@@ -1,0 +1,153 @@
+package net.sacredlabyrinth.phaed.simpleclans.managers;
+
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+
+import com.nijikokun.bukkit.Permissions.Permissions;
+import com.nijiko.permissions.PermissionHandler;
+import net.D3GN.MiracleM4n.mChat.mChat;
+
+import org.bukkit.plugin.Plugin;
+import org.bukkit.entity.Player;
+
+/**
+ *
+ * @author phaed
+ */
+public final class PermissionsManager
+{
+    /**
+     *
+     */
+    public mChat mchat = null;
+    public PermissionHandler handler = null;
+    private SimpleClans plugin;
+
+    /**
+     *
+     * @param plugin
+     */
+    public PermissionsManager()
+    {
+        plugin = SimpleClans.getInstance();
+        startPermissions();
+        startMChat();
+    }
+
+    /**
+     * Check if a player has permissions
+     * @param player the player
+     * @param permission the permission
+     * @return whether he has the permission
+     */
+    public boolean has(Player player, String permission)
+    {
+        if (player == null)
+        {
+            return false;
+        }
+
+        if (handler != null)
+        {
+            return handler.has(player, permission);
+        }
+        else
+        {
+            return player.hasPermission(permission);
+        }
+    }
+
+    private void startMChat()
+    {
+        Plugin test = plugin.getServer().getPluginManager().getPlugin("mChat");
+
+        if (test != null)
+        {
+            this.mchat = ((mChat) test);
+        }
+    }
+
+    private void startPermissions()
+    {
+        Plugin test = plugin.getServer().getPluginManager().getPlugin("Permissions");
+
+        if (test != null)
+        {
+            this.handler = ((Permissions) test).getHandler();
+        }
+    }
+
+    public String getGroup(Player p)
+    {
+        String world = p.getWorld().getName();
+        String name = p.getName();
+        return handler.getGroup(world, name);
+    }
+
+    public String getPrefix(Player p)
+    {
+        if (mchat != null)
+        {
+             return mchat.API.getPrefix(p);
+        }
+
+        if (handler != null)
+        {
+            try
+            {
+                String world = p.getWorld().getName();
+                String name = p.getName();
+                String prefix = handler.getUserPermissionString(world, name, "prefix");
+                if (prefix == null || prefix.isEmpty())
+                {
+                    String group = handler.getGroup(world, name);
+                    prefix = handler.getGroupPrefix(world, group);
+                    if (prefix == null)
+                    {
+                        prefix = "";
+                    }
+                }
+                return prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+                return "";
+            }
+        }
+        return "";
+    }
+
+    public String getSuffix(Player p)
+    {
+        if (mchat != null)
+        {
+            return mchat.API.getSuffix(p);
+        }
+
+        if (handler != null)
+        {
+            try
+            {
+                String world = p.getWorld().getName();
+                String name = p.getName();
+                String suffix = handler.getUserPermissionString(world, name, "suffix");
+                if (suffix == null || suffix.isEmpty())
+                {
+                    String group = handler.getGroup(world, name);
+                    suffix = handler.getGroupSuffix(world, group);
+                    if (suffix == null)
+                    {
+                        suffix = "";
+                    }
+                }
+                return suffix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
+            }
+            catch (Exception e)
+            {
+                System.out.println(e.getMessage());
+                return "";
+            }
+        }
+        return "";
+    }
+}

@@ -1,0 +1,111 @@
+name: SimpleClans
+main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
+version: 1.0
+softdepend: [Spout, Permissions, PermissionsBukkit, mChat]
+permissions:
+  simpleclans.mod.verify:
+    description: Can verify simpleclans
+  simpleclans.mod.ban:
+    description: Can ban players from the entire plugin
+  simpleclans.mod.delete:
+    description: Can delete any clan
+  simpleclans.anyone.list:
+    description: Can list simpleclans
+  simpleclans.anyone.profile:
+    description: Can view a clan's profile
+  simpleclans.anyone.roster:
+    description: Can veiw a clan's member list
+  simpleclans.anyone.lookup:
+    description: Can lookup a player's info
+  simpleclans.member.profile:
+    description: Can view his own clan's profile
+  simpleclans.member.roster:
+    description: Can view his own clan's member list
+  simpleclans.member.lookup:
+    description: Can view his own player info
+  simpleclans.member.vitals:
+    description: Can view his clan's vitals
+  simpleclans.member.coords:
+    description: Can view his clan's coords
+  simpleclans.member.stats:
+    description: Can view his simpleclans stats
+  simpleclans.member.bb:
+    description: Can view his clan's bulletin board
+  simpleclans.member.historybb:
+    description: Can view his clan's bulletin board history
+  simpleclans.member.ff:
+    description: Can toggle his own friendly fire
+  simpleclans.member.resign:
+    description: Can resign from his clan
+  simpleclans.leader.create:
+    description: Can create simpleclans
+  simpleclans.leader.ally:
+    description: Can ally his clan with other simpleclans
+  simpleclans.leader.rival:
+    description: Can start a rivalry with another clan
+  simpleclans.leader.bb:
+    description: Can add to his clan's bulletin board
+  simpleclans.leader.modtag:
+    description: Can modify his clan's tag
+  simpleclans.leader.cape:
+    description: Can set his clan's cape url
+  simpleclans.leader.invite:
+    description: Can invite players into his clan
+  simpleclans.leader.kick:
+    description: Can kick players form his tea,
+  simpleclans.leader.promote:
+    description: Can promote players to clan leaders
+  simpleclans.leader.promotable:
+    description: Can be promoted to clan leader
+  simpleclans.leader.demote:
+    description: Can demote clan leaders to normal players
+  simpleclans.leader.ff:
+    description: Can toggle his clan's friendly fire
+  simpleclans.leader.delete:
+    description: Can delete his own clan
+  simpleclans.mod:
+    description: Permissions for moderators
+    default: op
+    children:
+      simpleclans.mod.verify: true
+      simpleclans.mod.ban: true
+      simpleclans.mod.delete: true
+  simpleclans.anyone:
+    description: Permissions for anyone
+    default: true
+    children:
+      simpleclans.anyone.list: true
+      simpleclans.anyone.profile: true
+      simpleclans.anyone.roster: true
+  simpleclans.member:
+    description: Permissions for those who can be clan members
+    default: true
+    children:
+      simpleclans.member.can-join: true
+      simpleclans.member.profile: true
+      simpleclans.member.roster: true
+      simpleclans.member.lookup: true
+      simpleclans.member.vitals: true
+      simpleclans.member.coords: true
+      simpleclans.member.stats: true
+      simpleclans.member.bb: true
+      simpleclans.member.historybb: true
+      simpleclans.member.ff: true
+      simpleclans.member.resign: true
+  simpleclans.leader:
+    description: Permissions for those who can be clan leaders
+    default: true
+    children:
+      simpleclans.leader.create: true
+      simpleclans.leader.ally: true
+      simpleclans.leader.rival: true
+      simpleclans.leader.bb: true
+      simpleclans.leader.modtag: true
+      simpleclans.leader.cape: true
+      simpleclans.leader.invite: true
+      simpleclans.leader.kickv: true
+      simpleclans.leader.promote: true
+      simpleclans.leader.promotable: true
+      simpleclans.leader.demote: true
+      simpleclans.leader.ff: true
+      simpleclans.leader.delete: true
