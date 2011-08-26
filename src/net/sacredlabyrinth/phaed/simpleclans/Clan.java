@@ -2,9 +2,15 @@ package net.sacredlabyrinth.phaed.simpleclans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
+import java.text.NumberFormat;
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
+import java.util.logging.Level;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
@@ -13,6 +19,7 @@ import org.bukkit.entity.Player;
  */
 public class Clan implements Serializable, Comparable<Clan>
 {
+    private static final long serialVersionUID = 1L;
     private boolean verified;
     private String tag;
     private String colorTag;
@@ -50,10 +57,6 @@ public class Clan implements Serializable, Comparable<Clan>
         this.lastUsed = (new Date()).getTime();
         this.verified = verified;
         this.capeUrl = "";
-
-        cp.setTag(Helper.cleanTag(tag));
-        cp.setLeader(true);
-        this.members.add(cp.getCleanName());
     }
 
     @Override
@@ -192,7 +195,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public List<String> getBb()
     {
-        return bb;
+        return Collections.unmodifiableList(bb);
     }
 
     /**
@@ -200,15 +203,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public List<String> getAllies()
     {
-        return allies;
-    }
-
-    /**
-     * @param allies the allies to set
-     */
-    public void setAllies(List<String> allies)
-    {
-        this.allies = allies;
+        return Collections.unmodifiableList(allies);
     }
 
     /**
@@ -234,14 +229,6 @@ public class Clan implements Serializable, Comparable<Clan>
 
         allies.remove(ally);
         return true;
-    }
-
-    /**
-     * @param bb the bb to set
-     */
-    public void setBb(List<String> bb)
-    {
-        this.bb = bb;
     }
 
     /**
@@ -281,7 +268,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void setColorTag(String colorTag)
     {
-        this.colorTag = colorTag;
+        this.colorTag = Helper.parseColors(colorTag);
     }
 
     /**
@@ -294,7 +281,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     *
+     * Adds a cp to the clan's member list (used internally)
      * @param cp
      */
     public void addMember(ClanPlayer cp)
@@ -306,16 +293,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     *
-     * @param player
-     */
-    public void removeMember(Player player)
-    {
-        this.members.remove(player.getName().toLowerCase());
-    }
-
-    /**
-     *
+     * Removes a cp from the clan's member list (used internally)
      * @param playerName
      */
     public void removeMember(String playerName)
@@ -337,7 +315,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public List<String> getRivals()
     {
-        return rivals;
+        return Collections.unmodifiableList(rivals);
     }
 
     /**
@@ -366,14 +344,6 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * @param rivals the rivals to set
-     */
-    public void setRivals(List<String> rivals)
-    {
-        this.rivals = rivals;
-    }
-
-    /**
      * Check if the tag is a rival
      * @param tag
      * @return
@@ -394,27 +364,17 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * @return the members
-     */
-    public List<String> getMembers()
-    {
-        return this.members;
-    }
-
-    /**
-     * @param members the members to set
-     */
-    public void setMembers(List<String> members)
-    {
-        this.members = members;
-    }
-
-    /**
-     * @return the verified
+     * Tells you if the clan is verified, always returns true if no verification is required
+     * @return
      */
     public boolean isVerified()
     {
-        return verified;
+        if (SimpleClans.getInstance().getSettingsManager().isRequireVerification())
+        {
+            return verified;
+        }
+
+        return true;
     }
 
     /**
@@ -487,5 +447,718 @@ public class Clan implements Serializable, Comparable<Clan>
     public void setPackedRivals(String packedRivals)
     {
         this.rivals = Helper.fromArray(packedRivals.split("[|]"));
+    }
+
+    /**
+     * Returns a string with all ally tags
+     * @param sep
+     * @return
+     */
+    public String getAllyString(String sep)
+    {
+        String out = "";
+
+        for (String allyTag : getAllies())
+        {
+            Clan ally = SimpleClans.getInstance().getClanManager().getClan(allyTag);
+
+            if (ally != null)
+            {
+                out += ally.getColorTag() + sep;
+            }
+        }
+
+        out = Helper.stripTrailing(out, sep);
+
+        if (out.trim().isEmpty())
+        {
+            return ChatColor.GRAY + "None";
+        }
+
+        return Helper.parseColors(out);
+    }
+
+    /**
+     * Returns a string with all rival tags
+     * @param sep
+     * @return
+     */
+    public String getRivalString(String sep)
+    {
+        String out = "";
+
+        for (String rivalTag : getRivals())
+        {
+            Clan rival = SimpleClans.getInstance().getClanManager().getClan(rivalTag);
+
+            if (rival != null)
+            {
+                out += rival.getColorTag() + sep;
+            }
+        }
+
+        out = Helper.stripTrailing(out, sep);
+
+        if (out.trim().isEmpty())
+        {
+            return ChatColor.GRAY + "None";
+        }
+
+        return Helper.parseColors(out);
+    }
+
+    /**
+     * @param prefix
+     * @param sep
+     * @return the formatted leaders string
+     */
+    public String getLeadersString(String prefix, String sep)
+    {
+        String out = "";
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+
+            if (cp.isLeader())
+            {
+                out += prefix + cp.getName() + sep;
+            }
+        }
+
+        return Helper.stripTrailing(out, sep);
+    }
+
+    /**
+     * Check if a player is a leader of a clan
+     * @param player
+     * @return the leaders
+     */
+    public boolean isLeader(Player player)
+    {
+        if (isMember(player))
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player.getName().toLowerCase());
+
+            if (cp.isLeader())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check if a player is a leader of a clan
+     * @param playerName
+     * @return the leaders
+     */
+    public boolean isLeader(String playerName)
+    {
+        if (isMember(playerName))
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName.toLowerCase());
+
+            if (cp.isLeader())
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * @return the members
+     */
+    public List<ClanPlayer> getMembers()
+    {
+        List<ClanPlayer> out = new ArrayList<ClanPlayer>();
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            out.add(cp);
+        }
+
+        return out;
+    }
+
+    /**
+     * @return the leaders
+     */
+    public List<ClanPlayer> getLeaders()
+    {
+        List<ClanPlayer> out = new ArrayList<ClanPlayer>();
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+
+            if (cp.isLeader())
+            {
+                out.add(cp);
+            }
+        }
+
+        return out;
+    }
+
+    /**
+     * @return non leaders
+     */
+    public List<ClanPlayer> getNonLeaders()
+    {
+        List<ClanPlayer> out = new ArrayList<ClanPlayer>();
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+
+            if (!cp.isLeader())
+            {
+                out.add(cp);
+            }
+        }
+
+        Collections.sort(out);
+
+        return out;
+    }
+
+    /**
+     * Gets the clan's total KDR
+     * @return
+     */
+    public float getTotalKDR()
+    {
+        if (members.isEmpty())
+        {
+            return 0;
+        }
+
+        double totalWeightedKills = 0;
+        int totalDeaths = 0;
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            totalWeightedKills += cp.getWeightedKills();
+            totalDeaths += cp.getDeaths();
+        }
+
+        return ((float) totalWeightedKills) / ((float) totalDeaths);
+    }
+
+    /**
+     * Gets the clan's total KDR
+     * @return
+     */
+    public int getTotalDeaths()
+    {
+        int totalDeaths = 0;
+
+        if (members.isEmpty())
+        {
+            return totalDeaths;
+        }
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            totalDeaths += cp.getDeaths();
+        }
+
+        return totalDeaths;
+    }
+
+    /**
+     * Gets average weighted kills for the clan
+     * @return
+     */
+    public int getAverageWK()
+    {
+        int total = 0;
+
+        if (members.isEmpty())
+        {
+            return total;
+        }
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            total += cp.getWeightedKills();
+        }
+
+        return total / getSize();
+    }
+
+    /**
+     * Gets total rival kills for the clan
+     * @return
+     */
+    public int getTotalRival()
+    {
+        int total = 0;
+
+        if (members.isEmpty())
+        {
+            return total;
+        }
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            total += cp.getRivalKills();
+        }
+
+        return total;
+    }
+
+    /**
+     * Gets total neutral kills for the clan
+     * @return
+     */
+    public int getTotalNeutral()
+    {
+        int total = 0;
+
+        if (members.isEmpty())
+        {
+            return total;
+        }
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            total += cp.getNeutralKills();
+        }
+
+        return total;
+    }
+
+    /**
+     * Gets total civilian kills for the clan
+     * @return
+     */
+    public int getTotalCivilian()
+    {
+        int total = 0;
+
+        if (members.isEmpty())
+        {
+            return total;
+        }
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            total += cp.getCivilianKills();
+        }
+
+        return total;
+    }
+
+    /**
+     * SEt a clan's cape url
+     * @param url
+     */
+    public void setClanCape(String url)
+    {
+        setCapeUrl(url);
+
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+
+        for (String member : members)
+        {
+            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(member);
+        }
+    }
+
+    /**
+     * Check whether the clan has crossed the rival limit
+     * @return
+     */
+    public boolean reachedRivalLimit()
+    {
+        int rivalCount = rivals.size();
+        int clanCount = SimpleClans.getInstance().getClanManager().getRivableClanCount() - 1;
+        int rivalPercent = SimpleClans.getInstance().getSettingsManager().getRivalLimitPercent();
+
+        double limit = ((double) clanCount) * (((double) rivalPercent) / ((double) 100));
+
+        return rivalCount > limit;
+    }
+
+    /**
+     * Add a new player to the clan
+     * @param cp
+     */
+    public void addPlayerToClan(ClanPlayer cp)
+    {
+        cp.removePastClan(getColorTag());
+        cp.setClan(this);
+        cp.setLeader(false);
+        addMember(cp);
+
+        if (SimpleClans.getInstance().getSettingsManager().isClanTrustByDefault())
+        {
+            cp.setTrusted(true);
+        }
+        else
+        {
+            cp.setTrusted(false);
+        }
+
+        SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+
+        Player player = Helper.matchOnePlayer(cp.getName());
+        if (player != null)
+        {
+            SimpleClans.getInstance().getClanManager().updateDisplayName(player);
+        }
+    }
+
+    /**
+     * Remove a player from a clan
+     * @param player
+     */
+    public void removePlayerFromClan(Player player)
+    {
+        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
+        cp.setClan(null);
+        cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
+        cp.setLeader(false);
+        cp.setTrusted(false);
+        removeMember(player.getName());
+
+        SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+        SimpleClans.getInstance().getClanManager().updateDisplayName(player);
+    }
+
+    /**
+     * Promote a member to a leader of a clan
+     * @param playerName
+     */
+    public void promote(String playerName)
+    {
+        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
+        cp.setLeader(true);
+
+        SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+    }
+
+    /**
+     * Demote a leader back to a member of a clan
+     * @param playerName
+     */
+    public void demote(String playerName)
+    {
+        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
+        cp.setLeader(false);
+
+        SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+    }
+
+    /**
+     * Add an ally to a clan
+     * @param ally
+     */
+    public void addAlly(Clan ally)
+    {
+        removeRival(ally.getTag());
+        addAlly(ally.getTag());
+
+        ally.removeRival(getTag());
+        ally.addAlly(getTag());
+
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getStorageManager().updateClan(ally);
+    }
+
+    /**
+     *
+     * @param ally
+     */
+    public void removeAlly(Clan ally)
+    {
+        removeAlly(ally.getTag());
+        ally.removeAlly(getTag());
+
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getStorageManager().updateClan(ally);
+    }
+
+    /**
+     * Remove an ally from a clan
+     * @param rival
+     */
+    public void addRival(Clan rival)
+    {
+        removeAlly(rival.getTag());
+        addRival(rival.getTag());
+
+        rival.removeAlly(getTag());
+        rival.addRival(getTag());
+
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getStorageManager().updateClan(rival);
+    }
+
+    /**
+     *
+     * @param rival
+     */
+    public void removeRival(Clan rival)
+    {
+        removeRival(rival.getTag());
+        rival.removeRival(getTag());
+
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        SimpleClans.getInstance().getStorageManager().updateClan(rival);
+    }
+
+    /**
+     * Verify a clan
+     */
+    public void verifyClan()
+    {
+        setVerified(true);
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+    }
+
+    /**
+     * Check whether any clan member is online
+     * @return
+     */
+    public boolean isAnyOnline()
+    {
+        for (String member : members)
+        {
+            if (Helper.isOnline(member))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Check whether all leaders of a clan are online
+     * @return
+     */
+    public boolean allLeadersOnline()
+    {
+        List<ClanPlayer> leaders = getLeaders();
+
+        for (ClanPlayer leader : leaders)
+        {
+            if (!Helper.isOnline(leader.getName()))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Check whether all leaders, except for the one passed in, are online
+     * @param playerName
+     * @return
+     */
+    public boolean allOtherLeadersOnline(String playerName)
+    {
+        List<ClanPlayer> leaders = getLeaders();
+
+        for (ClanPlayer leader : leaders)
+        {
+            if (leader.getName().equalsIgnoreCase(playerName))
+            {
+                continue;
+            }
+
+            if (!Helper.isOnline(leader.getName()))
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Change a clan's tag
+     * @param tag
+     */
+    public void changeClanTag(String tag)
+    {
+        setColorTag(tag);
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+    }
+
+    /**
+     * Announce message to a whole clan
+     * @param playerName
+     * @param msg
+     */
+    public void clanAnnounce(String playerName, String msg)
+    {
+        String message = SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketLeft() + SimpleClans.getInstance().getSettingsManager().getTagDefaultColor() + getColorTag() + SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketRight() + " " + SimpleClans.getInstance().getSettingsManager().getClanChatAnnouncementColor() + msg;
+
+        for (ClanPlayer cp : getMembers())
+        {
+            Player pl = SimpleClans.getInstance().getServer().getPlayer(cp.getName());
+
+            if (pl != null)
+            {
+                ChatBlock.sendMessage(pl, message);
+            }
+        }
+        SimpleClans.log(Level.INFO, "[Clan Announce] [{0}] {1}", playerName, Helper.stripColors(message));
+    }
+
+    /**
+     * Announce message to a all the leaders of a clan
+     * @param playerName
+     * @param msg
+     */
+    public void leaderAnnounce(String playerName, String msg)
+    {
+        String message = SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketLeft() + SimpleClans.getInstance().getSettingsManager().getTagDefaultColor() + getColorTag() + SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketRight() + " " + SimpleClans.getInstance().getSettingsManager().getClanChatAnnouncementColor() + msg;
+
+        List<ClanPlayer> leaders = getLeaders();
+
+        for (ClanPlayer cp : leaders)
+        {
+            Player pl = SimpleClans.getInstance().getServer().getPlayer(cp.getName());
+
+            if (pl != null)
+            {
+                ChatBlock.sendMessage(pl, message);
+            }
+        }
+        SimpleClans.log(Level.INFO, "[Leader Announce] [{0}] " + Helper.stripColors(message), playerName);
+    }
+
+    /**
+     * Announce message to a whole clan plus audio alert
+     * @param playerName
+     * @param msg
+     */
+    public void audioAnnounce(String playerName, String msg)
+    {
+        clanAnnounce(playerName, msg);
+
+        for (String member : members)
+        {
+            Player pl = SimpleClans.getInstance().getServer().getPlayer(member);
+
+            if (pl != null)
+            {
+                SimpleClans.getInstance().getSpoutPluginManager().playAlert(pl);
+            }
+        }
+    }
+
+    /**
+     * Add a new bb message and announce it to all online members of a clan
+     * @param announcerName
+     * @param msg
+     */
+    public void addBb(String announcerName, String msg)
+    {
+        if (isVerified())
+        {
+            addBb(msg);
+            clanAnnounce(announcerName, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
+            SimpleClans.getInstance().getStorageManager().updateClan(this);
+        }
+    }
+
+    /**
+     * Displays bb to a player
+     * @param player
+     */
+    public void displayBb(Player player)
+    {
+        if (isVerified())
+        {
+            List<String> chunk = bb.subList(Math.max(bb.size() - SimpleClans.getInstance().getSettingsManager().getBbSize(), 0), bb.size());
+
+            ChatBlock.sendBlank(player);
+            ChatBlock.saySingle(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor() + Helper.capitalize(getName()) + " bulletin board");
+
+            for (String msg : chunk)
+            {
+                ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
+            }
+            ChatBlock.sendBlank(player);
+        }
+    }
+
+    /**
+     * Disband a clan
+     */
+    public void disband()
+    {
+        Collection<ClanPlayer> clanPlayers = SimpleClans.getInstance().getClanManager().getAllClanPlayers();
+        List<Clan> clans = SimpleClans.getInstance().getClanManager().getClans();
+
+        for (ClanPlayer cp : clanPlayers)
+        {
+            if (cp.getTag().equals(getTag()))
+            {
+                cp.setClan(null);
+
+                if (isVerified())
+                {
+                    cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
+                }
+
+                cp.setLeader(false);
+
+                SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
+
+                SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+            }
+        }
+
+        clans.remove(getTag());
+
+        for (Clan tm : clans)
+        {
+            if (tm.removeRival(getTag()))
+            {
+                tm.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Rivalry has ended.");
+            }
+
+            if (tm.removeAlly(getTag()))
+            {
+                tm.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Alliance has ended.");
+            }
+        }
+
+        SimpleClans.getInstance().getStorageManager().deleteClan(this);
+    }
+
+    /**
+     * Whether this clan can be rivaled
+     * @return
+     */
+    public boolean isUnrivable()
+    {
+        return SimpleClans.getInstance().getSettingsManager().isUnrivable(getTag());
     }
 }

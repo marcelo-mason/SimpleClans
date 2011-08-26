@@ -1,9 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager.RequestType;
-import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager.Vote;
 
 /**
  *
@@ -16,7 +15,7 @@ public final class Request
     private Clan clan;
     private String msg;
     private String target;
-    private RequestType type;
+    private ClanRequest type;
     private ClanPlayer requester;
 
     /**
@@ -29,7 +28,7 @@ public final class Request
      * @param clan
      * @param target
      */
-    public Request(SimpleClans plugin, RequestType type, List<ClanPlayer> acceptors, ClanPlayer requester, String target, Clan clan, String msg)
+    public Request(SimpleClans plugin, ClanRequest type, List<ClanPlayer> acceptors, ClanPlayer requester, String target, Clan clan, String msg)
     {
         plugin = SimpleClans.getInstance();
         this.type = type;
@@ -48,7 +47,7 @@ public final class Request
     /**
      * @return the type
      */
-    public RequestType getType()
+    public ClanRequest getType()
     {
         return type;
     }
@@ -56,7 +55,7 @@ public final class Request
     /**
      * @param type the type to set
      */
-    public void setType(RequestType type)
+    public void setType(ClanRequest type)
     {
         this.type = type;
     }
@@ -70,7 +69,6 @@ public final class Request
     }
 
     /**
-     * @param plugin the plugin to set
      */
     public void setPlugin()
     {
@@ -82,7 +80,7 @@ public final class Request
      */
     public List<ClanPlayer> getAcceptors()
     {
-        return acceptors;
+        return Collections.unmodifiableList(acceptors);
     }
 
     /**
@@ -146,7 +144,7 @@ public final class Request
      * @param playerNAme
      * @param vote
      */
-    public void vote(String playerNAme, Vote vote)
+    public void vote(String playerNAme, VoteResult vote)
     {
         for (ClanPlayer cp : acceptors)
         {
@@ -184,7 +182,7 @@ public final class Request
 
         for (ClanPlayer cp : acceptors)
         {
-            if (cp.getVote().equals(Vote.DENY))
+            if (cp.getVote().equals(VoteResult.DENY))
             {
                 out.add(cp.getName());
             }
@@ -203,7 +201,7 @@ public final class Request
 
         for (ClanPlayer cp : acceptors)
         {
-            if (cp.getVote().equals(Vote.ACCEPT))
+            if (cp.getVote().equals(VoteResult.ACCEPT))
             {
                 out.add(cp.getName());
             }

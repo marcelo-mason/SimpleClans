@@ -18,13 +18,12 @@ public final class PermissionsManager
     /**
      *
      */
-    public mChat mchat = null;
-    public PermissionHandler handler = null;
+    private boolean hasMChat;
+    private PermissionHandler handler = null;
     private SimpleClans plugin;
 
     /**
      *
-     * @param plugin
      */
     public PermissionsManager()
     {
@@ -62,7 +61,7 @@ public final class PermissionsManager
 
         if (test != null)
         {
-            this.mchat = ((mChat) test);
+            hasMChat = true;
         }
     }
 
@@ -76,6 +75,12 @@ public final class PermissionsManager
         }
     }
 
+    /**
+     *
+     * @param p
+     * @return
+     */
+    @SuppressWarnings("deprecation")
     public String getGroup(Player p)
     {
         String world = p.getWorld().getName();
@@ -83,11 +88,17 @@ public final class PermissionsManager
         return handler.getGroup(world, name);
     }
 
+    /**
+     *
+     * @param p
+     * @return
+     */
+    @SuppressWarnings({"deprecation", "deprecation"})
     public String getPrefix(Player p)
     {
-        if (mchat != null)
+        if (hasMChat)
         {
-             return mchat.API.getPrefix(p);
+             return mChat.API.getPrefix(p);
         }
 
         if (handler != null)
@@ -117,11 +128,17 @@ public final class PermissionsManager
         return "";
     }
 
+    /**
+     *
+     * @param p
+     * @return
+     */
+    @SuppressWarnings({"deprecation", "deprecation"})
     public String getSuffix(Player p)
     {
-        if (mchat != null)
+        if (hasMChat)
         {
-            return mchat.API.getSuffix(p);
+            return mChat.API.getSuffix(p);
         }
 
         if (handler != null)

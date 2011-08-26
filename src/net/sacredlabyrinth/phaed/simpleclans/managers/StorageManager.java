@@ -11,9 +11,9 @@ import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.data.DBCore;
-import net.sacredlabyrinth.phaed.simpleclans.data.MySQLCore;
-import net.sacredlabyrinth.phaed.simpleclans.data.SQLiteCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
 
 /**
  *
@@ -22,14 +22,10 @@ import net.sacredlabyrinth.phaed.simpleclans.data.SQLiteCore;
 public final class StorageManager
 {
     private SimpleClans plugin;
-    /**
-     *
-     */
-    public DBCore core;
+    private DBCore core;
 
     /**
      *
-     * @param plugin
      */
     public StorageManager()
     {
@@ -55,7 +51,7 @@ public final class StorageManager
                 {
                     SimpleClans.log(Level.INFO, "Creating table: sc_clans");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20) NOT NULL auto_increment, `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, PRIMARY KEY  (`id`), UNIQUE KEY `uq_simpleclans_1` (`tag`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20) NOT NULL auto_increment, `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, PRIMARY KEY  (`id`), UNIQUE KEY `uq_simpleclans_1` (`tag`));";
                     core.execute(query);
                 }
 
@@ -63,7 +59,7 @@ public final class StorageManager
                 {
                     SimpleClans.log(Level.INFO, "Creating table: sc_players");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20) NOT NULL auto_increment, `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `packed_past_clans` text, PRIMARY KEY  (`id`), UNIQUE KEY `uq_sc_players_1` (`name`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20) NOT NULL auto_increment, `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, PRIMARY KEY  (`id`), UNIQUE KEY `uq_sc_players_1` (`name`));";
                     core.execute(query);
                 }
             }
@@ -74,7 +70,7 @@ public final class StorageManager
         }
         else
         {
-            core = new SQLiteCore(SimpleClans.getLogger(), "SimpleClans", plugin.getDataFolder().getPath());
+            core = new SQLiteCore("SimpleClans", plugin.getDataFolder().getPath());
 
             if (core.checkConnection())
             {
@@ -103,28 +99,40 @@ public final class StorageManager
         }
     }
 
-    private void importFromDatabase()
+    /**
+     * Closes DB connection
+     */
+    public void closeConnection()
+    {
+        core.close();
+    }
+
+    /**
+     * Import all data from database to memory
+     */
+    public void importFromDatabase()
     {
         plugin.getClanManager().cleanData();
 
-        List<Clan> simpleclans = getSimpleClans();
-        List<ClanPlayer> tps = getClanPlayers();
+        List<Clan> clans = retrieveClans();
+        purgeClans(clans);
 
-        inactivityPurge(simpleclans, tps);
-
-        for (Clan clan : simpleclans)
+        for (Clan clan : clans)
         {
             plugin.getClanManager().importClan(clan);
         }
 
-        if (simpleclans.size() > 0)
+        if (clans.size() > 0)
         {
-            SimpleClans.log(Level.INFO, "simpleclans: {0}", simpleclans.size());
+            SimpleClans.log(Level.INFO, "clans: {0}", clans.size());
         }
 
-        for (ClanPlayer cp : tps)
+        List<ClanPlayer> cps = retrieveClanPlayers();
+        purgeClanPlayers(cps);
+
+        for (ClanPlayer cp : cps)
         {
-            Clan tm = plugin.getClanManager().getClan(cp.getTag());
+            Clan tm = cp.getClan();
 
             if (tm != null)
             {
@@ -133,63 +141,67 @@ public final class StorageManager
             plugin.getClanManager().importClanPlayer(cp);
         }
 
-        if (tps.size() > 0)
+        if (cps.size() > 0)
         {
-            SimpleClans.log(Level.INFO, "clan players: {0}", tps.size());
+            SimpleClans.log(Level.INFO, "clan players: {0}", cps.size());
         }
     }
 
-    private void inactivityPurge(List<Clan> simpleclans, List<ClanPlayer> tps)
+    private void purgeClans(List<Clan> clans)
     {
-        List<Clan> purgeSimpleClans = new ArrayList<Clan>();
-        List<ClanPlayer> purgeTps = new ArrayList<ClanPlayer>();
+        List<Clan> purge = new ArrayList<Clan>();
 
-        for (Clan clan : simpleclans)
+        for (Clan clan : clans)
         {
-            if (plugin.getClanManager().isVerified(clan))
+            if (clan.isVerified())
             {
                 if (clan.getInactiveDays() > plugin.getSettingsManager().getPurgeClan())
                 {
-                    purgeSimpleClans.add(clan);
+                    purge.add(clan);
                 }
             }
             else
             {
                 if (clan.getInactiveDays() > plugin.getSettingsManager().getPurgeUnverified())
                 {
-                    purgeSimpleClans.add(clan);
+                    purge.add(clan);
                 }
             }
         }
 
-        for (ClanPlayer cp : tps)
+        for (Clan clan : purge)
+        {
+            SimpleClans.log(Level.INFO, "purging clan: " + clan.getName());
+            deleteClan(clan);
+            clans.remove(clan);
+        }
+    }
+
+    private void purgeClanPlayers(List<ClanPlayer> cps)
+    {
+        List<ClanPlayer> purge = new ArrayList<ClanPlayer>();
+
+        for (ClanPlayer cp : cps)
         {
             if (cp.getInactiveDays() > plugin.getSettingsManager().getPurgePlayers())
             {
-                purgeTps.add(cp);
+                purge.add(cp);
             }
         }
 
-        for (Clan clan : purgeSimpleClans)
+        for (ClanPlayer cp : purge)
         {
-            SimpleClans.log(Level.INFO, "Purging clan: {0}", clan.getName());
-            deleteClan(clan);
-            simpleclans.remove(clan);
-        }
-
-        for (ClanPlayer cp : purgeTps)
-        {
-            SimpleClans.log(Level.INFO, "Purging player's data {0}", cp.getName());
+            SimpleClans.log(Level.INFO, "purging player data " + cp.getName());
             deleteClanPlayer(cp);
-            tps.remove(cp);
+            cps.remove(cp);
         }
     }
 
     /**
-     * Retrieves all simpleclans from the database
+     * Retrieves all simple clans from the database
      * @return
      */
-    public List<Clan> getSimpleClans()
+    public List<Clan> retrieveClans()
     {
         List<Clan> out = new ArrayList<Clan>();
 
@@ -207,14 +219,16 @@ public final class StorageManager
                         boolean verified = res.getBoolean("verified");
                         boolean friendly_fire = res.getBoolean("friendly_fire");
                         String tag = res.getString("tag");
-                        String color_tag = res.getString("color_tag");
+                        String color_tag = Helper.parseColors(res.getString("color_tag"));
                         String name = res.getString("name");
                         String packed_allies = res.getString("packed_allies");
                         String packed_rivals = res.getString("packed_rivals");
                         String packed_bb = res.getString("packed_bb");
                         String cape_url = res.getString("cape_url");
+                        String flags = res.getString("flags");
                         long founded = res.getLong("founded");
                         long last_used = res.getLong("last_used");
+
 
                         if (founded == 0)
                         {
@@ -243,7 +257,7 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        ex.printStackTrace();
+                        SimpleClans.getLogger().info(ex.getMessage());
                     }
                 }
             }
@@ -260,7 +274,7 @@ public final class StorageManager
      * Retrieves all clan players from the database
      * @return
      */
-    public List<ClanPlayer> getClanPlayers()
+    public List<ClanPlayer> retrieveClanPlayers()
     {
         List<ClanPlayer> out = new ArrayList<ClanPlayer>();
 
@@ -279,13 +293,15 @@ public final class StorageManager
                         String tag = res.getString("tag");
                         boolean leader = res.getBoolean("leader");
                         boolean friendly_fire = res.getBoolean("friendly_fire");
+                        boolean trusted =  res.getBoolean("trusted");
                         int neutral_kills = res.getInt("neutral_kills");
                         int rival_kills = res.getInt("rival_kills");
                         int civilian_kills = res.getInt("civilian_kills");
                         int deaths = res.getInt("deaths");
                         long last_seen = res.getLong("last_seen");
                         long join_date = res.getLong("join_date");
-                        String packed_past_clans = res.getString("packed_past_clans");
+                        String flags = res.getString("flags");
+                        String packed_past_clans = Helper.parseColors(res.getString("packed_past_clans"));
 
                         if (last_seen == 0)
                         {
@@ -299,7 +315,6 @@ public final class StorageManager
 
                         ClanPlayer cp = new ClanPlayer();
                         cp.setName(name);
-                        cp.setTag(tag);
                         cp.setLeader(leader);
                         cp.setFriendlyFire(friendly_fire);
                         cp.setNeutralKills(neutral_kills);
@@ -309,12 +324,23 @@ public final class StorageManager
                         cp.setLastSeen(last_seen);
                         cp.setJoinDate(join_date);
                         cp.setPackedPastClans(packed_past_clans);
+                        cp.setTrusted(leader ? true : trusted);
+
+                        if (!tag.isEmpty())
+                        {
+                            Clan clan = SimpleClans.getInstance().getClanManager().getClan(tag);
+
+                            if (clan != null)
+                            {
+                                cp.setClan(clan);
+                            }
+                        }
 
                         out.add(cp);
                     }
                     catch (Exception ex)
                     {
-                        ex.printStackTrace();
+                        SimpleClans.getLogger().info(ex.getMessage());
                     }
                 }
             }

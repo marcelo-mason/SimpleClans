@@ -273,7 +273,7 @@ public class ChatBlock
 
                 }
 
-                availableSpacing = availableSpacing - 4;
+                availableSpacing -= 4;
             }
 
             // cut off from flexible columns if too big
@@ -512,7 +512,7 @@ public class ChatBlock
 
         while (msgLength(msg) < length)
         {
-            msg = msg + " ";
+            msg += " ";
         }
 
         return msg;
@@ -841,7 +841,7 @@ public class ChatBlock
                     if (msg.codePointAt(x) == charcode)
                     {
                         // advance x to the next character
-                        x = x + 1;
+                        x += 1;
 
                         try
                         {

@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.util.Date;
 import java.util.HashSet;
-import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager.Vote;
+import org.bukkit.ChatColor;
 
 /**
  *
@@ -12,10 +12,12 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager.Vote;
  */
 public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 {
-    private SimpleClans plugin;
+    private static final long serialVersionUID = 1L;
     private String name;
     private boolean leader;
+    private boolean trusted;
     private String tag;
+    private Clan clan;
     private boolean friendlyFire;
     private int neutralKills;
     private int rivalKills;
@@ -24,14 +26,13 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private long lastSeen;
     private long joinDate;
     private HashSet<String> pastClans = new HashSet<String>();
-    private Vote vote;
+    private VoteResult vote;
 
     /**
      *
      */
     public ClanPlayer()
     {
-        plugin = SimpleClans.getInstance();
         this.tag = "";
     }
 
@@ -104,22 +105,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * @return the tag
-     */
-    public String getTag()
-    {
-        return tag;
-    }
-
-    /**
-     * @param tag the tag to set
-     */
-    public void setTag(String tag)
-    {
-        this.tag = tag;
-    }
-
-    /**
      * @return the leader
      */
     public boolean isLeader()
@@ -132,6 +117,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public void setLeader(boolean leader)
     {
+        if (leader)
+        {
+            trusted = true;
+        }
+
         this.leader = leader;
     }
 
@@ -165,8 +155,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public String getLastSeenDaysString()
     {
-        String out = "";
-
         double days = Dates.differenceInDays(new Timestamp(lastSeen), new Timestamp((new Date()).getTime()));
 
         if (days < 1)
@@ -175,11 +163,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         }
         else if (Math.round(days) == 1)
         {
-            return "1 day";
+            return "1 " + ChatColor.GRAY + "day";
         }
         else
         {
-            return Math.round(days) + " days";
+            return Math.round(days) + "" + ChatColor.GRAY + " days";
         }
     }
 
@@ -283,7 +271,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     /**
      * @return the vote
      */
-    public Vote getVote()
+    public VoteResult getVote()
     {
         return vote;
     }
@@ -291,7 +279,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     /**
      * @param vote the vote to set
      */
-    public void setVote(Vote vote)
+    public void setVote(VoteResult vote)
     {
         this.vote = vote;
     }
@@ -322,29 +310,26 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
     /**
      * Returns weighted kill score
-     * @param plugin
      * @return
      */
-    public int getWeightedKills()
+    public double getWeightedKills()
     {
-        int largest = Math.max(Math.max(plugin.getSettingsManager().getKwRival(), plugin.getSettingsManager().getKwNeutral()), plugin.getSettingsManager().getKwCivilian());
-
-        return (((rivalKills * plugin.getSettingsManager().getKwRival()) + (neutralKills * plugin.getSettingsManager().getKwNeutral()) + (civilianKills * plugin.getSettingsManager().getKwCivilian())) / largest);
+        SimpleClans plugin = SimpleClans.getInstance();
+        return (((double) rivalKills * plugin.getSettingsManager().getKwRival()) + ((double) neutralKills * plugin.getSettingsManager().getKwNeutral()) + ((double) civilianKills * plugin.getSettingsManager().getKwCivilian()));
     }
 
     /**
      * Returns kill / death ratio
-     * @param plugin
      * @return
      */
-    public float getKillDeathRatio()
+    public float getKDR()
     {
         if (deaths == 0)
         {
             return 0;
         }
 
-        return (((float) getWeightedKills()) / ((float) deaths)) * 100;
+        return ((float) getWeightedKills()) / ((float) deaths);
     }
 
     /**
@@ -385,7 +370,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public int getInactiveDays()
     {
         Timestamp now = new Timestamp((new Date()).getTime());
-        return (int)Math.floor(Dates.differenceInDays(new Timestamp(getLastSeen()), now));
+        return (int) Math.floor(Dates.differenceInDays(new Timestamp(getLastSeen()), now));
     }
 
     /**
@@ -393,7 +378,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public String getPackedPastClans()
     {
-       String PackedPastClans = "";
+        String PackedPastClans = "";
 
         HashSet<String> pt = getPastClans();
 
@@ -460,14 +445,57 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public HashSet<String> getPastClans()
     {
-        return pastClans;
+        HashSet<String> pc = new HashSet<String>();
+        pc.addAll(pastClans);
+        return pc;
     }
 
     /**
-     * @param pastClans the pastClans to set
+     * @return the clan
      */
-    public void setPastClans(HashSet<String> pastClans)
+    public Clan getClan()
     {
-        this.pastClans = pastClans;
+        return clan;
+    }
+
+    /**
+     * @param clan the clan to set
+     */
+    public void setClan(Clan clan)
+    {
+        if (clan == null)
+        {
+            this.tag = "";
+        }
+        else
+        {
+            this.tag = clan.getTag();
+        }
+
+        this.clan = clan;
+    }
+
+    /**
+     * @return the tag
+     */
+    public String getTag()
+    {
+        return tag;
+    }
+
+    /**
+     * @return the trusted
+     */
+    public boolean isTrusted()
+    {
+        return trusted;
+    }
+
+    /**
+     * @param trusted the trusted to set
+     */
+    public void setTrusted(boolean trusted)
+    {
+        this.trusted = trusted;
     }
 }

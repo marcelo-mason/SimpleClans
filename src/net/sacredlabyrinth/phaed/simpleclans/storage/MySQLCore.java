@@ -1,4 +1,4 @@
-package net.sacredlabyrinth.phaed.simpleclans.data;
+package net.sacredlabyrinth.phaed.simpleclans.storage;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -126,7 +126,7 @@ public class MySQLCore implements DBCore
     {
         try
         {
-             getConnection().createStatement().executeUpdate(query);
+            getConnection().createStatement().executeUpdate(query);
         }
         catch (SQLException ex)
         {
@@ -212,15 +212,11 @@ public class MySQLCore implements DBCore
         }
         catch (SQLException ex)
         {
-            if (ex.getMessage().contains("exist"))
-            {
-                return false;
-            }
-            else
+            if (!ex.getMessage().contains("exist"))
             {
                 log.warning("Error at SQL Query: " + ex.getMessage());
             }
+            return false;
         }
-        return false;
     }
 }

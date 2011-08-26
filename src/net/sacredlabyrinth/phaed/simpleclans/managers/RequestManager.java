@@ -1,5 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import net.sacredlabyrinth.phaed.simpleclans.ClanRequest;
+import net.sacredlabyrinth.phaed.simpleclans.VoteResult;
 import java.util.HashMap;
 import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
@@ -22,34 +24,11 @@ public final class RequestManager
 
     /**
      *
-     * @param plugin
      */
     public RequestManager()
     {
         plugin = SimpleClans.getInstance();
         askerTask();
-    }
-
-    /**
-     * Request Types
-     */
-    public enum RequestType
-    {
-        DEMOTE,
-        PROMOTE,
-        DELETE,
-        INVITE,
-        CREATE_ALLY,
-        BREAK_RIVALRY
-    }
-
-    /**
-     * Possible vote values
-     */
-    public enum Vote
-    {
-        ACCEPT,
-        DENY
     }
 
     /**
@@ -75,10 +54,10 @@ public final class RequestManager
 
         ClanPlayer demotedTp = plugin.getClanManager().getClanPlayer(demotedName.toLowerCase());
 
-        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(plugin.getClanManager().getLeaders(clan));
-        acceptors.remove(plugin.getClanManager().getClanPlayer(demotedName.toLowerCase()));
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(clan.getLeaders());
+        acceptors.remove(demotedTp);
 
-        Request req = new Request(plugin, RequestType.DEMOTE, acceptors, requester, demotedName, clan, msg);
+        Request req = new Request(plugin, ClanRequest.DEMOTE, acceptors, requester, demotedName, clan, msg);
         requests.put(clan.getTag(), req);
         ask(req);
     }
@@ -94,28 +73,28 @@ public final class RequestManager
     {
         String msg = Helper.capitalize(requester.getName()) + " is asking for the promotion of " + promotedName;
 
-        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(plugin.getClanManager().getLeaders(clan));
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(clan.getLeaders());
         acceptors.remove(requester);
 
-        Request req = new Request(plugin, RequestType.PROMOTE, acceptors, requester, promotedName, clan, msg);
+        Request req = new Request(plugin, ClanRequest.PROMOTE, acceptors, requester, promotedName, clan, msg);
         requests.put(clan.getTag(), req);
         ask(req);
     }
 
     /**
-     * Add a clan delete request
+     * Add a clan disband request
      * @param plugin
      * @param requester
      * @param clan
      */
-    public void addDeleteRequest(SimpleClans plugin, ClanPlayer requester, Clan clan)
+    public void addDisbandRequest(SimpleClans plugin, ClanPlayer requester, Clan clan)
     {
         String msg = Helper.capitalize(requester.getName()) + " is asking for the deletion of the clan";
 
-        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(plugin.getClanManager().getLeaders(clan));
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(clan.getLeaders());
         acceptors.remove(requester);
 
-        Request req = new Request(plugin, RequestType.DELETE, acceptors, requester, null, clan, msg);
+        Request req = new Request(plugin, ClanRequest.DISBAND, acceptors, requester, null, clan, msg);
         requests.put(clan.getTag(), req);
         ask(req);
     }
@@ -130,7 +109,7 @@ public final class RequestManager
     public void addInviteRequest(SimpleClans plugin, ClanPlayer requester, String invitedName, Clan clan)
     {
         String msg = Helper.capitalize(requester.getName()) + " is inviting you to join " + clan.getName();
-        Request req = new Request(plugin, RequestType.INVITE, null, requester, invitedName, clan, msg);
+        Request req = new Request(plugin, ClanRequest.INVITE, null, requester, invitedName, clan, msg);
         requests.put(invitedName.toLowerCase(), req);
         ask(req);
     }
@@ -146,10 +125,10 @@ public final class RequestManager
     {
         String msg = Helper.capitalize(requestingClan.getName()) + " is proposing an alliance with " + Helper.stripColors(allyClan.getColorTag());
 
-        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(plugin.getClanManager().getLeaders(allyClan));
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(allyClan.getLeaders());
         acceptors.remove(requester);
 
-        Request req = new Request(plugin, RequestType.CREATE_ALLY, acceptors, requester, allyClan.getTag(), requestingClan, msg);
+        Request req = new Request(plugin, ClanRequest.CREATE_ALLY, acceptors, requester, allyClan.getTag(), requestingClan, msg);
         requests.put(allyClan.getTag(), req);
         ask(req);
     }
@@ -165,10 +144,10 @@ public final class RequestManager
     {
         String msg = Helper.capitalize(requestingClan.getName()) + " is proposing to end the rivalry with " + Helper.stripColors(rivalClan.getColorTag());
 
-        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(plugin.getClanManager().getLeaders(rivalClan));
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(rivalClan.getLeaders());
         acceptors.remove(requester);
 
-        Request req = new Request(plugin, RequestType.BREAK_RIVALRY, acceptors, requester, rivalClan.getTag(), requestingClan, msg);
+        Request req = new Request(plugin, ClanRequest.BREAK_RIVALRY, acceptors, requester, rivalClan.getTag(), requestingClan, msg);
         requests.put(rivalClan.getTag(), req);
         ask(req);
     }
@@ -183,7 +162,7 @@ public final class RequestManager
 
         if (req != null)
         {
-            req.vote(cp.getName(), Vote.ACCEPT);
+            req.vote(cp.getName(), VoteResult.ACCEPT);
             processResults(req);
         }
         else
@@ -192,7 +171,7 @@ public final class RequestManager
 
             if (req != null)
             {
-                processInvite(req, Vote.ACCEPT);
+                processInvite(req, VoteResult.ACCEPT);
             }
         }
     }
@@ -207,7 +186,7 @@ public final class RequestManager
 
         if (req != null)
         {
-            req.vote(cp.getName(), Vote.DENY);
+            req.vote(cp.getName(), VoteResult.DENY);
             processResults(req);
         }
         else
@@ -216,32 +195,32 @@ public final class RequestManager
 
             if (req != null)
             {
-                processInvite(req, Vote.DENY);
+                processInvite(req, VoteResult.DENY);
             }
         }
     }
 
     /**
-     *
+     * Process the answer from an invite and add the player to the clan if accepted
      * @param req
      * @param vote
      */
-    public void processInvite(Request req, Vote vote)
+    public void processInvite(Request req, VoteResult vote)
     {
         Clan clan = req.getClan();
         String invited = req.getTarget();
 
-        if (vote.equals(Vote.ACCEPT))
+        if (vote.equals(VoteResult.ACCEPT))
         {
             ClanPlayer cp = plugin.getClanManager().getCreateClanPlayer(invited);
 
             clan.addBb(ChatColor.AQUA + Helper.capitalize(invited) + " has joined the clan");
             plugin.getClanManager().serverAnnounce(Helper.capitalize(invited) + " has joined " + clan.getName());
-            plugin.getClanManager().addMemberToClan(cp, clan);
+            clan.addPlayerToClan(cp);
         }
         else
         {
-            plugin.getClanManager().leaderAnnounce("Leaders", clan, ChatColor.RED + Helper.capitalize(invited) + " has denied the membership invitation");
+            clan.leaderAnnounce("Leaders", ChatColor.RED + Helper.capitalize(invited) + " has denied the membership invitation");
         }
 
         requests.remove(req.getTarget().toLowerCase());
@@ -253,7 +232,7 @@ public final class RequestManager
      */
     public void processResults(Request req)
     {
-        if (req.getType().equals(RequestType.CREATE_ALLY))
+        if (req.getType().equals(ClanRequest.CREATE_ALLY))
         {
             Clan clan = req.getClan();
             Clan ally = plugin.getClanManager().getClan(req.getTarget());
@@ -266,18 +245,18 @@ public final class RequestManager
 
                 if (!accepts.isEmpty())
                 {
-                    plugin.getClanManager().addAlly(clan, ally);
-                    plugin.getClanManager().addBb(cp.getName(), ally, ChatColor.AQUA + Helper.capitalize(accepts.get(0)) + " has accepted an alliance with " + clan.getName());
-                    plugin.getClanManager().addBb(cp.getName(), clan, ChatColor.AQUA + Helper.capitalize(cp.getName()) + " has created an alliance with " + Helper.capitalize(ally.getName()));
+                    clan.addAlly(ally);
+                    ally.addBb(cp.getName(), ChatColor.AQUA + Helper.capitalize(accepts.get(0)) + " has accepted an alliance with " + clan.getName());
+                    clan.addBb(cp.getName(), ChatColor.AQUA + Helper.capitalize(cp.getName()) + " has created an alliance with " + Helper.capitalize(ally.getName()));
                 }
                 else
                 {
-                    plugin.getClanManager().addBb(cp.getName(), ally, ChatColor.AQUA + Helper.capitalize(denies.get(0)) + " has denied an alliance with " + clan.getName());
-                    plugin.getClanManager().addBb(cp.getName(), clan, ChatColor.AQUA + "The alliance with " + Helper.capitalize(ally.getName()) + " was denied");
+                    ally.addBb(cp.getName(), ChatColor.AQUA + Helper.capitalize(denies.get(0)) + " has denied an alliance with " + clan.getName());
+                    clan.addBb(cp.getName(), ChatColor.AQUA + "The alliance with " + Helper.capitalize(ally.getName()) + " was denied");
                 }
             }
         }
-        else if (req.getType().equals(RequestType.BREAK_RIVALRY))
+        else if (req.getType().equals(ClanRequest.BREAK_RIVALRY))
         {
             Clan clan = req.getClan();
             Clan rival = plugin.getClanManager().getClan(req.getTarget());
@@ -290,14 +269,14 @@ public final class RequestManager
 
                 if (!accepts.isEmpty())
                 {
-                    plugin.getClanManager().removeRival(clan, rival);
-                    plugin.getClanManager().addBb(cp.getName(), rival, ChatColor.AQUA + Helper.capitalize(accepts.get(0)) + " has broken the rivalry with " + clan.getName());
-                    plugin.getClanManager().addBb(cp.getName(), clan, ChatColor.AQUA + Helper.capitalize(cp.getName()) + " has broken the rivalry with " + Helper.capitalize(rival.getName()));
+                    clan.removeRival(rival);
+                    rival.addBb(cp.getName(), ChatColor.AQUA + Helper.capitalize(accepts.get(0)) + " has broken the rivalry with " + clan.getName());
+                    clan.addBb(cp.getName(), ChatColor.AQUA + Helper.capitalize(cp.getName()) + " has broken the rivalry with " + Helper.capitalize(rival.getName()));
                 }
                 else
                 {
-                    plugin.getClanManager().addBb(cp.getName(), rival, ChatColor.AQUA + Helper.capitalize(denies.get(0)) + " has denied to make peace with " + clan.getName());
-                    plugin.getClanManager().addBb(cp.getName(), clan, ChatColor.AQUA + "The peace agreement with " + Helper.capitalize(rival.getName()) + " was denied");
+                    rival.addBb(cp.getName(), ChatColor.AQUA + Helper.capitalize(denies.get(0)) + " has denied to make peace with " + clan.getName());
+                    clan.addBb(cp.getName(), ChatColor.AQUA + "The peace agreement with " + Helper.capitalize(rival.getName()) + " was denied");
                 }
             }
         }
@@ -305,51 +284,51 @@ public final class RequestManager
         {
             List<String> denies = req.getDenies();
 
-            if (req.getType().equals(RequestType.DEMOTE))
+            if (req.getType().equals(ClanRequest.DEMOTE))
             {
                 Clan clan = req.getClan();
                 String demoted = req.getTarget();
 
                 if (denies.isEmpty())
                 {
-                    plugin.getClanManager().addBb("Leaders", clan, ChatColor.AQUA + Helper.capitalize(demoted) + " has been demoted back to member");
-                    plugin.getClanManager().demote(demoted, clan);
+                    clan.addBb("Leaders", ChatColor.AQUA + Helper.capitalize(demoted) + " has been demoted back to member");
+                    clan.demote(demoted);
                 }
                 else
                 {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-                    plugin.getClanManager().leaderAnnounce("Leaders", clan, ChatColor.RED + deniers + " " + (denies.size() == 1 ? "has" : "have") + " denied the demotion of " + demoted + ".  Consensus failed.");
+                    clan.leaderAnnounce("Leaders", ChatColor.RED + deniers + " " + (denies.size() == 1 ? "has" : "have") + " denied the demotion of " + demoted + ".  Consensus failed.");
                 }
             }
-            else if (req.getType().equals(RequestType.PROMOTE))
+            else if (req.getType().equals(ClanRequest.PROMOTE))
             {
                 Clan clan = req.getClan();
                 String promoted = req.getTarget();
 
                 if (denies.isEmpty())
                 {
-                    plugin.getClanManager().addBb("Leaders", clan, ChatColor.AQUA + Helper.capitalize(promoted) + " has been promoted to leader");
-                    plugin.getClanManager().promote(promoted, clan);
+                    clan.addBb("Leaders", ChatColor.AQUA + Helper.capitalize(promoted) + " has been promoted to leader");
+                    clan.promote(promoted);
                 }
                 else
                 {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-                    plugin.getClanManager().leaderAnnounce("Leaders", clan, ChatColor.RED + deniers + " " + (denies.size() == 1 ? "has" : "have") + " denied the promotion of " + promoted + ".  Consensus failed.");
+                    clan.leaderAnnounce("Leaders", ChatColor.RED + deniers + " " + (denies.size() == 1 ? "has" : "have") + " denied the promotion of " + promoted + ".  Consensus failed.");
                 }
             }
-            else if (req.getType().equals(RequestType.DELETE))
+            else if (req.getType().equals(ClanRequest.DISBAND))
             {
                 Clan clan = req.getClan();
 
                 if (denies.isEmpty())
                 {
-                    plugin.getClanManager().addBb("Leaders", clan, ChatColor.AQUA + "Clan " + clan.getName() + " has been deleted");
-                    plugin.getClanManager().deleteClan(clan);
+                    clan.addBb("Leaders", ChatColor.AQUA + "Clan " + clan.getName() + " has been disbanded");
+                    clan.disband();
                 }
                 else
                 {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-                    plugin.getClanManager().leaderAnnounce("Leaders", clan, ChatColor.RED + deniers + " " + (denies.size() == 1 ? "has" : "have") + " denied the clan deletion.  Consensus failed.");
+                    clan.leaderAnnounce("Leaders", ChatColor.RED + deniers + " " + (denies.size() == 1 ? "has" : "have") + " denied the clan deletion.  Consensus failed.");
                 }
             }
 
@@ -371,7 +350,7 @@ public final class RequestManager
             {
                 if (cp.getName().equalsIgnoreCase(playerName))
                 {
-                    plugin.getClanManager().leaderAnnounce("Leaders", req.getClan(), ChatColor.RED + Helper.capitalize(playerName) + " has signed off. " + req.getType() + " request cancelled.");
+                    req.getClan().leaderAnnounce("Leaders", ChatColor.RED + Helper.capitalize(playerName) + " has signed off. " + req.getType() + " request cancelled.");
                     requests.remove(req.getClan().getTag());
                     break;
                 }
@@ -405,11 +384,11 @@ public final class RequestManager
      */
     public void ask(Request req)
     {
-        final String tag = Helper.toColor(plugin.getSettingsManager().getClanChatBracketColor()) + plugin.getSettingsManager().getClanChatTagBracketLeft() + Helper.toColor(plugin.getSettingsManager().getTagDefaultColor()) + Helper.parseColors(req.getClan().getColorTag()) + Helper.toColor(plugin.getSettingsManager().getClanChatBracketColor()) + plugin.getSettingsManager().getClanChatTagBracketRight();
-        final String message = tag + " " + Helper.toColor(plugin.getSettingsManager().getRequestMessageColor()) + req.getMsg();
-        final String options = ChatBlock.makeEmpty(Helper.stripColors(tag)) + " " + ChatColor.DARK_GREEN + "/accept" + Helper.toColor(plugin.getSettingsManager().getPageHeadingsColor()) + " or " + ChatColor.DARK_RED + "/deny";
+        final String tag = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + req.getClan().getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight();
+        final String message = tag + " " + plugin.getSettingsManager().getRequestMessageColor() + req.getMsg();
+        final String options = ChatBlock.makeEmpty(Helper.stripColors(tag)) + " " + ChatColor.DARK_GREEN + "/accept" + plugin.getSettingsManager().getPageHeadingsColor() + " or " + ChatColor.DARK_RED + "/deny";
 
-        if (req.getType().equals(RequestType.INVITE))
+        if (req.getType().equals(ClanRequest.INVITE))
         {
             Player player = plugin.getServer().getPlayer(req.getTarget());
 

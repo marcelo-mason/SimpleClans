@@ -13,10 +13,12 @@
         </data>
         <spellchecker-wordlist xmlns="http://www.netbeans.org/ns/spellchecker-wordlist/1">
             <word>bb</word>
+            <word>clan's</word>
+            <word>clanchat</word>
             <word>motd</word>
             <word>plugin</word>
             <word>request's</word>
-            <word>clanchat</word>
+            <word>rivable</word>
         </spellchecker-wordlist>
     </configuration>
 </project>

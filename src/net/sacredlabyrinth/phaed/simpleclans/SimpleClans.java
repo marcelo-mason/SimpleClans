@@ -11,7 +11,7 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.DeathManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.PermissionsManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
-import net.sacredlabyrinth.phaed.simpleclans.managers.SpoutManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.SpoutPluginManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 
@@ -27,6 +27,17 @@ public class SimpleClans extends JavaPlugin
     private static SimpleClans instance;
     private static Logger logger = Logger.getLogger("Minecraft");
 
+    private ClanManager clanManager;
+    private CommandManager commandManager;
+    private RequestManager requestManager;
+    private DeathManager deathManager;
+    private StorageManager storageManager;
+    private SpoutPluginManager spoutPluginManager;
+    private SettingsManager settingsManager;
+    private PermissionsManager permissionsManager;
+    private SCPlayerListener playerListener;
+    private SCEntityListener entityListener;
+
     /**
      * @return the logger
      */
@@ -34,17 +45,6 @@ public class SimpleClans extends JavaPlugin
     {
         return logger;
     }
-    private ClanManager clanManager;
-    private CommandManager commandManager;
-    private RequestManager requestManager;
-    private DeathManager deathManager;
-    private StorageManager storageManager;
-    private SpoutManager spoutManager;
-    private SettingsManager settingsManager;
-    private PermissionsManager permissionsManager;
-
-    private SCPlayerListener playerListener;
-    private SCEntityListener entityListener;
 
     /**
      * @return the instance
@@ -65,16 +65,18 @@ public class SimpleClans extends JavaPlugin
         getLogger().log(level, new StringBuilder().append("[SimpleClans] ").append(MessageFormat.format(msg, arg)).toString());
     }
 
+    /**
+     *
+     */
     @Override
     public void onEnable()
     {
-        getLogger().info("[" + getDescription().getName() + "] version " + getDescription().getVersion() + " loaded");
+        logger.info("[" + getDescription().getName() + "] version " + getDescription().getVersion() + " loaded");
 
         instance = this;
-        spoutManager = new SpoutManager();
+        spoutPluginManager = new SpoutPluginManager();
         settingsManager = new SettingsManager();
         permissionsManager = new PermissionsManager();
-
         requestManager = new RequestManager();
         clanManager = new ClanManager();
         commandManager = new CommandManager();
@@ -86,7 +88,7 @@ public class SimpleClans extends JavaPlugin
 
         registerEvents();
 
-        getSpoutManager().processAllPlayers();
+        spoutPluginManager.processAllPlayers();
     }
 
     private void registerEvents()
@@ -98,11 +100,17 @@ public class SimpleClans extends JavaPlugin
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
     }
 
+    /**
+     *
+     */
     @Override
     public void onDisable()
     {
+        getServer().getScheduler().cancelTasks(this);
+        getStorageManager().closeConnection();
     }
 
     /**
@@ -148,9 +156,9 @@ public class SimpleClans extends JavaPlugin
     /**
      * @return the spoutManager
      */
-    public SpoutManager getSpoutManager()
+    public SpoutPluginManager getSpoutPluginManager()
     {
-        return spoutManager;
+        return spoutPluginManager;
     }
 
     /**

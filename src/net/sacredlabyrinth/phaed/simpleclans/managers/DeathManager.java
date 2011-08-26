@@ -19,7 +19,6 @@ public final class DeathManager
 
     /**
      *
-     * @param plugin
      */
     public DeathManager()
     {

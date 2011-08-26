@@ -3,12 +3,14 @@ main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
 version: 1.0
 softdepend: [Spout, Permissions, PermissionsBukkit, mChat]
 permissions:
+  simpleclans.admin.reload:
+    description: Can reload configuration
   simpleclans.mod.verify:
     description: Can verify simpleclans
   simpleclans.mod.ban:
     description: Can ban players from the entire plugin
-  simpleclans.mod.delete:
-    description: Can delete any clan
+  simpleclans.mod.disband:
+    description: Can disband any clan
   simpleclans.anyone.list:
     description: Can list simpleclans
   simpleclans.anyone.profile:
@@ -17,6 +19,12 @@ permissions:
     description: Can veiw a clan's member list
   simpleclans.anyone.lookup:
     description: Can lookup a player's info
+  simpleclans.anyone.leaderboard:
+    description: Can view the leaderboard
+  simpleclans.anyone.alliances:
+    description: Can view alliances by clan
+  simpleclans.anyone.rivalries:
+    description: Can view rivalries by clan
   simpleclans.member.profile:
     description: Can view his own clan's profile
   simpleclans.member.roster:
@@ -61,15 +69,17 @@ permissions:
     description: Can demote clan leaders to normal players
   simpleclans.leader.ff:
     description: Can toggle his clan's friendly fire
-  simpleclans.leader.delete:
-    description: Can delete his own clan
+  simpleclans.leader.disband:
+    description: Can disband his own clan
+  simpleclans.leader.settrust:
+    description: Can set trust levels for members
   simpleclans.mod:
     description: Permissions for moderators
     default: op
     children:
       simpleclans.mod.verify: true
       simpleclans.mod.ban: true
-      simpleclans.mod.delete: true
+      simpleclans.mod.disband: true
   simpleclans.anyone:
     description: Permissions for anyone
     default: true
@@ -77,6 +87,10 @@ permissions:
       simpleclans.anyone.list: true
       simpleclans.anyone.profile: true
       simpleclans.anyone.roster: true
+      simpleclans.anyone.lookup: true
+      simpleclans.anyone.leaderboard: true
+      simpleclans.anyone.alliances: true
+      simpleclans.anyone.rivalries: true
   simpleclans.member:
     description: Permissions for those who can be clan members
     default: true
@@ -108,4 +122,5 @@ permissions:
       simpleclans.leader.promotable: true
       simpleclans.leader.demote: true
       simpleclans.leader.ff: true
-      simpleclans.leader.delete: true
+      simpleclans.leader.disband: true
+      simpleclans.leader.settrust: true

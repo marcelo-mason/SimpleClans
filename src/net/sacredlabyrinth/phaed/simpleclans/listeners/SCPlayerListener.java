@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.listeners;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
@@ -10,6 +11,7 @@ import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerKickEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 
 /**
  *
@@ -21,7 +23,6 @@ public class SCPlayerListener extends PlayerListener
 
     /**
      *
-     * @param plugin
      */
     public SCPlayerListener()
     {
@@ -111,9 +112,16 @@ public class SCPlayerListener extends PlayerListener
             @Override
             public void run()
             {
-                plugin.getClanManager().processPlayerLogin(player);
+                plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
-                plugin.getClanManager().displayBb(player);
+                plugin.getSpoutPluginManager().processPlayer(player.getName());
+
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+                if (cp != null)
+                {
+                    cp.getClan().displayBb(player);
+                }
             }
         }, 1);
     }
@@ -125,13 +133,8 @@ public class SCPlayerListener extends PlayerListener
     @Override
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        Player player = event.getPlayer();
-
-        if (plugin.getClanManager().isRegistered(player))
-        {
-            plugin.getClanManager().processPlayerLogOff(player);
-        }
-        plugin.getRequestManager().endPendingRequest(player.getName());
+        plugin.getClanManager().updateLastSeen(event.getPlayer());
+        plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());
     }
 
     /**
@@ -141,11 +144,21 @@ public class SCPlayerListener extends PlayerListener
     @Override
     public void onPlayerKick(PlayerKickEvent event)
     {
-        Player player = event.getPlayer();
+        plugin.getClanManager().updateLastSeen(event.getPlayer());
+    }
 
-        if (plugin.getClanManager().isRegistered(player))
+    /**
+     *
+     * @param event
+     */
+    @Override
+    public void onPlayerTeleport(PlayerTeleportEvent event)
+    {
+        if (event.isCancelled())
         {
-            plugin.getClanManager().processPlayerLogOff(player);
+            return;
         }
+
+        plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
     }
 }

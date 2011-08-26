@@ -5,8 +5,13 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
+import java.util.Map;
+import java.util.NavigableSet;
+import java.util.TreeSet;
 import org.bukkit.ChatColor;
 
 
@@ -261,9 +266,9 @@ public class Helper
      * @param list
      * @return
      */
-    public static String[] toArray(List list)
+    public static String[] toArray(List<String> list)
     {
-        return (String[]) list.toArray(new String[0]);
+        return list.toArray(new String[0]);
     }
 
     /**
@@ -485,7 +490,7 @@ public class Helper
 
     /**
      * Test if a url is valid
-     * @param url
+     * @param strUrl
      * @return
      */
     public static boolean testURL(String strUrl)
@@ -496,7 +501,7 @@ public class Helper
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
             urlConn.connect();
 
-            if(urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
+            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
             {
                 return false;
             }
@@ -516,7 +521,7 @@ public class Helper
      */
     public static String escapeQuotes(String str)
     {
-        if(str == null)
+        if (str == null)
         {
             return "";
         }

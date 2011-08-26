@@ -1,13 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageByProjectileEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityListener;
@@ -22,7 +21,6 @@ public class SCEntityListener extends EntityListener
 
     /**
      *
-     * @param plugin
      */
     public SCEntityListener()
     {
@@ -48,51 +46,48 @@ public class SCEntityListener extends EntityListener
 
                 if (attacker != null)
                 {
-                    Clan aclan = plugin.getClanManager().getClan(attacker);
-                    Clan vclan = plugin.getClanManager().getClan(victim);
-
-                    ClanPlayer atp = plugin.getClanManager().getClanPlayer(attacker);
-                    ClanPlayer vtp = plugin.getClanManager().getClanPlayer(victim);
+                    ClanPlayer acp = plugin.getClanManager().getClanPlayer(attacker);
+                    ClanPlayer vcp = plugin.getClanManager().getClanPlayer(victim);
 
                     // record kill for attacker
 
-                    if (aclan != null && atp != null && plugin.getClanManager().isVerified(aclan))
+                    if (acp != null && acp.getClan().isVerified())
                     {
-                        if (vclan == null || !plugin.getClanManager().isVerified(vclan))
+                        if (vcp == null || !acp.getClan().isVerified())
                         {
-                            atp.addCivilianKill();
+                            acp.addCivilianKill();
                         }
                         else
                         {
-                            if (aclan.isRival(vclan.getTag()))
+                            if (acp.getClan().isRival(vcp.getClan().getTag()))
                             {
-                                atp.addRivalKill();
-                                plugin.getClanManager().serverAnnounce(Helper.parseColors(aclan.getColorTag()) + ChatColor.AQUA + atp.getName() + " killed rival " + Helper.parseColors(vclan.getColorTag()) + ChatColor.AQUA + Helper.toColor(plugin.getSettingsManager().getClanChatBracketColor()) + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + Helper.toColor(plugin.getSettingsManager().getClanChatNameColor()) + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + vtp.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight());
+                                acp.addRivalKill();
+                                plugin.getClanManager().serverAnnounce(acp.getClan().getColorTag() + ChatColor.AQUA + acp.getName() + " killed rival " + vcp.getClan().getColorTag() + ChatColor.AQUA + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + vcp.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight());
                             }
-                            else if (aclan.isAlly(vclan.getTag()))
+                            else if (acp.getClan().isAlly(vcp.getClan().getTag()))
                             {
                                 // do not reacord ally kills
                             }
-                            else if (aclan.equals(vclan))
+                            else if (acp.getClan().equals(vcp.getClan()))
                             {
                                 // do not record same clan kills
                             }
                             else
                             {
-                                atp.addNeutralKill();
-                                plugin.getClanManager().serverAnnounce(Helper.parseColors(aclan.getColorTag()) + ChatColor.AQUA + atp.getName() + " killed " + Helper.parseColors(vclan.getColorTag()) + ChatColor.AQUA + Helper.toColor(plugin.getSettingsManager().getClanChatBracketColor()) + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + Helper.toColor(plugin.getSettingsManager().getClanChatNameColor()) + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + vtp.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight());
+                                acp.addNeutralKill();
+                                plugin.getClanManager().serverAnnounce(acp.getClan().getColorTag() + ChatColor.AQUA + acp.getName() + " killed " + vcp.getClan().getColorTag() + ChatColor.AQUA + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + vcp.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight());
                             }
                         }
 
-                        plugin.getStorageManager().updateClanPlayer(atp);
+                        plugin.getStorageManager().updateClanPlayer(acp);
                     }
 
                     // record death for victim
 
-                    if (vclan != null && vtp != null && plugin.getClanManager().isVerified(vclan))
+                    if (vcp != null && vcp.getClan().isVerified())
                     {
-                        vtp.addDeath();
-                        plugin.getStorageManager().updateClanPlayer(vtp);
+                        vcp.addDeath();
+                        plugin.getStorageManager().updateClanPlayer(vcp);
                     }
                 }
             }
@@ -123,35 +118,36 @@ public class SCEntityListener extends EntityListener
                 attacker = (Player) sub.getDamager();
                 victim = (Player) sub.getEntity();
             }
-        }
 
-        if (event instanceof EntityDamageByProjectileEvent)
-        {
-            EntityDamageByProjectileEvent sub = (EntityDamageByProjectileEvent) event;
-
-            if (sub.getEntity() instanceof Player && sub.getDamager() instanceof Player)
+            if (sub.getEntity() instanceof Player && sub.getDamager() instanceof Arrow)
             {
-                attacker = (Player) sub.getDamager();
-                victim = (Player) sub.getEntity();
+                Arrow arrow = (Arrow) sub.getDamager();
+
+                if (arrow.getShooter() instanceof Player)
+                {
+                    attacker = (Player) arrow.getShooter();
+                    victim = (Player) sub.getEntity();
+                }
             }
         }
 
         if (attacker != null && victim != null)
         {
-            Clan aclan = plugin.getClanManager().getClan(attacker);
-            Clan vclan = plugin.getClanManager().getClan(victim);
+            ClanPlayer acp = plugin.getClanManager().getClanPlayer(attacker);
+            ClanPlayer vcp = plugin.getClanManager().getClanPlayer(victim);
 
-            ClanPlayer vtp = plugin.getClanManager().getClanPlayer(victim);
+            Clan vclan = vcp == null ? null : vcp.getClan();
+            Clan aclan = acp == null ? null : acp.getClan();
 
             if (vclan != null)
             {
                 if (aclan != null)
                 {
-                    if (vtp != null)
+                    if (vcp != null)
                     {
                         // personal ff enabled, allow damage
 
-                        if (vtp.isFriendlyFire())
+                        if (vcp.isFriendlyFire())
                         {
                             return;
                         }
