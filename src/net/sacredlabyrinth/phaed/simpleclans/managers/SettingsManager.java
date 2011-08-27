@@ -15,6 +15,7 @@ import org.bukkit.util.config.Configuration;
 public final class SettingsManager
 {
     private SimpleClans plugin;
+    private int bbLimit;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
     private List<String> bannedPlayers;
@@ -119,6 +120,7 @@ public final class SettingsManager
         chatTags = config.getBoolean("settings.display-chat-tags", true);
         combatTagSeconds = config.getInt("settings.combat-tag-seconds", 5);
         rivalLimitPercent = config.getInt("settings.rival-limit-percent", 50);
+        bbLimit = config.getInt("settings.maximum-number-of-bb-messages", 30);
         alertUrl = config.getString("spout.alert-url", "http://sacredlabyrinth.net/siren.wav");
         inGameTags = config.getBoolean("spout.in-game-tags", true);
         inGameTagsColored = config.getBoolean("spout.in-game-tags-colored", false);
@@ -189,6 +191,7 @@ public final class SettingsManager
         config.setProperty("settings.display-chat-tags", chatTags);
         config.setProperty("settings.combat-tag-seconds", combatTagSeconds);
         config.setProperty("settings.rival-limit-percent", rivalLimitPercent);
+        config.setProperty("settings.maximum-number-of-bb-messages", bbLimit);
         config.setProperty("spout.alert-url", alertUrl);
         config.setProperty("spout.in-game-tags", inGameTags);
         config.setProperty("spout.in-game-tags-colored", inGameTagsColored);
@@ -905,5 +908,13 @@ public final class SettingsManager
     public String getPageUnTrustedColor()
     {
         return Helper.toColor(pageUnTrustedColor);
+    }
+
+    /**
+     * @return the bbLimit
+     */
+    public int getBbLimit()
+    {
+        return bbLimit;
     }
 }

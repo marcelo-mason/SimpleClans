@@ -81,6 +81,7 @@ public final class CommandManager
 
         boolean isLeader = cp != null && cp.isLeader();
         boolean isTrusted = cp != null && cp.isTrusted();
+        boolean isVerified = clan != null && clan.isVerified();
 
         ChatBlock chatBlock = new ChatBlock();
 
@@ -203,13 +204,13 @@ public final class CommandManager
                 {
                     chatBlock.addRow(ChatColor.AQUA + "  /" + plugin.getSettingsManager().getCommandClan() + " kick [player]" + ChatColor.WHITE + " - Kick a player from the clan");
                 }
-                if (plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust"))
+                if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust"))
                 {
                     chatBlock.addRow(ChatColor.AQUA + "  /" + plugin.getSettingsManager().getCommandClan() + " trust/untrust [player]" + ChatColor.WHITE + " - Set trust level");
                 }
                 if (plugin.getPermissionsManager().has(player, "simpleclans.leader.promote"))
                 {
-                    chatBlock.addRow(ChatColor.AQUA + "  /" + plugin.getSettingsManager().getCommandClan() + " promote <member>" + ChatColor.WHITE + " - Promote a member to leader");
+                    chatBlock.addRow(ChatColor.AQUA + "  /" + plugin.getSettingsManager().getCommandClan() + " promote [member]" + ChatColor.WHITE + " - Promote a member to leader");
                 }
                 if (plugin.getPermissionsManager().has(player, "simpleclans.leader.demote"))
                 {
@@ -547,7 +548,7 @@ public final class CommandManager
                             String name = clan.isVerified() ? plugin.getSettingsManager().getPageClanNameColor() + clan.getName() : ChatColor.GRAY + "unverified";
                             String fullname = tag + " " + name;
                             String size = ChatColor.WHITE + "" + clan.getSize();
-                            String kdr = clan.isVerified() ? ChatColor.WHITE + "" + formatter.format(clan.getTotalKDR()) : "";
+                            String kdr = clan.isVerified() ? ChatColor.YELLOW + "" + formatter.format(clan.getTotalKDR()) : "";
 
                             chatBlock.addRow("  " + fullname, kdr, size);
                         }
@@ -639,7 +640,7 @@ public final class CommandManager
                     String founded = ChatColor.WHITE + "" + clan.getFoundedString();
                     String allies = ChatColor.WHITE + "" + clan.getAllyString(subColor + ", ");
                     String rivals = ChatColor.WHITE + "" + clan.getRivalString(subColor + ", ");
-                    String kdr = ChatColor.WHITE + "" + formatter.format(clan.getTotalKDR());
+                    String kdr = ChatColor.YELLOW + "" + formatter.format(clan.getTotalKDR());
                     String deaths = ChatColor.WHITE + "" + clan.getTotalDeaths();
                     String rival = ChatColor.WHITE + "" + clan.getTotalRival();
                     String neutral = ChatColor.WHITE + "" + clan.getTotalNeutral();
@@ -866,7 +867,7 @@ public final class CommandManager
                     String neutral = ChatColor.WHITE + "" + targetCp.getNeutralKills();
                     String civilian = ChatColor.WHITE + "" + targetCp.getCivilianKills();
                     String deaths = ChatColor.WHITE + "" + targetCp.getDeaths();
-                    String kdr = ChatColor.WHITE + "" + formatter.format(targetCp.getKDR());
+                    String kdr = ChatColor.YELLOW + "" + formatter.format(targetCp.getKDR());
                     String pastClans = ChatColor.WHITE + "" + targetCp.getPastClansString(headColor + ", ");
 
                     ChatBlock.sendMessage(player, "  " + subColor + "Clan: " + clanName);

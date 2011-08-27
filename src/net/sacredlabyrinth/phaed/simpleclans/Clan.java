@@ -2,8 +2,6 @@ package net.sacredlabyrinth.phaed.simpleclans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
-import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -22,6 +20,7 @@ public class Clan implements Serializable, Comparable<Clan>
     private static final long serialVersionUID = 1L;
     private boolean verified;
     private String tag;
+    private String flags;
     private String colorTag;
     private String name;
     private boolean friendlyFire;
@@ -39,6 +38,7 @@ public class Clan implements Serializable, Comparable<Clan>
     public Clan()
     {
         this.capeUrl = "";
+        this.flags = "";
     }
 
     /**
@@ -90,6 +90,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @return the name
      */
     public String getName()
@@ -98,6 +99,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param name the name to set
      */
     public void setName(String name)
@@ -106,6 +108,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns the clan's tag clean (no colors)
      * @return the tag
      */
     public String getTag()
@@ -114,6 +117,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param tag the tag to set
      */
     public void setTag(String tag)
@@ -122,6 +126,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns the last used date in milliseconds
      * @return the lastUsed
      */
     public long getLastUsed()
@@ -130,7 +135,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * Updates last used date
+     * Updates last used date to today (does not update clan on db)
      */
     public void updateLastUsed()
     {
@@ -138,7 +143,8 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * @return number of days the clan has been inactive
+     * Returns the number of days the clan has been inactive
+     * @return
      */
     public int getInactiveDays()
     {
@@ -147,6 +153,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param lastUsed the lastUsed to set
      */
     public void setLastUsed(long lastUsed)
@@ -155,6 +162,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Check whether this clan allows friendly fire
      * @return the friendlyFire
      */
     public boolean isFriendlyFire()
@@ -163,6 +171,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Sets the friendly fire status of this clan (does not update clan on db)
      * @param friendlyFire the friendlyFire to set
      */
     public void setFriendlyFire(boolean friendlyFire)
@@ -191,6 +200,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns a list with the contents of the bulletin board
      * @return the bb
      */
     public List<String> getBb()
@@ -199,6 +209,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Return a list of all the allies' tags clean (no colors)
      * @return the allies
      */
     public List<String> getAllies()
@@ -206,21 +217,12 @@ public class Clan implements Serializable, Comparable<Clan>
         return Collections.unmodifiableList(allies);
     }
 
-    /**
-     *
-     * @param tag
-     */
-    public void addAlly(String tag)
+    private void addAlly(String tag)
     {
         allies.add(tag);
     }
 
-    /**
-     *
-     * @param ally
-     * @return
-     */
-    public boolean removeAlly(String ally)
+    private boolean removeAlly(String ally)
     {
         if (!allies.contains(ally))
         {
@@ -232,6 +234,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * The founded date in milliseconds
      * @return the founded
      */
     public long getFounded()
@@ -240,7 +243,8 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * @return the string representation of the founded date
+     * The string representation of the founded date
+     * @return
      */
     public String getFoundedString()
     {
@@ -248,6 +252,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param founded the founded to set
      */
     public void setFounded(long founded)
@@ -256,6 +261,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns the color tag for this clan
      * @return the colorTag
      */
     public String getColorTag()
@@ -264,6 +270,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param colorTag the colorTag to set
      */
     public void setColorTag(String colorTag)
@@ -272,19 +279,24 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     *
+     * (used internally)
      * @param msg
      */
     public void addBb(String msg)
     {
+        while (bb.size() > SimpleClans.getInstance().getSettingsManager().getBbLimit())
+        {
+            bb.remove(0);
+        }
+
         bb.add(msg);
     }
 
     /**
-     * Adds a cp to the clan's member list (used internally)
+     * (used internally)
      * @param cp
      */
-    public void addMember(ClanPlayer cp)
+    public void importMember(ClanPlayer cp)
     {
         if (!this.members.contains(cp.getCleanName()))
         {
@@ -293,7 +305,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * Removes a cp from the clan's member list (used internally)
+     * (used internally)
      * @param playerName
      */
     public void removeMember(String playerName)
@@ -311,6 +323,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns a list of all rival tags clean (no colors)
      * @return the rivals
      */
     public List<String> getRivals()
@@ -318,21 +331,12 @@ public class Clan implements Serializable, Comparable<Clan>
         return Collections.unmodifiableList(rivals);
     }
 
-    /**
-     *
-     * @param tag
-     */
-    public void addRival(String tag)
+    private void addRival(String tag)
     {
         rivals.add(tag);
     }
 
-    /**
-     *
-     * @param rival
-     * @return
-     */
-    public boolean removeRival(String rival)
+    private boolean removeRival(String rival)
     {
         if (!rivals.contains(rival))
         {
@@ -378,6 +382,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param verified the verified to set
      */
     public void setVerified(boolean verified)
@@ -386,6 +391,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns the cape url for this clan
      * @return the capeUrl
      */
     public String getCapeUrl()
@@ -394,6 +400,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param capeUrl the capeUrl to set
      */
     public void setCapeUrl(String capeUrl)
@@ -402,6 +409,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @return the packedBb
      */
     public String getPackedBb()
@@ -410,6 +418,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param packedBb the packedBb to set
      */
     public void setPackedBb(String packedBb)
@@ -418,6 +427,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @return the packedAllies
      */
     public String getPackedAllies()
@@ -426,6 +436,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param packedAllies the packedAllies to set
      */
     public void setPackedAllies(String packedAllies)
@@ -434,6 +445,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @return the packedRivals
      */
     public String getPackedRivals()
@@ -442,6 +454,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * (used internally)
      * @param packedRivals the packedRivals to set
      */
     public void setPackedRivals(String packedRivals)
@@ -450,7 +463,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * Returns a string with all ally tags
+     * Returns a separator delimited string with all the ally clan's colored tags
      * @param sep
      * @return
      */
@@ -479,7 +492,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * Returns a string with all rival tags
+     * Returns a separator delimited string with all the rival clan's colored tags
      * @param sep
      * @return
      */
@@ -508,6 +521,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns a separator delimited string with all the leaders
      * @param prefix
      * @param sep
      * @return the formatted leaders string
@@ -536,17 +550,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public boolean isLeader(Player player)
     {
-        if (isMember(player))
-        {
-            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player.getName().toLowerCase());
-
-            if (cp.isLeader())
-            {
-                return true;
-            }
-        }
-
-        return false;
+        return isLeader(player.getName());
     }
 
     /**
@@ -570,6 +574,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Get all members (leaders, and non-leaders) in the clan
      * @return the members
      */
     public List<ClanPlayer> getMembers()
@@ -586,6 +591,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Get all leaders in the clan
      * @return the leaders
      */
     public List<ClanPlayer> getLeaders()
@@ -606,6 +612,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Get all non-leader players in the clan
      * @return non leaders
      */
     public List<ClanPlayer> getNonLeaders()
@@ -762,7 +769,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * SEt a clan's cape url
+     * Set a clan's cape url
      * @param url
      */
     public void setClanCape(String url)
@@ -801,7 +808,7 @@ public class Clan implements Serializable, Comparable<Clan>
         cp.removePastClan(getColorTag());
         cp.setClan(this);
         cp.setLeader(false);
-        addMember(cp);
+        importMember(cp);
 
         if (SimpleClans.getInstance().getSettingsManager().isClanTrustByDefault())
         {
@@ -871,7 +878,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * Add an ally to a clan
+     * Add an ally to a clan, and the clan to the ally
      * @param ally
      */
     public void addAlly(Clan ally)
@@ -887,7 +894,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     *
+     * Remove an ally form the clan, and the clan from the ally
      * @param ally
      */
     public void removeAlly(Clan ally)
@@ -900,7 +907,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * Remove an ally from a clan
+     * Add a rival to the clan, and the clan to the rival
      * @param rival
      */
     public void addRival(Clan rival)
@@ -916,7 +923,7 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     *
+     * Removes a rival from the clan, the clan from the rival
      * @param rival
      */
     public void removeRival(Clan rival)
@@ -1160,5 +1167,21 @@ public class Clan implements Serializable, Comparable<Clan>
     public boolean isUnrivable()
     {
         return SimpleClans.getInstance().getSettingsManager().isUnrivable(getTag());
+    }
+
+    /**
+     * @return the flags
+     */
+    public String getFlags()
+    {
+        return flags;
+    }
+
+    /**
+     * @param flags the flags to set
+     */
+    public void setFlags(String flags)
+    {
+        this.flags = flags;
     }
 }

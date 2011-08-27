@@ -17,6 +17,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean leader;
     private boolean trusted;
     private String tag;
+    private String flags;
     private Clan clan;
     private boolean friendlyFire;
     private int neutralKills;
@@ -34,6 +35,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public ClanPlayer()
     {
         this.tag = "";
+        this.flags = "";
     }
 
     /**
@@ -81,6 +83,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @return the name
      */
     public String getName()
@@ -89,6 +92,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns the clean name for this player (lowercase)
      * @return the name
      */
     public String getCleanName()
@@ -97,6 +101,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param name the name to set
      */
     public void setName(String name)
@@ -105,6 +110,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Whether this player is a leader or not
      * @return the leader
      */
     public boolean isLeader()
@@ -113,6 +119,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Sets this player as a leader (does not update clanplayer to db)
      * @param leader the leader to set
      */
     public void setLeader(boolean leader)
@@ -126,6 +133,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns the last seen date for this player in milliseconds
      * @return the lastSeen
      */
     public long getLastSeen()
@@ -134,6 +142,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param lastSeen the lastSeen to set
      */
     public void setLastSeen(long lastSeen)
@@ -142,7 +151,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Updates last seen date
+     * Updates last seen date to today
      */
     public void updateLastSeen()
     {
@@ -181,6 +190,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns the number of rival kills this player has
      * @return the rivalKills
      */
     public int getRivalKills()
@@ -189,6 +199,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param rivalKills the rivalKills to set
      */
     public void setRivalKills(int rivalKills)
@@ -197,7 +208,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Adds one rival kill
+     * Adds one rival kill to this player (does not update clanplayer to db)
      */
     public void addRivalKill()
     {
@@ -205,6 +216,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns the number of civilian kills this player has
      * @return the civilianKills
      */
     public int getCivilianKills()
@@ -213,6 +225,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param civilianKills the civilianKills to set
      */
     public void setCivilianKills(int civilianKills)
@@ -221,7 +234,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Adds one civilian kill
+     * Adds one civilian kill to this player (does not update clanplayer to db)
      */
     public void addCivilianKill()
     {
@@ -229,6 +242,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns the number of neutral kills this player has
      * @return the neutralKills
      */
     public int getNeutralKills()
@@ -237,6 +251,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param neutralKills the neutralKills to set
      */
     public void setNeutralKills(int neutralKills)
@@ -245,7 +260,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Adds one civilian kill
+     * Adds one civilian kill to this player (does not update clanplayer to db)
      */
     public void addNeutralKill()
     {
@@ -253,6 +268,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Whether this player is allowing friendly fire
      * @return the friendlyFire
      */
     public boolean isFriendlyFire()
@@ -261,6 +277,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Sets whether this player is allowing friendly fire (does not update clanplayer to db)
      * @param friendlyFire the friendlyFire to set
      */
     public void setFriendlyFire(boolean friendlyFire)
@@ -269,6 +286,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @return the vote
      */
     public VoteResult getVote()
@@ -277,6 +295,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param vote the vote to set
      */
     public void setVote(VoteResult vote)
@@ -285,6 +304,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns the number of deaths this player has
      * @return the deaths
      */
     public int getDeaths()
@@ -293,6 +313,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param deaths the deaths to set
      */
     public void setDeaths(int deaths)
@@ -301,7 +322,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Adds one death
+     * Adds one death to this player  (does not update clanplayer to db)
      */
     public void addDeath()
     {
@@ -309,7 +330,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns weighted kill score
+     * Returns weighted kill score for this player (kills multiplied by the different weights)
      * @return
      */
     public double getWeightedKills()
@@ -319,7 +340,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns kill / death ratio
+     * Returns weighted-kill/death ratio
      * @return
      */
     public float getKDR()
@@ -333,6 +354,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns the player's join date to his current clan in milliseconds
      * @return the joinDate
      */
     public long getJoinDate()
@@ -341,6 +363,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param joinDate the joinDate to set
      */
     public void setJoinDate(long joinDate)
@@ -349,7 +372,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * @return the string representation of the join date
+     * Returns a string representation of the join date
+     * @return
      */
     public String getJoinDateString()
     {
@@ -357,7 +381,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * @return the string representation of the last seen date
+     * Returns a string representation of the last seen date
+     * @return
      */
     public String getLastSeenString()
     {
@@ -365,7 +390,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * @return number of days the player has been inactive
+     * Returns the number of days the player has been inactive
+     * @return
      */
     public int getInactiveDays()
     {
@@ -374,6 +400,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @return the PackedPastClans
      */
     public String getPackedPastClans()
@@ -391,6 +418,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param PackedPastClans the PackedPastClans to set
      */
     public void setPackedPastClans(String PackedPastClans)
@@ -399,7 +427,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     *
+     * Adds a past clan to the player (does not update the clanplayer to db)
      * @param tag
      */
     public void addPastClan(String tag)
@@ -408,8 +436,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     *
-     * @param tag
+     * Removes a past clan from the player (does not update the clanplayer to db)
+     * @param tag is the clan's colored tag
      */
     public void removePastClan(String tag)
     {
@@ -417,7 +445,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     *
+     * Returns a separator delimited string with the color tags for all past clans this player has been in
      * @param sep
      * @return
      */
@@ -441,6 +469,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns a list with all past clans color tags this player has been in
      * @return the pastClans
      */
     public HashSet<String> getPastClans()
@@ -451,6 +480,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns this player's clan
      * @return the clan
      */
     public Clan getClan()
@@ -459,6 +489,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * (used internally)
      * @param clan the clan to set
      */
     public void setClan(Clan clan)
@@ -476,6 +507,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns this player's clan's tag.  Empty string if he's not in a clan.
      * @return the tag
      */
     public String getTag()
@@ -484,6 +516,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns this player's trusted status
      * @return the trusted
      */
     public boolean isTrusted()
@@ -492,10 +525,27 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Sets this player's trusted status (does not update the clanplayer to db)
      * @param trusted the trusted to set
      */
     public void setTrusted(boolean trusted)
     {
         this.trusted = trusted;
+    }
+
+    /**
+     * @return the flags
+     */
+    public String getFlags()
+    {
+        return flags;
+    }
+
+    /**
+     * @param flags the flags to set
+     */
+    public void setFlags(String flags)
+    {
+        this.flags = flags;
     }
 }

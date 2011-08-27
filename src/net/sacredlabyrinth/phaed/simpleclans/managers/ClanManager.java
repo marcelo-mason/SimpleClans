@@ -2,9 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Level;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
@@ -73,10 +71,12 @@ public final class ClanManager
 
         Clan clan = new Clan(cp, colorTag, name, verified);
         clan.addPlayerToClan(cp);
+        cp.setLeader(true);
 
         plugin.getStorageManager().insertClan(clan);
         importClan(clan);
 
+        plugin.getStorageManager().updateClanPlayer(cp);
         plugin.getSpoutPluginManager().processPlayer(player.getName());
     }
 
@@ -120,7 +120,8 @@ public final class ClanManager
     }
 
     /**
-     * @return the collection of all clan players, including the disabled ones
+     * Returns the collection of all clan players, including the disabled ones
+     * @return
      */
     public List<ClanPlayer> getAllClanPlayers()
     {
