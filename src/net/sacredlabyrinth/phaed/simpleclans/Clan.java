@@ -39,6 +39,7 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         this.capeUrl = "";
         this.flags = "";
+        this.tag = "";
     }
 
     /**
@@ -57,6 +58,7 @@ public class Clan implements Serializable, Comparable<Clan>
         this.lastUsed = (new Date()).getTime();
         this.verified = verified;
         this.capeUrl = "";
+        this.flags = "";
     }
 
     @Override
@@ -90,12 +92,12 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * (used internally)
+     * Return's the clan's name
      * @return the name
      */
     public String getName()
     {
-        return name;
+        return name.toLowerCase();
     }
 
     /**
@@ -279,17 +281,18 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * (used internally)
+     * Adds a bulletin board message without announcer
      * @param msg
      */
     public void addBb(String msg)
     {
-        while (bb.size() > SimpleClans.getInstance().getSettingsManager().getBbLimit())
+        while (bb.size() > SimpleClans.getInstance().getSettingsManager().getBbSize())
         {
             bb.remove(0);
         }
 
         bb.add(msg);
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
 
     /**
@@ -841,6 +844,7 @@ public class Clan implements Serializable, Comparable<Clan>
         cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
         cp.setLeader(false);
         cp.setTrusted(false);
+        cp.setJoinDate(0);
         removeMember(player.getName());
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
@@ -1088,9 +1092,8 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (isVerified())
         {
-            addBb(msg);
+            addBb( SimpleClans.getInstance().getSettingsManager().getBbColor() + msg);
             clanAnnounce(announcerName, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
-            SimpleClans.getInstance().getStorageManager().updateClan(this);
         }
     }
 
@@ -1102,12 +1105,10 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (isVerified())
         {
-            List<String> chunk = bb.subList(Math.max(bb.size() - SimpleClans.getInstance().getSettingsManager().getBbSize(), 0), bb.size());
-
             ChatBlock.sendBlank(player);
             ChatBlock.saySingle(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor() + Helper.capitalize(getName()) + " bulletin board");
 
-            for (String msg : chunk)
+            for (String msg : bb)
             {
                 ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
             }
@@ -1144,16 +1145,16 @@ public class Clan implements Serializable, Comparable<Clan>
 
         clans.remove(getTag());
 
-        for (Clan tm : clans)
+        for (Clan c : clans)
         {
-            if (tm.removeRival(getTag()))
+            if (c.removeRival(getTag()))
             {
-                tm.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Rivalry has ended.");
+                c.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Rivalry has ended.");
             }
 
-            if (tm.removeAlly(getTag()))
+            if (c.removeAlly(getTag()))
             {
-                tm.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Alliance has ended.");
+                c.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Alliance has ended.");
             }
         }
 

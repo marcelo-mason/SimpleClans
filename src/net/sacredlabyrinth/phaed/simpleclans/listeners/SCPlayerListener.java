@@ -1,5 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
+import java.util.List;
+import java.util.logging.Level;
+import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
@@ -36,6 +39,28 @@ public class SCPlayerListener extends PlayerListener
     @Override
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
+        if (event.isCancelled())
+        {
+            return;
+        }
+
+        Player player = event.getPlayer();
+
+        if (player == null)
+        {
+            return;
+        }
+
+        if (!plugin.getSettingsManager().getClanChatEnable())
+        {
+            return;
+        }
+
+        if (event.getMessage().length() == 0)
+        {
+            return;
+        }
+
         String[] split = event.getMessage().substring(1).split(" ");
 
         if (split.length == 0)
@@ -44,42 +69,33 @@ public class SCPlayerListener extends PlayerListener
         }
 
         String command = split[0];
-        String[] arg = Helper.removeFirst(split);
+        String msg = Helper.toMessage(Helper.removeFirst(split));
 
         if (plugin.getClanManager().isClan(command))
         {
             Clan clan = plugin.getClanManager().getClan(command);
 
-            plugin.getCommandManager().processClanChat(event.getPlayer(), clan, Helper.toMessage(arg));
-            event.setCancelled(true);
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
-        {
-            if (arg.length == 0)
+            if (!clan.isMember(player))
             {
-                plugin.getCommandManager().processMenu(event.getPlayer());
-            }
-            else
-            {
-                plugin.getCommandManager().processClan(event.getPlayer(), arg[0], Helper.removeFirst(arg));
+                return;
             }
 
+            announceClan(clan, player, msg);
             event.setCancelled(true);
         }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandMore()))
+    }
+
+    private void announceClan(Clan clan, Player player, String msg)
+    {
+        String message = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
+        SimpleClans.log(Level.INFO, plugin.getSettingsManager().getClanChatTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + msg);
+
+        List<ClanPlayer> cps = clan.getMembers();
+
+        for (ClanPlayer cp : cps)
         {
-            plugin.getCommandManager().processMore(event.getPlayer());
-            event.setCancelled(true);
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAccept()))
-        {
-            plugin.getCommandManager().processAccept(event.getPlayer());
-            event.setCancelled(true);
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandDeny()))
-        {
-            plugin.getCommandManager().processDeny(event.getPlayer());
-            event.setCancelled(true);
+            Player member = plugin.getServer().getPlayer(cp.getName());
+            ChatBlock.sendMessage(member, message);
         }
     }
 

@@ -1,7 +1,10 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import java.text.DecimalFormat;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
@@ -10,7 +13,10 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.ChatColor;
+import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 /**
  *
@@ -75,8 +81,8 @@ public final class ClanManager
 
         plugin.getStorageManager().insertClan(clan);
         importClan(clan);
-
         plugin.getStorageManager().updateClanPlayer(cp);
+
         plugin.getSpoutPluginManager().processPlayer(player.getName());
     }
 
@@ -230,7 +236,7 @@ public final class ClanManager
             if (clan != null)
             {
                 String tag = plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag();
-                String tagLabel = tag + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator().trim();
+                String tagLabel = tag + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
 
                 fullname = tagLabel + lastColor + fullname;
             }
@@ -282,6 +288,7 @@ public final class ClanManager
                 cp.setClan(null);
                 cp.addPastClan(clan.getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
                 cp.setLeader(false);
+                cp.setJoinDate(0);
                 clan.removeMember(playerName);
 
                 plugin.getStorageManager().updateClanPlayer(cp);
@@ -309,5 +316,391 @@ public final class ClanManager
         }
 
         return clanCount;
+    }
+
+    /**
+     * Returns a formatted string detailing the players armor
+     * @param inv
+     * @return
+     */
+    public String getArmorString(PlayerInventory inv)
+    {
+        String out = "";
+
+        ItemStack h = inv.getHelmet();
+
+        if (h.getType().equals(Material.CHAINMAIL_HELMET))
+        {
+            out += ChatColor.WHITE + "H";
+        }
+        else if (h.getType().equals(Material.DIAMOND_HELMET))
+        {
+            out += ChatColor.AQUA + "H";
+        }
+        else if (h.getType().equals(Material.GOLD_HELMET))
+        {
+            out += ChatColor.YELLOW + "H";
+        }
+        else if (h.getType().equals(Material.IRON_HELMET))
+        {
+            out += ChatColor.GRAY + "H";
+        }
+        else if (h.getType().equals(Material.LEATHER_HELMET))
+        {
+            out += ChatColor.GOLD + "H";
+        }
+        else if (h.getType().equals(Material.AIR))
+        {
+            out += ChatColor.BLACK + "H";
+        }
+        else
+        {
+            out += ChatColor.RED + "H";
+        }
+
+        ItemStack c = inv.getChestplate();
+
+        if (c.getType().equals(Material.CHAINMAIL_CHESTPLATE))
+        {
+            out += ChatColor.WHITE + "C";
+        }
+        else if (c.getType().equals(Material.DIAMOND_CHESTPLATE))
+        {
+            out += ChatColor.AQUA + "C";
+        }
+        else if (c.getType().equals(Material.GOLD_CHESTPLATE))
+        {
+            out += ChatColor.YELLOW + "C";
+        }
+        else if (c.getType().equals(Material.IRON_CHESTPLATE))
+        {
+            out += ChatColor.GRAY + "C";
+        }
+        else if (c.getType().equals(Material.LEATHER_CHESTPLATE))
+        {
+            out += ChatColor.GOLD + "C";
+        }
+        else if (c.getType().equals(Material.AIR))
+        {
+            out += ChatColor.BLACK + "C";
+        }
+        else
+        {
+            out += ChatColor.RED + "C";
+        }
+
+        ItemStack l = inv.getLeggings();
+
+        if (l.getType().equals(Material.CHAINMAIL_LEGGINGS))
+        {
+            out += ChatColor.WHITE + "L";
+        }
+        else if (l.getType().equals(Material.DIAMOND_LEGGINGS))
+        {
+            out += ChatColor.AQUA + "L";
+        }
+        else if (l.getType().equals(Material.GOLD_LEGGINGS))
+        {
+            out += ChatColor.YELLOW + "L";
+        }
+        else if (l.getType().equals(Material.IRON_LEGGINGS))
+        {
+            out += ChatColor.GRAY + "L";
+        }
+        else if (l.getType().equals(Material.LEATHER_LEGGINGS))
+        {
+            out += ChatColor.GOLD + "L";
+        }
+        else if (l.getType().equals(Material.AIR))
+        {
+            out += ChatColor.BLACK + "L";
+        }
+        else
+        {
+            out += ChatColor.RED + "L";
+        }
+
+        ItemStack b = inv.getBoots();
+
+        if (b.getType().equals(Material.CHAINMAIL_BOOTS))
+        {
+            out += ChatColor.WHITE + "B";
+        }
+        else if (b.getType().equals(Material.DIAMOND_BOOTS))
+        {
+            out += ChatColor.AQUA + "B";
+        }
+        else if (b.getType().equals(Material.GOLD_BOOTS))
+        {
+            out += ChatColor.YELLOW + "B";
+        }
+        else if (b.getType().equals(Material.IRON_BOOTS))
+        {
+            out += ChatColor.GRAY + "B";
+        }
+        else if (b.getType().equals(Material.LEATHER_BOOTS))
+        {
+            out += ChatColor.GOLD + "B";
+        }
+        else if (b.getType().equals(Material.AIR))
+        {
+            out += ChatColor.BLACK + "B";
+        }
+        else
+        {
+            out += ChatColor.RED + "B";
+        }
+
+        return out;
+    }
+
+    /**
+     * Returns a formatted string detailing the players weapons
+     * @param inv
+     * @return
+     */
+    public String getWeaponString(PlayerInventory inv)
+    {
+        String headColor = plugin.getSettingsManager().getPageHeadingsColor();
+
+        String out = "";
+
+        int count = getItemCount(inv.all(Material.DIAMOND_SWORD));
+
+        if (count > 0)
+        {
+            String countString = count > 1 ? count + "" : "";
+            out += ChatColor.AQUA + "S" + headColor + countString;
+        }
+
+        count = getItemCount(inv.all(Material.GOLD_SWORD));
+
+        if (count > 0)
+        {
+            String countString = count > 1 ? count + "" : "";
+            out += ChatColor.YELLOW + "S" + headColor + countString;
+        }
+
+        count = getItemCount(inv.all(Material.IRON_SWORD));
+
+        if (count > 0)
+        {
+            String countString = count > 1 ? count + "" : "";
+            out += ChatColor.GRAY + "S" + headColor + countString;
+        }
+
+        count = getItemCount(inv.all(Material.WOOD_SWORD));
+
+        if (count > 0)
+        {
+            String countString = count > 1 ? count + "" : "";
+            out += ChatColor.GOLD + "S" + headColor + countString;
+        }
+
+        count = getItemCount(inv.all(Material.BOW));
+
+        if (count > 0)
+        {
+            String countString = count > 1 ? count + "" : "";
+            out += ChatColor.GOLD + "B" + headColor + countString;
+        }
+
+        count = getItemCount(inv.all(Material.ARROW));
+
+        if (count > 0)
+        {
+            out += ChatColor.WHITE + "A" + headColor + count;
+        }
+
+        if (out.length() == 0)
+        {
+            out = ChatColor.BLACK + "None";
+        }
+
+        return out;
+    }
+
+    private int getItemCount(HashMap<Integer, ? extends ItemStack> all)
+    {
+        int count = 0;
+
+        for (ItemStack is : all.values())
+        {
+            count += is.getAmount();
+        }
+
+        return count;
+    }
+
+    /**
+     * Returns a formatted string detailing the players food
+     * @param inv
+     * @return
+     */
+    public String getFoodString(PlayerInventory inv)
+    {
+        double out = 0;
+
+        int count = getItemCount(inv.all(Material.GRILLED_PORK));
+
+        if (count > 0)
+        {
+            out += count * 4;
+        }
+
+        count = getItemCount(inv.all(Material.COOKED_FISH));
+
+        if (count > 0)
+        {
+            out += count * 2.5;
+        }
+
+        count = getItemCount(inv.all(Material.COOKIE));
+
+        if (count > 0)
+        {
+            out += count * .5;
+        }
+
+        count = getItemCount(inv.all(Material.CAKE));
+
+        if (count > 0)
+        {
+            out += count * 9;
+        }
+
+        count = getItemCount(inv.all(Material.CAKE_BLOCK));
+
+        if (count > 0)
+        {
+            out += count * 9;
+        }
+
+        count = getItemCount(inv.all(Material.MUSHROOM_SOUP));
+
+        if (count > 0)
+        {
+            out += count * 5;
+        }
+
+        count = getItemCount(inv.all(Material.BREAD));
+
+        if (count > 0)
+        {
+            out += count * 2.5;
+        }
+
+        count = getItemCount(inv.all(Material.APPLE));
+
+        if (count > 0)
+        {
+            out += count * 2;
+        }
+
+        count = getItemCount(inv.all(Material.GOLDEN_APPLE));
+
+        if (count > 0)
+        {
+            out += count * 10;
+        }
+
+        if (out == 0)
+        {
+            return ChatColor.BLACK + "None";
+        }
+        else
+        {
+            return new DecimalFormat("#.#").format(out) + "" + ChatColor.RED + "h";
+        }
+    }
+
+    /**
+     * Returns a formatted string detailing the players health
+     * @param health
+     * @return
+     */
+    public String getHealthString(int health)
+    {
+        String out = "";
+
+        if (health >= 16)
+        {
+            out += ChatColor.GREEN;
+        }
+        else if (health >= 8)
+        {
+            out += ChatColor.GOLD;
+        }
+        else
+        {
+            out += ChatColor.RED;
+        }
+
+        for (int i = 0; i < health; i++)
+        {
+            out += '|';
+        }
+
+        return out;
+    }
+
+    /**
+     * Sort clans by KDR
+     * @param clans
+     * @return
+     */
+    public void sortClansByKDR(List<Clan> clans)
+    {
+        Collections.sort(clans, new Comparator<Clan>()
+        {
+            @Override
+            public int compare(Clan c1, Clan c2)
+            {
+                Float o1 = Float.valueOf(c1.getTotalKDR());
+                Float o2 = Float.valueOf(c2.getTotalKDR());
+
+                return o2.compareTo(o1);
+            }
+        });
+    }
+
+    /**
+     * Sort clan players by KDR
+     * @param clans
+     * @return
+     */
+    public void sortClanPlayersByKDR(List<ClanPlayer> cps)
+    {
+        Collections.sort(cps, new Comparator<ClanPlayer>()
+        {
+            @Override
+            public int compare(ClanPlayer c1, ClanPlayer c2)
+            {
+                Float o1 = Float.valueOf(c1.getKDR());
+                Float o2 = Float.valueOf(c2.getKDR());
+
+                return o2.compareTo(o1);
+            }
+        });
+    }
+
+    /**
+     * Sort clan players by last seen days
+     * @param clans
+     * @return
+     */
+    public void sortClanPlayersByLastSeen(List<ClanPlayer> cps)
+    {
+        Collections.sort(cps, new Comparator<ClanPlayer>()
+        {
+            @Override
+            public int compare(ClanPlayer c1, ClanPlayer c2)
+            {
+                Double o1 = Double.valueOf(c1.getLastSeenDays());
+                Double o2 = Double.valueOf(c2.getLastSeenDays());
+
+                return o1.compareTo(o2);
+            }
+        });
     }
 }

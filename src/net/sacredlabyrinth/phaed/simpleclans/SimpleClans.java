@@ -3,10 +3,13 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.commands.AcceptCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ClanCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.DenyCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.MoreCommand;
 
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
-import net.sacredlabyrinth.phaed.simpleclans.managers.CommandManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.DeathManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.PermissionsManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager;
@@ -26,9 +29,7 @@ public class SimpleClans extends JavaPlugin
 {
     private static SimpleClans instance;
     private static Logger logger = Logger.getLogger("Minecraft");
-
     private ClanManager clanManager;
-    private CommandManager commandManager;
     private RequestManager requestManager;
     private DeathManager deathManager;
     private StorageManager storageManager;
@@ -79,7 +80,6 @@ public class SimpleClans extends JavaPlugin
         permissionsManager = new PermissionsManager();
         requestManager = new RequestManager();
         clanManager = new ClanManager();
-        commandManager = new CommandManager();
         deathManager = new DeathManager();
         storageManager = new StorageManager();
 
@@ -87,6 +87,7 @@ public class SimpleClans extends JavaPlugin
         entityListener = new SCEntityListener();
 
         registerEvents();
+        registerCommands();
 
         spoutPluginManager.processAllPlayers();
     }
@@ -101,6 +102,14 @@ public class SimpleClans extends JavaPlugin
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
+    }
+
+    private void registerCommands()
+    {
+        getCommand(settingsManager.getCommandClan()).setExecutor(new ClanCommand());
+        getCommand(settingsManager.getCommandMore()).setExecutor(new MoreCommand());
+        getCommand(settingsManager.getCommandDeny()).setExecutor(new DenyCommand());
+        getCommand(settingsManager.getCommandAccept()).setExecutor(new AcceptCommand());
     }
 
     /**
@@ -119,14 +128,6 @@ public class SimpleClans extends JavaPlugin
     public ClanManager getClanManager()
     {
         return clanManager;
-    }
-
-    /**
-     * @return the commandManager
-     */
-    public CommandManager getCommandManager()
-    {
-        return commandManager;
     }
 
     /**

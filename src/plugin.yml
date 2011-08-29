@@ -1,6 +1,6 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 1.3
+version: 1.3.3
 softdepend: [Spout, Permissions, PermissionsBukkit, mChat]
 permissions:
   simpleclans.admin.reload:
@@ -11,6 +11,8 @@ permissions:
     description: Can ban players from the entire plugin
   simpleclans.mod.disband:
     description: Can disband any clan
+  simpleclans.mod.globalff:
+    description: Can turn off global friendly fire protection
   simpleclans.anyone.list:
     description: Can list simpleclans
   simpleclans.anyone.profile:
@@ -39,8 +41,6 @@ permissions:
     description: Can view his simpleclans stats
   simpleclans.member.bb:
     description: Can view his clan's bulletin board
-  simpleclans.member.historybb:
-    description: Can view his clan's bulletin board history
   simpleclans.member.ff:
     description: Can toggle his own friendly fire
   simpleclans.member.resign:
@@ -80,6 +80,7 @@ permissions:
       simpleclans.mod.verify: true
       simpleclans.mod.ban: true
       simpleclans.mod.disband: true
+      simpleclans.mod.globalff: true
   simpleclans.anyone:
     description: Permissions for anyone
     default: true
@@ -103,7 +104,6 @@ permissions:
       simpleclans.member.coords: true
       simpleclans.member.stats: true
       simpleclans.member.bb: true
-      simpleclans.member.historybb: true
       simpleclans.member.ff: true
       simpleclans.member.resign: true
   simpleclans.leader:

@@ -4,9 +4,11 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
@@ -14,6 +16,7 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -23,6 +26,7 @@ public final class StorageManager
 {
     private SimpleClans plugin;
     private DBCore core;
+    private HashMap<String, ChatBlock> chatBlocks = new HashMap<String, ChatBlock>();
 
     /**
      *
@@ -32,6 +36,26 @@ public final class StorageManager
         plugin = SimpleClans.getInstance();
         initiateDB();
         importFromDatabase();
+    }
+
+    /**
+     * REtrieve a player's pending chat lines
+     * @param player
+     * @return
+     */
+    public ChatBlock getChatBlock(Player player)
+    {
+        return chatBlocks.get(player.getName());
+    }
+
+    /**
+     * Store pending chat lines for a player
+     * @param player
+     * @param cb
+     */
+    public void addChatBlock(Player player, ChatBlock cb)
+    {
+        chatBlocks.put(player.getName(), cb);
     }
 
     /**
@@ -293,7 +317,7 @@ public final class StorageManager
                         String tag = res.getString("tag");
                         boolean leader = res.getBoolean("leader");
                         boolean friendly_fire = res.getBoolean("friendly_fire");
-                        boolean trusted =  res.getBoolean("trusted");
+                        boolean trusted = res.getBoolean("trusted");
                         int neutral_kills = res.getInt("neutral_kills");
                         int rival_kills = res.getInt("rival_kills");
                         int civilian_kills = res.getInt("civilian_kills");
@@ -360,7 +384,7 @@ public final class StorageManager
     public void insertClan(Clan clan)
     {
         String query = "INSERT INTO `sc_clans` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`) ";
-        String values = "VALUES ( " + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "','" + Helper.escapeQuotes(clan.getFlags()) +"');";
+        String values = "VALUES ( " + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "','" + Helper.escapeQuotes(clan.getFlags()) + "');";
         core.insert(query + values);
     }
 

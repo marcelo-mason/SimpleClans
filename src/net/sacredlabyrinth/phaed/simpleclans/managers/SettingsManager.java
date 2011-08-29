@@ -15,7 +15,7 @@ import org.bukkit.util.config.Configuration;
 public final class SettingsManager
 {
     private SimpleClans plugin;
-    private int bbLimit;
+    private boolean globalff;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
     private List<String> bannedPlayers;
@@ -63,6 +63,7 @@ public final class SettingsManager
     private String tagSeparator;
     private String tagSeparatorColor;
     private boolean clanTrustByDefault;
+    private boolean clanChatEnable;
     private String clanChatAnnouncementColor;
     private String clanChatMessageColor;
     private String clanChatNameColor;
@@ -120,7 +121,6 @@ public final class SettingsManager
         chatTags = config.getBoolean("settings.display-chat-tags", true);
         combatTagSeconds = config.getInt("settings.combat-tag-seconds", 5);
         rivalLimitPercent = config.getInt("settings.rival-limit-percent", 50);
-        bbLimit = config.getInt("settings.maximum-number-of-bb-messages", 30);
         alertUrl = config.getString("spout.alert-url", "http://sacredlabyrinth.net/siren.wav");
         inGameTags = config.getBoolean("spout.in-game-tags", true);
         inGameTagsColored = config.getBoolean("spout.in-game-tags-colored", false);
@@ -140,7 +140,7 @@ public final class SettingsManager
         pageUnTrustedColor = config.getString("page.untrusted-color", "7");
         pageClanNameColor = config.getString("page.clan-name-color", "b");
         bbSize = config.getInt("bb.size", 10);
-        bbColor = config.getString("bb.color", "f");
+        bbColor = config.getString("bb.color", "e");
         bbAccentColor = config.getString("bb.accent-color", "8");
         commandClan = config.getString("commands.clan", "clan");
         commandMore = config.getString("commands.more", "more");
@@ -156,6 +156,7 @@ public final class SettingsManager
         tagDefaultColor = config.getString("tag.default-color", "8");
         tagSeparator = config.getString("tag.separator.char", " .");
         tagSeparatorColor = config.getString("tag.separator.color", "8");
+        clanChatEnable = config.getBoolean("clanchat.enable", true);
         clanChatAnnouncementColor = config.getString("clanchat.announcement-color", "e");
         clanChatMessageColor = config.getString("clanchat.message-color", "b");
         clanChatNameColor = config.getString("clanchat.name-color", "e");
@@ -191,7 +192,6 @@ public final class SettingsManager
         config.setProperty("settings.display-chat-tags", chatTags);
         config.setProperty("settings.combat-tag-seconds", combatTagSeconds);
         config.setProperty("settings.rival-limit-percent", rivalLimitPercent);
-        config.setProperty("settings.maximum-number-of-bb-messages", bbLimit);
         config.setProperty("spout.alert-url", alertUrl);
         config.setProperty("spout.in-game-tags", inGameTags);
         config.setProperty("spout.in-game-tags-colored", inGameTagsColored);
@@ -227,6 +227,7 @@ public final class SettingsManager
         config.setProperty("tag.default-color", tagDefaultColor);
         config.setProperty("tag.separator.char", tagSeparator);
         config.setProperty("tag.separator.color", tagSeparatorColor);
+        config.setProperty("clanchat.enable", clanChatEnable);
         config.setProperty("clanchat.announcement-color", clanChatAnnouncementColor);
         config.setProperty("clanchat.message-color", clanChatMessageColor);
         config.setProperty("clanchat.name-color", clanChatNameColor);
@@ -262,7 +263,7 @@ public final class SettingsManager
             }
         }
 
-        if(word.equalsIgnoreCase(commandClan) || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept))
+        if (word.equalsIgnoreCase(commandClan) || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept))
         {
             return true;
         }
@@ -297,7 +298,7 @@ public final class SettingsManager
     {
         for (String c : getDisallowedColors())
         {
-            if (str.contains("&"+c))
+            if (str.contains("&" + c))
             {
                 return true;
             }
@@ -726,7 +727,7 @@ public final class SettingsManager
      */
     public String getTagSeparator()
     {
-        if(tagSeparator.equals(" ."))
+        if (tagSeparator.equals(" ."))
         {
             return ".";
         }
@@ -911,10 +912,26 @@ public final class SettingsManager
     }
 
     /**
-     * @return the bbLimit
+     * @return the globalff
      */
-    public int getBbLimit()
+    public boolean isGlobalff()
     {
-        return bbLimit;
+        return globalff;
+    }
+
+    /**
+     * @param globalff the globalff to set
+     */
+    public void setGlobalff(boolean globalff)
+    {
+        this.globalff = globalff;
+    }
+
+    /**
+     * @return the clanChatEnable
+     */
+    public boolean getClanChatEnable()
+    {
+        return clanChatEnable;
     }
 }

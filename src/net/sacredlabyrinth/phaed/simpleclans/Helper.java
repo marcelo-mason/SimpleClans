@@ -389,6 +389,12 @@ public class Helper
             return one + two;
         }
 
+        if (one.equals("&"))
+        {
+            return Helper.toColor(two);
+        }
+
+
         return "";
     }
 

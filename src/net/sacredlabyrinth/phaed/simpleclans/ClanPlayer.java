@@ -50,6 +50,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         this.neutralKills = 0;
         this.rivalKills = 0;
         this.civilianKills = 0;
+        this.tag = "";
+        this.flags = "";
     }
 
     @Override
@@ -354,7 +356,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns the player's join date to his current clan in milliseconds
+     * Returns the player's join date to his current clan in milliseconds, 0 if not in a clan
      * @return the joinDate
      */
     public long getJoinDate()
@@ -372,11 +374,16 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns a string representation of the join date
+     * Returns a string representation of the join date, blank if not in a clan
      * @return
      */
     public String getJoinDateString()
     {
+        if (joinDate == 0)
+        {
+            return "";
+        }
+
         return new java.text.SimpleDateFormat("MMM dd, ''yy h:mm a").format(new Date(this.joinDate));
     }
 
