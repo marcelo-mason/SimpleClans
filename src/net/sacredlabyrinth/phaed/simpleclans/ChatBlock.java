@@ -19,7 +19,6 @@ public class ChatBlock
     private static final int lineLength = 319;
     private ArrayList<Boolean> columnFlexes = new ArrayList<Boolean>();
     private ArrayList<Integer> columnSizes = new ArrayList<Integer>();
-    private ArrayList<Integer> columnSpaces = new ArrayList<Integer>();
     private ArrayList<String> columnAlignments = new ArrayList<String>();
     private LinkedList<String[]> rows = new LinkedList<String[]>();
     private boolean prefix_used = false;
@@ -47,18 +46,6 @@ public class ChatBlock
         for (boolean flex : columnFlex)
         {
             columnFlexes.add(flex);
-        }
-    }
-
-    /**
-     *
-     * @param columnSpacings
-     */
-    public void setSpacing(int... columnSpacings)
-    {
-        for (int spacing : columnSpacings)
-        {
-            columnSpaces.add(spacing);
         }
     }
 
@@ -348,16 +335,6 @@ public class ChatBlock
         }
 
         return out;
-    }
-
-    /**
-     * Outputs a message to everybody
-     * @param sender
-     * @param msg
-     */
-    public static void sendMessageAll(Player sender, String msg)
-    {
-        sendMessageAll(sender, msg);
     }
 
     /**
