@@ -5,13 +5,8 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.HashSet;
-import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
-import java.util.NavigableSet;
-import java.util.TreeSet;
 import org.bukkit.ChatColor;
 
 
@@ -374,7 +369,7 @@ public class Helper
      */
     public static String getLastColorCode(String msg)
     {
-        msg = msg.replaceAll(String.valueOf((char) 194), "");
+        msg = msg.replaceAll(String.valueOf((char) 194), "").trim();
 
         if (msg.length() < 2)
         {

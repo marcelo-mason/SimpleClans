@@ -90,7 +90,7 @@ public final class SpoutPluginManager
 
                 if (plugin.getSettingsManager().isInGameTags())
                 {
-                    String tag = plugin.getSettingsManager().isInGameTagsColored() ? clan.getColorTag() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator() : ChatColor.DARK_GRAY + clan.getTag() + plugin.getSettingsManager().getTagSeparator();
+                    String tag = plugin.getSettingsManager().isInGameTagsColored() ? (plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + clan.getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator()) : ChatColor.DARK_GRAY + plugin.getSettingsManager().getTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparator();
                     SpoutManager.getAppearanceManager().setGlobalTitle(player, tag + ChatColor.WHITE + player.getName());
                 }
             }

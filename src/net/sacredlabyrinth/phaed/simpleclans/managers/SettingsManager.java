@@ -18,19 +18,23 @@ public final class SettingsManager
     private boolean globalff;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
+    private List<String> blacklistedWorlds;
     private List<String> bannedPlayers;
     private List<String> disallowedWords;
     private List<String> disallowedColors;
     private List<String> unRivableClans;
     private int rivalLimitPercent;
     private int combatTagSeconds;
+    private boolean ePurchaseCreation;
+    private boolean ePurchaseVerification;
+    private int eCreationPrice;
+    private int eVerificationPrice;
     private String alertUrl;
     private boolean inGameTags;
     private boolean inGameTagsColored;
     private boolean clanCapes;
     private String defaultCapeUrl;
     private String serverName;
-    private boolean ffDefault;
     private boolean chatTags;
     private int purgeClan;
     private int purgeUnverified;
@@ -48,7 +52,6 @@ public final class SettingsManager
     private String bbColor;
     private String bbAccentColor;
     private String bbNewClan;
-    private String commandClan;
     private String commandMore;
     private String commandDeny;
     private String commandAccept;
@@ -62,6 +65,9 @@ public final class SettingsManager
     private String tagDefaultColor;
     private String tagSeparator;
     private String tagSeparatorColor;
+    private String tagBracketLeft;
+    private String tagBracketRight;
+    private String tagBracketColor;
     private boolean clanTrustByDefault;
     private boolean clanChatEnable;
     private String clanChatAnnouncementColor;
@@ -112,15 +118,19 @@ public final class SettingsManager
 
         bannedPlayers = config.getStringList("settings.banned-players", new ArrayList<String>());
         disallowedColors = config.getStringList("settings.disallowed-tag-colors", disallowedColorsDefault);
+        blacklistedWorlds = config.getStringList("settings.blacklisted-worlds", new ArrayList<String>());
         disallowedWords = config.getStringList("settings.disallowed-tags", standardDisallowed);
         unRivableClans = config.getStringList("settings.unrivable-clans", unRivableClansDefault);
         showUnverifiedOnList = config.getBoolean("settings.show-unverified-on-list", false);
         requireVerification = config.getBoolean("settings.new-clan-verification-required", true);
         serverName = config.getString("settings.server-name", "&9MinecraftServer");
-        ffDefault = config.getBoolean("settings.ff-prevent-by-default", true);
         chatTags = config.getBoolean("settings.display-chat-tags", true);
         combatTagSeconds = config.getInt("settings.combat-tag-seconds", 5);
         rivalLimitPercent = config.getInt("settings.rival-limit-percent", 50);
+        ePurchaseCreation = config.getBoolean("economy.purchase-clan-create", false);
+        ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify", false);
+        eCreationPrice = config.getInt("economy.creation-price", 100);
+        eVerificationPrice = config.getInt("economy.verification-price", 1000);
         alertUrl = config.getString("spout.alert-url", "http://sacredlabyrinth.net/siren.wav");
         inGameTags = config.getBoolean("spout.in-game-tags", true);
         inGameTagsColored = config.getBoolean("spout.in-game-tags-colored", false);
@@ -142,7 +152,6 @@ public final class SettingsManager
         bbSize = config.getInt("bb.size", 10);
         bbColor = config.getString("bb.color", "e");
         bbAccentColor = config.getString("bb.accent-color", "8");
-        commandClan = config.getString("commands.clan", "clan");
         commandMore = config.getString("commands.more", "more");
         commandDeny = config.getString("commands.deny", "deny");
         commandAccept = config.getString("commands.accept", "accept");
@@ -156,6 +165,9 @@ public final class SettingsManager
         tagDefaultColor = config.getString("tag.default-color", "8");
         tagSeparator = config.getString("tag.separator.char", " .");
         tagSeparatorColor = config.getString("tag.separator.color", "8");
+        tagBracketColor = config.getString("tag.bracket.color", "8");
+        tagBracketLeft = config.getString("tag.bracket.left", "");
+        tagBracketRight = config.getString("tag.bracket.right", "");
         clanChatEnable = config.getBoolean("clanchat.enable", true);
         clanChatAnnouncementColor = config.getString("clanchat.announcement-color", "e");
         clanChatMessageColor = config.getString("clanchat.message-color", "b");
@@ -182,17 +194,21 @@ public final class SettingsManager
         config.load();
 
         config.setProperty("settings.banned-players", bannedPlayers);
+        config.setProperty("settings.blacklisted-worlds", blacklistedWorlds);
         config.setProperty("settings.disallowed-tags", disallowedWords);
         config.setProperty("settings.disallowed-tag-colors", disallowedColors);
         config.setProperty("settings.show-unverified-on-list", showUnverifiedOnList);
         config.setProperty("settings.unrivable-clans", unRivableClans);
         config.setProperty("settings.new-clan-verification-required", requireVerification);
         config.setProperty("settings.server-name", serverName);
-        config.setProperty("settings.ff-prevent-by-default", ffDefault);
         config.setProperty("settings.display-chat-tags", chatTags);
         config.setProperty("settings.combat-tag-seconds", combatTagSeconds);
         config.setProperty("settings.rival-limit-percent", rivalLimitPercent);
         config.setProperty("spout.alert-url", alertUrl);
+        config.setProperty("economy.purchase-clan-create", ePurchaseCreation);
+        config.setProperty("economy.purchase-clan-verify", ePurchaseVerification);
+        config.setProperty("economy.creation-price", eCreationPrice);
+        config.setProperty("economy.verification-price", eVerificationPrice);
         config.setProperty("spout.in-game-tags", inGameTags);
         config.setProperty("spout.in-game-tags-colored", inGameTagsColored);
         config.setProperty("spout.enable-clan-capes", clanCapes);
@@ -213,7 +229,6 @@ public final class SettingsManager
         config.setProperty("bb.size", bbSize);
         config.setProperty("bb.color", bbColor);
         config.setProperty("bb.accent-color", bbAccentColor);
-        config.setProperty("commands.clan", commandClan);
         config.setProperty("commands.more", commandMore);
         config.setProperty("commands.deny", commandDeny);
         config.setProperty("commands.accept", commandAccept);
@@ -227,6 +242,9 @@ public final class SettingsManager
         config.setProperty("tag.default-color", tagDefaultColor);
         config.setProperty("tag.separator.char", tagSeparator);
         config.setProperty("tag.separator.color", tagSeparatorColor);
+        config.setProperty("tag.bracket.color", tagBracketColor);
+        config.setProperty("tag.bracket.left", tagBracketLeft);
+        config.setProperty("tag.bracket.right", tagBracketRight);
         config.setProperty("clanchat.enable", clanChatEnable);
         config.setProperty("clanchat.announcement-color", clanChatAnnouncementColor);
         config.setProperty("clanchat.message-color", clanChatMessageColor);
@@ -249,13 +267,31 @@ public final class SettingsManager
     }
 
     /**
+     * Check whether a worlds is blacklisted
+     * @param word
+     * @return
+     */
+    public boolean isBlacklistedWorld(String world)
+    {
+        for (String w : blacklistedWorlds)
+        {
+            if (w.equalsIgnoreCase(world))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
      * Check whether a word is disallowed
      * @param word
      * @return
      */
     public boolean isDisallowedWord(String word)
     {
-        for (String w : getDisallowedWords())
+        for (String w : disallowedWords)
         {
             if (w.equalsIgnoreCase(word))
             {
@@ -263,7 +299,7 @@ public final class SettingsManager
             }
         }
 
-        if (word.equalsIgnoreCase(commandClan) || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept))
+        if (word.equalsIgnoreCase("clan") || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept))
         {
             return true;
         }
@@ -491,14 +527,6 @@ public final class SettingsManager
     }
 
     /**
-     * @return the ffDefault
-     */
-    public boolean isFfDefault()
-    {
-        return ffDefault;
-    }
-
-    /**
      * @return the chatTags
      */
     public boolean isChatTags()
@@ -624,14 +652,6 @@ public final class SettingsManager
     public String getBbNewClan()
     {
         return bbNewClan;
-    }
-
-    /**
-     * @return the commandClan
-     */
-    public String getCommandClan()
-    {
-        return commandClan;
     }
 
     /**
@@ -933,5 +953,69 @@ public final class SettingsManager
     public boolean getClanChatEnable()
     {
         return clanChatEnable;
+    }
+
+    /**
+     * @return the tagBracketLeft
+     */
+    public String getTagBracketLeft()
+    {
+        return tagBracketLeft;
+    }
+
+    /**
+     * @return the tagBracketRight
+     */
+    public String getTagBracketRight()
+    {
+        return tagBracketRight;
+    }
+
+    /**
+     * @return the tagBracketColor
+     */
+    public String getTagBracketColor()
+    {
+        return Helper.toColor(tagBracketColor);
+    }
+
+    /**
+     * @return the ePurchaseCreation
+     */
+    public boolean isePurchaseCreation()
+    {
+        return ePurchaseCreation;
+    }
+
+    /**
+     * @return the ePurchaseVerification
+     */
+    public boolean isePurchaseVerification()
+    {
+        return ePurchaseVerification;
+    }
+
+    /**
+     * @return the eCreationPrice
+     */
+    public int geteCreationPrice()
+    {
+        return eCreationPrice;
+    }
+
+    /**
+     * @return the eVerificationPrice
+     */
+    public int geteVerificationPrice()
+    {
+        return eVerificationPrice;
+    }
+
+     /**
+     * @return ePurchaseVerification || ePurchaseCreation
+     */
+    public boolean isEconomyEnabled()
+    {
+        return ePurchaseVerification || ePurchaseCreation;
     }
 }

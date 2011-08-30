@@ -139,15 +139,20 @@ public class ClanCommand implements CommandExecutor
             {
                 Player player = (Player) sender;
 
+                if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
+                {
+                    return false;
+                }
+
                 if (plugin.getSettingsManager().isBanned(player.getName()))
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + "You are banned from using " + plugin.getSettingsManager().getCommandClan() + " commands");
+                    ChatBlock.sendMessage(player, ChatColor.RED + "You are banned from using clan commands");
                     return true;
                 }
 
                 if (args.length == 0)
                 {
-                    menuCommand.run(player);
+                    menuCommand.execute(player);
                 }
                 else
                 {
@@ -156,131 +161,131 @@ public class ClanCommand implements CommandExecutor
 
                     if (subcommand.equalsIgnoreCase("create"))
                     {
-                        createCommand.run(player, subargs);
+                        createCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("list"))
                     {
-                        listCommand.run(player, subargs);
+                        listCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("profile"))
                     {
-                        profileCommand.run(player, subargs);
+                        profileCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("roster"))
                     {
-                        rosterCommand.run(player, subargs);
+                        rosterCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("lookup"))
                     {
-                        lookupCommand.run(player, subargs);
+                        lookupCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("leaderboard"))
                     {
-                        leaderboardCommand.run(player, subargs);
+                        leaderboardCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("alliances"))
                     {
-                        alliancesCommand.run(player, subargs);
+                        alliancesCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("rivalries"))
                     {
-                        rivalriesCommand.run(player, subargs);
+                        rivalriesCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("vitals"))
                     {
-                        vitalsCommand.run(player, subargs);
+                        vitalsCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("coords"))
                     {
-                        coordsCommand.run(player, subargs);
+                        coordsCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("stats"))
                     {
-                        statsCommand.run(player, subargs);
+                        statsCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("ally"))
                     {
-                        allyCommand.run(player, subargs);
+                        allyCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("rival"))
                     {
-                        rivalCommand.run(player, subargs);
+                        rivalCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("bb"))
                     {
-                        bbCommand.run(player, subargs);
+                        bbCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("modtag"))
                     {
-                        modtagCommand.run(player, subargs);
+                        modtagCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("cape"))
                     {
-                        capeCommand.run(player, subargs);
+                        capeCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("invite"))
                     {
-                        inviteCommand.run(player, subargs);
+                        inviteCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("kick"))
                     {
-                        kickCommand.run(player, subargs);
+                        kickCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("trust"))
                     {
-                        trustCommand.run(player, subargs);
+                        trustCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("untrust"))
                     {
-                        untrustCommand.run(player, subargs);
+                        untrustCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("promote"))
                     {
-                        promoteCommand.run(player, subargs);
+                        promoteCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("demote"))
                     {
-                        demoteCommand.run(player, subargs);
+                        demoteCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("clanff"))
                     {
-                        clanffCommand.run(player, subargs);
+                        clanffCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("ff"))
                     {
-                        ffCommand.run(player, subargs);
+                        ffCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("resign"))
                     {
-                        resignCommand.run(player, subargs);
+                        resignCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("disband"))
                     {
-                        disbandCommand.run(player, subargs);
+                        disbandCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("verify"))
                     {
-                        verifyCommand.run(player, subargs);
+                        verifyCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("ban"))
                     {
-                        banCommand.run(player, subargs);
+                        banCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("unban"))
                     {
-                        unbanCommand.run(player, subargs);
+                        unbanCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("reload"))
                     {
-                        reloadCommand.run(player, subargs);
+                        reloadCommand.execute(player, subargs);
                     }
                     else if (subcommand.equalsIgnoreCase("globalff"))
                     {
-                        globalffCommand.run(player, subargs);
+                        globalffCommand.execute(player, subargs);
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + "Does not match a " + plugin.getSettingsManager().getCommandClan() + " command");
+                        ChatBlock.sendMessage(player, ChatColor.RED + "Does not match a clan command");
                     }
                 }
                 return true;

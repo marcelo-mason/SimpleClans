@@ -16,11 +16,11 @@ public class GlobalffCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -54,12 +54,12 @@ public class GlobalffCommand
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " globalff allow/auto");
+                ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan globalff allow/auto");
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " ff allow/auto");
+            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan ff allow/auto");
         }
     }
 }

@@ -17,11 +17,11 @@ public class BanCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -37,7 +37,7 @@ public class BanCommand
 
                     if (pl != null)
                     {
-                        ChatBlock.sendMessage(pl, ChatColor.AQUA + "You have been banned from " + plugin.getSettingsManager().getCommandClan() + " commands");
+                        ChatBlock.sendMessage(pl, ChatColor.AQUA + "You have been banned from clan commands");
                     }
 
                     plugin.getClanManager().ban(banned);
@@ -50,7 +50,7 @@ public class BanCommand
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " ban/unban [player]");
+                ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan ban/unban [player]");
             }
         }
         else

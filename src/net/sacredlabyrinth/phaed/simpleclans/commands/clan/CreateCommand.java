@@ -19,11 +19,11 @@ public class CreateCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -58,19 +58,22 @@ public class CreateCommand
                                                 {
                                                     if (!plugin.getClanManager().isClan(cleanTag))
                                                     {
-                                                        plugin.getClanManager().createClan(player, tag, name);
-
-                                                        Clan clan = plugin.getClanManager().getClan(tag);
-                                                        clan.addBb(player.getName(), ChatColor.AQUA + "Clan " + name + " created");
-                                                        plugin.getStorageManager().updateClan(clan);
-
-                                                        if (plugin.getSettingsManager().isRequireVerification())
+                                                        if (plugin.getClanManager().purchaseCreation(player))
                                                         {
-                                                            boolean verified = !plugin.getSettingsManager().isRequireVerification() || plugin.getPermissionsManager().has(player, "simpleclans.mod.verify");
+                                                            plugin.getClanManager().createClan(player, tag, name);
 
-                                                            if (!verified)
+                                                            Clan clan = plugin.getClanManager().getClan(tag);
+                                                            clan.addBb(player.getName(), ChatColor.AQUA + "Clan " + name + " created");
+                                                            plugin.getStorageManager().updateClan(clan);
+
+                                                            if (plugin.getSettingsManager().isRequireVerification())
                                                             {
-                                                                ChatBlock.sendMessage(player, ChatColor.AQUA + "Get your clan verified to access advanced features.");
+                                                                boolean verified = !plugin.getSettingsManager().isRequireVerification() || plugin.getPermissionsManager().has(player, "simpleclans.mod.verify");
+
+                                                                if (!verified)
+                                                                {
+                                                                    ChatBlock.sendMessage(player, ChatColor.AQUA + "Get your clan verified to access advanced features.");
+                                                                }
                                                             }
                                                         }
                                                     }
@@ -126,8 +129,8 @@ public class CreateCommand
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " create [tag] [name]");
-                ChatBlock.sendMessage(player, ChatColor.RED + "Example: /" + plugin.getSettingsManager().getCommandClan() + " create &4Kol Knights of the Labyrinth");
+                ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan create [tag] [name]");
+                ChatBlock.sendMessage(player, ChatColor.RED + "Example: /clan create &4Kol Knights of the Labyrinth");
             }
         }
         else

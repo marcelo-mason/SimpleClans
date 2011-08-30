@@ -19,11 +19,11 @@ public class RivalCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -83,7 +83,7 @@ public class RivalCommand
                                                     }
                                                     else
                                                     {
-                                                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " ally add/remove [tag]");
+                                                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan ally add/remove [tag]");
                                                     }
                                                 }
                                                 else
@@ -108,7 +108,7 @@ public class RivalCommand
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " rival add/remove [tag]");
+                                    ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan rival add/remove [tag]");
                                 }
                             }
                             else

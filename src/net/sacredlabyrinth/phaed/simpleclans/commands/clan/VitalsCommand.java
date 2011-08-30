@@ -20,11 +20,11 @@ public class VitalsCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
@@ -87,7 +87,7 @@ public class VitalsCommand
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " vitals");
+                            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan vitals");
                         }
                     }
                     else

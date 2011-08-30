@@ -19,11 +19,11 @@ public class TrustCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -84,7 +84,7 @@ public class TrustCommand
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " trust [player]");
+                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan trust [player]");
                     }
                 }
                 else

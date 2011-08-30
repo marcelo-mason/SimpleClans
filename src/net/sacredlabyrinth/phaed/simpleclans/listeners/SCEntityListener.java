@@ -38,6 +38,11 @@ public class SCEntityListener extends EntityListener
         {
             Player victim = (Player) event.getEntity();
 
+            if (plugin.getSettingsManager().isBlacklistedWorld(victim.getLocation().getWorld().getName()))
+            {
+                return;
+            }
+
             String attackerName = plugin.getDeathManager().pollLastAttacker(victim.getName());
 
             if (attackerName != null)
@@ -131,6 +136,14 @@ public class SCEntityListener extends EntityListener
             }
         }
 
+        if (victim != null)
+        {
+            if (plugin.getSettingsManager().isBlacklistedWorld(victim.getLocation().getWorld().getName()))
+            {
+                return;
+            }
+        }
+
         if (attacker != null && victim != null)
         {
             ClanPlayer acp = plugin.getClanManager().getClanPlayer(attacker);
@@ -181,4 +194,5 @@ public class SCEntityListener extends EntityListener
             plugin.getDeathManager().addDamager(victim.getName(), attacker.getName());
         }
     }
+
 }

@@ -19,11 +19,11 @@ public class AlliancesCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
@@ -73,7 +73,7 @@ public class AlliancesCommand
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " alliances");
+            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan alliances");
         }
     }
 }

@@ -19,11 +19,11 @@ public class ModtagCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -78,8 +78,8 @@ public class ModtagCommand
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " modtag [tag]");
-                            ChatBlock.sendMessage(player, ChatColor.RED + "Example: /" + plugin.getSettingsManager().getCommandClan() + " modtag &4K&fo&4L");
+                            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan modtag [tag]");
+                            ChatBlock.sendMessage(player, ChatColor.RED + "Example: /clan modtag &4K&fo&4L");
                         }
                     }
                     else

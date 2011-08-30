@@ -4,8 +4,8 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijiko.permissions.PermissionHandler;
+import java.util.logging.Level;
 import net.D3GN.MiracleM4n.mChat.mChat;
-
 import org.bukkit.plugin.Plugin;
 import org.bukkit.entity.Player;
 
@@ -28,8 +28,9 @@ public final class PermissionsManager
     public PermissionsManager()
     {
         plugin = SimpleClans.getInstance();
-        startPermissions();
-        startMChat();
+        detectPermissions();
+        detectGroupManager();
+        detectMChat();
     }
 
     /**
@@ -55,7 +56,7 @@ public final class PermissionsManager
         }
     }
 
-    private void startMChat()
+    private void detectMChat()
     {
         Plugin test = plugin.getServer().getPluginManager().getPlugin("mChat");
 
@@ -65,13 +66,24 @@ public final class PermissionsManager
         }
     }
 
-    private void startPermissions()
+    private void detectPermissions()
     {
         Plugin test = plugin.getServer().getPluginManager().getPlugin("Permissions");
 
         if (test != null)
         {
             this.handler = ((Permissions) test).getHandler();
+        }
+    }
+
+    private void detectGroupManager()
+    {
+        Plugin test = plugin.getServer().getPluginManager().getPlugin("GroupManager");
+
+        if (test != null)
+        {
+            SimpleClans.log(Level.SEVERE, "SimpleClans does not support GroupManager");
+            plugin.getPluginLoader().disablePlugin(plugin);
         }
     }
 

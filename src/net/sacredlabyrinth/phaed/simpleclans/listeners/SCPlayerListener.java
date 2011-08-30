@@ -1,11 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
-import java.util.List;
-import java.util.logging.Level;
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerChatEvent;
@@ -51,6 +47,11 @@ public class SCPlayerListener extends PlayerListener
             return;
         }
 
+        if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
+        {
+            return;
+        }
+
         if (!plugin.getSettingsManager().getClanChatEnable())
         {
             return;
@@ -73,29 +74,23 @@ public class SCPlayerListener extends PlayerListener
 
         if (plugin.getClanManager().isClan(command))
         {
-            Clan clan = plugin.getClanManager().getClan(command);
-
-            if (!clan.isMember(player))
-            {
-                return;
-            }
-
-            announceClan(clan, player, msg);
+            plugin.getCommandManager().processClanChat(player, command, msg);
             event.setCancelled(true);
         }
-    }
-
-    private void announceClan(Clan clan, Player player, String msg)
-    {
-        String message = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
-        SimpleClans.log(Level.INFO, plugin.getSettingsManager().getClanChatTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + msg);
-
-        List<ClanPlayer> cps = clan.getMembers();
-
-        for (ClanPlayer cp : cps)
+        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAccept()))
         {
-            Player member = plugin.getServer().getPlayer(cp.getName());
-            ChatBlock.sendMessage(member, message);
+            plugin.getCommandManager().processAccept(player);
+            event.setCancelled(true);
+        }
+        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandDeny()))
+        {
+            plugin.getCommandManager().processDeny(player);
+            event.setCancelled(true);
+        }
+        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandMore()))
+        {
+            plugin.getCommandManager().processMore(player);
+            event.setCancelled(true);
         }
     }
 
@@ -111,6 +106,11 @@ public class SCPlayerListener extends PlayerListener
             return;
         }
 
+        if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
+        {
+            return;
+        }
+
         plugin.getClanManager().updateDisplayName(event.getPlayer());
     }
 
@@ -122,6 +122,11 @@ public class SCPlayerListener extends PlayerListener
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         final Player player = event.getPlayer();
+
+        if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
+        {
+            return;
+        }
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
         {
@@ -149,6 +154,11 @@ public class SCPlayerListener extends PlayerListener
     @Override
     public void onPlayerQuit(PlayerQuitEvent event)
     {
+        if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
+        {
+            return;
+        }
+
         plugin.getClanManager().updateLastSeen(event.getPlayer());
         plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());
     }
@@ -160,6 +170,11 @@ public class SCPlayerListener extends PlayerListener
     @Override
     public void onPlayerKick(PlayerKickEvent event)
     {
+        if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
+        {
+            return;
+        }
+
         plugin.getClanManager().updateLastSeen(event.getPlayer());
     }
 
@@ -171,6 +186,11 @@ public class SCPlayerListener extends PlayerListener
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
         if (event.isCancelled())
+        {
+            return;
+        }
+
+        if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
         {
             return;
         }

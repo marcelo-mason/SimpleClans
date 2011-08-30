@@ -12,6 +12,7 @@ import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.register.payment.Method.MethodAccount;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -236,7 +237,7 @@ public final class ClanManager
             if (clan != null)
             {
                 String tag = plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag();
-                String tagLabel = tag + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
+                String tagLabel = plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + tag + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
 
                 fullname = tagLabel + lastColor + fullname;
             }
@@ -702,5 +703,73 @@ public final class ClanManager
                 return o1.compareTo(o2);
             }
         });
+    }
+
+    /**
+     * Purchase clan creation
+     * @param player
+     * @param price
+     * @return
+     */
+    public boolean purchaseCreation(Player player)
+    {
+        if (!plugin.getSettingsManager().isePurchaseCreation())
+        {
+            return true;
+        }
+
+        int price =  plugin.getSettingsManager().geteCreationPrice();
+
+        if (plugin.getMethod() != null)
+        {
+            MethodAccount account = plugin.getMethod().getAccount(player.getName());
+
+            if (account.hasEnough(price))
+            {
+                account.subtract(price);
+                player.sendMessage(ChatColor.RED + "Your account has been debited " + price);
+            }
+            else
+            {
+                player.sendMessage(ChatColor.RED + "You do not have sufficient money in your account");
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Purchase clan verification
+     * @param player
+     * @param price
+     * @return
+     */
+    public boolean purchaseVerification(Player player)
+    {
+        if (!plugin.getSettingsManager().isePurchaseVerification())
+        {
+            return true;
+        }
+
+        int price =  plugin.getSettingsManager().geteVerificationPrice();
+
+        if (plugin.getMethod() != null)
+        {
+            MethodAccount account = plugin.getMethod().getAccount(player.getName());
+
+            if (account.hasEnough(price))
+            {
+                account.subtract(price);
+                player.sendMessage(ChatColor.RED + "Your account has been debited " + price);
+            }
+            else
+            {
+                player.sendMessage(ChatColor.RED + "You do not have sufficient money in your account");
+                return false;
+            }
+        }
+
+        return true;
     }
 }

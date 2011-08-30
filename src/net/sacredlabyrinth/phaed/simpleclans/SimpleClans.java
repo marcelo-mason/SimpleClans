@@ -3,11 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import java.text.MessageFormat;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sacredlabyrinth.phaed.simpleclans.commands.AcceptCommand;
 import net.sacredlabyrinth.phaed.simpleclans.commands.ClanCommand;
-import net.sacredlabyrinth.phaed.simpleclans.commands.DenyCommand;
-import net.sacredlabyrinth.phaed.simpleclans.commands.MoreCommand;
-
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.DeathManager;
@@ -17,6 +13,8 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SpoutPluginManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.CommandManager;
+import net.sacredlabyrinth.register.payment.Method;
 
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event;
@@ -29,6 +27,7 @@ public class SimpleClans extends JavaPlugin
 {
     private static SimpleClans instance;
     private static Logger logger = Logger.getLogger("Minecraft");
+    private Method Method;
     private ClanManager clanManager;
     private RequestManager requestManager;
     private DeathManager deathManager;
@@ -38,6 +37,7 @@ public class SimpleClans extends JavaPlugin
     private PermissionsManager permissionsManager;
     private SCPlayerListener playerListener;
     private SCEntityListener entityListener;
+    private CommandManager commandManager;
 
     /**
      * @return the logger
@@ -82,6 +82,7 @@ public class SimpleClans extends JavaPlugin
         clanManager = new ClanManager();
         deathManager = new DeathManager();
         storageManager = new StorageManager();
+        commandManager = new CommandManager();
 
         playerListener = new SCPlayerListener();
         entityListener = new SCEntityListener();
@@ -106,10 +107,7 @@ public class SimpleClans extends JavaPlugin
 
     private void registerCommands()
     {
-        getCommand(settingsManager.getCommandClan()).setExecutor(new ClanCommand());
-        getCommand(settingsManager.getCommandMore()).setExecutor(new MoreCommand());
-        getCommand(settingsManager.getCommandDeny()).setExecutor(new DenyCommand());
-        getCommand(settingsManager.getCommandAccept()).setExecutor(new AcceptCommand());
+        getCommand("clan").setExecutor(new ClanCommand());
     }
 
     /**
@@ -120,6 +118,22 @@ public class SimpleClans extends JavaPlugin
     {
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
+    }
+
+    /**
+     * @param Method the Method to set
+     */
+    public void setMethod(Method Method)
+    {
+        this.Method = Method;
+    }
+
+    /**
+     * @return the Method
+     */
+    public Method getMethod()
+    {
+        return Method;
     }
 
     /**
@@ -176,5 +190,13 @@ public class SimpleClans extends JavaPlugin
     public PermissionsManager getPermissionsManager()
     {
         return permissionsManager;
+    }
+
+    /**
+     * @return the commandManager
+     */
+    public CommandManager getCommandManager()
+    {
+        return commandManager;
     }
 }

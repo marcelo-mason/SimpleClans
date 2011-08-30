@@ -19,11 +19,11 @@ public class PromoteCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -96,7 +96,7 @@ public class PromoteCommand
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " promote <member>");
+                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan promote <member>");
                     }
                 }
                 else

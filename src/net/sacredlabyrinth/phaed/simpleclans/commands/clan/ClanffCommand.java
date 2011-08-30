@@ -18,11 +18,11 @@ public class ClanffCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -54,12 +54,12 @@ public class ClanffCommand
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " clanff allow/block");
+                            ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan clanff allow/block");
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " clanff allow/block");
+                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan clanff allow/block");
                     }
                 }
                 else

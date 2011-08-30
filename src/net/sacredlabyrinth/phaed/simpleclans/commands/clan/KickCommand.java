@@ -19,11 +19,11 @@ public class KickCommand
     }
 
     /**
-     * Run the command
+     * Execute the command
      * @param player
      * @param arg
      */
-    public void run(Player player, String[] arg)
+    public void execute(Player player, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
@@ -74,7 +74,7 @@ public class KickCommand
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /" + plugin.getSettingsManager().getCommandClan() + " kick [player]");
+                        ChatBlock.sendMessage(player, ChatColor.RED + "Usage: /clan kick [player]");
                     }
                 }
                 else
