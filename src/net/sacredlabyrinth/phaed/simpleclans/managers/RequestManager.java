@@ -367,7 +367,6 @@ public final class RequestManager
     {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
-            @Override
             public void run()
             {
                 for (Request req : requests.values())

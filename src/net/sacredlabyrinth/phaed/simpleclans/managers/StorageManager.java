@@ -94,7 +94,7 @@ public final class StorageManager
         }
         else
         {
-            core = new SQLiteCore("SimpleClans", plugin.getDataFolder().getPath());
+            core = new SQLiteCore(plugin.getDataFolder().getPath());
 
             if (core.checkConnection())
             {
@@ -348,7 +348,7 @@ public final class StorageManager
                         cp.setLastSeen(last_seen);
                         cp.setJoinDate(join_date);
                         cp.setPackedPastClans(packed_past_clans);
-                        cp.setTrusted(leader ? true : trusted);
+                        cp.setTrusted(leader || trusted);
 
                         if (!tag.isEmpty())
                         {

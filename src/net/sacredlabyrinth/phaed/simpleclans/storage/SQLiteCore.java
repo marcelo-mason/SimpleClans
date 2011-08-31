@@ -22,13 +22,11 @@ public class SQLiteCore implements DBCore
 
     /**
      *
-     * @param log
-     * @param dbName
      * @param dbLocation
      */
-    public SQLiteCore(String dbName, String dbLocation)
+    public SQLiteCore(String dbLocation)
     {
-        this.dbName = dbName;
+        this.dbName = "SimpleClans";
         this.dbLocation = dbLocation;
         this.log = SimpleClans.getLogger();
 
@@ -58,7 +56,6 @@ public class SQLiteCore implements DBCore
         {
             Class.forName("org.sqlite.JDBC");
             connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
-            return;
         }
         catch (SQLException ex)
         {
@@ -122,9 +119,8 @@ public class SQLiteCore implements DBCore
     {
         try
         {
-            ResultSet result = getConnection().createStatement().executeQuery(query);
 
-            return result;
+            return getConnection().createStatement().executeQuery(query);
         }
         catch (SQLException ex)
         {

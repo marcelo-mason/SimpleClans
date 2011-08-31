@@ -72,7 +72,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         return other.getName().equals(this.getName());
     }
 
-    @Override
     public int compareTo(ClanPlayer other)
     {
         return this.getName().compareToIgnoreCase(other.getName());

@@ -29,7 +29,6 @@ public class ReloadCommand
             plugin.getSettingsManager().load();
             plugin.getStorageManager().importFromDatabase();
             ChatBlock.sendMessage(player, ChatColor.AQUA + "Configuration reloaded");
-            return;
         }
     }
 }

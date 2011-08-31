@@ -34,7 +34,7 @@ public class iCo5 implements Method {
     }
 
     public boolean hasBank(String bank) {
-        return (!hasBanks()) ? false : this.iConomy.Banks.exists(bank);
+        return (hasBanks()) && this.iConomy.Banks.exists(bank);
     }
 
     public boolean hasAccount(String name) {
@@ -42,7 +42,7 @@ public class iCo5 implements Method {
     }
 
     public boolean hasBankAccount(String bank, String name) {
-        return (!hasBank(bank)) ? false : this.iConomy.getBank(bank).hasAccount(name);
+        return (hasBank(bank)) && this.iConomy.getBank(bank).hasAccount(name);
     }
 
     public MethodAccount getAccount(String name) {
@@ -52,7 +52,7 @@ public class iCo5 implements Method {
     public MethodBankAccount getBankAccount(String bank, String name) {
         return new iCoBankAccount(this.iConomy.getBank(bank).getAccount(name));
     }
-	
+
     public boolean isCompatible(Plugin plugin) {
         return plugin.getDescription().getName().equalsIgnoreCase("iconomy") && plugin.getClass().getName().equals("com.iConomy.iConomy") && plugin instanceof iConomy;
     }

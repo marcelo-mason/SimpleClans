@@ -6,6 +6,7 @@ import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.commands.ClanCommand;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
+import net.sacredlabyrinth.phaed.simpleclans.listeners.SCServerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.DeathManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.PermissionsManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager;
@@ -35,9 +36,10 @@ public class SimpleClans extends JavaPlugin
     private SpoutPluginManager spoutPluginManager;
     private SettingsManager settingsManager;
     private PermissionsManager permissionsManager;
+    private CommandManager commandManager;
     private SCPlayerListener playerListener;
     private SCEntityListener entityListener;
-    private CommandManager commandManager;
+    private SCServerListener serverListener;
 
     /**
      * @return the logger
@@ -56,8 +58,8 @@ public class SimpleClans extends JavaPlugin
     }
 
     /**
-     * Parameterized logger
-     * @param level
+     * Parametrized logger
+     * @param level the level
      * @param msg the message
      * @param arg the arguments
      */
@@ -66,10 +68,6 @@ public class SimpleClans extends JavaPlugin
         getLogger().log(level, new StringBuilder().append("[SimpleClans] ").append(MessageFormat.format(msg, arg)).toString());
     }
 
-    /**
-     *
-     */
-    @Override
     public void onEnable()
     {
         logger.info("[" + getDescription().getName() + "] version " + getDescription().getVersion() + " loaded");
@@ -86,6 +84,7 @@ public class SimpleClans extends JavaPlugin
 
         playerListener = new SCPlayerListener();
         entityListener = new SCEntityListener();
+        serverListener = new SCServerListener();
 
         registerEvents();
         registerCommands();
@@ -103,6 +102,8 @@ public class SimpleClans extends JavaPlugin
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_ENABLE, serverListener, Priority.Monitor, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLUGIN_DISABLE, serverListener, Priority.Monitor, this);
     }
 
     private void registerCommands()
@@ -110,10 +111,6 @@ public class SimpleClans extends JavaPlugin
         getCommand("clan").setExecutor(new ClanCommand());
     }
 
-    /**
-     *
-     */
-    @Override
     public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);

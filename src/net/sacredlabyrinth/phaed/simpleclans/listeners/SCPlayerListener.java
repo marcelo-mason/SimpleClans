@@ -130,7 +130,6 @@ public class SCPlayerListener extends PlayerListener
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
         {
-            @Override
             public void run()
             {
                 plugin.getClanManager().updateLastSeen(player);

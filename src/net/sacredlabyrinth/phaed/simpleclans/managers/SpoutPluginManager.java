@@ -64,7 +64,7 @@ public final class SpoutPluginManager
 
     /**
      * Adds cape and title to a player
-     * @param playerName
+     * @param player the player
      */
     public void processPlayer(Player player)
     {

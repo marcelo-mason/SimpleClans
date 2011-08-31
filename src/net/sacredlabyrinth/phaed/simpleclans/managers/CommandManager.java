@@ -29,7 +29,7 @@ public final class CommandManager
     /**
      * Processes a clan chat command
      * @param player
-     * @param clan
+     * @param clanTag
      * @param msg
      */
     public void processClanChat(Player player, String clanTag, String msg)

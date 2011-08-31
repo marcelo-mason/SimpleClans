@@ -654,11 +654,10 @@ public final class ClanManager
     {
         Collections.sort(clans, new Comparator<Clan>()
         {
-            @Override
             public int compare(Clan c1, Clan c2)
             {
-                Float o1 = Float.valueOf(c1.getTotalKDR());
-                Float o2 = Float.valueOf(c2.getTotalKDR());
+                Float o1 = c1.getTotalKDR();
+                Float o2 = c2.getTotalKDR();
 
                 return o2.compareTo(o1);
             }
@@ -667,18 +666,17 @@ public final class ClanManager
 
     /**
      * Sort clan players by KDR
-     * @param clans
+     * @param cps
      * @return
      */
     public void sortClanPlayersByKDR(List<ClanPlayer> cps)
     {
         Collections.sort(cps, new Comparator<ClanPlayer>()
         {
-            @Override
             public int compare(ClanPlayer c1, ClanPlayer c2)
             {
-                Float o1 = Float.valueOf(c1.getKDR());
-                Float o2 = Float.valueOf(c2.getKDR());
+                Float o1 = c1.getKDR();
+                Float o2 = c2.getKDR();
 
                 return o2.compareTo(o1);
             }
@@ -687,18 +685,17 @@ public final class ClanManager
 
     /**
      * Sort clan players by last seen days
-     * @param clans
+     * @param cps
      * @return
      */
     public void sortClanPlayersByLastSeen(List<ClanPlayer> cps)
     {
         Collections.sort(cps, new Comparator<ClanPlayer>()
         {
-            @Override
             public int compare(ClanPlayer c1, ClanPlayer c2)
             {
-                Double o1 = Double.valueOf(c1.getLastSeenDays());
-                Double o2 = Double.valueOf(c2.getLastSeenDays());
+                Double o1 = c1.getLastSeenDays();
+                Double o2 = c2.getLastSeenDays();
 
                 return o1.compareTo(o2);
             }
@@ -708,7 +705,6 @@ public final class ClanManager
     /**
      * Purchase clan creation
      * @param player
-     * @param price
      * @return
      */
     public boolean purchaseCreation(Player player)
@@ -742,7 +738,6 @@ public final class ClanManager
     /**
      * Purchase clan verification
      * @param player
-     * @param price
      * @return
      */
     public boolean purchaseVerification(Player player)

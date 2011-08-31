@@ -268,7 +268,7 @@ public final class SettingsManager
 
     /**
      * Check whether a worlds is blacklisted
-     * @param word
+     * @param world
      * @return
      */
     public boolean isBlacklistedWorld(String world)
@@ -299,12 +299,8 @@ public final class SettingsManager
             }
         }
 
-        if (word.equalsIgnoreCase("clan") || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept))
-        {
-            return true;
-        }
+        return word.equalsIgnoreCase("clan") || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept);
 
-        return false;
     }
 
     /**

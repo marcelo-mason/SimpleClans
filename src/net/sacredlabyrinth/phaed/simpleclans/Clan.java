@@ -79,7 +79,6 @@ public class Clan implements Serializable, Comparable<Clan>
         return other.getTag().equals(this.getTag());
     }
 
-    @Override
     public int compareTo(Clan other)
     {
         return this.getTag().compareToIgnoreCase(other.getTag());
@@ -376,12 +375,8 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public boolean isVerified()
     {
-        if (SimpleClans.getInstance().getSettingsManager().isRequireVerification())
-        {
-            return verified;
-        }
+        return !SimpleClans.getInstance().getSettingsManager().isRequireVerification() || verified;
 
-        return true;
     }
 
     /**
@@ -1143,7 +1138,7 @@ public class Clan implements Serializable, Comparable<Clan>
             }
         }
 
-        clans.remove(getTag());
+        clans.remove(this);
 
         for (Clan c : clans)
         {

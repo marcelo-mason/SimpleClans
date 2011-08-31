@@ -15,13 +15,11 @@ import java.util.regex.*;
  */
 public class ChatBlock
 {
-    private int colspacing = 12;
     private static final int lineLength = 319;
     private ArrayList<Boolean> columnFlexes = new ArrayList<Boolean>();
     private ArrayList<Integer> columnSizes = new ArrayList<Integer>();
     private ArrayList<String> columnAlignments = new ArrayList<String>();
     private LinkedList<String[]> rows = new LinkedList<String[]>();
-    private boolean prefix_used = false;
     private String color = "";
     /**
      *
@@ -152,7 +150,7 @@ public class ChatBlock
      * @param amount
      * @return
      */
-    public boolean sendBlock(Player player, String prefix, int amount)
+    boolean sendBlock(Player player, String prefix, int amount)
     {
         if (player == null)
         {
@@ -169,7 +167,7 @@ public class ChatBlock
             amount = rows.size();
         }
 
-        prefix_used = prefix == null ? true : false;
+        boolean prefix_used = prefix == null;
 
         String empty_prefix = ChatBlock.makeEmpty(prefix);
 
@@ -244,6 +242,7 @@ public class ChatBlock
 
             // add in spacings
 
+            int colspacing = 12;
             int availableSpacing = colspacing;
 
             while (calculatedRowSize(measuredCols) < lineLength && availableSpacing > 0)
@@ -342,7 +341,7 @@ public class ChatBlock
      * @param col
      * @return
      */
-    public int getMaxWidth(int col)
+    int getMaxWidth(int col)
     {
         double maxWidth = 0;
 
@@ -370,7 +369,7 @@ public class ChatBlock
      * @param lineLength
      * @return
      */
-    public static String centerInLineOf(String msg, double lineLength)
+    private static String centerInLineOf(String msg, double lineLength)
     {
         double length = msgLength(msg);
         double diff = lineLength - length;
@@ -417,7 +416,7 @@ public class ChatBlock
      * @param length
      * @return
      */
-    public static String cropRightToFit(String msg, double length)
+    private static String cropRightToFit(String msg, double length)
     {
         if (msg == null || msg.length() == 0 || length == 0)
         {
@@ -438,7 +437,7 @@ public class ChatBlock
      * @param length
      * @return
      */
-    public static String cropLeftToFit(String msg, double length)
+    private static String cropLeftToFit(String msg, double length)
     {
         if (msg == null || msg.length() == 0 || length == 0)
         {
@@ -459,7 +458,7 @@ public class ChatBlock
      * @param length
      * @return
      */
-    public static String paddLeftToFit(String msg, double length)
+    private static String paddLeftToFit(String msg, double length)
     {
         if (msgLength(msg) >= length)
         {
@@ -480,7 +479,7 @@ public class ChatBlock
      * @param length
      * @return
      */
-    public static String paddRightToFit(String msg, double length)
+    private static String paddRightToFit(String msg, double length)
     {
         if (msgLength(msg) >= length)
         {
@@ -500,7 +499,7 @@ public class ChatBlock
      * @param str
      * @return
      */
-    public static double msgLength(String str)
+    private static double msgLength(String str)
     {
         double length = 0;
         str = cleanColors(str);
@@ -527,16 +526,15 @@ public class ChatBlock
      * @param str
      * @return
      */
-    public static String cleanColors(String str)
+    private static String cleanColors(String str)
     {
         String patternStr = "ÃƒÂ¯Ã‚Â¿Ã‚Â½.";
         String replacementStr = "";
 
         Pattern pattern = Pattern.compile(patternStr);
         Matcher matcher = pattern.matcher(str);
-        String out = matcher.replaceAll(replacementStr);
 
-        return out;
+        return matcher.replaceAll(replacementStr);
     }
 
     /**
@@ -544,7 +542,7 @@ public class ChatBlock
      * @param x
      * @return
      */
-    public static int charLength(char x)
+    private static int charLength(char x)
     {
         if ("i.:,;|!".indexOf(x) != -1)
         {
@@ -585,7 +583,7 @@ public class ChatBlock
      * @param msg
      * @return
      */
-    public static String[] wordWrap(String msg)
+    private static String[] wordWrap(String msg)
     {
         // Split each word apart
 
@@ -632,7 +630,7 @@ public class ChatBlock
                 }
             }
             // Merge them and add them to the output array.
-            String merged = combineSplit(0, words.toArray(new String[words.size()]), " ") + " ";
+            String merged = combineSplit(words.toArray(new String[words.size()])) + " ";
             out.add(merged.replaceAll("\\s+$", ""));
         }
         // Convert to an array and return
@@ -642,20 +640,20 @@ public class ChatBlock
 
     /**
      *
-     * @param startIndex
+     *
+     *
      * @param string
-     * @param seperator
      * @return
      */
-    public static String combineSplit(int startIndex, String[] string, String seperator)
+    private static String combineSplit(String[] string)
     {
         StringBuilder builder = new StringBuilder();
-        for (int i = startIndex; i < string.length; i++)
+        for (String aString : string)
         {
-            builder.append(string[i]);
-            builder.append(seperator);
+            builder.append(aString);
+            builder.append(" ");
         }
-        builder.deleteCharAt(builder.length() - seperator.length());
+        builder.deleteCharAt(builder.length() - " ".length());
 
         return builder.toString();
     }
@@ -666,7 +664,7 @@ public class ChatBlock
      * @param str
      * @return
      */
-    public static String[] wordCut(int lengthBefore, String str)
+    private static String[] wordCut(int lengthBefore, String str)
     {
         int length = lengthBefore;
 
@@ -775,9 +773,9 @@ public class ChatBlock
      * @param message
      * @return
      */
-    public static String[] colorize(String[] message)
+    private static String[] colorize(String[] message)
     {
-        return colorizeBase(message, 167);
+        return colorizeBase(message);
     }
 
     /**
@@ -790,16 +788,16 @@ public class ChatBlock
         return colorizeBase((new String[]
                 {
                     message
-                }), 167)[0];
+                }))[0];
     }
 
     /**
      *
+     *
      * @param message
-     * @param charcode
      * @return
      */
-    public static String[] colorizeBase(String[] message, int charcode)
+    private static String[] colorizeBase(String[] message)
     {
         if (message != null && message[0] != null && !message[0].isEmpty())
         {
@@ -815,7 +813,7 @@ public class ChatBlock
                 for (int x = 0; x < msg.length(); x++)
                 {
                     // If the char is color code
-                    if (msg.codePointAt(x) == charcode)
+                    if (msg.codePointAt(x) == 167)
                     {
                         // advance x to the next character
                         x += 1;
@@ -824,7 +822,7 @@ public class ChatBlock
                         {
                             lastColor = ChatColor.getByCode(Integer.parseInt(msg.charAt(x) + "", 16)) + "";
                         }
-                        catch (Exception ex)
+                        catch (Exception ignored)
                         {
                         }
                     }

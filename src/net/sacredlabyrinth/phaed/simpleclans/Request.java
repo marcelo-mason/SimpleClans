@@ -10,7 +10,6 @@ import java.util.List;
  */
 public final class Request
 {
-    private SimpleClans plugin;
     private List<ClanPlayer> acceptors = new ArrayList<ClanPlayer>();
     private Clan clan;
     private String msg;
@@ -30,7 +29,6 @@ public final class Request
      */
     public Request(SimpleClans plugin, ClanRequest type, List<ClanPlayer> acceptors, ClanPlayer requester, String target, Clan clan, String msg)
     {
-        plugin = SimpleClans.getInstance();
         this.type = type;
         this.target = target;
         this.clan = clan;
@@ -61,21 +59,6 @@ public final class Request
     }
 
     /**
-     * @return the plugin
-     */
-    public SimpleClans getPlugin()
-    {
-        return plugin;
-    }
-
-    /**
-     */
-    public void setPlugin()
-    {
-        plugin = SimpleClans.getInstance();
-    }
-
-    /**
      * @return the acceptors
      */
     public List<ClanPlayer> getAcceptors()
@@ -88,7 +71,7 @@ public final class Request
      */
     public void setAcceptors(List<ClanPlayer> acceptors)
     {
-        this.setAcceptors(acceptors);
+        this.acceptors = acceptors;
     }
 
     /**

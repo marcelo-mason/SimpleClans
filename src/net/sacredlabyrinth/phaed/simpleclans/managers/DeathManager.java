@@ -60,10 +60,9 @@ public final class DeathManager
     {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
-            @Override
             public void run()
             {
-                List<DamageRecord> old = new ArrayList<DamageRecord>();
+                List<String> old = new ArrayList<String>();
 
                 for (String victim : damages.keySet())
                 {
@@ -73,13 +72,13 @@ public final class DeathManager
 
                     if (Dates.differenceInSeconds(now, rec.getTime()) >= plugin.getSettingsManager().getCombatTagSeconds())
                     {
-                        old.add(rec);
+                        old.add(victim);
                     }
                 }
 
-                for (DamageRecord o : old)
+                for (String v : old)
                 {
-                    damages.remove(o);
+                    damages.remove(v);
                 }
             }
         }, 0, 20L * 5);

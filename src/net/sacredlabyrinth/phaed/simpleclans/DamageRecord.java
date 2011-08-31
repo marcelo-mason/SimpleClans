@@ -62,8 +62,7 @@ public class DamageRecord
      */
     public Date getTime()
     {
-        Date t = new Date(time.getTime());
-        return t;
+        return new Date(time.getTime());
     }
 
     /**

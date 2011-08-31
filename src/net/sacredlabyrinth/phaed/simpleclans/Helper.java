@@ -263,7 +263,7 @@ public class Helper
      */
     public static String[] toArray(List<String> list)
     {
-        return list.toArray(new String[0]);
+        return list.toArray(new String[list.size()]);
     }
 
     /**
@@ -311,10 +311,10 @@ public class Helper
 
         for (String arg : args)
         {
-            out += arg + sep;
+            out += arg + ", ";
         }
 
-        return stripTrailing(out, sep);
+        return stripTrailing(out, ", ");
     }
 
     /**

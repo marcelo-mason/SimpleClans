@@ -48,7 +48,7 @@ public class CreateCommand
                                 {
                                     if (cleanTag.matches("[0-9a-zA-Z]*"))
                                     {
-                                        if (name.indexOf("&") < 0)
+                                        if (!name.contains("&"))
                                         {
                                             if (!plugin.getSettingsManager().isDisallowedWord(cleanTag.toLowerCase()))
                                             {

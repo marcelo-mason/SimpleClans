@@ -8,7 +8,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 /**
- *
  * @author phaed
  */
 public class VerifyCommand
@@ -19,6 +18,7 @@ public class VerifyCommand
 
     /**
      * Execute the command
+     *
      * @param player
      * @param arg
      */
@@ -36,18 +36,11 @@ public class VerifyCommand
         {
             if (arg.length == 0)
             {
-                if (clan != null)
+                if (plugin.getClanManager().purchaseVerification(player))
                 {
-                    if (plugin.getClanManager().purchaseVerification(player))
-                    {
-                        clan.verifyClan();
-                        clan.addBb(player.getName(), ChatColor.AQUA + "Clan " + clan.getName() + " has been verified!");
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + "The clan has been verified");
-                    }
-                }
-                else
-                {
-                    ChatBlock.sendMessage(player, ChatColor.RED + "The clan does not exist");
+                    clan.verifyClan();
+                    clan.addBb(player.getName(), ChatColor.AQUA + "Clan " + clan.getName() + " has been verified!");
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + "The clan has been verified");
                 }
             }
         }

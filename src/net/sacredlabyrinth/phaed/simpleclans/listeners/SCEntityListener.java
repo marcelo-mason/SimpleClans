@@ -156,14 +156,11 @@ public class SCEntityListener extends EntityListener
             {
                 if (aclan != null)
                 {
-                    if (vcp != null)
-                    {
-                        // personal ff enabled, allow damage
+                    // personal ff enabled, allow damage
 
-                        if (vcp.isFriendlyFire())
-                        {
-                            return;
-                        }
+                    if (vcp.isFriendlyFire())
+                    {
+                        return;
                     }
 
                     // clan ff enabled, allow damage

@@ -43,7 +43,7 @@ public class CapeCommand
                         {
                             String url = arg[0];
 
-                            if (url.indexOf(".png") >= 0)
+                            if (url.contains(".png"))
                             {
                                 if (Helper.testURL(url))
                                 {
