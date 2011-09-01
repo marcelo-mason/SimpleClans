@@ -1,22 +1,20 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
+import org.bukkit.entity.Player;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
-import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
-import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
-import org.bukkit.entity.Player;
 
 /**
  *
@@ -39,7 +37,7 @@ public final class StorageManager
     }
 
     /**
-     * REtrieve a player's pending chat lines
+     * Retrieve a player's pending chat lines
      * @param player
      * @return
      */
@@ -69,7 +67,7 @@ public final class StorageManager
 
             if (core.checkConnection())
             {
-                SimpleClans.log(Level.INFO, "MySQL Connection successful");
+                SimpleClans.log(Level.INFO, plugin.getLang().getString("mysql.connection.successful"));
 
                 if (!core.existsTable("sc_clans"))
                 {
@@ -89,7 +87,7 @@ public final class StorageManager
             }
             else
             {
-                SimpleClans.log(Level.INFO, "MySQL Connection failed");
+                SimpleClans.log(Level.INFO, plugin.getLang().getString("mysql.connection.failed"));
             }
         }
         else
@@ -98,9 +96,9 @@ public final class StorageManager
 
             if (core.checkConnection())
             {
-                SimpleClans.log(Level.INFO, "SQLite Connection successful");
+                SimpleClans.log(Level.INFO, plugin.getLang().getString("sqlite.connection.successful"));
 
-                if (!core.existsTable("simpleclans"))
+                if (!core.existsTable("sc_clans"))
                 {
                     SimpleClans.log(Level.INFO, "Creating table: sc_clans");
 
@@ -118,7 +116,7 @@ public final class StorageManager
             }
             else
             {
-                SimpleClans.log(Level.INFO, " SQLite Connection failed");
+                SimpleClans.log(Level.INFO, plugin.getLang().getString("sqlite.connection.failed"));
             }
         }
     }
@@ -148,7 +146,7 @@ public final class StorageManager
 
         if (clans.size() > 0)
         {
-            SimpleClans.log(Level.INFO, "clans: {0}", clans.size());
+            SimpleClans.log(Level.INFO, MessageFormat.format(plugin.getLang().getString("clans"), clans.size()));
         }
 
         List<ClanPlayer> cps = retrieveClanPlayers();
@@ -167,7 +165,7 @@ public final class StorageManager
 
         if (cps.size() > 0)
         {
-            SimpleClans.log(Level.INFO, "clan players: {0}", cps.size());
+            SimpleClans.log(Level.INFO, MessageFormat.format(plugin.getLang().getString("clan.players"), cps.size()));
         }
     }
 
@@ -195,7 +193,7 @@ public final class StorageManager
 
         for (Clan clan : purge)
         {
-            SimpleClans.log(Level.INFO, "purging clan: " + clan.getName());
+            SimpleClans.log(Level.INFO, MessageFormat.format(plugin.getLang().getString("purging.clan"), clan.getName()));
             deleteClan(clan);
             clans.remove(clan);
         }
@@ -215,7 +213,7 @@ public final class StorageManager
 
         for (ClanPlayer cp : purge)
         {
-            SimpleClans.log(Level.INFO, "purging player data " + cp.getName());
+            SimpleClans.log(Level.INFO, MessageFormat.format(plugin.getLang().getString("purging.player.data"), cp.getName()));
             deleteClanPlayer(cp);
             cps.remove(cp);
         }
@@ -427,7 +425,7 @@ public final class StorageManager
     public void updateClanPlayer(ClanPlayer cp)
     {
         cp.updateLastSeen();
-        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) + "' WHERE name = '" + cp.getName() + "';";
+        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) +  "', trusted = " + (cp.isTrusted() ? 1 : 0) + " WHERE name = '" + cp.getName() + "';";
         core.update(query);
     }
 

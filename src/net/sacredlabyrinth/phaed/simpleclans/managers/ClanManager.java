@@ -2,6 +2,8 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import java.text.DecimalFormat;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -607,7 +609,7 @@ public final class ClanManager
 
         if (out == 0)
         {
-            return ChatColor.BLACK + "None";
+            return ChatColor.BLACK + plugin.getLang().getString("none");
         }
         else
         {
@@ -723,11 +725,11 @@ public final class ClanManager
             if (account.hasEnough(price))
             {
                 account.subtract(price);
-                player.sendMessage(ChatColor.RED + "Your account has been debited " + price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("account.has.been.debited"), price));
             }
             else
             {
-                player.sendMessage(ChatColor.RED + "You do not have sufficient money in your account");
+                player.sendMessage(ChatColor.RED + plugin.getLang().getString("not.sufficient.money"));
                 return false;
             }
         }
@@ -756,11 +758,11 @@ public final class ClanManager
             if (account.hasEnough(price))
             {
                 account.subtract(price);
-                player.sendMessage(ChatColor.RED + "Your account has been debited " + price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("account.has.been.debited"), price));
             }
             else
             {
-                player.sendMessage(ChatColor.RED + "You do not have sufficient money in your account");
+                player.sendMessage(ChatColor.RED + plugin.getLang().getString("not.sufficient.money"));
                 return false;
             }
         }

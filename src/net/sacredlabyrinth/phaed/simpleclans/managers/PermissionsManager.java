@@ -82,7 +82,7 @@ public final class PermissionsManager
 
         if (test != null)
         {
-            SimpleClans.log(Level.SEVERE, "SimpleClans does not support GroupManager");
+            SimpleClans.log(Level.SEVERE, plugin.getLang().getString("no.groupmanager"));
             plugin.getPluginLoader().disablePlugin(plugin);
         }
     }

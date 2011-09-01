@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashSet;
 import org.bukkit.ChatColor;
@@ -169,15 +170,15 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         if (days < 1)
         {
-            return "Today";
+            return SimpleClans.getInstance().getLang().getString("today");
         }
         else if (Math.round(days) == 1)
         {
-            return "1 " + ChatColor.GRAY + "day";
+            return MessageFormat.format(SimpleClans.getInstance().getLang().getString("1.color.day"), ChatColor.GRAY);
         }
         else
         {
-            return Math.round(days) + "" + ChatColor.GRAY + " days";
+            return MessageFormat.format(SimpleClans.getInstance().getLang().getString("many.color.days"), Math.round(days), ChatColor.GRAY);
         }
     }
 
@@ -346,12 +347,14 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public float getKDR()
     {
-        if (deaths == 0)
+        int totalDeaths = getDeaths();
+
+        if (totalDeaths == 0)
         {
-            return 0;
+            totalDeaths = 1;
         }
 
-        return ((float) getWeightedKills()) / ((float) deaths);
+        return ((float) getWeightedKills()) / ((float) totalDeaths);
     }
 
     /**
@@ -468,7 +471,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         if (out.trim().isEmpty())
         {
-            return "None";
+            return SimpleClans.getInstance().getLang().getString("none");
         }
 
         return out;

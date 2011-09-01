@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
+import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
@@ -512,7 +513,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (out.trim().isEmpty())
         {
-            return ChatColor.GRAY + "None";
+            return ChatColor.GRAY + SimpleClans.getInstance().getLang().getString("none");
         }
 
         return Helper.parseColors(out);
@@ -651,6 +652,11 @@ public class Clan implements Serializable, Comparable<Clan>
             ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
             totalWeightedKills += cp.getWeightedKills();
             totalDeaths += cp.getDeaths();
+        }
+
+        if (totalDeaths == 0)
+        {
+            totalDeaths = 1;
         }
 
         return ((float) totalWeightedKills) / ((float) totalDeaths);
@@ -1101,7 +1107,7 @@ public class Clan implements Serializable, Comparable<Clan>
         if (isVerified())
         {
             ChatBlock.sendBlank(player);
-            ChatBlock.saySingle(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor() + Helper.capitalize(getName()) + " bulletin board");
+            ChatBlock.saySingle(player, MessageFormat.format(SimpleClans.getInstance().getLang().getString("bulletin.board.header"), SimpleClans.getInstance().getSettingsManager().getBbAccentColor(), SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor(), Helper.capitalize(getName())));
 
             for (String msg : bb)
             {
@@ -1133,7 +1139,6 @@ public class Clan implements Serializable, Comparable<Clan>
                 cp.setLeader(false);
 
                 SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
-
                 SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
             }
         }
@@ -1142,18 +1147,28 @@ public class Clan implements Serializable, Comparable<Clan>
 
         for (Clan c : clans)
         {
+            String disbanded = SimpleClans.getInstance().getLang().getString("clan.disbanded");
+
             if (c.removeRival(getTag()))
             {
-                c.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Rivalry has ended.");
+                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang().getString("has.been.disbanded.rivalry.ended"), Helper.capitalize(getName())));
             }
 
             if (c.removeAlly(getTag()))
             {
-                c.addBb("Clan Disbanded", ChatColor.AQUA + Helper.capitalize(getName()) + " has been disbanded.  Alliance has ended.");
+                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang().getString("has.been.disbanded.alliance.ended"), Helper.capitalize(getName())));
             }
         }
 
-        SimpleClans.getInstance().getStorageManager().deleteClan(this);
+        final Clan thisOne = this;
+
+        SimpleClans.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(SimpleClans.getInstance(), new Runnable()
+        {
+            public void run()
+            {
+                SimpleClans.getInstance().getStorageManager().deleteClan(thisOne);
+            }
+        }, 1);
     }
 
     /**

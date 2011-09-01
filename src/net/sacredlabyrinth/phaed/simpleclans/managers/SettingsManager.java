@@ -15,6 +15,7 @@ import org.bukkit.util.config.Configuration;
 public final class SettingsManager
 {
     private SimpleClans plugin;
+    private String language;
     private boolean globalff;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
@@ -51,7 +52,7 @@ public final class SettingsManager
     private int bbSize;
     private String bbColor;
     private String bbAccentColor;
-    private String bbNewClan;
+    private String commandClan;
     private String commandMore;
     private String commandDeny;
     private String commandAccept;
@@ -123,6 +124,7 @@ public final class SettingsManager
         unRivableClans = config.getStringList("settings.unrivable-clans", unRivableClansDefault);
         showUnverifiedOnList = config.getBoolean("settings.show-unverified-on-list", false);
         requireVerification = config.getBoolean("settings.new-clan-verification-required", true);
+        language = config.getString("settings.language", "en");
         serverName = config.getString("settings.server-name", "&9MinecraftServer");
         chatTags = config.getBoolean("settings.display-chat-tags", true);
         combatTagSeconds = config.getInt("settings.combat-tag-seconds", 5);
@@ -152,6 +154,7 @@ public final class SettingsManager
         bbSize = config.getInt("bb.size", 10);
         bbColor = config.getString("bb.color", "e");
         bbAccentColor = config.getString("bb.accent-color", "8");
+        commandClan = config.getString("commands.clan", "clan");
         commandMore = config.getString("commands.more", "more");
         commandDeny = config.getString("commands.deny", "deny");
         commandAccept = config.getString("commands.accept", "accept");
@@ -193,6 +196,7 @@ public final class SettingsManager
         Configuration config = getPlugin().getConfiguration();
         config.load();
 
+        config.setProperty("settings.language", language);
         config.setProperty("settings.banned-players", bannedPlayers);
         config.setProperty("settings.blacklisted-worlds", blacklistedWorlds);
         config.setProperty("settings.disallowed-tags", disallowedWords);
@@ -229,6 +233,7 @@ public final class SettingsManager
         config.setProperty("bb.size", bbSize);
         config.setProperty("bb.color", bbColor);
         config.setProperty("bb.accent-color", bbAccentColor);
+        config.setProperty("commands.clan", commandClan);
         config.setProperty("commands.more", commandMore);
         config.setProperty("commands.deny", commandDeny);
         config.setProperty("commands.accept", commandAccept);
@@ -268,8 +273,8 @@ public final class SettingsManager
 
     /**
      * Check whether a worlds is blacklisted
-     * @param world
-     * @return
+     * @param world the world
+     * @return whether the world is blacklisted
      */
     public boolean isBlacklistedWorld(String world)
     {
@@ -286,8 +291,8 @@ public final class SettingsManager
 
     /**
      * Check whether a word is disallowed
-     * @param word
-     * @return
+     * @param word the world
+     * @return whether its a disallowed word
      */
     public boolean isDisallowedWord(String word)
     {
@@ -304,27 +309,9 @@ public final class SettingsManager
     }
 
     /**
-     * Check whether a color is disallowed
-     * @param color
-     * @return
-     */
-    public boolean isDisallowedColor(String color)
-    {
-        for (String c : getDisallowedColors())
-        {
-            if (c.equalsIgnoreCase(color))
-            {
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    /**
      * Check whether a string has a disallowed color
-     * @param str
-     * @return
+     * @param str the string
+     * @return whether the string contains the color code
      */
     public boolean hasDisallowedColor(String str)
     {
@@ -356,8 +343,8 @@ public final class SettingsManager
 
     /**
      * Check whether a clan is un-rivable
-     * @param tag
-     * @return
+     * @param tag the tag
+     * @return whether the clan is unrivable
      */
     public boolean isUnrivable(String tag)
     {
@@ -374,8 +361,8 @@ public final class SettingsManager
 
     /**
      * Check whether a player is banned
-     * @param playerName
-     * @return
+     * @param playerName the player's name
+     * @return whether player is banned
      */
     public boolean isBanned(String playerName)
     {
@@ -392,7 +379,7 @@ public final class SettingsManager
 
     /**
      * Add a player to the banned list
-     * @param playerName
+     * @param playerName the player's name
      */
     public void addBanned(String playerName)
     {
@@ -406,7 +393,7 @@ public final class SettingsManager
 
     /**
      * Remove a player from the banned list
-     * @param playerName
+     * @param playerName the player's name
      */
     public void removeBanned(String playerName)
     {
@@ -440,14 +427,6 @@ public final class SettingsManager
     public List<String> getBannedPlayers()
     {
         return Collections.unmodifiableList(bannedPlayers);
-    }
-
-    /**
-     * @return the disallowedWords
-     */
-    public List<String> getDisallowedWords()
-    {
-        return Collections.unmodifiableList(disallowedWords);
     }
 
     /**
@@ -563,14 +542,6 @@ public final class SettingsManager
     }
 
     /**
-     * @param requestFreqencySecs the requestFreqencySecs to set
-     */
-    public void setRequestFreqencySecs(int requestFreqencySecs)
-    {
-        this.requestFreqencySecs = requestFreqencySecs;
-    }
-
-    /**
      * @return the requestMessageColor
      */
     public String getRequestMessageColor()
@@ -643,11 +614,11 @@ public final class SettingsManager
     }
 
     /**
-     * @return the bbNewClan
+     * @return the commandClan
      */
-    public String getBbNewClan()
+    public String getCommandClan()
     {
-        return bbNewClan;
+        return commandClan;
     }
 
     /**
@@ -1007,11 +978,8 @@ public final class SettingsManager
         return eVerificationPrice;
     }
 
-     /**
-     * @return ePurchaseVerification || ePurchaseCreation
-     */
-    public boolean isEconomyEnabled()
+    public String getLanguage()
     {
-        return ePurchaseVerification || ePurchaseCreation;
+        return language;
     }
 }

@@ -116,7 +116,7 @@ public final class SpoutPluginManager
 
         if (test != null)
         {
-            SimpleClans.log(Level.INFO, "Spout features enabled");
+            SimpleClans.log(Level.INFO, plugin.getLang().getString("spout.features.enabled"));
             return true;
         }
         return false;

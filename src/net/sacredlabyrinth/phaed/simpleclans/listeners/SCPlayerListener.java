@@ -70,11 +70,15 @@ public class SCPlayerListener extends PlayerListener
         }
 
         String command = split[0];
-        String msg = Helper.toMessage(Helper.removeFirst(split));
 
         if (plugin.getClanManager().isClan(command))
         {
-            plugin.getCommandManager().processClanChat(player, command, msg);
+            plugin.getCommandManager().processClanChat(player, command, Helper.toMessage(Helper.removeFirst(split)));
+            event.setCancelled(true);
+        }
+        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
+        {
+            plugin.getCommandManager().processClan(player, Helper.removeFirst(split));
             event.setCancelled(true);
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAccept()))
@@ -92,6 +96,7 @@ public class SCPlayerListener extends PlayerListener
             plugin.getCommandManager().processMore(player);
             event.setCancelled(true);
         }
+
     }
 
     /**

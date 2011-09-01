@@ -1,11 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.storage;
 
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 /**
  *
@@ -58,7 +59,6 @@ public class MySQLCore implements DBCore
     /**
      * @return connection
      */
-    @Override
     public Connection getConnection()
     {
         if (connection == null)
@@ -72,7 +72,6 @@ public class MySQLCore implements DBCore
     /**
      * @return whether connection can be established
      */
-    @Override
     public Boolean checkConnection()
     {
         return getConnection() != null;
@@ -81,7 +80,6 @@ public class MySQLCore implements DBCore
     /**
      * Close connection
      */
-    @Override
     public void close()
     {
         try
@@ -102,7 +100,6 @@ public class MySQLCore implements DBCore
      * @param query
      * @return
      */
-    @Override
     public ResultSet select(String query)
     {
         try
@@ -121,7 +118,6 @@ public class MySQLCore implements DBCore
      * Execute an insert statement
      * @param query
      */
-    @Override
     public void insert(String query)
     {
         try
@@ -141,7 +137,6 @@ public class MySQLCore implements DBCore
      * Execute an update statement
      * @param query
      */
-    @Override
     public void update(String query)
     {
         try
@@ -161,7 +156,6 @@ public class MySQLCore implements DBCore
      * Execute a delete statement
      * @param query
      */
-    @Override
     public void delete(String query)
     {
         try
@@ -182,7 +176,6 @@ public class MySQLCore implements DBCore
      * @param query
      * @return
      */
-    @Override
     public Boolean execute(String query)
     {
         try
@@ -202,20 +195,16 @@ public class MySQLCore implements DBCore
      * @param table
      * @return
      */
-    @Override
     public Boolean existsTable(String table)
     {
         try
         {
-            ResultSet result = getConnection().createStatement().executeQuery("SELECT * FROM " + table);
-            return result != null;
+            ResultSet tables = getConnection().getMetaData().getTables(null, null, table, null);
+            return tables.next();
         }
-        catch (SQLException ex)
+        catch (SQLException e)
         {
-            if (!ex.getMessage().contains("exist"))
-            {
-                log.warning("Error at SQL Query: " + ex.getMessage());
-            }
+            log.severe("Failed to check if table '" + table + "' exists: " + e.getMessage());
             return false;
         }
     }
