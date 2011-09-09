@@ -1,22 +1,14 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.simpleclans.ClanRequest;
-import net.sacredlabyrinth.phaed.simpleclans.VoteResult;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.Request;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 /**
- *
  * @author phaed
  */
 public final class RequestManager
@@ -35,6 +27,7 @@ public final class RequestManager
 
     /**
      * Check whether the clan has a pending request
+     *
      * @param tag
      * @return
      */
@@ -45,13 +38,14 @@ public final class RequestManager
 
     /**
      * Add a demotion request
-     * @param plugin
+     *
      * @param requester
      * @param demotedName
      * @param clan
      */
-    public void addDemoteRequest(SimpleClans plugin, ClanPlayer requester, String demotedName, Clan clan)
+    public void addDemoteRequest(ClanPlayer requester, String demotedName, Clan clan)
     {
+
         String msg = MessageFormat.format(plugin.getLang().getString("asking.for.the.demotion"), Helper.capitalize(requester.getName()), demotedName);
 
         ClanPlayer demotedTp = plugin.getClanManager().getClanPlayer(demotedName.toLowerCase());
@@ -66,12 +60,12 @@ public final class RequestManager
 
     /**
      * Add a promotion request
-     * @param plugin
+     *
      * @param requester
      * @param promotedName
      * @param clan
      */
-    public void addPromoteRequest(SimpleClans plugin, ClanPlayer requester, String promotedName, Clan clan)
+    public void addPromoteRequest(ClanPlayer requester, String promotedName, Clan clan)
     {
         String msg = MessageFormat.format(plugin.getLang().getString("asking.for.the.promotion"), Helper.capitalize(requester.getName()), promotedName);
 
@@ -85,11 +79,11 @@ public final class RequestManager
 
     /**
      * Add a clan disband request
-     * @param plugin
+     *
      * @param requester
      * @param clan
      */
-    public void addDisbandRequest(SimpleClans plugin, ClanPlayer requester, Clan clan)
+    public void addDisbandRequest(ClanPlayer requester, Clan clan)
     {
         String msg = MessageFormat.format(plugin.getLang().getString("asking.for.the.deletion"), Helper.capitalize(requester.getName()));
 
@@ -103,12 +97,12 @@ public final class RequestManager
 
     /**
      * Add a member invite request
-     * @param plugin
+     *
      * @param requester
      * @param invitedName
      * @param clan
      */
-    public void addInviteRequest(SimpleClans plugin, ClanPlayer requester, String invitedName, Clan clan)
+    public void addInviteRequest(ClanPlayer requester, String invitedName, Clan clan)
     {
         String msg = MessageFormat.format(plugin.getLang().getString("inviting.you.to.join"), Helper.capitalize(requester.getName()), clan.getName());
         Request req = new Request(plugin, ClanRequest.INVITE, null, requester, invitedName, clan, msg);
@@ -117,13 +111,51 @@ public final class RequestManager
     }
 
     /**
-     * Add an clan alliance request
-     * @param plugin
+     * Add an clan war request
+     *
      * @param requester
      * @param allyClan
      * @param requestingClan
      */
-    public void addAllyRequest(SimpleClans plugin, ClanPlayer requester, Clan allyClan, Clan requestingClan)
+    public void addWarStartRequest(ClanPlayer requester, Clan allyClan, Clan requestingClan)
+    {
+        String msg = MessageFormat.format(plugin.getLang().getString("proposing.war"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(allyClan.getColorTag()));
+
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(allyClan.getLeaders());
+        acceptors.remove(requester);
+
+        Request req = new Request(plugin, ClanRequest.START_WAR, acceptors, requester, allyClan.getTag(), requestingClan, msg);
+        requests.put(allyClan.getTag(), req);
+        ask(req);
+    }
+
+    /**
+     * Add an war end request
+     *
+     * @param requester
+     * @param rivalClan
+     * @param requestingClan
+     */
+    public void addWarEndRequest(ClanPlayer requester, Clan rivalClan, Clan requestingClan)
+    {
+        String msg = MessageFormat.format(plugin.getLang().getString("proposing.to.end.the.war"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(rivalClan.getColorTag()));
+
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(rivalClan.getLeaders());
+        acceptors.remove(requester);
+
+        Request req = new Request(plugin, ClanRequest.END_WAR, acceptors, requester, rivalClan.getTag(), requestingClan, msg);
+        requests.put(rivalClan.getTag(), req);
+        ask(req);
+    }
+
+    /**
+     * Add an clan alliance request
+     *
+     * @param requester
+     * @param allyClan
+     * @param requestingClan
+     */
+    public void addAllyRequest(ClanPlayer requester, Clan allyClan, Clan requestingClan)
     {
         String msg = MessageFormat.format(plugin.getLang().getString("proposing.an.alliance"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(allyClan.getColorTag()));
 
@@ -137,13 +169,14 @@ public final class RequestManager
 
     /**
      * Add an clan rivalry break request
-     * @param plugin
+     *
      * @param requester
      * @param rivalClan
      * @param requestingClan
      */
-    public void addRivalryBreakRequest(SimpleClans plugin, ClanPlayer requester, Clan rivalClan, Clan requestingClan)
+    public void addRivalryBreakRequest(ClanPlayer requester, Clan rivalClan, Clan requestingClan)
     {
+
         String msg = MessageFormat.format(plugin.getLang().getString("proposing.to.end.the.rivalry"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(rivalClan.getColorTag()));
 
         List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(rivalClan.getLeaders());
@@ -156,6 +189,7 @@ public final class RequestManager
 
     /**
      * Record one player's accept vote
+     *
      * @param cp
      */
     public void accept(ClanPlayer cp)
@@ -180,6 +214,7 @@ public final class RequestManager
 
     /**
      * Record one player's deny vote
+     *
      * @param cp
      */
     public void deny(ClanPlayer cp)
@@ -204,6 +239,7 @@ public final class RequestManager
 
     /**
      * Process the answer from an invite and add the player to the clan if accepted
+     *
      * @param req
      * @param vote
      */
@@ -230,11 +266,64 @@ public final class RequestManager
 
     /**
      * Check to see if votes are complete and process the result
+     *
      * @param req
      */
     public void processResults(Request req)
     {
-        if (req.getType().equals(ClanRequest.CREATE_ALLY))
+        if (req.getType().equals(ClanRequest.START_WAR))
+        {
+            Clan clan = req.getClan();
+            Clan war = plugin.getClanManager().getClan(req.getTarget());
+            ClanPlayer cp = req.getRequester();
+
+            if (war != null && clan != null)
+            {
+                List<String> accepts = req.getAccepts();
+                List<String> denies = req.getDenies();
+
+                if (!accepts.isEmpty())
+                {
+                    clan.addWarringClan(war);
+                    war.addWarringClan(clan);
+
+                    war.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("you.are.at.war"), Helper.capitalize(war.getName()), clan.getColorTag()));
+                    clan.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("you.are.at.war"), Helper.capitalize(clan.getName()), war.getColorTag()));
+                }
+                else
+                {
+                    war.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("denied.war.req"), Helper.capitalize(denies.get(0)), clan.getName()));
+                    clan.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("end.war.denied"), Helper.capitalize(war.getName())));
+                }
+            }
+        }
+        else if (req.getType().equals(ClanRequest.END_WAR))
+        {
+            Clan clan = req.getClan();
+            Clan war = plugin.getClanManager().getClan(req.getTarget());
+            ClanPlayer cp = req.getRequester();
+
+            if (war != null && clan != null)
+            {
+                List<String> accepts = req.getAccepts();
+                List<String> denies = req.getDenies();
+
+                if (!accepts.isEmpty())
+                {
+                    clan.removeWarringClan(war);
+                    war.removeWarringClan(clan);
+
+                    war.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("you.are.no.longer.at.war"), Helper.capitalize(accepts.get(0)), clan.getColorTag()));
+                    clan.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("you.are.no.longer.at.war"), Helper.capitalize(clan.getName()), Helper.capitalize(war.getColorTag())));
+                }
+                else
+                {
+                    war.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("denied.war.end"), Helper.capitalize(denies.get(0)), clan.getName()));
+                    clan.addBb(cp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("end.war.denied"), Helper.capitalize(war.getName())));
+                }
+            }
+        }
+        else if (req.getType().equals(ClanRequest.CREATE_ALLY))
         {
             Clan clan = req.getClan();
             Clan ally = plugin.getClanManager().getClan(req.getTarget());
@@ -342,6 +431,7 @@ public final class RequestManager
 
     /**
      * End a pending request prematurely
+     *
      * @param playerName
      * @return
      */
@@ -382,6 +472,7 @@ public final class RequestManager
 
     /**
      * Asks a request to players for votes
+     *
      * @param req
      */
     public void ask(Request req)

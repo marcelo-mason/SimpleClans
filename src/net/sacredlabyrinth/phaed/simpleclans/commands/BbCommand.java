@@ -48,12 +48,12 @@ public class BbCommand
                 }
                 else
                 {
-                    if (plugin.getPermissionsManager().has(player, "simpleclans.leader.bb"))
+                    if (plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add"))
                     {
-                        if (clan.isLeader(player))
+                        if (cp.isTrusted())
                         {
                             String msg = Helper.toMessage(arg);
-                            clan.addBb(player.getName(), player.getName() + ": " + msg);
+                            clan.addBb(player.getName(), ChatColor.YELLOW + player.getName() + ChatColor.GOLD + "> " + msg);
                             plugin.getStorageManager().updateClan(clan);
                         }
                         else

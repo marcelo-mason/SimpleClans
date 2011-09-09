@@ -30,7 +30,7 @@ public class GlobalffCommand
         {
             String action = arg[0];
 
-            if (action.equalsIgnoreCase("allow"))
+            if (action.equalsIgnoreCase(plugin.getLang().getString("allow")))
             {
                 if (plugin.getSettingsManager().isGlobalff())
                 {
@@ -42,7 +42,7 @@ public class GlobalffCommand
                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("global.friendly.fire.is.set.to.allowed"));
                 }
             }
-            else if (action.equalsIgnoreCase("auto"))
+            else if (action.equalsIgnoreCase(plugin.getLang().getString("auto")))
             {
                 if (plugin.getSettingsManager().isGlobalff())
                 {

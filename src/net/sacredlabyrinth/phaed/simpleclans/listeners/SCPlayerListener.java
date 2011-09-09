@@ -1,19 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.player.PlayerChatEvent;
-import org.bukkit.event.player.PlayerCommandPreprocessEvent;
-import org.bukkit.event.player.PlayerJoinEvent;
-import org.bukkit.event.player.PlayerKickEvent;
-import org.bukkit.event.player.PlayerListener;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 
 /**
- *
  * @author phaed
  */
 public class SCPlayerListener extends PlayerListener
@@ -29,7 +22,6 @@ public class SCPlayerListener extends PlayerListener
     }
 
     /**
-     *
      * @param event
      */
     @Override
@@ -52,11 +44,6 @@ public class SCPlayerListener extends PlayerListener
             return;
         }
 
-        if (!plugin.getSettingsManager().getClanChatEnable())
-        {
-            return;
-        }
-
         if (event.getMessage().length() == 0)
         {
             return;
@@ -73,6 +60,11 @@ public class SCPlayerListener extends PlayerListener
 
         if (plugin.getClanManager().isClan(command))
         {
+            if (!plugin.getSettingsManager().getClanChatEnable())
+            {
+                return;
+            }
+
             plugin.getCommandManager().processClanChat(player, command, Helper.toMessage(Helper.removeFirst(split)));
             event.setCancelled(true);
         }
@@ -100,7 +92,6 @@ public class SCPlayerListener extends PlayerListener
     }
 
     /**
-     *
      * @param event
      */
     @Override
@@ -120,7 +111,6 @@ public class SCPlayerListener extends PlayerListener
     }
 
     /**
-     *
      * @param event
      */
     @Override
@@ -141,18 +131,20 @@ public class SCPlayerListener extends PlayerListener
                 plugin.getClanManager().updateDisplayName(player);
                 plugin.getSpoutPluginManager().processPlayer(player.getName());
 
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
-                if (cp != null)
+                if (plugin.getSettingsManager().isBbShowOnLogin())
                 {
-                    cp.getClan().displayBb(player);
+                    ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+                    if (cp != null)
+                    {
+                        cp.getClan().displayBb(player);
+                    }
                 }
             }
         }, 1);
     }
 
     /**
-     *
      * @param event
      */
     @Override
@@ -168,7 +160,6 @@ public class SCPlayerListener extends PlayerListener
     }
 
     /**
-     *
      * @param event
      */
     @Override
@@ -183,7 +174,6 @@ public class SCPlayerListener extends PlayerListener
     }
 
     /**
-     *
      * @param event
      */
     @Override
@@ -199,6 +189,15 @@ public class SCPlayerListener extends PlayerListener
             return;
         }
 
+        plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
+    }
+
+    /**
+     * @param event
+     */
+    @Override
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent event)
+    {
         plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
     }
 }

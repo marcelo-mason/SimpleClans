@@ -43,6 +43,8 @@ public class RivalriesCommand
                 ChatBlock.sendBlank(player);
                 ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang().getString("rivalries") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                 ChatBlock.sendBlank(player);
+                ChatBlock.sendMessage(player, headColor + plugin.getLang().getString("legend") +  ChatColor.DARK_RED + " [" + plugin.getLang().getString("war") + "]");
+                ChatBlock.sendBlank(player);
 
                 chatBlock.setAlignment("l", "l");
                 chatBlock.addRow(plugin.getLang().getString("clan"), plugin.getLang().getString("rivals"));

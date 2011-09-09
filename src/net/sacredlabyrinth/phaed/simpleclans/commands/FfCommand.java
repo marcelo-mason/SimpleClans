@@ -37,13 +37,13 @@ public class FfCommand
                 {
                     String action = arg[0];
 
-                    if (action.equalsIgnoreCase("allow"))
+                    if (action.equalsIgnoreCase(plugin.getLang().getString("allow")))
                     {
                         cp.setFriendlyFire(true);
                         plugin.getStorageManager().updateClanPlayer(cp);
                         ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("personal.friendly.fire.is.set.to.allowed"));
                     }
-                    else if (action.equalsIgnoreCase("auto"))
+                    else if (action.equalsIgnoreCase(plugin.getLang().getString("auto")))
                     {
                         cp.setFriendlyFire(false);
                         plugin.getStorageManager().updateClanPlayer(cp);

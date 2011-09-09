@@ -54,7 +54,7 @@ public class DemoteCommand
                                 }
                                 else
                                 {
-                                    plugin.getRequestManager().addDemoteRequest(plugin, cp, demotedName, clan);
+                                    plugin.getRequestManager().addDemoteRequest(cp, demotedName, clan);
                                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("demotion.vote.has.been.requested.from.all.leaders"));
                                 }
                             }

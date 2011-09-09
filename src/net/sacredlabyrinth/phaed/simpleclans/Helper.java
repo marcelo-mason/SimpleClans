@@ -1,5 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -7,10 +10,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashSet;
 import java.util.List;
-import org.bukkit.ChatColor;
-
-
-import org.bukkit.entity.Player;
 
 /**
  *
@@ -411,7 +410,7 @@ public class Helper
      */
     public static String stripTrailing(String msg, String sep)
     {
-        if (msg.length() < sep.length() * 2)
+        if (msg.length() < sep.length())
         {
             return msg;
         }

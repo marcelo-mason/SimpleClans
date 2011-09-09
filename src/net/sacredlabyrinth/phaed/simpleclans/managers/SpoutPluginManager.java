@@ -1,18 +1,18 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.util.logging.Level;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
+import java.util.logging.Level;
+
 /**
- *
  * @author phaed
  */
 public final class SpoutPluginManager
@@ -47,6 +47,7 @@ public final class SpoutPluginManager
 
     /**
      * Adds cape and title to a player
+     *
      * @param playerName
      */
     public void processPlayer(String playerName)
@@ -64,6 +65,7 @@ public final class SpoutPluginManager
 
     /**
      * Adds cape and title to a player
+     *
      * @param player the player
      */
     public void processPlayer(Player player)
@@ -90,8 +92,15 @@ public final class SpoutPluginManager
 
                 if (plugin.getSettingsManager().isInGameTags())
                 {
-                    String tag = plugin.getSettingsManager().isInGameTagsColored() ? (plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + clan.getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator()) : ChatColor.DARK_GRAY + plugin.getSettingsManager().getTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparator();
-                    SpoutManager.getAppearanceManager().setGlobalTitle(player, tag + ChatColor.WHITE + player.getName());
+                    if (player.isSneaking())
+                    {
+                        SpoutManager.getAppearanceManager().setGlobalTitle(player, player.getName());
+                    }
+                    else
+                    {
+                        String tag = plugin.getSettingsManager().isInGameTagsColored() ? (plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + clan.getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator()) : ChatColor.DARK_GRAY + plugin.getSettingsManager().getTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparator();
+                        SpoutManager.getAppearanceManager().setGlobalTitle(player, tag + ChatColor.WHITE + player.getName());
+                    }
                 }
             }
         }
@@ -99,6 +108,7 @@ public final class SpoutPluginManager
 
     /**
      * Plays alert to player
+     *
      * @param player
      */
     public void playAlert(Player player)

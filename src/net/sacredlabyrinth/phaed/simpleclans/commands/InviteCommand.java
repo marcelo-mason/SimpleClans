@@ -55,7 +55,7 @@ public class InviteCommand
 
                                         if (cpInv == null)
                                         {
-                                            plugin.getRequestManager().addInviteRequest(plugin, cp, invited.getName(), clan);
+                                            plugin.getRequestManager().addInviteRequest(cp, invited.getName(), clan);
                                             ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.asked.to.join"), Helper.capitalize(invited.getName()), clan.getName()));
                                         }
                                         else

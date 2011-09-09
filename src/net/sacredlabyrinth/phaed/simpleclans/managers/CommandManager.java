@@ -47,6 +47,7 @@ public final class CommandManager
     private ReloadCommand reloadCommand;
     private GlobalffCommand globalffCommand;
     private MenuCommand menuCommand;
+    private WarCommand warCommand;
 
     /**
      *
@@ -86,6 +87,7 @@ public final class CommandManager
         unbanCommand = new UnbanCommand();
         reloadCommand = new ReloadCommand();
         globalffCommand = new GlobalffCommand();
+        warCommand = new WarCommand();
     }
 
     /**
@@ -240,6 +242,10 @@ public final class CommandManager
                 {
                     globalffCommand.execute(player, subargs);
                 }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("war.command")))
+                {
+                    warCommand.execute(player, subargs);
+                }
                 else
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("does.not.match"));
@@ -306,7 +312,7 @@ public final class CommandManager
                     if (cp.getVote() == null)
                     {
                         plugin.getRequestManager().accept(cp);
-                        clan.leaderAnnounce(player.getDisplayName(), ChatColor.GREEN + MessageFormat.format(plugin.getLang().getString("voted.to.accept"), Helper.capitalize(player.getDisplayName())));
+                        clan.leaderAnnounce(player.getDisplayName(), ChatColor.GREEN + MessageFormat.format(plugin.getLang().getString("voted.to.accept"), Helper.capitalize(player.getName())));
                     }
                     else
                     {

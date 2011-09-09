@@ -103,7 +103,7 @@ public class StatsCommand
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.kills"), plugin.getSettingsManager().getCommandClan()));
+                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.stats"), plugin.getSettingsManager().getCommandClan()));
                         }
                     }
                     else

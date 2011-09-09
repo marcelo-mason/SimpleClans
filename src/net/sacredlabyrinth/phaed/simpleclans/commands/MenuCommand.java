@@ -114,11 +114,15 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.rival.add.remove.tag.1.add.remove.a.rival.clan"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.war"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.war"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.bb"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.bb.1.display.bulletin.board"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.bb"))
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.bb.msg.1.add.a.message.to.the.bulletin.board"), clanCommand, ChatColor.WHITE));
         }
@@ -140,7 +144,11 @@ public class MenuCommand
         }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust"))
         {
-            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.trust.untrust.player.1.set.trust.level"), clanCommand, ChatColor.WHITE));
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.trust.untrust.player.1.set.trust.level1"), clanCommand, ChatColor.WHITE));
+        }
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.trust.untrust.player.1.set.trust.level2"), clanCommand, ChatColor.WHITE));
         }
         if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.promote"))
         {

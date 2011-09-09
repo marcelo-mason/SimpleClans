@@ -49,7 +49,7 @@ public class AllyCommand
                                 {
                                     if (ally.isVerified())
                                     {
-                                        if (action.equals("add"))
+                                        if (action.equals(plugin.getLang().getString("add")))
                                         {
                                             if (!clan.isAlly(ally.getTag()))
                                             {
@@ -57,7 +57,7 @@ public class AllyCommand
 
                                                 if (!onlineLeaders.isEmpty())
                                                 {
-                                                    plugin.getRequestManager().addAllyRequest(plugin, cp, ally, clan);
+                                                    plugin.getRequestManager().addAllyRequest(cp, ally, clan);
                                                     ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("leaders.have.been.asked.for.an.alliance"), Helper.capitalize(ally.getName())));
                                                 }
                                                 else

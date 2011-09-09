@@ -58,7 +58,7 @@ public class RivalCommand
                                             {
                                                 if (rival.isVerified())
                                                 {
-                                                    if (action.equals("add"))
+                                                    if (action.equals(plugin.getLang().getString("add")))
                                                     {
                                                         if (!clan.isRival(rival.getTag()))
                                                         {
@@ -75,7 +75,7 @@ public class RivalCommand
                                                     {
                                                         if (clan.isRival(rival.getTag()))
                                                         {
-                                                            plugin.getRequestManager().addRivalryBreakRequest(plugin, cp, rival, clan);
+                                                            plugin.getRequestManager().addRivalryBreakRequest(cp, rival, clan);
                                                             ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("leaders.asked.to.end.rivalry"), Helper.capitalize(rival.getName())));
                                                         }
                                                         else

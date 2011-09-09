@@ -1,6 +1,6 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 1.4.1
+version: 1.5
 softdepend: [Spout, Permissions, PermissionsBukkit, mChat]
 permissions:
   simpleclans.admin.reload:
@@ -41,6 +41,8 @@ permissions:
     description: Can view his simpleclans stats
   simpleclans.member.bb:
     description: Can view his clan's bulletin board
+  simpleclans.leader.bb-add:
+    description: Can add to his clan's bulletin board
   simpleclans.member.ff:
     description: Can toggle his own friendly fire
   simpleclans.member.resign:
@@ -51,8 +53,6 @@ permissions:
     description: Can ally his clan with other simpleclans
   simpleclans.leader.rival:
     description: Can start a rivalry with another clan
-  simpleclans.leader.bb:
-    description: Can add to his clan's bulletin board
   simpleclans.leader.modtag:
     description: Can modify his clan's tag
   simpleclans.leader.cape:
@@ -73,6 +73,13 @@ permissions:
     description: Can disband his own clan
   simpleclans.leader.settrust:
     description: Can set trust levels for members
+  simpleclans.leader.war:
+    description: Can start wars
+  simpleclans.admin:
+    description: Permissions for admins
+    default: op
+    children:
+      simpleclans.admin.reload: true
   simpleclans.mod:
     description: Permissions for moderators
     default: op
@@ -104,6 +111,7 @@ permissions:
       simpleclans.member.coords: true
       simpleclans.member.stats: true
       simpleclans.member.bb: true
+      simpleclans.member.bb-add: true
       simpleclans.member.ff: true
       simpleclans.member.resign: true
   simpleclans.leader:
@@ -113,14 +121,14 @@ permissions:
       simpleclans.leader.create: true
       simpleclans.leader.ally: true
       simpleclans.leader.rival: true
-      simpleclans.leader.bb: true
       simpleclans.leader.modtag: true
       simpleclans.leader.cape: true
       simpleclans.leader.invite: true
-      simpleclans.leader.kickv: true
+      simpleclans.leader.kick: true
       simpleclans.leader.promote: true
       simpleclans.leader.promotable: true
       simpleclans.leader.demote: true
       simpleclans.leader.ff: true
       simpleclans.leader.disband: true
       simpleclans.leader.settrust: true
+      simpleclans.leader.war: true

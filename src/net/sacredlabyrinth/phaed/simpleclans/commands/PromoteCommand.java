@@ -62,7 +62,7 @@ public class PromoteCommand
                                                 }
                                                 else
                                                 {
-                                                    plugin.getRequestManager().addPromoteRequest(plugin, cp, promoted.getName(), clan);
+                                                    plugin.getRequestManager().addPromoteRequest(cp, promoted.getName(), clan);
                                                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("promotion.vote.has.been.requested.from.all.leaders"));
                                                 }
                                             }

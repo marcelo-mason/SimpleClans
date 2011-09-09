@@ -42,13 +42,13 @@ public class ClanffCommand
                     {
                         String action = arg[0];
 
-                        if (action.equalsIgnoreCase("allow"))
+                        if (action.equalsIgnoreCase(plugin.getLang().getString("allow")))
                         {
                             clan.addBb(player.getName(), ChatColor.AQUA + plugin.getLang().getString("clan.wide.friendly.fire.is.allowed"));
                             clan.setFriendlyFire(true);
                             plugin.getStorageManager().updateClan(clan);
                         }
-                        else if (action.equalsIgnoreCase("block"))
+                        else if (action.equalsIgnoreCase(plugin.getLang().getString("block")))
                         {
                             clan.addBb(player.getName(), ChatColor.AQUA + plugin.getLang().getString("clan.wide.friendly.fire.blocked"));
                             clan.setFriendlyFire(false);

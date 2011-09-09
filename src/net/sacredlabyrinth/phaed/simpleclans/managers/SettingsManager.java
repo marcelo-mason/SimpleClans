@@ -1,12 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.util.config.Configuration;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-
-import org.bukkit.util.config.Configuration;
 
 /**
  *
@@ -25,7 +25,6 @@ public final class SettingsManager
     private List<String> disallowedColors;
     private List<String> unRivableClans;
     private int rivalLimitPercent;
-    private int combatTagSeconds;
     private boolean ePurchaseCreation;
     private boolean ePurchaseVerification;
     private int eCreationPrice;
@@ -49,6 +48,7 @@ public final class SettingsManager
     private String pageLeaderColor;
     private String pageTrustedColor;
     private String pageUnTrustedColor;
+    private boolean bbShowOnLogin;
     private int bbSize;
     private String bbColor;
     private String bbAccentColor;
@@ -127,7 +127,6 @@ public final class SettingsManager
         language = config.getString("settings.language", "en");
         serverName = config.getString("settings.server-name", "&9MinecraftServer");
         chatTags = config.getBoolean("settings.display-chat-tags", true);
-        combatTagSeconds = config.getInt("settings.combat-tag-seconds", 5);
         rivalLimitPercent = config.getInt("settings.rival-limit-percent", 50);
         ePurchaseCreation = config.getBoolean("economy.purchase-clan-create", false);
         ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify", false);
@@ -151,6 +150,7 @@ public final class SettingsManager
         pageTrustedColor = config.getString("page.trusted-color", "f");
         pageUnTrustedColor = config.getString("page.untrusted-color", "7");
         pageClanNameColor = config.getString("page.clan-name-color", "b");
+        bbShowOnLogin = config.getBoolean("bb.show-on-login", true);
         bbSize = config.getInt("bb.size", 10);
         bbColor = config.getString("bb.color", "e");
         bbAccentColor = config.getString("bb.accent-color", "8");
@@ -206,7 +206,6 @@ public final class SettingsManager
         config.setProperty("settings.new-clan-verification-required", requireVerification);
         config.setProperty("settings.server-name", serverName);
         config.setProperty("settings.display-chat-tags", chatTags);
-        config.setProperty("settings.combat-tag-seconds", combatTagSeconds);
         config.setProperty("settings.rival-limit-percent", rivalLimitPercent);
         config.setProperty("spout.alert-url", alertUrl);
         config.setProperty("economy.purchase-clan-create", ePurchaseCreation);
@@ -231,6 +230,7 @@ public final class SettingsManager
         config.setProperty("page.untrusted-color", pageUnTrustedColor);
         config.setProperty("page.clan-name-color", pageClanNameColor);
         config.setProperty("bb.size", bbSize);
+        config.setProperty("bb.show-on-login", bbShowOnLogin);
         config.setProperty("bb.color", bbColor);
         config.setProperty("bb.accent-color", bbAccentColor);
         config.setProperty("commands.clan", commandClan);
@@ -451,14 +451,6 @@ public final class SettingsManager
     public int getRivalLimitPercent()
     {
         return rivalLimitPercent;
-    }
-
-    /**
-     * @return the combatTagSeconds
-     */
-    public int getCombatTagSeconds()
-    {
-        return combatTagSeconds;
     }
 
     /**
@@ -981,5 +973,10 @@ public final class SettingsManager
     public String getLanguage()
     {
         return language;
+    }
+
+    public boolean isBbShowOnLogin()
+    {
+        return bbShowOnLogin;
     }
 }

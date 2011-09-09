@@ -47,7 +47,7 @@ public class DisbandCommand
                         }
                         else
                         {
-                            plugin.getRequestManager().addDisbandRequest(plugin, cp, clan);
+                            plugin.getRequestManager().addDisbandRequest(cp, clan);
                             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("clan.disband.vote.has.been.requested.from.all.leaders"));
                         }
                     }
