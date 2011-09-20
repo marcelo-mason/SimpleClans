@@ -44,7 +44,7 @@ public class GlobalffCommand
             }
             else if (action.equalsIgnoreCase(plugin.getLang().getString("auto")))
             {
-                if (plugin.getSettingsManager().isGlobalff())
+                if (!plugin.getSettingsManager().isGlobalff())
                 {
                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("global.friendy.fire.is.already.being.managed.by.each.clan"));
                 }

@@ -52,9 +52,12 @@ public class ListCommand
                     ChatBlock.sendMessage(player, headColor + plugin.getLang().getString("total.clans") + " " + subColor + clans.size());
                     ChatBlock.sendBlank(player);
 
-                    chatBlock.setAlignment("l", "c", "c");
+                    chatBlock.setAlignment("c", "l", "c", "c");
+                    chatBlock.setFlexibility(false, true, false, false);
 
-                    chatBlock.addRow("  " + headColor + plugin.getLang().getString("name"), plugin.getLang().getString("kdr"), plugin.getLang().getString("members"));
+                    chatBlock.addRow("  " + headColor + plugin.getLang().getString("rank"), plugin.getLang().getString("name"), plugin.getLang().getString("kdr"), plugin.getLang().getString("members"));
+
+                    int rank = 1;
 
                     for (Clan clan : clans)
                     {
@@ -72,7 +75,8 @@ public class ListCommand
                         String size = ChatColor.WHITE + "" + clan.getSize();
                         String kdr = clan.isVerified() ? ChatColor.YELLOW + "" + formatter.format(clan.getTotalKDR()) : "";
 
-                        chatBlock.addRow("  " + fullname, kdr, size);
+                        chatBlock.addRow("  " + rank, fullname, kdr, size);
+                        rank++;
                     }
 
                     boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

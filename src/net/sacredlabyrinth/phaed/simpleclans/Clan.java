@@ -30,7 +30,7 @@ public class Clan implements Serializable, Comparable<Clan>
     private List<String> rivals = new ArrayList<String>();
     private List<String> bb = new ArrayList<String>();
     private List<String> members = new ArrayList<String>();
-    private List<String> warringClans = new ArrayList<String>();
+    private HashMap<String, Clan> warringClans = new HashMap<String, Clan>();
 
     /**
      *
@@ -85,17 +85,6 @@ public class Clan implements Serializable, Comparable<Clan>
     public String toString()
     {
         return tag;
-    }
-
-    /**
-     * Returns whether this clan is warring with another clan
-     *
-     * @param tag the tag of the clan we are  at war with
-     * @return
-     */
-    public boolean isWarring(String tag)
-    {
-        return warringClans.contains(tag);
     }
 
     /**
@@ -527,7 +516,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (out.trim().isEmpty())
         {
-            return ChatColor.GRAY + "None";
+            return ChatColor.BLACK + "None";
         }
 
         return Helper.parseColors(out);
@@ -565,7 +554,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (out.trim().isEmpty())
         {
-            return ChatColor.GRAY + "-";
+            return ChatColor.BLACK + "None";
         }
 
         return Helper.parseColors(out);
@@ -904,22 +893,28 @@ public class Clan implements Serializable, Comparable<Clan>
     /**
      * Remove a player from a clan
      *
-     * @param player
+     * @param playerName
      */
-    public void removePlayerFromClan(Player player)
+    public void removePlayerFromClan(String playerName)
     {
-        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
+        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
         cp.setClan(null);
         cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
         cp.setLeader(false);
         cp.setTrusted(false);
         cp.setJoinDate(0);
-        removeMember(player.getName());
+        removeMember(playerName);
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        SimpleClans.getInstance().getClanManager().updateDisplayName(player);
+
+        Player matched = Helper.matchOnePlayer(playerName);
+
+        if (matched != null)
+        {
+            SimpleClans.getInstance().getClanManager().updateDisplayName(matched);
+        }
     }
 
     /**
@@ -1192,6 +1187,13 @@ public class Clan implements Serializable, Comparable<Clan>
             ChatBlock.sendBlank(player);
             ChatBlock.saySingle(player, MessageFormat.format(SimpleClans.getInstance().getLang().getString("bulletin.board.header"), SimpleClans.getInstance().getSettingsManager().getBbAccentColor(), SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor(), Helper.capitalize(getName())));
 
+            int maxSize = SimpleClans.getInstance().getSettingsManager().getBbSize();
+
+            while (bb.size() > maxSize)
+            {
+                bb.remove(0);
+            }
+
             for (String msg : bb)
             {
                 ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
@@ -1232,6 +1234,11 @@ public class Clan implements Serializable, Comparable<Clan>
         {
             String disbanded = SimpleClans.getInstance().getLang().getString("clan.disbanded");
 
+            if (c.removeWarringClan(this))
+            {
+                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang().getString("you.are.no.longer.at.war"), Helper.capitalize(c.getName()), getColorTag()));
+            }
+
             if (c.removeRival(getTag()))
             {
                 c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang().getString("has.been.disbanded.rivalry.ended"), Helper.capitalize(getName())));
@@ -1265,48 +1272,68 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Returns whether this clan is warring with another clan
+     *
+     * @param tag the tag of the clan we are  at war with
+     * @return
+     */
+    public boolean isWarring(String tag)
+    {
+        return warringClans.containsKey(tag);
+    }
+
+    /**
+     * Returns whether this clan is warring with another clan
+     *
+     * @param clan the clan we are testing against
+     * @return
+     */
+    public boolean isWarring(Clan clan)
+    {
+        return warringClans.containsKey(clan.getTag());
+    }
+
+    /**
      * Add a clan to be at war with
      *
      * @param clan
      */
     public void addWarringClan(Clan clan)
     {
-        if (!warringClans.contains(clan.getTag()))
+        if (!warringClans.containsKey(clan.getTag()))
         {
-            warringClans.add(clan.getTag());
+            warringClans.put(clan.getTag(), clan);
         }
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-    }
-
-    /**
-     * Check if were in a war with a clan
-     *
-     * @param tag
-     */
-    public boolean isWarringClan(String tag)
-    {
-        return warringClans.contains(tag);
     }
 
     /**
      * Remove a warring clan
      *
      * @param clan
+     * @return
      */
-    public void removeWarringClan(Clan clan)
+    public boolean removeWarringClan(Clan clan)
     {
-        warringClans.remove(clan.getTag());
-        SimpleClans.getInstance().getStorageManager().updateClan(this);
+        Clan warring = warringClans.remove(clan.getTag());
+
+        if (warring != null)
+        {
+            SimpleClans.getInstance().getStorageManager().updateClan(this);
+            return true;
+        }
+
+        return false;
     }
 
     /**
-     * Return a list of all the warring clans
+     * Return a collection of all the warring clans
      *
      * @return the clan list
      */
-    public List<String> getWarringClans()
+    public List<Clan> getWarringClans()
     {
-        return Collections.unmodifiableList(warringClans);
+        return new ArrayList<Clan>(warringClans.values());
     }
 
     /**
@@ -1320,7 +1347,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         // writing the list of flags to json
 
-        flags.put("warring", warringClans);
+        flags.put("warring", warringClans.keySet());
 
         return (new JSONWriter()).write(flags);
     }
@@ -1349,7 +1376,15 @@ public class Clan implements Serializable, Comparable<Clan>
 
                         if (clans != null)
                         {
-                            warringClans.addAll(clans);
+                            for (String tag : clans)
+                            {
+                                Clan clan = SimpleClans.getInstance().getClanManager().getClan(tag);
+
+                                if (clan != null)
+                                {
+                                    warringClans.put(tag, clan);
+                                }
+                            }
                         }
                     }
                 }

@@ -29,7 +29,6 @@ public final class PermissionsManager
     {
         plugin = SimpleClans.getInstance();
         detectPermissions();
-        detectGroupManager();
         detectMChat();
     }
 
@@ -73,17 +72,6 @@ public final class PermissionsManager
         if (test != null)
         {
             this.handler = ((Permissions) test).getHandler();
-        }
-    }
-
-    private void detectGroupManager()
-    {
-        Plugin test = plugin.getServer().getPluginManager().getPlugin("GroupManager");
-
-        if (test != null)
-        {
-            SimpleClans.log(Level.SEVERE, plugin.getLang().getString("no.groupmanager"));
-            plugin.getPluginLoader().disablePlugin(plugin);
         }
     }
 

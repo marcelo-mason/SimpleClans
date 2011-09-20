@@ -5,12 +5,16 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author phaed
  */
 public class MenuCommand
 {
+    private List<String> menuItems = new LinkedList<String>();
+
     public MenuCommand()
     {
     }
@@ -174,6 +178,12 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.disband.1.disband.your.clan"), clanCommand, ChatColor.WHITE));
         }
+
+        for (String item : menuItems)
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + item);
+        }
+
         if (plugin.getPermissionsManager().has(player, "simpleclans.mod.verify") && plugin.getSettingsManager().isRequireVerification())
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang().getString("0.verify.tag.1.verify.an.unverified.clan"), clanCommand, ChatColor.WHITE));
@@ -214,5 +224,27 @@ public class MenuCommand
         }
 
         ChatBlock.sendBlank(player);
+    }
+
+    /**
+     * Adds a menu item to the /clan menu
+     * @param syntax
+     * @param description
+     */
+    public void addMenuItem(String syntax, String description)
+    {
+        addMenuItem(syntax, description, ChatColor.AQUA);
+    }
+
+    /**
+     * Adds a menu item to the /clan menu, specifying syntax color
+     * [color] /[syntax] - [description]
+     * @param syntax
+     * @param description
+     * @param color
+     */
+    public void addMenuItem(String syntax, String description, ChatColor color)
+    {
+        menuItems.add(color + "/" + syntax + ChatColor.WHITE + " - " + description);
     }
 }

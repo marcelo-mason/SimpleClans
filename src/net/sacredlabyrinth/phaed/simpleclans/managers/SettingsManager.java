@@ -148,10 +148,10 @@ public final class SettingsManager
         pageHeadingsColor = config.getString("page.headings-color", "8");
         pageLeaderColor = config.getString("page.leader-color", "4");
         pageTrustedColor = config.getString("page.trusted-color", "f");
-        pageUnTrustedColor = config.getString("page.untrusted-color", "7");
+        pageUnTrustedColor = config.getString("page.untrusted-color", "8");
         pageClanNameColor = config.getString("page.clan-name-color", "b");
         bbShowOnLogin = config.getBoolean("bb.show-on-login", true);
-        bbSize = config.getInt("bb.size", 10);
+        bbSize = config.getInt("bb.size", 6);
         bbColor = config.getString("bb.color", "e");
         bbAccentColor = config.getString("bb.accent-color", "8");
         commandClan = config.getString("commands.clan", "clan");

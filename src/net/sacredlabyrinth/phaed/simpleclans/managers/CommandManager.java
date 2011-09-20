@@ -431,4 +431,169 @@ public final class CommandManager
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("nothing.more.to.see"));
         }
     }
+
+    public CreateCommand getCreateCommand()
+    {
+        return createCommand;
+    }
+
+    public ListCommand getListCommand()
+    {
+        return listCommand;
+    }
+
+    public ProfileCommand getProfileCommand()
+    {
+        return profileCommand;
+    }
+
+    public RosterCommand getRosterCommand()
+    {
+        return rosterCommand;
+    }
+
+    public LookupCommand getLookupCommand()
+    {
+        return lookupCommand;
+    }
+
+    public LeaderboardCommand getLeaderboardCommand()
+    {
+        return leaderboardCommand;
+    }
+
+    public AlliancesCommand getAlliancesCommand()
+    {
+        return alliancesCommand;
+    }
+
+    public RivalriesCommand getRivalriesCommand()
+    {
+        return rivalriesCommand;
+    }
+
+    public VitalsCommand getVitalsCommand()
+    {
+        return vitalsCommand;
+    }
+
+    public CoordsCommand getCoordsCommand()
+    {
+        return coordsCommand;
+    }
+
+    public StatsCommand getStatsCommand()
+    {
+        return statsCommand;
+    }
+
+    public AllyCommand getAllyCommand()
+    {
+        return allyCommand;
+    }
+
+    public RivalCommand getRivalCommand()
+    {
+        return rivalCommand;
+    }
+
+    public BbCommand getBbCommand()
+    {
+        return bbCommand;
+    }
+
+    public ModtagCommand getModtagCommand()
+    {
+        return modtagCommand;
+    }
+
+    public CapeCommand getCapeCommand()
+    {
+        return capeCommand;
+    }
+
+    public InviteCommand getInviteCommand()
+    {
+        return inviteCommand;
+    }
+
+    public KickCommand getKickCommand()
+    {
+        return kickCommand;
+    }
+
+    public TrustCommand getTrustCommand()
+    {
+        return trustCommand;
+    }
+
+    public UntrustCommand getUntrustCommand()
+    {
+        return untrustCommand;
+    }
+
+    public PromoteCommand getPromoteCommand()
+    {
+        return promoteCommand;
+    }
+
+    public DemoteCommand getDemoteCommand()
+    {
+        return demoteCommand;
+    }
+
+    public ClanffCommand getClanffCommand()
+    {
+        return clanffCommand;
+    }
+
+    public FfCommand getFfCommand()
+    {
+        return ffCommand;
+    }
+
+    public ResignCommand getResignCommand()
+    {
+        return resignCommand;
+    }
+
+    public DisbandCommand getDisbandCommand()
+    {
+        return disbandCommand;
+    }
+
+    public VerifyCommand getVerifyCommand()
+    {
+        return verifyCommand;
+    }
+
+    public BanCommand getBanCommand()
+    {
+        return banCommand;
+    }
+
+    public UnbanCommand getUnbanCommand()
+    {
+        return unbanCommand;
+    }
+
+    public ReloadCommand getReloadCommand()
+    {
+        return reloadCommand;
+    }
+
+    public GlobalffCommand getGlobalffCommand()
+    {
+        return globalffCommand;
+    }
+
+    public MenuCommand getMenuCommand()
+    {
+        return menuCommand;
+    }
+
+    public WarCommand getWarCommand()
+    {
+        return warCommand;
+    }
 }

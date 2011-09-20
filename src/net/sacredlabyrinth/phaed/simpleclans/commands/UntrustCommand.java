@@ -41,21 +41,21 @@ public class UntrustCommand
                 {
                     if (arg.length == 1)
                     {
-                        Player trusted = Helper.matchOnePlayer(arg[0]);
+                        String trusted = arg[0];
 
                         if (trusted != null)
                         {
-                            if (!trusted.getName().equals(player.getName()))
+                            if (!trusted.equals(player.getName()))
                             {
                                 if (clan.isMember(trusted))
                                 {
                                     if (!clan.isLeader(trusted))
                                     {
-                                        ClanPlayer tcp = plugin.getClanManager().getCreateClanPlayer(trusted.getName());
+                                        ClanPlayer tcp = plugin.getClanManager().getCreateClanPlayer(trusted);
 
                                         if (tcp.isTrusted())
                                         {
-                                            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.given.untrusted.status.by"), Helper.capitalize(trusted.getName()), player.getName()));
+                                            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.given.untrusted.status.by"), Helper.capitalize(trusted), player.getName()));
                                             tcp.setTrusted(false);
                                             plugin.getStorageManager().updateClanPlayer(tcp);
                                         }

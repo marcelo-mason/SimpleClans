@@ -1,6 +1,6 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 1.5
+version: 1.5.3
 softdepend: [Spout, Permissions, PermissionsBukkit, mChat]
 permissions:
   simpleclans.admin.reload:
@@ -101,7 +101,7 @@ permissions:
       simpleclans.anyone.rivalries: true
   simpleclans.member:
     description: Permissions for those who can be clan members
-    default: true
+    default: false
     children:
       simpleclans.member.can-join: true
       simpleclans.member.profile: true
@@ -116,7 +116,7 @@ permissions:
       simpleclans.member.resign: true
   simpleclans.leader:
     description: Permissions for those who can be clan leaders
-    default: true
+    default: false
     children:
       simpleclans.leader.create: true
       simpleclans.leader.ally: true

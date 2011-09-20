@@ -131,10 +131,9 @@ public class RosterCommand
                     }
 
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
-                    String online = isOnline ? ChatColor.GREEN + "*" : "";
-                    String lastSeen = ChatColor.WHITE + cp.getLastSeenDaysString();
+                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang().getString("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
-                    row.add(name + online);
+                    row.add(name);
                     row.add(lastSeen);
 
                     if (row.size() == 4)

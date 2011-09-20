@@ -1,11 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import org.bukkit.ChatColor;
+
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.Date;
 import java.util.HashSet;
-import org.bukkit.ChatColor;
 
 /**
  *

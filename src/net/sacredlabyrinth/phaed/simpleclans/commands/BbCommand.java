@@ -53,7 +53,7 @@ public class BbCommand
                         if (cp.isTrusted())
                         {
                             String msg = Helper.toMessage(arg);
-                            clan.addBb(player.getName(), ChatColor.YELLOW + player.getName() + ChatColor.GOLD + "> " + msg);
+                            clan.addBb(player.getName(), ChatColor.AQUA + player.getName() + ": "+ChatColor.WHITE + msg);
                             plugin.getStorageManager().updateClan(clan);
                         }
                         else

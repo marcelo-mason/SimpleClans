@@ -41,17 +41,17 @@ public class KickCommand
                 {
                     if (arg.length == 1)
                     {
-                        Player kicked = Helper.matchOnePlayer(arg[0]);
+                        String kicked = arg[0];
 
                         if (kicked != null)
                         {
-                            if (!kicked.getName().equals(player.getName()))
+                            if (!kicked.equals(player.getName()))
                             {
                                 if (clan.isMember(kicked))
                                 {
                                     if (!clan.isLeader(kicked))
                                     {
-                                        clan.addBb(player.getName(),  ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.kicked.by"), Helper.capitalize(kicked.getName()), player.getName()));
+                                        clan.addBb(player.getName(),  ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.kicked.by"), Helper.capitalize(kicked), player.getName()));
                                         clan.removePlayerFromClan(kicked);
                                     }
                                     else
