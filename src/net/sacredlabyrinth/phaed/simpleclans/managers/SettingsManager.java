@@ -87,6 +87,7 @@ public final class SettingsManager
     private String database;
     private String username;
     private String password;
+    private boolean safeCivilians;
 
     /**
      *
@@ -188,6 +189,7 @@ public final class SettingsManager
         database = config.getString("mysql.database", "");
         username = config.getString("mysql.username", "");
         password = config.getString("mysql.password", "");
+        safeCivilians = config.getBoolean("safe-civilians", false);
         save();
     }
 
@@ -267,7 +269,7 @@ public final class SettingsManager
         config.setProperty("mysql.database", database);
         config.setProperty("mysql.username", username);
         config.setProperty("mysql.password", password);
-
+        config.setProperty("safe-civilians", safeCivilians);
         config.save();
     }
 
@@ -979,4 +981,11 @@ public final class SettingsManager
     {
         return bbShowOnLogin;
     }
+
+    public boolean getSafeCivilians()
+    {
+        return safeCivilians;
+    }
+
+
 }

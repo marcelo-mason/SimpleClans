@@ -47,7 +47,7 @@ public final class CommandManager
     private ReloadCommand reloadCommand;
     private GlobalffCommand globalffCommand;
     private MenuCommand menuCommand;
-    private WarCommand warCommand;
+    //private WarCommand warCommand;
 
     /**
      *
@@ -87,7 +87,7 @@ public final class CommandManager
         unbanCommand = new UnbanCommand();
         reloadCommand = new ReloadCommand();
         globalffCommand = new GlobalffCommand();
-        warCommand = new WarCommand();
+        //warCommand = new WarCommand();
     }
 
     /**
@@ -242,10 +242,10 @@ public final class CommandManager
                 {
                     globalffCommand.execute(player, subargs);
                 }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("war.command")))
+               /** else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("war.command")))
                 {
                     warCommand.execute(player, subargs);
-                }
+                } **/
                 else
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("does.not.match"));
@@ -592,8 +592,8 @@ public final class CommandManager
         return menuCommand;
     }
 
-    public WarCommand getWarCommand()
+    /**public WarCommand getWarCommand()
     {
         return warCommand;
-    }
+    }**/
 }
