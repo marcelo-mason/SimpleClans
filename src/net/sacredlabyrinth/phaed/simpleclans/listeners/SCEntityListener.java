@@ -198,6 +198,25 @@ public class SCEntityListener extends EntityListener
                         return;
                     }
                 }
+                else
+                {
+                    // not part of a clan - check if safeCivilians is set
+                    if (plugin.getSettingsManager().getSafeCivilians())
+                    {
+                        event.setCancelled(true);
+                        return;
+                    }
+                }
+            }
+            else
+            {
+                // not part of a clan - check if safeCivilians is set
+                if (plugin.getSettingsManager().getSafeCivilians())
+                {
+                    event.setCancelled(true);
+                    return;
+                }
+
             }
         }
     }
