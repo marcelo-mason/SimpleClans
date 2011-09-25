@@ -201,6 +201,7 @@ public class SCEntityListener extends EntityListener
                 else
                 {
                     // not part of a clan - check if safeCivilians is set
+
                     if (plugin.getSettingsManager().getSafeCivilians())
                     {
                         event.setCancelled(true);
@@ -211,12 +212,12 @@ public class SCEntityListener extends EntityListener
             else
             {
                 // not part of a clan - check if safeCivilians is set
+
                 if (plugin.getSettingsManager().getSafeCivilians())
                 {
                     event.setCancelled(true);
                     return;
                 }
-
             }
         }
     }

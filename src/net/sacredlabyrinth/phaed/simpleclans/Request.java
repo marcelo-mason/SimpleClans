@@ -5,7 +5,6 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * @author phaed
  */
 public final class Request
@@ -18,7 +17,6 @@ public final class Request
     private ClanPlayer requester;
 
     /**
-     *
      * @param plugin
      * @param type
      * @param acceptors
@@ -124,6 +122,7 @@ public final class Request
 
     /**
      * Used for leader voting
+     *
      * @param playerNAme
      * @param vote
      */
@@ -140,6 +139,7 @@ public final class Request
 
     /**
      * Check whether all leaders have voted
+     *
      * @return
      */
     public boolean votingFinished()
@@ -157,6 +157,7 @@ public final class Request
 
     /**
      * Returns the players who have denied the request
+     *
      * @return
      */
     public List<String> getDenies()
@@ -165,9 +166,12 @@ public final class Request
 
         for (ClanPlayer cp : acceptors)
         {
-            if (cp.getVote().equals(VoteResult.DENY))
+            if (cp.getVote() != null)
             {
-                out.add(cp.getName());
+                if (cp.getVote().equals(VoteResult.DENY))
+                {
+                    out.add(cp.getName());
+                }
             }
         }
 
@@ -176,6 +180,7 @@ public final class Request
 
     /**
      * Returns the players who have denied the request
+     *
      * @return
      */
     public List<String> getAccepts()
@@ -184,9 +189,12 @@ public final class Request
 
         for (ClanPlayer cp : acceptors)
         {
-            if (cp.getVote().equals(VoteResult.ACCEPT))
+            if (cp.getVote() != null)
             {
-                out.add(cp.getName());
+                if (cp.getVote().equals(VoteResult.ACCEPT))
+                {
+                    out.add(cp.getName());
+                }
             }
         }
 

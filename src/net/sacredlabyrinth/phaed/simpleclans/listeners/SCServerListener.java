@@ -3,7 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.listeners;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.event.server.ServerListener;
 
-import net.sacredlabyrinth.register.payment.Methods;
+import net.sacredlabyrinth.phaed.register.payment.Methods;
 import org.bukkit.event.server.PluginDisableEvent;
 import org.bukkit.event.server.PluginEnableEvent;
 
@@ -52,9 +52,9 @@ public class SCServerListener extends ServerListener
     @Override
     public void onPluginEnable(PluginEnableEvent event)
     {
-        if (Methods != null && !Methods.hasMethod())
+        if (!Methods.hasMethod())
         {
-            if (Methods.setMethod(event.getPlugin()))
+            if (Methods.setMethod(plugin.getServer().getPluginManager()))
             {
                 plugin.setMethod(Methods.getMethod());
                 SimpleClans.log(Level.INFO, "Payment method: {0} v{1}", plugin.getMethod().getName(), plugin.getMethod().getVersion());

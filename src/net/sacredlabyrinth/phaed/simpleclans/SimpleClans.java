@@ -4,7 +4,7 @@ import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCServerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
-import net.sacredlabyrinth.register.payment.Method;
+import net.sacredlabyrinth.phaed.register.payment.Method;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;

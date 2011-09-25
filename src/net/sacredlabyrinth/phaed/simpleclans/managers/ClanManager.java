@@ -1,7 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.register.payment.Method.MethodAccount;
+import net.sacredlabyrinth.phaed.register.payment.Method.MethodAccount;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
