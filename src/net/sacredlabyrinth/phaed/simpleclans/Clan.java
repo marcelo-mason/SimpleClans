@@ -10,7 +10,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * @author phaed
@@ -1112,7 +1111,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(Level.INFO, "[Clan Announce] [{0}] {1}", playerName, Helper.stripColors(message));
+        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("clan.announce") + ChatColor.WHITE + "]  [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
     }
 
     /**
@@ -1136,7 +1135,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(Level.INFO, "[Leader Announce] [{0}] " + Helper.stripColors(message), playerName);
+        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("leader.announce") + ChatColor.WHITE + "]  [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
     }
 
     /**

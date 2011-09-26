@@ -1,7 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.register.payment.Method.MethodAccount;
+import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -11,7 +11,6 @@ import org.bukkit.inventory.PlayerInventory;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
-import java.util.logging.Level;
 
 /**
  * @author phaed
@@ -233,7 +232,7 @@ public final class ClanManager
             ChatBlock.sendMessage(player, ChatColor.DARK_GRAY + " * " + ChatColor.AQUA + msg);
         }
 
-        SimpleClans.log(Level.INFO, "[Server Announce] {0}", msg);
+        SimpleClans.log(ChatColor.AQUA + "[" + plugin.getLang().getString("server.announce") + "] " + ChatColor.WHITE + msg);
     }
 
     /**

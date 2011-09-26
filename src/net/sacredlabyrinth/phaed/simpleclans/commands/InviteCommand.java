@@ -45,7 +45,7 @@ public class InviteCommand
 
                         if (invited != null)
                         {
-                            if (plugin.getPermissionsManager().has(player, "simpleclans.member.can-join"))
+                            if (plugin.getPermissionsManager().has(invited, "simpleclans.member.can-join"))
                             {
                                 if (!invited.getName().equals(player.getName()))
                                 {

@@ -12,13 +12,13 @@ import java.util.HashSet;
 import java.util.List;
 
 /**
- *
  * @author phaed
  */
 public class Helper
 {
     /**
      * Ensures only one player can be matched from a partial name
+     *
      * @param playername
      * @return matched player, null if more than one player matched
      */
@@ -35,7 +35,25 @@ public class Helper
     }
 
     /**
+     * Get a players full color name if he is online
+     * @param playerName
+     * @return
+     */
+    public static String getColorName(String playerName)
+    {
+        List<Player> players = SimpleClans.getInstance().getServer().matchPlayer(playerName);
+
+        if (players.size() == 1)
+        {
+            return SimpleClans.getInstance().getPermissionsManager().getPrefix(players.get(0))  + players.get(0).getDisplayName() + SimpleClans.getInstance().getPermissionsManager().getSuffix(players.get(0));
+        }
+
+        return playerName;
+    }
+
+    /**
      * Check for integer
+     *
      * @param o
      * @return
      */
@@ -46,6 +64,7 @@ public class Helper
 
     /**
      * Check for byte
+     *
      * @param input
      * @return
      */
@@ -64,6 +83,7 @@ public class Helper
 
     /**
      * Check for short
+     *
      * @param input
      * @return
      */
@@ -82,6 +102,7 @@ public class Helper
 
     /**
      * Check for integer
+     *
      * @param input
      * @return
      */
@@ -100,6 +121,7 @@ public class Helper
 
     /**
      * Check for float
+     *
      * @param input
      * @return
      */
@@ -118,6 +140,7 @@ public class Helper
 
     /**
      * Check for string
+     *
      * @param o
      * @return
      */
@@ -128,6 +151,7 @@ public class Helper
 
     /**
      * Check for boolean
+     *
      * @param o
      * @return
      */
@@ -138,6 +162,7 @@ public class Helper
 
     /**
      * Remove a character from a string
+     *
      * @param s
      * @param c
      * @return
@@ -159,6 +184,7 @@ public class Helper
 
     /**
      * Remove first character from a string
+     *
      * @param s
      * @param c
      * @return
@@ -181,6 +207,7 @@ public class Helper
 
     /**
      * Capitalize first word of sentence
+     *
      * @param content
      * @return
      */
@@ -197,6 +224,7 @@ public class Helper
 
     /**
      * Return plural word if count is bigger than one
+     *
      * @param count
      * @param word
      * @param ending
@@ -209,6 +237,7 @@ public class Helper
 
     /**
      * Hex value to ChatColor
+     *
      * @param hexValue
      * @return
      */
@@ -219,6 +248,7 @@ public class Helper
 
     /**
      * Converts string array to ArrayList<String>, remove empty strings
+     *
      * @param values
      * @return
      */
@@ -232,6 +262,7 @@ public class Helper
 
     /**
      * Converts string array to HashSet<String>, remove empty strings
+     *
      * @param values
      * @return
      */
@@ -245,6 +276,7 @@ public class Helper
 
     /**
      * Converts a player array to ArrayList<Player>
+     *
      * @param values
      * @return
      */
@@ -257,6 +289,7 @@ public class Helper
 
     /**
      * Converts ArrayList<String> to string array
+     *
      * @param list
      * @return
      */
@@ -267,6 +300,7 @@ public class Helper
 
     /**
      * Removes first item from a string array
+     *
      * @param args
      * @return
      */
@@ -283,6 +317,7 @@ public class Helper
 
     /**
      * Converts a string array to a space separated string
+     *
      * @param args
      * @return
      */
@@ -300,6 +335,7 @@ public class Helper
 
     /**
      * Converts a string array to a string with custom separators
+     *
      * @param args
      * @param sep
      * @return
@@ -318,6 +354,7 @@ public class Helper
 
     /**
      * Converts a string array to a string with custom separators
+     *
      * @param args
      * @param sep
      * @return
@@ -336,6 +373,7 @@ public class Helper
 
     /**
      * Convert color hex values with ampersand to special character
+     *
      * @param msg
      * @return
      */
@@ -346,6 +384,7 @@ public class Helper
 
     /**
      * Removes color codes from strings
+     *
      * @param msg
      * @return
      */
@@ -361,8 +400,8 @@ public class Helper
      * @param msg
      * @return
      */
+
     /**
-     *
      * @param msg
      * @return
      */
@@ -394,6 +433,7 @@ public class Helper
 
     /**
      * Cleans up the tag from color codes and makes it lowercase
+     *
      * @param tag
      * @return
      */
@@ -404,6 +444,7 @@ public class Helper
 
     /**
      * Removes trailing separators
+     *
      * @param msg
      * @param sep
      * @return
@@ -434,6 +475,7 @@ public class Helper
 
     /**
      * Generates page separator line
+     *
      * @param sep
      * @return
      */
@@ -450,6 +492,7 @@ public class Helper
 
     /**
      * Check whether a player is online
+     *
      * @param playerName
      * @return
      */
@@ -470,6 +513,7 @@ public class Helper
 
     /**
      * Remove offline players from a ClanPlayer array
+     *
      * @param in
      * @return
      */
@@ -490,6 +534,7 @@ public class Helper
 
     /**
      * Test if a url is valid
+     *
      * @param strUrl
      * @return
      */
@@ -516,6 +561,7 @@ public class Helper
 
     /**
      * Escapes single quotes
+     *
      * @param str
      * @return
      */

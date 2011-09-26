@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.List;
-import java.util.logging.Level;
 
 /**
  * @author phaed
@@ -254,7 +253,7 @@ public final class CommandManager
         }
         catch (Exception ex)
         {
-            SimpleClans.log(Level.SEVERE, MessageFormat.format(plugin.getLang().getString("simpleclans.command.failure"), ex.getMessage()));
+            SimpleClans.log(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("simpleclans.command.failure"), ex.getMessage()));
         }
     }
 
@@ -275,7 +274,7 @@ public final class CommandManager
         }
 
         String message = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
-        SimpleClans.log(Level.INFO, plugin.getSettingsManager().getClanChatTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + msg);
+        SimpleClans.log(message);
 
         List<ClanPlayer> cps = clan.getMembers();
 

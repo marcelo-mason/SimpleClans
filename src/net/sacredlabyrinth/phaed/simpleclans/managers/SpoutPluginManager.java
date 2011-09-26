@@ -10,8 +10,6 @@ import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
-import java.util.logging.Level;
-
 /**
  * @author phaed
  */
@@ -126,7 +124,7 @@ public final class SpoutPluginManager
 
         if (test != null)
         {
-            SimpleClans.log(Level.INFO, plugin.getLang().getString("spout.features.enabled"));
+            SimpleClans.log(plugin.getLang().getString("spout.features.enabled"));
             return true;
         }
         return false;

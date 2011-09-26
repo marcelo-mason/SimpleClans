@@ -1,10 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import net.sacredlabyrinth.phaed.register.payment.Method;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCServerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
-import net.sacredlabyrinth.phaed.register.payment.Method;
+import org.bukkit.craftbukkit.CraftServer;
+import org.bukkit.craftbukkit.command.ColouredConsoleSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -13,7 +15,6 @@ import java.text.MessageFormat;
 import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -54,13 +55,16 @@ public class SimpleClans extends JavaPlugin
 
     /**
      * Parametrized logger
-     * @param level the level
+     *
      * @param msg the message
      * @param arg the arguments
      */
-    public static void log(Level level, String msg, Object... arg)
+    public static void log(String msg, Object... arg)
     {
-        getLogger().log(level, new StringBuilder().append("[SimpleClans] ").append(MessageFormat.format(msg, arg)).toString());
+        CraftServer server = (CraftServer) SimpleClans.getInstance().getServer();
+        ColouredConsoleSender sender = new ColouredConsoleSender(server);
+
+        sender.sendMessage(new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
     }
 
     public void onEnable()
