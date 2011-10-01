@@ -71,7 +71,7 @@ public final class ClanManager
 
         boolean verified = !plugin.getSettingsManager().isRequireVerification() || plugin.getPermissionsManager().has(player, "simpleclans.mod.verify");
 
-        Clan clan = new Clan(cp, colorTag, name, verified);
+        Clan clan = new Clan(colorTag, name, verified);
         clan.addPlayerToClan(cp);
         cp.setLeader(true);
 
@@ -245,8 +245,8 @@ public final class ClanManager
         if (plugin.getSettingsManager().isChatTags())
         {
             String prefix = plugin.getPermissionsManager().getPrefix(player);
-            String lastColor = Helper.getLastColorCode(prefix);
-            String fullname = player.getName();
+            String lastColor = plugin.getSettingsManager().isUseColorCodeFromPrefix() ? Helper.getLastColorCode(prefix) : ChatColor.WHITE + "";
+            String fullName = player.getName();
 
             ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
@@ -262,10 +262,11 @@ public final class ClanManager
                 String tag = plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag();
                 String tagLabel = plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + tag + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
 
-                fullname = tagLabel + lastColor + fullname;
+                fullName = tagLabel + lastColor + fullName;
             }
 
-            player.setDisplayName(fullname);
+            player.setDisplayName(fullName);
+            //player.setListName(fullName);
         }
     }
 
@@ -723,6 +724,37 @@ public final class ClanManager
     }
 
     /**
+     * Returns a formatted string detailing the players hunger
+     *
+     * @param health
+     * @return
+     */
+    public String getHungerString(int health)
+    {
+        String out = "";
+
+        if (health >= 16)
+        {
+            out += ChatColor.GREEN;
+        }
+        else if (health >= 8)
+        {
+            out += ChatColor.GOLD;
+        }
+        else
+        {
+            out += ChatColor.RED;
+        }
+
+        for (int i = 0; i < health; i++)
+        {
+            out += '|';
+        }
+
+        return out;
+    }
+
+    /**
      * Sort clans by KDR
      *
      * @param clans
@@ -848,5 +880,197 @@ public final class ClanManager
         }
 
         return true;
+    }
+
+    /**
+     * Processes a clan chat command
+     *
+     * @param player
+     * @param msg
+     */
+    public void processClanChat(Player player, String tag, String msg)
+    {
+        Clan clan = plugin.getClanManager().getClan(tag);
+
+        if (!clan.isMember(player))
+        {
+            return;
+        }
+
+        processClanChat(player, msg);
+    }
+
+    /**
+     * Processes a clan chat command
+     *
+     * @param msg
+     */
+    public void processClanChat(Player player, String msg)
+    {
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player.getName());
+
+        if (cp == null)
+        {
+            return;
+        }
+
+        String[] split = msg.split(" ");
+
+        if (split.length == 0)
+        {
+            return;
+        }
+
+        String command = split[0];
+
+        if (command.equals("on"))
+        {
+            cp.setClanChat(true);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have enabled clan chat");
+        }
+        else if (command.equals("off"))
+        {
+            cp.setClanChat(false);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have disabled clan chat");
+        }
+        else if (command.equals("join"))
+        {
+            cp.setChannel(ClanPlayer.Channel.CLAN);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have joined clan chat");
+        }
+        else if (command.equals("leave"))
+        {
+            cp.setChannel(ClanPlayer.Channel.NONE);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left clan chat");
+        }
+        else
+        {
+            String code = "" + ChatColor.RED + ChatColor.WHITE + ChatColor.RED + ChatColor.BLACK;
+            String message = code + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + cp.getClan().getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
+            SimpleClans.log(message);
+
+            List<ClanPlayer> cps = cp.getClan().getMembers();
+
+            for (ClanPlayer cpp : cps)
+            {
+                Player member = plugin.getServer().getPlayer(cpp.getName());
+                ChatBlock.sendMessage(member, message);
+            }
+        }
+    }
+
+    /**
+     * Processes a ally chat command
+     *
+     * @param msg
+     */
+    public void processAllyChat(Player player, String msg)
+    {
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+        if (cp == null)
+        {
+            return;
+        }
+
+        String[] split = msg.split(" ");
+
+        if (split.length == 0)
+        {
+            return;
+        }
+
+        String command = split[0];
+
+        if (command.equals("on"))
+        {
+            cp.setAllyChat(true);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have enabled ally chat");
+        }
+        else if (command.equals("off"))
+        {
+            cp.setAllyChat(false);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have disabled ally chat");
+        }
+        else if (command.equals("join"))
+        {
+            cp.setChannel(ClanPlayer.Channel.ALLY);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have joined ally chat");
+        }
+        else if (command.equals("leave"))
+        {
+            cp.setChannel(ClanPlayer.Channel.NONE);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left ally chat");
+        }
+        else
+        {
+            String code = "" + ChatColor.AQUA + ChatColor.WHITE + ChatColor.AQUA + ChatColor.BLACK;
+            String message = code + plugin.getSettingsManager().getAllyChatBracketColor() + plugin.getSettingsManager().getAllyChatTagBracketLeft() + plugin.getSettingsManager().getAllyChatTagColor() + plugin.getSettingsManager().getCommandAlly() + plugin.getSettingsManager().getAllyChatBracketColor() + plugin.getSettingsManager().getAllyChatTagBracketRight() + " " + plugin.getSettingsManager().getAllyChatNameColor() + plugin.getSettingsManager().getAllyChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getAllyChatPlayerBracketRight() + " " + plugin.getSettingsManager().getAllyChatMessageColor() + msg;
+            SimpleClans.log(message);
+
+            Player self = plugin.getServer().getPlayer(player.getName());
+            ChatBlock.sendMessage(self, message);
+
+            List<ClanPlayer> allies = cp.getClan().getAllAllyMembers();
+            allies.addAll(cp.getClan().getMembers());
+
+            for (ClanPlayer ally : allies)
+            {
+                Player member = plugin.getServer().getPlayer(ally.getName());
+                ChatBlock.sendMessage(member, message);
+            }
+        }
+    }
+
+
+    /**
+     * Processes a global chat command
+     *
+     * @param msg
+     */
+    public boolean processGlobalChat(Player player, String msg)
+    {
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player.getName());
+
+        if (cp == null)
+        {
+            return false;
+        }
+
+        String[] split = msg.split(" ");
+
+        if (split.length == 0)
+        {
+            return false;
+        }
+
+        String command = split[0];
+
+        if (command.equals("on"))
+        {
+            cp.setGlobalChat(true);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have enabled global chat");
+        }
+        else if (command.equals("off"))
+        {
+            cp.setGlobalChat(false);
+            plugin.getStorageManager().updateClanPlayer(cp);
+            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have disabled global chat");
+        }
+        else
+        {
+            return true;
+        }
+
+        return false;
     }
 }

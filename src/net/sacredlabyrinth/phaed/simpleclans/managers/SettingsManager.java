@@ -9,13 +9,15 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- *
  * @author phaed
  */
 public final class SettingsManager
 {
     private SimpleClans plugin;
     private String language;
+    private boolean useColorCodeFromPrefix;
+    private boolean confirmationForPromote;
+    private boolean confirmationForDemote;
     private boolean globalff;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
@@ -53,6 +55,8 @@ public final class SettingsManager
     private String bbColor;
     private String bbAccentColor;
     private String commandClan;
+    private String commandAlly;
+    private String commandGlobal;
     private String commandMore;
     private String commandDeny;
     private String commandAccept;
@@ -70,6 +74,15 @@ public final class SettingsManager
     private String tagBracketRight;
     private String tagBracketColor;
     private boolean clanTrustByDefault;
+    private boolean allyChatEnable;
+    private String allyChatMessageColor;
+    private String allyChatNameColor;
+    private String allyChatTagColor;
+    private String allyChatTagBracketLeft;
+    private String allyChatTagBracketRight;
+    private String allyChatBracketColor;
+    private String allyChatPlayerBracketLeft;
+    private String allyChatPlayerBracketRight;
     private boolean clanChatEnable;
     private String clanChatAnnouncementColor;
     private String clanChatMessageColor;
@@ -79,6 +92,7 @@ public final class SettingsManager
     private String clanChatBracketColor;
     private String clanChatPlayerBracketLeft;
     private String clanChatPlayerBracketRight;
+    private boolean clanFFOnByDefault;
     private double kwRival;
     private double kwNeutral;
     private double kwCivilian;
@@ -118,6 +132,7 @@ public final class SettingsManager
         List<String> disallowedColorsDefault = new ArrayList<String>();
         disallowedColorsDefault.add("4");
 
+        useColorCodeFromPrefix = config.getBoolean("settings.use-colorcode-from-prefix-for-name", true);
         bannedPlayers = config.getStringList("settings.banned-players", new ArrayList<String>());
         disallowedColors = config.getStringList("settings.disallowed-tag-colors", disallowedColorsDefault);
         blacklistedWorlds = config.getStringList("settings.blacklisted-worlds", new ArrayList<String>());
@@ -156,14 +171,19 @@ public final class SettingsManager
         bbColor = config.getString("bb.color", "e");
         bbAccentColor = config.getString("bb.accent-color", "8");
         commandClan = config.getString("commands.clan", "clan");
+        commandAlly = config.getString("commands.ally", "ally");
+        commandGlobal = config.getString("commands.global", "global");
         commandMore = config.getString("commands.more", "more");
         commandDeny = config.getString("commands.deny", "deny");
         commandAccept = config.getString("commands.accept", "accept");
+        confirmationForPromote = config.getBoolean("clan.confirmation-for-demote", false);
+        confirmationForDemote = config.getBoolean("clan.confirmation-for-promote", false);
         clanTrustByDefault = config.getBoolean("clan.trust-members-by-default", false);
         clanMinSizeToAlly = config.getInt("clan.min-size-to-set-ally", 3);
         clanMinSizeToRival = config.getInt("clan.min-size-to-set-rival", 3);
         clanMinLength = config.getInt("clan.min-length", 2);
         clanMaxLength = config.getInt("clan.max-length", 25);
+        clanFFOnByDefault = config.getBoolean("clan.ff-on-by-default", false);
         tagMinLength = config.getInt("tag.min-length", 2);
         tagMaxLength = config.getInt("tag.max-length", 5);
         tagDefaultColor = config.getString("tag.default-color", "8");
@@ -172,6 +192,15 @@ public final class SettingsManager
         tagBracketColor = config.getString("tag.bracket.color", "8");
         tagBracketLeft = config.getString("tag.bracket.left", "");
         tagBracketRight = config.getString("tag.bracket.right", "");
+        allyChatEnable = config.getBoolean("allychat.enable", true);
+        allyChatMessageColor = config.getString("allychat.message-color", "3");
+        allyChatTagColor = config.getString("allychat.tag-color", "b");
+        allyChatNameColor = config.getString("allychat.name-color", "f");
+        allyChatBracketColor = config.getString("allychat.tag-bracket.color", "8");
+        allyChatTagBracketLeft = config.getString("allychat.tag-bracket.left", "[");
+        allyChatTagBracketRight = config.getString("allychat.tag-bracket.right", "]");
+        allyChatPlayerBracketLeft = config.getString("allychat.player-bracket.left", "<");
+        allyChatPlayerBracketRight = config.getString("allychat.player-bracket.right", ">");
         clanChatEnable = config.getBoolean("clanchat.enable", true);
         clanChatAnnouncementColor = config.getString("clanchat.announcement-color", "e");
         clanChatMessageColor = config.getString("clanchat.message-color", "b");
@@ -181,9 +210,9 @@ public final class SettingsManager
         clanChatTagBracketRight = config.getString("clanchat.tag-bracket.right", "]");
         clanChatPlayerBracketLeft = config.getString("clanchat.player-bracket.left", "<");
         clanChatPlayerBracketRight = config.getString("clanchat.player-bracket.right", ">");
-        kwRival = config.getDouble("kill-weights.rival", 1.5);
+        kwRival = config.getDouble("kill-weights.rival", 2);
         kwNeutral = config.getDouble("kill-weights.neutral", 1);
-        kwCivilian = config.getDouble("kill-weights.civilian", .5);
+        kwCivilian = config.getDouble("kill-weights.civilian", 0);
         useMysql = config.getBoolean("mysql.enable", false);
         host = config.getString("mysql.host", "localhost");
         database = config.getString("mysql.database", "");
@@ -198,6 +227,7 @@ public final class SettingsManager
         Configuration config = getPlugin().getConfiguration();
         config.load();
 
+        config.setProperty("settings.use-colorcode-from-prefix-for-name", useColorCodeFromPrefix);
         config.setProperty("settings.language", language);
         config.setProperty("settings.banned-players", bannedPlayers);
         config.setProperty("settings.blacklisted-worlds", blacklistedWorlds);
@@ -236,14 +266,19 @@ public final class SettingsManager
         config.setProperty("bb.color", bbColor);
         config.setProperty("bb.accent-color", bbAccentColor);
         config.setProperty("commands.clan", commandClan);
+        config.setProperty("commands.ally", commandAlly);
+        config.setProperty("commands.global", commandGlobal);
         config.setProperty("commands.more", commandMore);
         config.setProperty("commands.deny", commandDeny);
         config.setProperty("commands.accept", commandAccept);
+        config.setProperty("clan.confirmation-for-demote", confirmationForPromote);
+        config.setProperty("clan.confirmation-for-promote", confirmationForDemote);
         config.setProperty("clan.trust-members-by-default", clanTrustByDefault);
         config.setProperty("clan.min-size-to-set-ally", clanMinSizeToAlly);
         config.setProperty("clan.min-size-to-set-rival", clanMinSizeToRival);
         config.setProperty("clan.min-length", clanMinLength);
         config.setProperty("clan.max-length", clanMaxLength);
+        config.setProperty("clan.ff-on-by-default", clanFFOnByDefault);
         config.setProperty("tag.min-length", tagMinLength);
         config.setProperty("tag.max-length", tagMaxLength);
         config.setProperty("tag.default-color", tagDefaultColor);
@@ -252,6 +287,15 @@ public final class SettingsManager
         config.setProperty("tag.bracket.color", tagBracketColor);
         config.setProperty("tag.bracket.left", tagBracketLeft);
         config.setProperty("tag.bracket.right", tagBracketRight);
+        config.setProperty("allychat.enable", allyChatEnable);
+        config.setProperty("allychat.message-color", allyChatMessageColor);
+        config.setProperty("allychat.name-color", allyChatNameColor);
+        config.setProperty("allychat.tag-color", allyChatTagColor);
+        config.setProperty("allychat.tag-bracket.color", allyChatBracketColor);
+        config.setProperty("allychat.tag-bracket.left", allyChatTagBracketLeft);
+        config.setProperty("allychat.tag-bracket.right", allyChatTagBracketRight);
+        config.setProperty("allychat.player-bracket.left", allyChatPlayerBracketLeft);
+        config.setProperty("allychat.player-bracket.right", allyChatPlayerBracketRight);
         config.setProperty("clanchat.enable", clanChatEnable);
         config.setProperty("clanchat.announcement-color", clanChatAnnouncementColor);
         config.setProperty("clanchat.message-color", clanChatMessageColor);
@@ -275,6 +319,7 @@ public final class SettingsManager
 
     /**
      * Check whether a worlds is blacklisted
+     *
      * @param world the world
      * @return whether the world is blacklisted
      */
@@ -293,6 +338,7 @@ public final class SettingsManager
 
     /**
      * Check whether a word is disallowed
+     *
      * @param word the world
      * @return whether its a disallowed word
      */
@@ -312,6 +358,7 @@ public final class SettingsManager
 
     /**
      * Check whether a string has a disallowed color
+     *
      * @param str the string
      * @return whether the string contains the color code
      */
@@ -345,6 +392,7 @@ public final class SettingsManager
 
     /**
      * Check whether a clan is un-rivable
+     *
      * @param tag the tag
      * @return whether the clan is unrivable
      */
@@ -363,6 +411,7 @@ public final class SettingsManager
 
     /**
      * Check whether a player is banned
+     *
      * @param playerName the player's name
      * @return whether player is banned
      */
@@ -381,6 +430,7 @@ public final class SettingsManager
 
     /**
      * Add a player to the banned list
+     *
      * @param playerName the player's name
      */
     public void addBanned(String playerName)
@@ -395,6 +445,7 @@ public final class SettingsManager
 
     /**
      * Remove a player from the banned list
+     *
      * @param playerName the player's name
      */
     public void removeBanned(String playerName)
@@ -987,5 +1038,78 @@ public final class SettingsManager
         return safeCivilians;
     }
 
+    public boolean isConfirmationForPromote()
+    {
+        return confirmationForPromote;
+    }
 
+    public boolean isConfirmationForDemote()
+    {
+        return confirmationForDemote;
+    }
+
+    public boolean isUseColorCodeFromPrefix()
+    {
+        return useColorCodeFromPrefix;
+    }
+
+    public String getCommandAlly()
+    {
+        return commandAlly;
+    }
+
+    public boolean isAllyChatEnable()
+    {
+        return allyChatEnable;
+    }
+
+    public String getAllyChatMessageColor()
+    {
+        return Helper.toColor(allyChatMessageColor);
+    }
+
+    public String getAllyChatNameColor()
+    {
+        return Helper.toColor(allyChatNameColor);
+    }
+
+    public String getAllyChatTagBracketLeft()
+    {
+        return allyChatTagBracketLeft;
+    }
+
+    public String getAllyChatTagBracketRight()
+    {
+        return allyChatTagBracketRight;
+    }
+
+    public String getAllyChatBracketColor()
+    {
+        return Helper.toColor(allyChatBracketColor);
+    }
+
+    public String getAllyChatPlayerBracketLeft()
+    {
+        return allyChatPlayerBracketLeft;
+    }
+
+    public String getAllyChatPlayerBracketRight()
+    {
+        return allyChatPlayerBracketRight;
+    }
+
+    public String getCommandGlobal()
+    {
+        return commandGlobal;
+    }
+
+    public String getAllyChatTagColor()
+    {
+        return Helper.toColor(allyChatTagColor);
+    }
+
+    public boolean isClanFFOnByDefault()
+    {
+        return clanFFOnByDefault;
+    }
 }

@@ -174,10 +174,6 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.resign.1.resign.from.the.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.disband"))
-        {
-            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.disband.1.disband.your.clan"), clanCommand, ChatColor.WHITE));
-        }
 
         for (String item : menuItems)
         {

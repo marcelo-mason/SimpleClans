@@ -63,7 +63,6 @@ public class SimpleClans extends JavaPlugin
     {
         CraftServer server = (CraftServer) SimpleClans.getInstance().getServer();
         ColouredConsoleSender sender = new ColouredConsoleSender(server);
-
         sender.sendMessage(new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
     }
 
@@ -72,7 +71,11 @@ public class SimpleClans extends JavaPlugin
         instance = this;
         settingsManager = new SettingsManager();
 
-        lang = PropertyResourceBundle.getBundle("languages.lang", new Locale(settingsManager.getLanguage()));
+        if (lang == null)
+        {
+            lang = PropertyResourceBundle.getBundle("languages.lang", new Locale(settingsManager.getLanguage()));
+        }
+
         logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
         spoutPluginManager = new SpoutPluginManager();

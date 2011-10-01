@@ -47,7 +47,7 @@ public class DemoteCommand
                         {
                             if (clan.isLeader(demotedName))
                             {
-                                if (clan.getLeaders().size() == 1)
+                                if (clan.getLeaders().size() == 1|| !plugin.getSettingsManager().isConfirmationForDemote())
                                 {
                                     clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("demoted.back.to.member"), Helper.capitalize(demotedName)));
                                     clan.demote(demotedName);

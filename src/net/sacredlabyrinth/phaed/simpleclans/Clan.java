@@ -41,12 +41,11 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * @param cp
      * @param tag
      * @param name
      * @param verified
      */
-    public Clan(ClanPlayer cp, String tag, String name, boolean verified)
+    public Clan(String tag, String name, boolean verified)
     {
         this.tag = Helper.cleanTag(tag);
         this.colorTag = tag;
@@ -55,6 +54,11 @@ public class Clan implements Serializable, Comparable<Clan>
         this.lastUsed = (new Date()).getTime();
         this.verified = verified;
         this.capeUrl = "";
+
+        if (SimpleClans.getInstance().getSettingsManager().isClanFFOnByDefault())
+        {
+            friendlyFire = true;
+        }
     }
 
     @Override
@@ -680,6 +684,25 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
+     * Get all the ally clan's members
+     *
+     * @return
+     */
+    public List<ClanPlayer> getAllAllyMembers()
+    {
+        List<ClanPlayer> out = new LinkedList<ClanPlayer>();
+
+        for (String tag : allies)
+        {
+            Clan ally = SimpleClans.getInstance().getClanManager().getClan(tag);
+
+            out.addAll(ally.getMembers());
+        }
+
+        return out;
+    }
+
+    /**
      * Gets the clan's total KDR
      *
      * @return
@@ -1100,7 +1123,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void clanAnnounce(String playerName, String msg)
     {
-        String message = SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketLeft() + SimpleClans.getInstance().getSettingsManager().getTagDefaultColor() + getColorTag() + SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketRight() + " " + SimpleClans.getInstance().getSettingsManager().getClanChatAnnouncementColor() + msg;
+        String message = SimpleClans.getInstance().getSettingsManager().getClanChatAnnouncementColor() + msg;
 
         for (ClanPlayer cp : getMembers())
         {
@@ -1111,7 +1134,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("clan.announce") + ChatColor.WHITE + "]  [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
+        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("clan.announce") + ChatColor.WHITE + "] [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
     }
 
     /**
@@ -1122,7 +1145,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void leaderAnnounce(String playerName, String msg)
     {
-        String message = SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketLeft() + SimpleClans.getInstance().getSettingsManager().getTagDefaultColor() + getColorTag() + SimpleClans.getInstance().getSettingsManager().getClanChatBracketColor() + SimpleClans.getInstance().getSettingsManager().getClanChatTagBracketRight() + " " + SimpleClans.getInstance().getSettingsManager().getClanChatAnnouncementColor() + msg;
+        String message = SimpleClans.getInstance().getSettingsManager().getClanChatAnnouncementColor() + msg;
 
         List<ClanPlayer> leaders = getLeaders();
 
@@ -1135,7 +1158,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("leader.announce") + ChatColor.WHITE + "]  [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
+        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("leader.announce") + ChatColor.WHITE + "] [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
     }
 
     /**

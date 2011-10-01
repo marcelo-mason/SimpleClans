@@ -1,17 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 
 /**
- *
  * @author phaed
  */
 public class PromoteCommand
@@ -22,6 +17,7 @@ public class PromoteCommand
 
     /**
      * Execute the command
+     *
      * @param player
      * @param arg
      */
@@ -53,18 +49,10 @@ public class PromoteCommand
                                     {
                                         if (clan.isMember(promoted))
                                         {
-                                            if (!clan.isLeader(promoted))
+                                            if (!clan.isLeader(promoted) || !plugin.getSettingsManager().isConfirmationForPromote())
                                             {
-                                                if (clan.getLeaders().size() == 1)
-                                                {
-                                                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("promoted.to.leader"), Helper.capitalize(promoted.getName())));
-                                                    clan.promote(promoted.getName());
-                                                }
-                                                else
-                                                {
-                                                    plugin.getRequestManager().addPromoteRequest(cp, promoted.getName(), clan);
-                                                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("promotion.vote.has.been.requested.from.all.leaders"));
-                                                }
+                                                clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("promoted.to.leader"), Helper.capitalize(promoted.getName())));
+                                                clan.promote(promoted.getName());
                                             }
                                             else
                                             {

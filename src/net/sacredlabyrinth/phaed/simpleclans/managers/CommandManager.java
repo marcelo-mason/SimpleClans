@@ -6,7 +6,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.List;
 
 /**
  * @author phaed
@@ -254,34 +253,6 @@ public final class CommandManager
         catch (Exception ex)
         {
             SimpleClans.log(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("simpleclans.command.failure"), ex.getMessage()));
-        }
-    }
-
-    /**
-     * Processes a clan chat command
-     *
-     * @param player
-     * @param clanTag
-     * @param msg
-     */
-    public void processClanChat(Player player, String clanTag, String msg)
-    {
-        Clan clan = plugin.getClanManager().getClan(clanTag);
-
-        if (!clan.isMember(player))
-        {
-            return;
-        }
-
-        String message = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
-        SimpleClans.log(message);
-
-        List<ClanPlayer> cps = clan.getMembers();
-
-        for (ClanPlayer cp : cps)
-        {
-            Player member = plugin.getServer().getPlayer(cp.getName());
-            ChatBlock.sendMessage(member, message);
         }
     }
 

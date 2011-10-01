@@ -354,6 +354,7 @@ public final class StorageManager
                         }
 
                         ClanPlayer cp = new ClanPlayer();
+                        cp.setFlags(flags);
                         cp.setName(name);
                         cp.setLeader(leader);
                         cp.setFriendlyFire(friendly_fire);
