@@ -258,7 +258,7 @@ public final class RequestManager
         }
         else
         {
-            clan.leaderAnnounce(plugin.getLang().getString("leaders"), ChatColor.RED + MessageFormat.format(plugin.getLang().getString("membership.invitation"), Helper.capitalize(invited)));
+            clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("membership.invitation"), Helper.capitalize(invited)));
         }
 
         requests.remove(req.getTarget().toLowerCase());
@@ -389,7 +389,7 @@ public final class RequestManager
                 else
                 {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-                    clan.leaderAnnounce(plugin.getLang().getString("leaders"), ChatColor.RED + MessageFormat.format(plugin.getLang().getString("denied.demotion"), deniers, demoted));
+                    clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("denied.demotion"), deniers, demoted));
                 }
             }
             else if (req.getType().equals(ClanRequest.PROMOTE))
@@ -405,7 +405,7 @@ public final class RequestManager
                 else
                 {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-                    clan.leaderAnnounce(plugin.getLang().getString("leaders"), ChatColor.RED + MessageFormat.format(plugin.getLang().getString("denied.the.promotion"), deniers, promoted));
+                    clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("denied.the.promotion"), deniers, promoted));
                 }
             }
             else if (req.getType().equals(ClanRequest.DISBAND))
@@ -420,7 +420,7 @@ public final class RequestManager
                 else
                 {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
-                    clan.leaderAnnounce(plugin.getLang().getString("leaders"), ChatColor.RED + MessageFormat.format(plugin.getLang().getString("clan.deletion"), deniers));
+                    clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("clan.deletion"), deniers));
                 }
             }
 
@@ -443,7 +443,7 @@ public final class RequestManager
             {
                 if (cp.getName().equalsIgnoreCase(playerName))
                 {
-                    req.getClan().leaderAnnounce(plugin.getLang().getString("leaders"), MessageFormat.format(plugin.getLang().getString("signed.off.request.cancelled"), ChatColor.RED + Helper.capitalize(playerName), req.getType()));
+                    req.getClan().leaderAnnounce(MessageFormat.format(plugin.getLang().getString("signed.off.request.cancelled"), ChatColor.RED + Helper.capitalize(playerName), req.getType()));
                     requests.remove(req.getClan().getTag());
                     break;
                 }

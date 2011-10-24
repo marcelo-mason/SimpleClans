@@ -36,6 +36,7 @@ public class Helper
 
     /**
      * Get a players full color name if he is online
+     *
      * @param playerName
      * @return
      */
@@ -45,7 +46,7 @@ public class Helper
 
         if (players.size() == 1)
         {
-            return SimpleClans.getInstance().getPermissionsManager().getPrefix(players.get(0))  + players.get(0).getDisplayName() + SimpleClans.getInstance().getPermissionsManager().getSuffix(players.get(0));
+            return SimpleClans.getInstance().getPermissionsManager().getPrefix(players.get(0)) + players.get(0).getDisplayName() + SimpleClans.getInstance().getPermissionsManager().getSuffix(players.get(0));
         }
 
         return playerName;
@@ -243,6 +244,11 @@ public class Helper
      */
     public static String toColor(String hexValue)
     {
+        if (hexValue == null)
+        {
+            return "";
+        }
+
         return ChatColor.getByCode(Integer.valueOf(hexValue, 16)).toString();
     }
 

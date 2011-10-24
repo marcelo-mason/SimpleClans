@@ -28,7 +28,7 @@ public class ClanffCommand
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.leader.clanff"))
+        if (plugin.getPermissionsManager().has(player, "simpleclans.leader.ff"))
         {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 

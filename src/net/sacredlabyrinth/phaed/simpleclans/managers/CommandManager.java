@@ -282,7 +282,7 @@ public final class CommandManager
                     if (cp.getVote() == null)
                     {
                         plugin.getRequestManager().accept(cp);
-                        clan.leaderAnnounce(player.getDisplayName(), ChatColor.GREEN + MessageFormat.format(plugin.getLang().getString("voted.to.accept"), Helper.capitalize(player.getName())));
+                        clan.leaderAnnounce(ChatColor.GREEN + MessageFormat.format(plugin.getLang().getString("voted.to.accept"), Helper.capitalize(player.getName())));
                     }
                     else
                     {
@@ -339,7 +339,7 @@ public final class CommandManager
                     if (cp.getVote() == null)
                     {
                         plugin.getRequestManager().deny(cp);
-                        clan.leaderAnnounce(player.getName(), ChatColor.RED + MessageFormat.format(plugin.getLang().getString("has.voted.to.deny"), Helper.capitalize(player.getName())));
+                        clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("has.voted.to.deny"), Helper.capitalize(player.getName())));
                     }
                     else
                     {

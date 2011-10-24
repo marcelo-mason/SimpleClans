@@ -48,7 +48,7 @@ public class Clan implements Serializable, Comparable<Clan>
     public Clan(String tag, String name, boolean verified)
     {
         this.tag = Helper.cleanTag(tag);
-        this.colorTag = tag;
+        this.colorTag = Helper.parseColors(tag);
         this.name = name;
         this.founded = (new Date()).getTime();
         this.lastUsed = (new Date()).getTime();
@@ -97,7 +97,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public String getName()
     {
-        return name.toLowerCase();
+        return name;
     }
 
     /**
@@ -688,15 +688,18 @@ public class Clan implements Serializable, Comparable<Clan>
      *
      * @return
      */
-    public List<ClanPlayer> getAllAllyMembers()
+    public Set<ClanPlayer> getAllAllyMembers()
     {
-        List<ClanPlayer> out = new LinkedList<ClanPlayer>();
+        Set<ClanPlayer> out = new HashSet<ClanPlayer>();
 
         for (String tag : allies)
         {
             Clan ally = SimpleClans.getInstance().getClanManager().getClan(tag);
 
-            out.addAll(ally.getMembers());
+            if (ally != null)
+            {
+                out.addAll(ally.getMembers());
+            }
         }
 
         return out;
@@ -890,22 +893,16 @@ public class Clan implements Serializable, Comparable<Clan>
         cp.removePastClan(getColorTag());
         cp.setClan(this);
         cp.setLeader(false);
-        importMember(cp);
+        cp.setTrusted(SimpleClans.getInstance().getSettingsManager().isClanTrustByDefault());
 
-        if (SimpleClans.getInstance().getSettingsManager().isClanTrustByDefault())
-        {
-            cp.setTrusted(true);
-        }
-        else
-        {
-            cp.setTrusted(false);
-        }
+        importMember(cp);
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
 
         Player player = Helper.matchOnePlayer(cp.getName());
+
         if (player != null)
         {
             SimpleClans.getInstance().getClanManager().updateDisplayName(player);
@@ -948,6 +945,7 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
         cp.setLeader(true);
+        cp.setTrusted(true);
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
@@ -1134,16 +1132,15 @@ public class Clan implements Serializable, Comparable<Clan>
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("clan.announce") + ChatColor.WHITE + "] [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
+        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang().getString("clan.announce") + ChatColor.AQUA + "] " + ChatColor.AQUA + "[" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
     }
 
     /**
      * Announce message to a all the leaders of a clan
      *
-     * @param playerName
      * @param msg
      */
-    public void leaderAnnounce(String playerName, String msg)
+    public void leaderAnnounce(String msg)
     {
         String message = SimpleClans.getInstance().getSettingsManager().getClanChatAnnouncementColor() + msg;
 
@@ -1158,7 +1155,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(ChatColor.WHITE + "[" + ChatColor.AQUA + SimpleClans.getInstance().getLang().getString("leader.announce") + ChatColor.WHITE + "] [" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
+        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang().getString("leader.announce") + ChatColor.AQUA + "] " + ChatColor.WHITE + message);
     }
 
     /**
@@ -1278,9 +1275,12 @@ public class Clan implements Serializable, Comparable<Clan>
         {
             public void run()
             {
+                SimpleClans.getInstance().getClanManager().removeClan(thisOne.getTag());
                 SimpleClans.getInstance().getStorageManager().deleteClan(thisOne);
             }
         }, 1);
+
+
     }
 
     /**

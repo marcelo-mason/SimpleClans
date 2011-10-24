@@ -94,6 +94,15 @@ public final class ClanManager
     }
 
     /**
+     * Remove a clan from memory
+     * @param tag
+     */
+    public void removeClan(String tag)
+    {
+        clans.remove(tag);
+    }
+
+    /**
      * Whether the tag belongs to a clan
      *
      * @param tag
@@ -245,6 +254,7 @@ public final class ClanManager
         if (plugin.getSettingsManager().isChatTags())
         {
             String prefix = plugin.getPermissionsManager().getPrefix(player);
+            String suffix = plugin.getPermissionsManager().getSuffix(player);
             String lastColor = plugin.getSettingsManager().isUseColorCodeFromPrefix() ? Helper.getLastColorCode(prefix) : ChatColor.WHITE + "";
             String fullName = player.getName();
 
@@ -266,7 +276,7 @@ public final class ClanManager
             }
 
             player.setDisplayName(fullName);
-            //player.setListName(fullName);
+            //player.setListName(prefix + fullName + suffix);
         }
     }
 
@@ -463,7 +473,7 @@ public final class ClanManager
         }
         else if (b.getType().equals(Material.IRON_BOOTS))
         {
-            out += ChatColor.GRAY + plugin.getLang().getString("armor.B");
+            out += ChatColor.WHITE + plugin.getLang().getString("armor.B");
         }
         else if (b.getType().equals(Material.LEATHER_BOOTS))
         {
@@ -514,7 +524,15 @@ public final class ClanManager
         if (count > 0)
         {
             String countString = count > 1 ? count + "" : "";
-            out += ChatColor.GRAY + plugin.getLang().getString("weapon.S") + countString;
+            out += ChatColor.WHITE + plugin.getLang().getString("weapon.S") + headColor + countString;
+        }
+
+        count = getItemCount(inv.all(Material.STONE_SWORD));
+
+        if (count > 0)
+        {
+            String countString = count > 1 ? count + "" : "";
+            out += ChatColor.GRAY + plugin.getLang().getString("weapon.S") + headColor + countString;
         }
 
         count = getItemCount(inv.all(Material.WOOD_SWORD));
@@ -522,7 +540,7 @@ public final class ClanManager
         if (count > 0)
         {
             String countString = count > 1 ? count + "" : "";
-            out += ChatColor.GOLD + plugin.getLang().getString("weapon.S") + countString;
+            out += ChatColor.GOLD + plugin.getLang().getString("weapon.S") + headColor + countString;
         }
 
         count = getItemCount(inv.all(Material.BOW));
@@ -530,14 +548,14 @@ public final class ClanManager
         if (count > 0)
         {
             String countString = count > 1 ? count + "" : "";
-            out += ChatColor.GOLD + plugin.getLang().getString("weapon.B") + countString;
+            out += ChatColor.GOLD + plugin.getLang().getString("weapon.B") + headColor + countString;
         }
 
         count = getItemCount(inv.all(Material.ARROW));
 
         if (count > 0)
         {
-            out += ChatColor.WHITE + plugin.getLang().getString("weapon.A") + count;
+            out += ChatColor.GOLD + plugin.getLang().getString("weapon.A") + headColor + count;
         }
 
         if (out.length() == 0)
@@ -1019,11 +1037,16 @@ public final class ClanManager
             Player self = plugin.getServer().getPlayer(player.getName());
             ChatBlock.sendMessage(self, message);
 
-            List<ClanPlayer> allies = cp.getClan().getAllAllyMembers();
+            Set<ClanPlayer> allies = cp.getClan().getAllAllyMembers();
             allies.addAll(cp.getClan().getMembers());
 
             for (ClanPlayer ally : allies)
             {
+                if(player.getName().equalsIgnoreCase(ally.getName()))
+                {
+                    continue;
+                }
+
                 Player member = plugin.getServer().getPlayer(ally.getName());
                 ChatBlock.sendMessage(member, message);
             }

@@ -18,7 +18,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
- *
  * @author phaed
  */
 public final class StorageManager
@@ -39,6 +38,7 @@ public final class StorageManager
 
     /**
      * Retrieve a player's pending chat lines
+     *
      * @param player
      * @return
      */
@@ -49,6 +49,7 @@ public final class StorageManager
 
     /**
      * Store pending chat lines for a player
+     *
      * @param player
      * @param cb
      */
@@ -90,7 +91,7 @@ public final class StorageManager
                 {
                     SimpleClans.log("Creating table: sc_kills");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20) NOT NULL auto_increment, `attacker` varchar(16) NOT NULL,  `victim` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20) NOT NULL auto_increment, `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
                     core.execute(query);
                 }
             }
@@ -127,7 +128,7 @@ public final class StorageManager
                 {
                     SimpleClans.log("Creating table: sc_kills");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20), `attacker` varchar(16) NOT NULL,  `victim` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20), `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
                     core.execute(query);
                 }
             }
@@ -238,6 +239,7 @@ public final class StorageManager
 
     /**
      * Retrieves all simple clans from the database
+     *
      * @return
      */
     public List<Clan> retrieveClans()
@@ -312,6 +314,7 @@ public final class StorageManager
 
     /**
      * Retrieves all clan players from the database
+     *
      * @return
      */
     public List<ClanPlayer> retrieveClanPlayers()
@@ -396,6 +399,7 @@ public final class StorageManager
 
     /**
      * Insert a clan into the database
+     *
      * @param clan
      */
     public void insertClan(Clan clan)
@@ -407,6 +411,7 @@ public final class StorageManager
 
     /**
      * Update a clan to the database
+     *
      * @param clan
      */
     public void updateClan(Clan clan)
@@ -418,6 +423,7 @@ public final class StorageManager
 
     /**
      * Delete a clan from the database
+     *
      * @param clan
      */
     public void deleteClan(Clan clan)
@@ -428,6 +434,7 @@ public final class StorageManager
 
     /**
      * Insert a clan player into the database
+     *
      * @param cp
      */
     public void insertClanPlayer(ClanPlayer cp)
@@ -439,22 +446,288 @@ public final class StorageManager
 
     /**
      * Update a clan player to the database
+     *
      * @param cp
      */
     public void updateClanPlayer(ClanPlayer cp)
     {
         cp.updateLastSeen();
-        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) +  "', trusted = " + (cp.isTrusted() ? 1 : 0) + " WHERE name = '" + cp.getName() + "';";
+        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) + "', trusted = " + (cp.isTrusted() ? 1 : 0) + " WHERE name = '" + cp.getName() + "';";
         core.update(query);
     }
 
     /**
      * Delete a clan player from the database
+     *
      * @param cp
      */
     public void deleteClanPlayer(ClanPlayer cp)
     {
         String query = "DELETE FROM `sc_players` WHERE name = '" + cp.getName() + "';";
         core.delete(query);
+
+        deleteKills(cp.getName());
+    }
+
+    /**
+     * Insert a kill into the database
+     *
+     * @param attacker
+     * @param victim
+     * @param type
+     */
+    public void insertKill(Player attacker, String attackerTag, Player victim, String victimTag, String type)
+    {
+        String query = "INSERT INTO `sc_kills` (  `attacker`, `attacker_tag`, `victim`, `victim_tag`, `kill_type`) ";
+        String values = "VALUES ( '" + attacker.getName() + "','" + attackerTag + "','" + victim.getName() + "','" + victimTag + "','" + type + "');";
+        core.insert(query + values);
+    }
+
+    /**
+     * Delete a player's kill record form the database
+     *
+     * @param playerName
+     */
+    public void deleteKills(String playerName)
+    {
+        String query = "DELETE FROM `sc_kills` WHERE `attacker` = '" + playerName + "'";
+        core.delete(query);
+    }
+
+    /**
+     * Returns a map of victim->count of all kills that specific player did
+     *
+     * @param playerName
+     * @param min cuts off players who do not meet the minimum requirement of kills
+     * @return
+     */
+    public HashMap<String, Integer> getKillsPerPlayer(String playerName, int min)
+    {
+        HashMap<String, Integer> out = new HashMap<String, Integer>();
+
+        String query = "SELECT victim, count(victim) AS kills FROM `sc_kills` WHERE attacker = '" + playerName + "' AND count(victim) > " + min + " GROUP BY victim ORDER BY victim;";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String victim = res.getString("victim");
+                        int kills = res.getInt("kills");
+                        out.put(victim, kills);
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleClans.getLogger().info(ex.getMessage());
+                    }
+                }
+            }
+            catch (SQLException ex)
+            {
+                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
+    }
+
+    /**
+     * Returns a map of tag->count of all kills that specific player did
+     *
+     * @param playerName
+     * @return
+     */
+    public HashMap<String, Integer> getKillsPerClan(String playerName)
+    {
+        HashMap<String, Integer> out = new HashMap<String, Integer>();
+
+        String query = "SELECT victim_tag, count(victim_tag) AS kills FROM `sc_kills` WHERE attacker = '" + playerName + "' GROUP BY victim_tag ORDER BY victim_tag;";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String victimTag = res.getString("victim_tag");
+                        int kills = res.getInt("kills");
+                        out.put(victimTag, kills);
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleClans.getLogger().info(ex.getMessage());
+                    }
+                }
+            }
+            catch (SQLException ex)
+            {
+                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
+    }
+
+    /**
+     * Returns a map of tag->count of all deaths by each clan
+     *
+     * @return
+     */
+    public HashMap<String, Integer> getTotalDeathsPerClan()
+    {
+        HashMap<String, Integer> out = new HashMap<String, Integer>();
+
+        String query = "SELECT victim_tag, count(victim_tag) AS kills FROM `sc_kills` GROUP BY victim_tag ORDER BY victim_tag;";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String victimTag = res.getString("victim_tag");
+                        int kills = res.getInt("kills");
+                        out.put(victimTag, kills);
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleClans.getLogger().info(ex.getMessage());
+                    }
+                }
+            }
+            catch (SQLException ex)
+            {
+                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
+    }
+
+    /**
+     * Returns a map of tag->count of all kills by each clan
+     *
+     * @return
+     */
+    public HashMap<String, Integer> getTotalKillsPerClan()
+    {
+        HashMap<String, Integer> out = new HashMap<String, Integer>();
+
+        String query = "SELECT attacker_tag, count(attacker_tag) AS kills FROM `sc_kills` GROUP BY attacker_tag ORDER BY attacker_tag;";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String victimTag = res.getString("attacker_tag");
+                        int kills = res.getInt("kills");
+                        out.put(victimTag, kills);
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleClans.getLogger().info(ex.getMessage());
+                    }
+                }
+            }
+            catch (SQLException ex)
+            {
+                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
+    }
+
+    /**
+     * Returns a map of playerName->count of all kills by each player
+     *
+     * @return
+     */
+    public HashMap<String, Integer> getTotalKillsPerPlayer()
+    {
+        HashMap<String, Integer> out = new HashMap<String, Integer>();
+
+        String query = "SELECT attacker, count(attacker) AS kills FROM `sc_kills` GROUP BY attacker ORDER BY attacker;";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String attacker = res.getString("attacker");
+                        int kills = res.getInt("kills");
+                        out.put(attacker, kills);
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleClans.getLogger().info(ex.getMessage());
+                    }
+                }
+            }
+            catch (SQLException ex)
+            {
+                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
+    }
+
+    /**
+     * Returns a map of playerName->count of all kills by each player
+     *
+     * @return
+     */
+    public HashMap<String, Integer> getTotalDeathsPerPlayer()
+    {
+        HashMap<String, Integer> out = new HashMap<String, Integer>();
+
+        String query = "SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY victim;";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String victim = res.getString("victim");
+                        int kills = res.getInt("kills");
+                        out.put(victim, kills);
+                    }
+                    catch (Exception ex)
+                    {
+                        SimpleClans.getLogger().info(ex.getMessage());
+                    }
+                }
+            }
+            catch (SQLException ex)
+            {
+                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
     }
 }

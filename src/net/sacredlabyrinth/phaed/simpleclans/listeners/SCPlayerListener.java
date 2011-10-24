@@ -68,10 +68,11 @@ public class SCPlayerListener extends PlayerListener
                 return;
             }
 
+            event.setCancelled(true);
+
             if (split.length > 1)
             {
                 plugin.getClanManager().processClanChat(player, command, Helper.toMessage(Helper.removeFirst(split)));
-                event.setCancelled(true);
             }
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAlly()))
@@ -81,24 +82,20 @@ public class SCPlayerListener extends PlayerListener
                 return;
             }
 
+            event.setCancelled(true);
+
             if (split.length > 1)
             {
                 plugin.getClanManager().processAllyChat(player, Helper.toMessage(Helper.removeFirst(split)));
-                event.setCancelled(true);
             }
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandGlobal()))
         {
+            event.setCancelled(true);
+
             if (split.length > 1)
             {
-                if (plugin.getClanManager().processGlobalChat(player, Helper.toMessage(Helper.removeFirst(split))))
-                {
-                    event.setMessage(Helper.toMessage(Helper.removeFirst(split)));
-                }
-                else
-                {
-                    event.setCancelled(true);
-                }
+                plugin.getClanManager().processGlobalChat(player, Helper.toMessage(Helper.removeFirst(split)));
             }
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))

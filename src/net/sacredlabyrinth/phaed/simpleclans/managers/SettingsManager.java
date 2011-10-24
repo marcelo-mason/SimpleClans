@@ -2,9 +2,10 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import org.bukkit.util.config.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
+import java.io.File;
+import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 
@@ -102,6 +103,8 @@ public final class SettingsManager
     private String username;
     private String password;
     private boolean safeCivilians;
+    private File main;
+    private FileConfiguration config;
 
     /**
      *
@@ -109,6 +112,8 @@ public final class SettingsManager
     public SettingsManager()
     {
         plugin = SimpleClans.getInstance();
+        config = plugin.getConfig();
+        main = new File(plugin.getDataFolder() + File.separator + "config.yml");
         load();
     }
 
@@ -118,204 +123,128 @@ public final class SettingsManager
     @SuppressWarnings("unchecked")
     public void load()
     {
-        Configuration config = getPlugin().getConfiguration();
-        config.load();
+        boolean exists = (main).exists();
 
-        List<String> standardDisallowed = new ArrayList<String>();
-        standardDisallowed.add("vip");
+        if (exists)
+        {
+            try
+            {
+                config.options().copyDefaults(true);
+                config.load(main);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            config.options().copyDefaults(true);
+        }
 
-        List<String> unRivableClansDefault = new ArrayList<String>();
-        unRivableClansDefault.add("admin");
-        unRivableClansDefault.add("staff");
-        unRivableClansDefault.add("mod");
+        useColorCodeFromPrefix = config.getBoolean("settings.use-colorcode-from-prefix-for-name");
+        bannedPlayers = config.getList("settings.banned-players");
+        disallowedColors = config.getList("settings.disallowed-tag-colors");
+        blacklistedWorlds = config.getList("settings.blacklisted-worlds");
+        disallowedWords = config.getList("settings.disallowed-tags");
+        unRivableClans = config.getList("settings.unrivable-clans");
+        showUnverifiedOnList = config.getBoolean("settings.show-unverified-on-list");
+        requireVerification = config.getBoolean("settings.new-clan-verification-required");
+        language = config.getString("settings.language");
+        serverName = config.getString("settings.server-name");
+        chatTags = config.getBoolean("settings.display-chat-tags");
+        rivalLimitPercent = config.getInt("settings.rival-limit-percent");
+        ePurchaseCreation = config.getBoolean("economy.purchase-clan-create");
+        ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify");
+        eCreationPrice = config.getInt("economy.creation-price");
+        eVerificationPrice = config.getInt("economy.verification-price");
+        alertUrl = config.getString("spout.alert-url");
+        inGameTags = config.getBoolean("spout.in-game-tags");
+        inGameTagsColored = config.getBoolean("spout.in-game-tags-colored");
+        clanCapes = config.getBoolean("spout.enable-clan-capes");
+        defaultCapeUrl = config.getString("spout.default-cape-url");
+        purgeClan = config.getInt("purge.inactive-clan-days");
+        purgeUnverified = config.getInt("purge.unverified-clan-days");
+        purgePlayers = config.getInt("purge.inactive-player-data-days");
+        requestFreqencySecs = config.getInt("request.ask-frequency-secs");
+        requestMessageColor = config.getString("request.message-color");
+        pageSize = config.getInt("page.size");
+        pageSep = config.getString("page.separator");
+        pageSubTitleColor = config.getString("page.subtitle-color");
+        pageHeadingsColor = config.getString("page.headings-color");
+        pageLeaderColor = config.getString("page.leader-color");
+        pageTrustedColor = config.getString("page.trusted-color");
+        pageUnTrustedColor = config.getString("page.untrusted-color");
+        pageClanNameColor = config.getString("page.clan-name-color");
+        bbShowOnLogin = config.getBoolean("bb.show-on-login");
+        bbSize = config.getInt("bb.size");
+        bbColor = config.getString("bb.color");
+        bbAccentColor = config.getString("bb.accent-color");
+        commandClan = config.getString("commands.clan");
+        commandAlly = config.getString("commands.ally");
+        commandGlobal = config.getString("commands.global");
+        commandMore = config.getString("commands.more");
+        commandDeny = config.getString("commands.deny");
+        commandAccept = config.getString("commands.accept");
+        confirmationForPromote = config.getBoolean("clan.confirmation-for-demote");
+        confirmationForDemote = config.getBoolean("clan.confirmation-for-promote");
+        clanTrustByDefault = config.getBoolean("clan.trust-members-by-default");
+        clanMinSizeToAlly = config.getInt("clan.min-size-to-set-ally");
+        clanMinSizeToRival = config.getInt("clan.min-size-to-set-rival");
+        clanMinLength = config.getInt("clan.min-length");
+        clanMaxLength = config.getInt("clan.max-length");
+        clanFFOnByDefault = config.getBoolean("clan.ff-on-by-default");
+        tagMinLength = config.getInt("tag.min-length");
+        tagMaxLength = config.getInt("tag.max-length");
+        tagDefaultColor = config.getString("tag.default-color");
+        tagSeparator = config.getString("tag.separator.char");
+        tagSeparatorColor = config.getString("tag.separator.color");
+        tagBracketColor = config.getString("tag.bracket.color");
+        tagBracketLeft = config.getString("tag.bracket.left");
+        tagBracketRight = config.getString("tag.bracket.right");
+        allyChatEnable = config.getBoolean("allychat.enable");
+        allyChatMessageColor = config.getString("allychat.message-color");
+        allyChatTagColor = config.getString("allychat.tag-color");
+        allyChatNameColor = config.getString("allychat.name-color");
+        allyChatBracketColor = config.getString("allychat.tag-bracket.color");
+        allyChatTagBracketLeft = config.getString("allychat.tag-bracket.left");
+        allyChatTagBracketRight = config.getString("allychat.tag-bracket.right");
+        allyChatPlayerBracketLeft = config.getString("allychat.player-bracket.left");
+        allyChatPlayerBracketRight = config.getString("allychat.player-bracket.right");
+        clanChatEnable = config.getBoolean("clanchat.enable");
+        clanChatAnnouncementColor = config.getString("clanchat.announcement-color");
+        clanChatMessageColor = config.getString("clanchat.message-color");
+        clanChatNameColor = config.getString("clanchat.name-color");
+        clanChatBracketColor = config.getString("clanchat.tag-bracket.color");
+        clanChatTagBracketLeft = config.getString("clanchat.tag-bracket.left");
+        clanChatTagBracketRight = config.getString("clanchat.tag-bracket.right");
+        clanChatPlayerBracketLeft = config.getString("clanchat.player-bracket.left");
+        clanChatPlayerBracketRight = config.getString("clanchat.player-bracket.right");
+        kwRival = config.getDouble("kill-weights.rival");
+        kwNeutral = config.getDouble("kill-weights.neutral");
+        kwCivilian = config.getDouble("kill-weights.civilian");
+        useMysql = config.getBoolean("mysql.enable");
+        host = config.getString("mysql.host");
+        database = config.getString("mysql.database");
+        username = config.getString("mysql.username");
+        password = config.getString("mysql.password");
+        safeCivilians = config.getBoolean("safe-civilians");
 
-        List<String> disallowedColorsDefault = new ArrayList<String>();
-        disallowedColorsDefault.add("4");
-
-        useColorCodeFromPrefix = config.getBoolean("settings.use-colorcode-from-prefix-for-name", true);
-        bannedPlayers = config.getStringList("settings.banned-players", new ArrayList<String>());
-        disallowedColors = config.getStringList("settings.disallowed-tag-colors", disallowedColorsDefault);
-        blacklistedWorlds = config.getStringList("settings.blacklisted-worlds", new ArrayList<String>());
-        disallowedWords = config.getStringList("settings.disallowed-tags", standardDisallowed);
-        unRivableClans = config.getStringList("settings.unrivable-clans", unRivableClansDefault);
-        showUnverifiedOnList = config.getBoolean("settings.show-unverified-on-list", false);
-        requireVerification = config.getBoolean("settings.new-clan-verification-required", true);
-        language = config.getString("settings.language", "en");
-        serverName = config.getString("settings.server-name", "&9MinecraftServer");
-        chatTags = config.getBoolean("settings.display-chat-tags", true);
-        rivalLimitPercent = config.getInt("settings.rival-limit-percent", 50);
-        ePurchaseCreation = config.getBoolean("economy.purchase-clan-create", false);
-        ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify", false);
-        eCreationPrice = config.getInt("economy.creation-price", 100);
-        eVerificationPrice = config.getInt("economy.verification-price", 1000);
-        alertUrl = config.getString("spout.alert-url", "http://sacredlabyrinth.net/siren.wav");
-        inGameTags = config.getBoolean("spout.in-game-tags", true);
-        inGameTagsColored = config.getBoolean("spout.in-game-tags-colored", false);
-        clanCapes = config.getBoolean("spout.enable-clan-capes", true);
-        defaultCapeUrl = config.getString("spout.default-cape-url", "http://i.imgur.com/pjqV6.png");
-        purgeClan = config.getInt("purge.inactive-clan-days", 7);
-        purgeUnverified = config.getInt("purge.unverified-clan-days", 2);
-        purgePlayers = config.getInt("purge.inactive-player-data-days", 30);
-        requestFreqencySecs = config.getInt("request.ask-frequency-secs", 60);
-        requestMessageColor = config.getString("request.message-color", "b");
-        pageSize = config.getInt("page.size", 13);
-        pageSep = config.getString("page.separator", "-");
-        pageSubTitleColor = config.getString("page.subtitle-color", "7");
-        pageHeadingsColor = config.getString("page.headings-color", "8");
-        pageLeaderColor = config.getString("page.leader-color", "4");
-        pageTrustedColor = config.getString("page.trusted-color", "f");
-        pageUnTrustedColor = config.getString("page.untrusted-color", "8");
-        pageClanNameColor = config.getString("page.clan-name-color", "b");
-        bbShowOnLogin = config.getBoolean("bb.show-on-login", true);
-        bbSize = config.getInt("bb.size", 6);
-        bbColor = config.getString("bb.color", "e");
-        bbAccentColor = config.getString("bb.accent-color", "8");
-        commandClan = config.getString("commands.clan", "clan");
-        commandAlly = config.getString("commands.ally", "ally");
-        commandGlobal = config.getString("commands.global", "global");
-        commandMore = config.getString("commands.more", "more");
-        commandDeny = config.getString("commands.deny", "deny");
-        commandAccept = config.getString("commands.accept", "accept");
-        confirmationForPromote = config.getBoolean("clan.confirmation-for-demote", false);
-        confirmationForDemote = config.getBoolean("clan.confirmation-for-promote", false);
-        clanTrustByDefault = config.getBoolean("clan.trust-members-by-default", false);
-        clanMinSizeToAlly = config.getInt("clan.min-size-to-set-ally", 3);
-        clanMinSizeToRival = config.getInt("clan.min-size-to-set-rival", 3);
-        clanMinLength = config.getInt("clan.min-length", 2);
-        clanMaxLength = config.getInt("clan.max-length", 25);
-        clanFFOnByDefault = config.getBoolean("clan.ff-on-by-default", false);
-        tagMinLength = config.getInt("tag.min-length", 2);
-        tagMaxLength = config.getInt("tag.max-length", 5);
-        tagDefaultColor = config.getString("tag.default-color", "8");
-        tagSeparator = config.getString("tag.separator.char", " .");
-        tagSeparatorColor = config.getString("tag.separator.color", "8");
-        tagBracketColor = config.getString("tag.bracket.color", "8");
-        tagBracketLeft = config.getString("tag.bracket.left", "");
-        tagBracketRight = config.getString("tag.bracket.right", "");
-        allyChatEnable = config.getBoolean("allychat.enable", true);
-        allyChatMessageColor = config.getString("allychat.message-color", "3");
-        allyChatTagColor = config.getString("allychat.tag-color", "b");
-        allyChatNameColor = config.getString("allychat.name-color", "f");
-        allyChatBracketColor = config.getString("allychat.tag-bracket.color", "8");
-        allyChatTagBracketLeft = config.getString("allychat.tag-bracket.left", "[");
-        allyChatTagBracketRight = config.getString("allychat.tag-bracket.right", "]");
-        allyChatPlayerBracketLeft = config.getString("allychat.player-bracket.left", "<");
-        allyChatPlayerBracketRight = config.getString("allychat.player-bracket.right", ">");
-        clanChatEnable = config.getBoolean("clanchat.enable", true);
-        clanChatAnnouncementColor = config.getString("clanchat.announcement-color", "e");
-        clanChatMessageColor = config.getString("clanchat.message-color", "b");
-        clanChatNameColor = config.getString("clanchat.name-color", "e");
-        clanChatBracketColor = config.getString("clanchat.tag-bracket.color", "8");
-        clanChatTagBracketLeft = config.getString("clanchat.tag-bracket.left", "[");
-        clanChatTagBracketRight = config.getString("clanchat.tag-bracket.right", "]");
-        clanChatPlayerBracketLeft = config.getString("clanchat.player-bracket.left", "<");
-        clanChatPlayerBracketRight = config.getString("clanchat.player-bracket.right", ">");
-        kwRival = config.getDouble("kill-weights.rival", 2);
-        kwNeutral = config.getDouble("kill-weights.neutral", 1);
-        kwCivilian = config.getDouble("kill-weights.civilian", 0);
-        useMysql = config.getBoolean("mysql.enable", false);
-        host = config.getString("mysql.host", "localhost");
-        database = config.getString("mysql.database", "");
-        username = config.getString("mysql.username", "");
-        password = config.getString("mysql.password", "");
-        safeCivilians = config.getBoolean("safe-civilians", false);
         save();
     }
 
     private void save()
     {
-        Configuration config = getPlugin().getConfiguration();
-        config.load();
-
-        config.setProperty("settings.use-colorcode-from-prefix-for-name", useColorCodeFromPrefix);
-        config.setProperty("settings.language", language);
-        config.setProperty("settings.banned-players", bannedPlayers);
-        config.setProperty("settings.blacklisted-worlds", blacklistedWorlds);
-        config.setProperty("settings.disallowed-tags", disallowedWords);
-        config.setProperty("settings.disallowed-tag-colors", disallowedColors);
-        config.setProperty("settings.show-unverified-on-list", showUnverifiedOnList);
-        config.setProperty("settings.unrivable-clans", unRivableClans);
-        config.setProperty("settings.new-clan-verification-required", requireVerification);
-        config.setProperty("settings.server-name", serverName);
-        config.setProperty("settings.display-chat-tags", chatTags);
-        config.setProperty("settings.rival-limit-percent", rivalLimitPercent);
-        config.setProperty("spout.alert-url", alertUrl);
-        config.setProperty("economy.purchase-clan-create", ePurchaseCreation);
-        config.setProperty("economy.purchase-clan-verify", ePurchaseVerification);
-        config.setProperty("economy.creation-price", eCreationPrice);
-        config.setProperty("economy.verification-price", eVerificationPrice);
-        config.setProperty("spout.in-game-tags", inGameTags);
-        config.setProperty("spout.in-game-tags-colored", inGameTagsColored);
-        config.setProperty("spout.enable-clan-capes", clanCapes);
-        config.setProperty("spout.default-cape-url", defaultCapeUrl);
-        config.setProperty("purge.inactive-clan-days", purgeClan);
-        config.setProperty("purge.unverified-clan-days", purgeUnverified);
-        config.setProperty("purge.inactive-player-data-days", purgePlayers);
-        config.setProperty("request.ask-frequency-secs", requestFreqencySecs);
-        config.setProperty("request.message-color", requestMessageColor);
-        config.setProperty("page.size", pageSize);
-        config.setProperty("page.separator", pageSep);
-        config.setProperty("page.subtitle-color", pageSubTitleColor);
-        config.setProperty("page.headings-color", pageHeadingsColor);
-        config.setProperty("page.leader-color", pageLeaderColor);
-        config.setProperty("page.trusted-color", pageTrustedColor);
-        config.setProperty("page.untrusted-color", pageUnTrustedColor);
-        config.setProperty("page.clan-name-color", pageClanNameColor);
-        config.setProperty("bb.size", bbSize);
-        config.setProperty("bb.show-on-login", bbShowOnLogin);
-        config.setProperty("bb.color", bbColor);
-        config.setProperty("bb.accent-color", bbAccentColor);
-        config.setProperty("commands.clan", commandClan);
-        config.setProperty("commands.ally", commandAlly);
-        config.setProperty("commands.global", commandGlobal);
-        config.setProperty("commands.more", commandMore);
-        config.setProperty("commands.deny", commandDeny);
-        config.setProperty("commands.accept", commandAccept);
-        config.setProperty("clan.confirmation-for-demote", confirmationForPromote);
-        config.setProperty("clan.confirmation-for-promote", confirmationForDemote);
-        config.setProperty("clan.trust-members-by-default", clanTrustByDefault);
-        config.setProperty("clan.min-size-to-set-ally", clanMinSizeToAlly);
-        config.setProperty("clan.min-size-to-set-rival", clanMinSizeToRival);
-        config.setProperty("clan.min-length", clanMinLength);
-        config.setProperty("clan.max-length", clanMaxLength);
-        config.setProperty("clan.ff-on-by-default", clanFFOnByDefault);
-        config.setProperty("tag.min-length", tagMinLength);
-        config.setProperty("tag.max-length", tagMaxLength);
-        config.setProperty("tag.default-color", tagDefaultColor);
-        config.setProperty("tag.separator.char", tagSeparator);
-        config.setProperty("tag.separator.color", tagSeparatorColor);
-        config.setProperty("tag.bracket.color", tagBracketColor);
-        config.setProperty("tag.bracket.left", tagBracketLeft);
-        config.setProperty("tag.bracket.right", tagBracketRight);
-        config.setProperty("allychat.enable", allyChatEnable);
-        config.setProperty("allychat.message-color", allyChatMessageColor);
-        config.setProperty("allychat.name-color", allyChatNameColor);
-        config.setProperty("allychat.tag-color", allyChatTagColor);
-        config.setProperty("allychat.tag-bracket.color", allyChatBracketColor);
-        config.setProperty("allychat.tag-bracket.left", allyChatTagBracketLeft);
-        config.setProperty("allychat.tag-bracket.right", allyChatTagBracketRight);
-        config.setProperty("allychat.player-bracket.left", allyChatPlayerBracketLeft);
-        config.setProperty("allychat.player-bracket.right", allyChatPlayerBracketRight);
-        config.setProperty("clanchat.enable", clanChatEnable);
-        config.setProperty("clanchat.announcement-color", clanChatAnnouncementColor);
-        config.setProperty("clanchat.message-color", clanChatMessageColor);
-        config.setProperty("clanchat.name-color", clanChatNameColor);
-        config.setProperty("clanchat.tag-bracket.color", clanChatBracketColor);
-        config.setProperty("clanchat.tag-bracket.left", clanChatTagBracketLeft);
-        config.setProperty("clanchat.tag-bracket.right", clanChatTagBracketRight);
-        config.setProperty("clanchat.player-bracket.left", clanChatPlayerBracketLeft);
-        config.setProperty("clanchat.player-bracket.right", clanChatPlayerBracketRight);
-        config.setProperty("kill-weights.rival", kwRival);
-        config.setProperty("kill-weights.neutral", kwNeutral);
-        config.setProperty("kill-weights.civilian", kwCivilian);
-        config.setProperty("mysql.enable", useMysql);
-        config.setProperty("mysql.host", host);
-        config.setProperty("mysql.database", database);
-        config.setProperty("mysql.username", username);
-        config.setProperty("mysql.password", password);
-        config.setProperty("safe-civilians", safeCivilians);
-        config.save();
+        try
+        {
+            config.save(main);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
+
 
     /**
      * Check whether a worlds is blacklisted

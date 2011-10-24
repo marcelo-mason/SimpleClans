@@ -138,7 +138,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         if (leader)
         {
-            trusted = true;
+            trusted = leader;
         }
 
         this.leader = leader;
@@ -592,7 +592,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public boolean isTrusted()
     {
-        return trusted;
+        return leader || trusted;
     }
 
     /**
@@ -616,7 +616,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         // writing the list of flags to json
 
-        flags.put("channel", channel);
+        flags.put("channel", channel.toString());
 
         // writing the channel state settings flags
 
@@ -646,39 +646,44 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
             {
                 for (String flag : flags.keySet())
                 {
-                    // reading the list of flags from json
-
-                    if (flag.equals("channel"))
+                    try
                     {
-                        String chn = (String) flags.get(flag);
-
-                        if (chn != null && !chn.isEmpty())
+                        if (flag.equals("channel"))
                         {
-                            if (chn.equalsIgnoreCase("clan"))
+                            String chn = (String) flags.get(flag);
+
+                            if (chn != null && !chn.isEmpty())
                             {
-                                channel = Channel.CLAN;
+                                if (chn.equalsIgnoreCase("clan"))
+                                {
+                                    channel = Channel.CLAN;
+                                }
+                                else if (chn.equalsIgnoreCase("ally"))
+                                {
+                                    channel = Channel.ALLY;
+                                }
+                                else
+                                {
+                                    channel = Channel.NONE;
+                                }
                             }
-                            else if (chn.equalsIgnoreCase("ally"))
+                        }
+
+                        if (flag.equals("channel-state"))
+                        {
+                            List<Boolean> settings = (List<Boolean>) flags.get(flag);
+
+                            if (settings != null && !settings.isEmpty())
                             {
-                                channel = Channel.ALLY;
-                            }
-                            else
-                            {
-                                channel = Channel.NONE;
+                                globalChat = settings.get(0);
+                                allyChat = settings.get(1);
+                                clanChat = settings.get(2);
                             }
                         }
                     }
-
-                    if (flag.equals("channel-state"))
+                    catch (Exception ex)
                     {
-                        List<Boolean> settings = (List<Boolean>) flags.get(flag);
-
-                        if (settings != null && !settings.isEmpty())
-                        {
-                            globalChat = settings.get(0);
-                            allyChat = settings.get(1);
-                            clanChat = settings.get(2);
-                        }
+                        SimpleClans.getLogger().warning("Player-flags corrupt, cleaning...");
                     }
                 }
             }

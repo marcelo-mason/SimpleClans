@@ -38,21 +38,23 @@ public class CreateCommand
 
                 String name = Helper.toMessage(Helper.removeFirst(arg));
 
-                if (cleanTag.length() <= plugin.getSettingsManager().getTagMaxLength())
+                boolean bypass = plugin.getPermissionsManager().has(player, "simpleclans.mod.bypass");
+
+                if (bypass || cleanTag.length() <= plugin.getSettingsManager().getTagMaxLength())
                 {
-                    if (cleanTag.length() > plugin.getSettingsManager().getTagMinLength())
+                    if (bypass || cleanTag.length() > plugin.getSettingsManager().getTagMinLength())
                     {
-                        if (!plugin.getSettingsManager().hasDisallowedColor(tag))
+                        if (bypass || !plugin.getSettingsManager().hasDisallowedColor(tag))
                         {
-                            if (Helper.stripColors(name).length() <= plugin.getSettingsManager().getClanMaxLength())
+                            if (bypass || Helper.stripColors(name).length() <= plugin.getSettingsManager().getClanMaxLength())
                             {
-                                if (Helper.stripColors(name).length() > plugin.getSettingsManager().getClanMinLength())
+                                if (bypass || Helper.stripColors(name).length() > plugin.getSettingsManager().getClanMinLength())
                                 {
                                     if (cleanTag.matches("[0-9a-zA-Z]*"))
                                     {
                                         if (!name.contains("&"))
                                         {
-                                            if (!plugin.getSettingsManager().isDisallowedWord(cleanTag.toLowerCase()))
+                                            if (bypass || !plugin.getSettingsManager().isDisallowedWord(cleanTag.toLowerCase()))
                                             {
                                                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 

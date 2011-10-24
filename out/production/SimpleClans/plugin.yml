@@ -1,6 +1,6 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 1.7
+version: 1.7.4
 softdepend: [Spout, Permissions, PermissionsBukkit, mChat]
 permissions:
   simpleclans.admin.reload:
@@ -15,6 +15,8 @@ permissions:
     description: Can turn off global friendly fire protection
   simpleclans.mod.nohide:
     description: Messages from these players cannot be hidden via chat commands
+  simpleclans.mod.bypass:
+    description: Can bypass restrictions
   simpleclans.anyone.list:
     description: Can list simpleclans
   simpleclans.anyone.profile:
@@ -92,6 +94,7 @@ permissions:
       simpleclans.mod.ban: true
       simpleclans.mod.disband: true
       simpleclans.mod.globalff: true
+      simpleclans.mod.bypass: true
   simpleclans.anyone:
     description: Permissions for anyone
     default: true

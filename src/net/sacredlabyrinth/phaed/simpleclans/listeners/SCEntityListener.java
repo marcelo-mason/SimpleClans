@@ -77,12 +77,14 @@ public class SCEntityListener extends EntityListener
                     if (vcp == null || !acp.getClan().isVerified())
                     {
                         acp.addCivilianKill();
+                        plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
                     }
                     else
                     {
                         if (acp.getClan().isRival(vcp.getClan().getTag()))
                         {
                             acp.addRivalKill();
+                            plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
                         }
                         else if (acp.getClan().isAlly(vcp.getClan().getTag()))
                         {
@@ -95,6 +97,7 @@ public class SCEntityListener extends EntityListener
                         else
                         {
                             acp.addNeutralKill();
+                            plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
                         }
                     }
 

@@ -5,8 +5,7 @@ import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCServerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
-import org.bukkit.craftbukkit.CraftServer;
-import org.bukkit.craftbukkit.command.ColouredConsoleSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.event.Event;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -61,8 +60,8 @@ public class SimpleClans extends JavaPlugin
      */
     public static void log(String msg, Object... arg)
     {
-        CraftServer server = (CraftServer) SimpleClans.getInstance().getServer();
-        ColouredConsoleSender sender = new ColouredConsoleSender(server);
+        ConsoleCommandSender sender = SimpleClans.getInstance().getServer().getConsoleSender();
+        //ColouredConsoleSender sender = new ColouredConsoleSender((CraftServer)SimpleClans.getInstance().getServer());
         sender.sendMessage(new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
     }
 
