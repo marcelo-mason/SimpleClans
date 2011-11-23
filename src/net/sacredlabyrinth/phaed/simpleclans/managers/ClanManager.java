@@ -845,7 +845,7 @@ public final class ClanManager
             return true;
         }
 
-        int price = plugin.getSettingsManager().geteCreationPrice();
+        int price = plugin.getSettingsManager().getCreationPrice();
 
         if (plugin.getMethod() != null)
         {
@@ -879,7 +879,7 @@ public final class ClanManager
             return true;
         }
 
-        int price = plugin.getSettingsManager().geteVerificationPrice();
+        int price = plugin.getSettingsManager().getVerificationPrice();
 
         if (plugin.getMethod() != null)
         {

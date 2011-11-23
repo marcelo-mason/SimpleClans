@@ -1,6 +1,6 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 1.7.4
+version: 1.7.5
 softdepend: [Spout, Permissions, PermissionsBukkit, mChat]
 permissions:
   simpleclans.admin.reload:

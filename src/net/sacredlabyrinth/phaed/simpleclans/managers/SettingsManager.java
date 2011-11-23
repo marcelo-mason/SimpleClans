@@ -939,7 +939,7 @@ public final class SettingsManager
     /**
      * @return the eCreationPrice
      */
-    public int geteCreationPrice()
+    public int getCreationPrice()
     {
         return eCreationPrice;
     }
@@ -947,7 +947,7 @@ public final class SettingsManager
     /**
      * @return the eVerificationPrice
      */
-    public int geteVerificationPrice()
+    public int getVerificationPrice()
     {
         return eVerificationPrice;
     }
