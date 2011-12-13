@@ -55,6 +55,8 @@ permissions:
     description: Can resign from his clan
   simpleclans.member.ally:
     description: Can use ally chat
+  simpleclans.member.can-join:
+    description: Can join clans
   simpleclans.leader.create:
     description: Can create simpleclans
   simpleclans.leader.ally:

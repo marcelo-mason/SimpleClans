@@ -12,7 +12,6 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
- *
  * @author phaed
  */
 public final class PermissionsManager
@@ -27,6 +26,7 @@ public final class PermissionsManager
     public static Permission permission = null;
     public static Economy economy = null;
     public static Chat chat = null;
+
     /**
      *
      */
@@ -36,13 +36,21 @@ public final class PermissionsManager
         detectPermissions();
         detectPEX();
 
-        setupPermissions();
-        setupEconomy();
-        setupChat();
+        try
+        {
+            setupPermissions();
+            setupEconomy();
+            setupChat();
+        }
+        catch (Exception ex)
+        {
+            // meh
+        }
     }
 
     /**
      * Check if an economy plugin is installed
+     *
      * @return
      */
     public boolean hasEconomy()
@@ -52,6 +60,7 @@ public final class PermissionsManager
 
     /**
      * Charge a player some money
+     *
      * @param player
      * @param money
      * @return
@@ -63,6 +72,7 @@ public final class PermissionsManager
 
     /**
      * Check if a user has the money
+     *
      * @param player
      * @param money
      * @return whether he has the money
@@ -74,8 +84,9 @@ public final class PermissionsManager
 
     /**
      * Check if a player has permissions
+     *
      * @param player the player
-     * @param perm the permission
+     * @param perm   the permission
      * @return whether he has the permission
      */
     public boolean has(Player player, String perm)
@@ -85,7 +96,7 @@ public final class PermissionsManager
             return false;
         }
 
-        if(permission != null)
+        if (permission != null)
         {
             return permission.has(player, perm);
         }
@@ -122,7 +133,8 @@ public final class PermissionsManager
     private Boolean setupPermissions()
     {
         RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
-        if (permissionProvider != null) {
+        if (permissionProvider != null)
+        {
             permission = permissionProvider.getProvider();
         }
         return (permission != null);
@@ -131,7 +143,8 @@ public final class PermissionsManager
     private Boolean setupChat()
     {
         RegisteredServiceProvider<Chat> chatProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-        if (chatProvider != null) {
+        if (chatProvider != null)
+        {
             chat = chatProvider.getProvider();
         }
 
@@ -141,7 +154,8 @@ public final class PermissionsManager
     private Boolean setupEconomy()
     {
         RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
-        if (economyProvider != null) {
+        if (economyProvider != null)
+        {
             economy = economyProvider.getProvider();
         }
 
@@ -149,7 +163,6 @@ public final class PermissionsManager
     }
 
     /**
-     *
      * @param p
      * @return
      */
@@ -158,12 +171,12 @@ public final class PermissionsManager
     {
         if (chat != null)
         {
-             return chat.getPlayerPrefix(p);
+            return chat.getPlayerPrefix(p);
         }
 
         if (hasPEX)
         {
-           return PermissionsEx.getUser(p).getPrefix(p.getWorld().getName());
+            return PermissionsEx.getUser(p).getPrefix(p.getWorld().getName());
         }
 
         if (handler != null)
@@ -194,7 +207,6 @@ public final class PermissionsManager
     }
 
     /**
-     *
      * @param p
      * @return
      */
@@ -208,7 +220,7 @@ public final class PermissionsManager
 
         if (hasPEX)
         {
-           return PermissionsEx.getUser(p).getSuffix(p.getWorld().getName());
+            return PermissionsEx.getUser(p).getSuffix(p.getWorld().getName());
         }
 
         if (handler != null)

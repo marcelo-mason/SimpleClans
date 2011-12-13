@@ -83,11 +83,17 @@ public final class SpoutPluginManager
                 {
                     if (!clan.getCapeUrl().isEmpty())
                     {
-                        sp.setCape(clan.getCapeUrl());
+                        if (clan.getCapeUrl().toLowerCase().contains(".png"))
+                        {
+                            sp.setCape(clan.getCapeUrl());
+                        }
                     }
                     else
                     {
-                        sp.setCape(plugin.getSettingsManager().getDefaultCapeUrl());
+                        if (plugin.getSettingsManager().getDefaultCapeUrl().toLowerCase().contains(".png"))
+                        {
+                            sp.setCape(plugin.getSettingsManager().getDefaultCapeUrl());
+                        }
                     }
                 }
 
@@ -95,12 +101,12 @@ public final class SpoutPluginManager
                 {
                     if (player.isSneaking())
                     {
-                        sp.setCape(player.getName());
+                        sp.setTitle(player.getName());
                     }
                     else
                     {
                         String tag = plugin.getSettingsManager().isInGameTagsColored() ? (plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + clan.getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator()) : ChatColor.DARK_GRAY + plugin.getSettingsManager().getTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparator();
-                        sp.setCape(tag + ChatColor.WHITE + player.getName());
+                        sp.setTitle(tag + ChatColor.WHITE + player.getName());
                     }
                 }
             }
