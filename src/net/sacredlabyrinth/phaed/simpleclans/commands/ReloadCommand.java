@@ -30,5 +30,9 @@ public class ReloadCommand
             plugin.getStorageManager().importFromDatabase();
             ChatBlock.sendMessage(player,  ChatColor.AQUA + plugin.getLang().getString("configuration.reloaded"));
         }
+        else
+        {
+            ChatBlock.sendMessage(player,  ChatColor.RED + "Think you're slick don't ya");
+        }
     }
 }

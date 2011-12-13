@@ -1,13 +1,15 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-
-import com.nijikokun.bukkit.Permissions.Permissions;
 import com.nijiko.permissions.PermissionHandler;
-import java.util.logging.Level;
-import net.D3GN.MiracleM4n.mChat.mChat;
-import org.bukkit.plugin.Plugin;
+import com.nijikokun.bukkit.Permissions.Permissions;
+import net.milkbowl.vault.chat.Chat;
+import net.milkbowl.vault.economy.Economy;
+import net.milkbowl.vault.permission.Permission;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.entity.Player;
+import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.RegisteredServiceProvider;
+import ru.tehkode.permissions.bukkit.PermissionsEx;
 
 /**
  *
@@ -18,10 +20,13 @@ public final class PermissionsManager
     /**
      *
      */
-    private boolean hasMChat;
+    private boolean hasPEX;
     private PermissionHandler handler = null;
     private SimpleClans plugin;
 
+    public static Permission permission = null;
+    public static Economy economy = null;
+    public static Chat chat = null;
     /**
      *
      */
@@ -29,39 +34,68 @@ public final class PermissionsManager
     {
         plugin = SimpleClans.getInstance();
         detectPermissions();
-        detectMChat();
+        detectPEX();
+
+        setupPermissions();
+        setupEconomy();
+        setupChat();
+    }
+
+    /**
+     * Check if an economy plugin is installed
+     * @return
+     */
+    public boolean hasEconomy()
+    {
+        return economy != null;
+    }
+
+    /**
+     * Charge a player some money
+     * @param player
+     * @param money
+     * @return
+     */
+    public boolean playerChargeMoney(Player player, double money)
+    {
+        return economy.withdrawPlayer(player.getName(), money).transactionSuccess();
+    }
+
+    /**
+     * Check if a user has the money
+     * @param player
+     * @param money
+     * @return whether he has the money
+     */
+    public boolean playerHasMoney(Player player, double money)
+    {
+        return economy.has(player.getName(), money);
     }
 
     /**
      * Check if a player has permissions
      * @param player the player
-     * @param permission the permission
+     * @param perm the permission
      * @return whether he has the permission
      */
-    public boolean has(Player player, String permission)
+    public boolean has(Player player, String perm)
     {
         if (player == null)
         {
             return false;
         }
 
-        if (handler != null)
+        if(permission != null)
         {
-            return handler.has(player, permission);
+            return permission.has(player, perm);
+        }
+        else if (handler != null)
+        {
+            return handler.has(player, perm);
         }
         else
         {
-            return player.hasPermission(permission);
-        }
-    }
-
-    private void detectMChat()
-    {
-        Plugin test = plugin.getServer().getPluginManager().getPlugin("mChat");
-
-        if (test != null)
-        {
-            hasMChat = true;
+            return player.hasPermission(perm);
         }
     }
 
@@ -75,17 +109,43 @@ public final class PermissionsManager
         }
     }
 
-    /**
-     *
-     * @param p
-     * @return
-     */
-    @SuppressWarnings("deprecation")
-    public String getGroup(Player p)
+    private void detectPEX()
     {
-        String world = p.getWorld().getName();
-        String name = p.getName();
-        return handler.getGroup(world, name);
+        Plugin test = plugin.getServer().getPluginManager().getPlugin("PermissionsEx");
+
+        if (test != null)
+        {
+            hasPEX = true;
+        }
+    }
+
+    private Boolean setupPermissions()
+    {
+        RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
+        if (permissionProvider != null) {
+            permission = permissionProvider.getProvider();
+        }
+        return (permission != null);
+    }
+
+    private Boolean setupChat()
+    {
+        RegisteredServiceProvider<Chat> chatProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
+        if (chatProvider != null) {
+            chat = chatProvider.getProvider();
+        }
+
+        return (chat != null);
+    }
+
+    private Boolean setupEconomy()
+    {
+        RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
+        if (economyProvider != null) {
+            economy = economyProvider.getProvider();
+        }
+
+        return (economy != null);
     }
 
     /**
@@ -96,9 +156,14 @@ public final class PermissionsManager
     @SuppressWarnings({"deprecation", "deprecation"})
     public String getPrefix(Player p)
     {
-        if (hasMChat)
+        if (chat != null)
         {
-             return mChat.API.getPrefix(p);
+             return chat.getPlayerPrefix(p);
+        }
+
+        if (hasPEX)
+        {
+           return PermissionsEx.getUser(p).getPrefix(p.getWorld().getName());
         }
 
         if (handler != null)
@@ -136,9 +201,14 @@ public final class PermissionsManager
     @SuppressWarnings({"deprecation", "deprecation"})
     public String getSuffix(Player p)
     {
-        if (hasMChat)
+        if (chat != null)
         {
-            return mChat.API.getSuffix(p);
+            return chat.getPlayerSuffix(p);
+        }
+
+        if (hasPEX)
+        {
+           return PermissionsEx.getUser(p).getSuffix(p.getWorld().getName());
         }
 
         if (handler != null)

@@ -7,8 +7,9 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.player.SpoutPlayer;
+
+import static org.getspout.spoutapi.SpoutManager.*;
 
 /**
  * @author phaed
@@ -76,15 +77,17 @@ public final class SpoutPluginManager
             {
                 Clan clan = cp.getClan();
 
+                SpoutPlayer sp = getPlayer(player);
+
                 if (plugin.getSettingsManager().isClanCapes())
                 {
                     if (!clan.getCapeUrl().isEmpty())
                     {
-                        SpoutManager.getAppearanceManager().setGlobalCloak(player, clan.getCapeUrl());
+                        sp.setCape(clan.getCapeUrl());
                     }
                     else
                     {
-                        SpoutManager.getAppearanceManager().setGlobalCloak(player, plugin.getSettingsManager().getDefaultCapeUrl());
+                        sp.setCape(plugin.getSettingsManager().getDefaultCapeUrl());
                     }
                 }
 
@@ -92,12 +95,12 @@ public final class SpoutPluginManager
                 {
                     if (player.isSneaking())
                     {
-                        SpoutManager.getAppearanceManager().setGlobalTitle(player, player.getName());
+                        sp.setCape(player.getName());
                     }
                     else
                     {
                         String tag = plugin.getSettingsManager().isInGameTagsColored() ? (plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + clan.getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator()) : ChatColor.DARK_GRAY + plugin.getSettingsManager().getTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparator();
-                        SpoutManager.getAppearanceManager().setGlobalTitle(player, tag + ChatColor.WHITE + player.getName());
+                        sp.setCape(tag + ChatColor.WHITE + player.getName());
                     }
                 }
             }
@@ -113,8 +116,8 @@ public final class SpoutPluginManager
     {
         if (isHasSpout())
         {
-            SpoutPlayer sp = org.getspout.spoutapi.SpoutManager.getPlayerFromId(player.getEntityId());
-            SpoutManager.getSoundManager().playCustomSoundEffect(plugin, sp, plugin.getSettingsManager().getAlertUrl(), true);
+            SpoutPlayer sp = getPlayerFromId(player.getEntityId());
+            getSoundManager().playCustomSoundEffect(plugin, sp, plugin.getSettingsManager().getAlertUrl(), true);
         }
     }
 

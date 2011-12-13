@@ -35,6 +35,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean globalChat = true;
     private boolean allyChat = true;
     private boolean clanChat = true;
+    private boolean bbEnabled = true;
+    private boolean capeEnabled = true;
 
     /**
      *
@@ -627,6 +629,12 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         flags.put("channel-state", settings);
 
+        // couple of toggles
+
+        flags.put("bb-enabled", bbEnabled);
+        flags.put("cape-enabled", capeEnabled);
+
+
         return (new JSONWriter()).write(flags);
     }
 
@@ -680,6 +688,16 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
                                 clanChat = settings.get(2);
                             }
                         }
+
+                        if (flag.equals("bb-enabled"))
+                        {
+                            bbEnabled = (Boolean) flags.get(flag);
+                        }
+
+                        if (flag.equals("cape-enabled"))
+                        {
+                            capeEnabled = (Boolean) flags.get(flag);
+                        }
                     }
                     catch (Exception ex)
                     {
@@ -728,6 +746,26 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public void setChannel(Channel channel)
     {
         this.channel = channel;
+    }
+
+    public boolean isBbEnabled()
+    {
+        return bbEnabled;
+    }
+
+    public void setBbEnabled(boolean bbEnabled)
+    {
+        this.bbEnabled = bbEnabled;
+    }
+
+    public boolean isCapeEnabled()
+    {
+        return capeEnabled;
+    }
+
+    public void setCapeEnabled(boolean capeEnabled)
+    {
+        this.capeEnabled = capeEnabled;
     }
 
     public enum Channel

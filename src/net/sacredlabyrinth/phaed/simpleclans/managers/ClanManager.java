@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.register.payment.Method.MethodAccount;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -847,13 +846,11 @@ public final class ClanManager
 
         int price = plugin.getSettingsManager().getCreationPrice();
 
-        if (plugin.getMethod() != null)
+        if (plugin.getPermissionsManager().hasEconomy())
         {
-            MethodAccount account = plugin.getMethod().getAccount(player.getName());
-
-            if (account.hasEnough(price))
+            if (plugin.getPermissionsManager().playerHasMoney(player, price))
             {
-                account.subtract(price);
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
                 player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("account.has.been.debited"), price));
             }
             else
@@ -881,13 +878,11 @@ public final class ClanManager
 
         int price = plugin.getSettingsManager().getVerificationPrice();
 
-        if (plugin.getMethod() != null)
+         if (plugin.getPermissionsManager().hasEconomy())
         {
-            MethodAccount account = plugin.getMethod().getAccount(player.getName());
-
-            if (account.hasEnough(price))
+            if (plugin.getPermissionsManager().playerHasMoney(player, price))
             {
-                account.subtract(price);
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
                 player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("account.has.been.debited"), price));
             }
             else

@@ -693,6 +693,11 @@ public final class SettingsManager
             return ".";
         }
 
+        if (tagSeparator == null)
+        {
+            return "";
+        }
+
         return tagSeparator;
     }
 

@@ -5,9 +5,7 @@
       <root url="file://D:/Download/Plugins" />
     </CLASSES>
     <JAVADOC />
-    <SOURCES>
-      <root url="jar://$USER_HOME$/Desktop/Bukkit-Bukkit-0.0.0-755-gb1451f5.zip!/Bukkit-Bukkit-b1451f5/src/main/java" />
-    </SOURCES>
+    <SOURCES />
     <jarDirectory url="file://D:/Download/Plugins" recursive="false" />
   </library>
 </component>
