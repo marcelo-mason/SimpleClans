@@ -105,7 +105,7 @@ public final class SettingsManager
     private boolean safeCivilians;
     private File main;
     private FileConfiguration config;
-
+    private boolean compatMode;
     /**
      *
      */
@@ -144,6 +144,7 @@ public final class SettingsManager
 
         useColorCodeFromPrefix = config.getBoolean("settings.use-colorcode-from-prefix-for-name");
         bannedPlayers = config.getList("settings.banned-players");
+        compatMode = config.getBoolean("settings.chat-compatibility-mode");
         disallowedColors = config.getList("settings.disallowed-tag-colors");
         blacklistedWorlds = config.getList("settings.blacklisted-worlds");
         disallowedWords = config.getList("settings.disallowed-tags");
@@ -1045,5 +1046,15 @@ public final class SettingsManager
     public boolean isClanFFOnByDefault()
     {
         return clanFFOnByDefault;
+    }
+
+    public boolean isCompatMode()
+    {
+        return compatMode;
+    }
+
+    public void setCompatMode(boolean compatMode)
+    {
+        this.compatMode = compatMode;
     }
 }

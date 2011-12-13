@@ -11,6 +11,7 @@ tag:
         color: '8'
         char: ' .'
 settings:
+    chat-compatibility-mode: false
     rival-limit-percent: 50
     use-colorcode-from-prefix-for-name: true
     display-chat-tags: true

@@ -64,10 +64,19 @@
   </component>
   <component name="FileEditorManager">
     <leaf>
-      <file leaf-file-name="ClanManager.java" pinned="false" current="false" current-in-tab="false">
+      <file leaf-file-name="ClanManager.java" pinned="false" current="true" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/ClanManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="841" column="7" selection-start="21036" selection-end="21036" vertical-scroll-proportion="0.0">
+            <state line="253" column="0" selection-start="5912" selection-end="5912" vertical-scroll-proportion="0.20116618">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="SCPlayerListener.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/listeners/SCPlayerListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="160" column="0" selection-start="4379" selection-end="4379" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -85,16 +94,25 @@
       <file leaf-file-name="CommandManager.java" pinned="false" current="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/CommandManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="12" column="19" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0">
+            <state line="83" column="38" selection-start="3070" selection-end="3070" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="MenuCommand.java" pinned="false" current="true" current-in-tab="true">
-        <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/commands/MenuCommand.java">
+      <file leaf-file-name="SettingsManager.java" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/SettingsManager.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state line="146" column="139" selection-start="8820" selection-end="8820" vertical-scroll-proportion="0.6118143">
+            <state line="146" column="75" selection-start="4670" selection-end="4670" vertical-scroll-proportion="0.0">
+              <folding />
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file leaf-file-name="config.yml" pinned="false" current="false" current-in-tab="false">
+        <entry file="file://$PROJECT_DIR$/src/config.yml">
+          <provider selected="true" editor-type-id="text-editor">
+            <state line="13" column="4" selection-start="220" selection-end="243" vertical-scroll-proportion="0.0">
               <folding />
             </state>
           </provider>
@@ -147,15 +165,6 @@
           </provider>
         </entry>
       </file>
-      <file leaf-file-name="PermissionsManager.java" pinned="false" current="false" current-in-tab="false">
-        <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/PermissionsManager.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state line="44" column="46" selection-start="1131" selection-end="1131" vertical-scroll-proportion="0.0">
-              <folding />
-            </state>
-          </provider>
-        </entry>
-      </file>
     </leaf>
   </component>
   <component name="FindManager">
@@ -170,22 +179,22 @@
   <component name="IdeDocumentHistory">
     <option name="changedFiles">
       <list>
-        <option value="$PROJECT_DIR$/src/config.yml" />
-        <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/Helper.java" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/ClanPlayer.java" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/commands/BbCommand.java" />
-        <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/SettingsManager.java" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/commands/ReloadCommand.java" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/SpoutPluginManager.java" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/SimpleClans.java" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/PermissionsManager.java" />
-        <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/ClanManager.java" />
         <option value="$PROJECT_DIR$/src/plugin.yml" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/commands/CapeCommand.java" />
         <option value="$PROJECT_DIR$/src/languages/lang_en.properties" />
         <option value="$PROJECT_DIR$/src/languages/lang_fr.properties" />
         <option value="$PROJECT_DIR$/src/languages/lang_pl.properties" />
         <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/commands/MenuCommand.java" />
+        <option value="$PROJECT_DIR$/src/config.yml" />
+        <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/SettingsManager.java" />
+        <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/listeners/SCPlayerListener.java" />
+        <option value="$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/ClanManager.java" />
       </list>
     </option>
   </component>
@@ -571,7 +580,7 @@
     </todo-panel>
   </component>
   <component name="ToolWindowManager">
-    <frame x="90" y="77" width="1558" height="895" extended-state="1" />
+    <frame x="90" y="77" width="1558" height="895" extended-state="0" />
     <editor active="true" />
     <layout>
       <window_info id="Changes" active="false" anchor="bottom" auto_hide="false" internal_type="DOCKED" type="DOCKED" visible="false" weight="0.33" sideWeight="0.5" order="7" side_tool="false" content_ui="tabs" />
@@ -654,20 +663,6 @@
     <option name="FILTER_TARGETS" value="false" />
   </component>
   <component name="editorHistoryManager">
-    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/SpoutPluginManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="129" column="0" selection-start="3800" selection-end="3800" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/SimpleClans.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="32" column="0" selection-start="1143" selection-end="1143" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/commands/CreateCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="64" column="100" selection-start="2675" selection-end="2691" vertical-scroll-proportion="0.0">
@@ -696,23 +691,9 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/SettingsManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="687" column="7" selection-start="18606" selection-end="18606" vertical-scroll-proportion="0.020576132">
-          <folding />
-        </state>
-      </provider>
-    </entry>
     <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/PermissionsManager.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="44" column="46" selection-start="1131" selection-end="1131" vertical-scroll-proportion="0.0">
-          <folding />
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/CommandManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="12" column="19" selection-start="302" selection-end="302" vertical-scroll-proportion="0.0">
           <folding />
         </state>
       </provider>
@@ -723,13 +704,6 @@
           <folding>
             <element signature="imports" expanded="true" />
           </folding>
-        </state>
-      </provider>
-    </entry>
-    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/ClanManager.java">
-      <provider selected="true" editor-type-id="text-editor">
-        <state line="841" column="7" selection-start="21036" selection-end="21036" vertical-scroll-proportion="0.0">
-          <folding />
         </state>
       </provider>
     </entry>
@@ -773,6 +747,41 @@
     <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/commands/MenuCommand.java">
       <provider selected="true" editor-type-id="text-editor">
         <state line="146" column="139" selection-start="8820" selection-end="8820" vertical-scroll-proportion="0.6118143">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/config.yml">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="13" column="4" selection-start="220" selection-end="243" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/SettingsManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="146" column="75" selection-start="4670" selection-end="4670" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/CommandManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="83" column="38" selection-start="3070" selection-end="3070" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/listeners/SCPlayerListener.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="160" column="0" selection-start="4379" selection-end="4379" vertical-scroll-proportion="0.0">
+          <folding />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/net/sacredlabyrinth/phaed/simpleclans/managers/ClanManager.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state line="253" column="0" selection-start="5912" selection-end="5912" vertical-scroll-proportion="0.20116618">
           <folding />
         </state>
       </provider>

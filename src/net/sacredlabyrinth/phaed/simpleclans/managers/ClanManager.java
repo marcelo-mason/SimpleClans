@@ -250,6 +250,13 @@ public final class ClanManager
      */
     public void updateDisplayName(Player player)
     {
+        // do not update displayname if in compat mode
+
+        if(plugin.getSettingsManager().isCompatMode())
+        {
+            return;
+        }
+
         if (plugin.getSettingsManager().isChatTags())
         {
             String prefix = plugin.getPermissionsManager().getPrefix(player);
