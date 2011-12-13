@@ -52,17 +52,9 @@ public class SimpleClans extends JavaPlugin
         return instance;
     }
 
-    /**
-     * Parametrized logger
-     *
-     * @param msg the message
-     * @param arg the arguments
-     */
     public static void log(String msg, Object... arg)
     {
-        ConsoleCommandSender sender = SimpleClans.getInstance().getServer().getConsoleSender();
-        //ColouredConsoleSender sender = new ColouredConsoleSender((CraftServer)SimpleClans.getInstance().getServer());
-        sender.sendMessage(new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
+        logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
     }
 
     public void onEnable()
