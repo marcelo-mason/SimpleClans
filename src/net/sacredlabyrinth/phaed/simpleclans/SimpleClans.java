@@ -30,6 +30,7 @@ public class SimpleClans extends JavaPlugin
     private CommandManager commandManager;
     private SCPlayerListener playerListener;
     private SCEntityListener entityListener;
+
     private ResourceBundle lang;
 
     /**

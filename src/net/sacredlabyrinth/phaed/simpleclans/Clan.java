@@ -1,6 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.stringtree.json.JSONReader;
 import org.stringtree.json.JSONValidatingReader;
@@ -30,6 +32,10 @@ public class Clan implements Serializable, Comparable<Clan>
     private List<String> bb = new ArrayList<String>();
     private List<String> members = new ArrayList<String>();
     private HashMap<String, Clan> warringClans = new HashMap<String, Clan>();
+    private int homeX = 0;
+    private int homeY = 0;
+    private int homeZ = 0;
+    private String homeWorld = "";
 
     /**
      *
@@ -676,6 +682,26 @@ public class Clan implements Serializable, Comparable<Clan>
             {
                 out.add(cp);
             }
+        }
+
+        Collections.sort(out);
+
+        return out;
+    }
+
+    /**
+     * Get all clan's members
+     *
+     * @return
+     */
+    public List<ClanPlayer> getAllMembers()
+    {
+        List<ClanPlayer> out = new ArrayList<ClanPlayer>();
+
+        for (String member : members)
+        {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            out.add(cp);
         }
 
         Collections.sort(out);
@@ -1370,6 +1396,10 @@ public class Clan implements Serializable, Comparable<Clan>
         // writing the list of flags to json
 
         flags.put("warring", warringClans.keySet());
+        flags.put("homeX", homeX);
+        flags.put("homeY", homeY);
+        flags.put("homeZ", homeZ);
+        flags.put("homeWorld", homeWorld == null ? "" : homeWorld);
 
         return (new JSONWriter()).write(flags);
     }
@@ -1392,25 +1422,79 @@ public class Clan implements Serializable, Comparable<Clan>
                 {
                     // reading the list of flags from json
 
-                    if (flag.equals("warring"))
+                    try
                     {
-                        List<String> clans = (List<String>) flags.get(flag);
-
-                        if (clans != null)
+                        if (flag.equals("warring"))
                         {
-                            for (String tag : clans)
-                            {
-                                Clan clan = SimpleClans.getInstance().getClanManager().getClan(tag);
+                            List<String> clans = (List<String>) flags.get(flag);
 
-                                if (clan != null)
+                            if (clans != null)
+                            {
+                                for (String tag : clans)
                                 {
-                                    warringClans.put(tag, clan);
+                                    Clan clan = SimpleClans.getInstance().getClanManager().getClan(tag);
+
+                                    if (clan != null)
+                                    {
+                                        warringClans.put(tag, clan);
+                                    }
                                 }
                             }
+                        }
+
+                        if (flag.equals("homeX"))
+                        {
+                            homeX = ((Long) flags.get(flag)).intValue();
+                        }
+
+                        if (flag.equals("homeY"))
+                        {
+                            homeY = ((Long) flags.get(flag)).intValue();
+                        }
+
+                        if (flag.equals("homeZ"))
+                        {
+                            homeZ = ((Long) flags.get(flag)).intValue();
+                        }
+
+                        if (flag.equals("homeWorld"))
+                        {
+                            homeWorld = (String) flags.get(flag);
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        for (StackTraceElement el : ex.getStackTrace())
+                        {
+                            System.out.print("Failed reading flag: " + flag);
+                            System.out.print("Value: " + flags.get(flag));
+                            System.out.print(el.toString());
                         }
                     }
                 }
             }
         }
+    }
+
+    public void setHomeLocation(Location home)
+    {
+        homeX = home.getBlockX();
+        homeY = home.getBlockY();
+        homeZ = home.getBlockZ();
+        homeWorld = home.getWorld().getName();
+
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+    }
+
+    public Location getHomeLocation()
+    {
+        World world = SimpleClans.getInstance().getServer().getWorld(homeWorld);
+
+        if (world != null)
+        {
+            return new Location(world, homeX, homeY, homeZ);
+        }
+
+        return null;
     }
 }

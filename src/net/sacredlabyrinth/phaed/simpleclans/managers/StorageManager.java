@@ -270,7 +270,6 @@ public final class StorageManager
                         long founded = res.getLong("founded");
                         long last_used = res.getLong("last_used");
 
-
                         if (founded == 0)
                         {
                             founded = (new Date()).getTime();
@@ -299,13 +298,19 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        for (StackTraceElement el : ex.getStackTrace())
+                        {
+                            System.out.print(el.toString());
+                        }
                     }
                 }
             }
             catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                for (StackTraceElement el : ex.getStackTrace())
+                {
+                    System.out.print(el.toString());
+                }
             }
         }
 
@@ -384,13 +389,19 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        for (StackTraceElement el : ex.getStackTrace())
+                        {
+                            System.out.print(el.toString());
+                        }
                     }
                 }
             }
             catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                for (StackTraceElement el : ex.getStackTrace())
+                {
+                    System.out.print(el.toString());
+                }
             }
         }
 
@@ -452,7 +463,7 @@ public final class StorageManager
     public void updateClanPlayer(ClanPlayer cp)
     {
         cp.updateLastSeen();
-        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) + "', trusted = " + (cp.isTrusted() ? 1 : 0) + " WHERE name = '" + cp.getName() + "';";
+        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) + "', trusted = " + (cp.isTrusted() ? 1 : 0) + ", flags='" + Helper.escapeQuotes(cp.getFlags()) + "' WHERE name = '" + cp.getName() + "';";
         core.update(query);
     }
 
@@ -498,7 +509,7 @@ public final class StorageManager
      * Returns a map of victim->count of all kills that specific player did
      *
      * @param playerName
-     * @param min cuts off players who do not meet the minimum requirement of kills
+     * @param min        cuts off players who do not meet the minimum requirement of kills
      * @return
      */
     public HashMap<String, Integer> getKillsPerPlayer(String playerName, int min)

@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
@@ -578,5 +579,17 @@ public class Helper
             return "";
         }
         return str.replace("'", "''");
+    }
+
+
+    /**
+     * Returns a prettier coordinate, does not include world
+     *
+     * @param loc
+     * @return
+     */
+    public static String toLocationString(Location loc)
+    {
+        return loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " " + loc.getWorld().getName();
     }
 }

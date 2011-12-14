@@ -106,6 +106,7 @@ public final class SettingsManager
     private File main;
     private FileConfiguration config;
     private boolean compatMode;
+    private boolean homebaseSetOnce;
     /**
      *
      */
@@ -187,6 +188,7 @@ public final class SettingsManager
         commandMore = config.getString("commands.more");
         commandDeny = config.getString("commands.deny");
         commandAccept = config.getString("commands.accept");
+        homebaseSetOnce = config.getBoolean("clan.homebase-can-be-set-only-once");
         confirmationForPromote = config.getBoolean("clan.confirmation-for-demote");
         confirmationForDemote = config.getBoolean("clan.confirmation-for-promote");
         clanTrustByDefault = config.getBoolean("clan.trust-members-by-default");
@@ -1056,5 +1058,10 @@ public final class SettingsManager
     public void setCompatMode(boolean compatMode)
     {
         this.compatMode = compatMode;
+    }
+
+    public boolean isHomebaseSetOnce()
+    {
+        return homebaseSetOnce;
     }
 }

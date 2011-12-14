@@ -231,7 +231,10 @@ public class SCPlayerListener extends PlayerListener
 
                     if (cp != null)
                     {
-                        cp.getClan().displayBb(player);
+                        if (cp.isBbEnabled())
+                        {
+                            cp.getClan().displayBb(player);
+                        }
                     }
                 }
             }

@@ -25,7 +25,7 @@ public class CapeCommand
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (arg.length == 1 && arg[0] == "toggle")
+        if (arg.length == 1 && arg[0].equalsIgnoreCase("toggle"))
         {
             if (plugin.getPermissionsManager().has(player, "simpleclans.member.cape-toggle"))
             {
@@ -41,13 +41,13 @@ public class CapeCommand
                         {
                             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("capeoff"));
                             cp.setCapeEnabled(false);
+                            plugin.getSpoutPluginManager().clearCape(player);
                         }
                         else
                         {
                             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("capeon"));
                             cp.setCapeEnabled(true);
                         }
-                        plugin.getStorageManager().updateClanPlayer(cp);
                     }
                     else
                     {

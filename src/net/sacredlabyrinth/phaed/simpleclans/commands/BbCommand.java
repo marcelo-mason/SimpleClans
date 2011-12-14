@@ -44,20 +44,9 @@ public class BbCommand
                 }
                 else
                 {
-                    if (plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add"))
-                    {
-                        if (cp.isTrusted())
-                        {
-                            String msg = Helper.toMessage(arg);
-                            clan.addBb(player.getName(), ChatColor.AQUA + player.getName() + ": " + ChatColor.WHITE + msg);
-                            plugin.getStorageManager().updateClan(clan);
-                        }
-                        else
-                        {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
-                        }
-                    }
-                    else if (plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle"))
+                    String cmd = arg[0];
+
+                    if (cmd.equalsIgnoreCase("toggle") && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle"))
                     {
                         if (cp.isBbEnabled())
                         {
@@ -70,6 +59,19 @@ public class BbCommand
                             cp.setBbEnabled(true);
                         }
                         plugin.getStorageManager().updateClanPlayer(cp);
+                    }
+                    else if (plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add"))
+                    {
+                        if (cp.isTrusted())
+                        {
+                            String msg = Helper.toMessage(arg);
+                            clan.addBb(player.getName(), ChatColor.AQUA + player.getName() + ": " + ChatColor.WHITE + msg);
+                            plugin.getStorageManager().updateClan(clan);
+                        }
+                        else
+                        {
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                        }
                     }
                     else
                     {

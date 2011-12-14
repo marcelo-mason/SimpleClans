@@ -114,6 +114,24 @@ public final class SpoutPluginManager
     }
 
     /**
+     * Clear a player's cape
+     * @param player
+     */
+    public void clearCape(Player player)
+    {
+        if (isHasSpout())
+        {
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+            if (cp != null && cp.getClan().isVerified())
+            {
+                SpoutPlayer sp = getPlayer(player);
+                sp.setCape("");
+            }
+        }
+    }
+
+    /**
      * Plays alert to player
      *
      * @param player

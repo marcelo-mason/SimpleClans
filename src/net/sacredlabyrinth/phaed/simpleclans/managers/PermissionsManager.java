@@ -169,9 +169,16 @@ public final class PermissionsManager
     @SuppressWarnings({"deprecation", "deprecation"})
     public String getPrefix(Player p)
     {
-        if (chat != null)
+        try
         {
-            return chat.getPlayerPrefix(p);
+            if (chat != null)
+            {
+                return chat.getPlayerPrefix(p);
+            }
+        }
+        catch (Exception ex)
+        {
+            // yea vault kinda sucks like that
         }
 
         if (hasPEX)
@@ -213,9 +220,16 @@ public final class PermissionsManager
     @SuppressWarnings({"deprecation", "deprecation"})
     public String getSuffix(Player p)
     {
-        if (chat != null)
+        try
         {
-            return chat.getPlayerSuffix(p);
+            if (chat != null)
+            {
+                return chat.getPlayerSuffix(p);
+            }
+        }
+        catch (Exception ex)
+        {
+            // yea vault kinda sucks like that
         }
 
         if (hasPEX)

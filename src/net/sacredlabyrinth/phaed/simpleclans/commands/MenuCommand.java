@@ -118,6 +118,14 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.rival.add.remove.tag.1.add.remove.a.rival.clan"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.home"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("home-menu"), clanCommand, ChatColor.WHITE));
+        }
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.home-set"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("home-set-menu"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.war"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.war"), clanCommand, ChatColor.WHITE));

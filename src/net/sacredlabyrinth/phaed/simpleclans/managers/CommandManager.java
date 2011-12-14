@@ -46,6 +46,7 @@ public final class CommandManager
     private GlobalffCommand globalffCommand;
     private MenuCommand menuCommand;
     private WarCommand warCommand;
+    private HomeCommand homeCommand;
 
     /**
      *
@@ -86,6 +87,7 @@ public final class CommandManager
         reloadCommand = new ReloadCommand();
         globalffCommand = new GlobalffCommand();
         warCommand = new WarCommand();
+        homeCommand = new HomeCommand();
     }
 
     /**
@@ -135,6 +137,10 @@ public final class CommandManager
                 else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("lookup.command")))
                 {
                     lookupCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("home.command")))
+                {
+                    homeCommand.execute(player, subargs);
                 }
                 else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("leaderboard.command")))
                 {
@@ -253,6 +259,10 @@ public final class CommandManager
         catch (Exception ex)
         {
             SimpleClans.log(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("simpleclans.command.failure"), ex.getMessage()));
+            for(StackTraceElement el : ex.getStackTrace())
+            {
+                System.out.print(el.toString());
+            }
         }
     }
 

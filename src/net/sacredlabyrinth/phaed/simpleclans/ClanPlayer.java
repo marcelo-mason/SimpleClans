@@ -756,6 +756,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public void setBbEnabled(boolean bbEnabled)
     {
         this.bbEnabled = bbEnabled;
+        SimpleClans.getInstance().getStorageManager().updateClanPlayer(this);
     }
 
     public boolean isCapeEnabled()
@@ -766,6 +767,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public void setCapeEnabled(boolean capeEnabled)
     {
         this.capeEnabled = capeEnabled;
+        SimpleClans.getInstance().getStorageManager().updateClanPlayer(this);
     }
 
     public enum Channel
@@ -773,6 +775,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         CLAN,
         ALLY,
         NONE
+    }
+
+    public Player toPlayer()
+    {
+        return SimpleClans.getInstance().getServer().getPlayer(this.name);
     }
 }
 
