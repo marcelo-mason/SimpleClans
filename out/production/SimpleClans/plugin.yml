@@ -1,7 +1,7 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 1.8.3
-softdepend: [Spout, Permissions, PermissionsBukkit, mChat, Vault, PermissionsEx]
+version: 1.9.2
+softdepend: [Spout, Permissions, PermissionsBukkit, mChat, HeroChat mChatSuite, ChatManager, iChat, Vault, PermissionsEx]
 permissions:
   simpleclans.admin.reload:
     description: Can reload configuration

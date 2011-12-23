@@ -100,23 +100,23 @@ public class SCPlayerListener extends PlayerListener
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
         {
-            plugin.getCommandManager().processClan(player, Helper.removeFirst(split));
             event.setCancelled(true);
+            plugin.getCommandManager().processClan(player, Helper.removeFirst(split));
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAccept()))
         {
-            plugin.getCommandManager().processAccept(player);
             event.setCancelled(true);
+            plugin.getCommandManager().processAccept(player);
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandDeny()))
         {
-            plugin.getCommandManager().processDeny(player);
             event.setCancelled(true);
+            plugin.getCommandManager().processDeny(player);
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandMore()))
         {
-            plugin.getCommandManager().processMore(player);
             event.setCancelled(true);
+            plugin.getCommandManager().processMore(player);
         }
     }
 
@@ -126,11 +126,6 @@ public class SCPlayerListener extends PlayerListener
     @Override
     public void onPlayerChat(PlayerChatEvent event)
     {
-        if (event.isCancelled())
-        {
-            return;
-        }
-
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
         {
             return;
@@ -201,7 +196,37 @@ public class SCPlayerListener extends PlayerListener
             }
         }
 
-        plugin.getClanManager().updateDisplayName(event.getPlayer());
+        if (plugin.getSettingsManager().isCompatMode())
+        {
+            if (cp != null)
+            {
+                String tag = plugin.getSettingsManager().getTagDefaultColor() + cp.getClan().getColorTag();
+                String tagLabel = plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + tag + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
+
+                Player player = event.getPlayer();
+
+                if (player.getDisplayName().contains("{clan}"))
+                {
+                    player.setDisplayName(player.getDisplayName().replace("{clan}", tagLabel));
+                }
+                else if (event.getFormat().contains("{clan}"))
+                {
+                    event.setFormat(event.getFormat().replace("{clan}", tagLabel));
+                }
+                else if (event.getFormat().contains("%1$s"))
+                {
+                    event.setFormat(event.getFormat().replace("%1$s", tagLabel + "%1$s"));
+                }
+            }
+            else
+            {
+                event.setFormat(event.getFormat().replace("{clan}", ""));
+            }
+        }
+        else
+        {
+            plugin.getClanManager().updateDisplayName(event.getPlayer());
+        }
     }
 
     /**

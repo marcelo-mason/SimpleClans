@@ -52,6 +52,7 @@ kill-weights:
     civilian: 0.0
     neutral: 1.0
 clan:
+    homebase-teleport-wait-secs: 10
     homebase-can-be-set-only-once: true
     min-size-to-set-rival: 3
     max-length: 25

@@ -3,10 +3,12 @@
     <words>
       <w>clanchat</w>
       <w>clanplayer</w>
+      <w>dest</w>
       <w>groupmanager</w>
       <w>rivable</w>
       <w>simpleclans</w>
       <w>sqlite</w>
+      <w>teleport</w>
       <w>unrivable</w>
     </words>
   </dictionary>

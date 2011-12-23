@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
+import com.sparkedia.valrix.ColorMe.ColorMe;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -38,13 +39,16 @@ public final class PermissionsManager
 
         try
         {
+            Class.forName("net.milkbowl.vault.permission.Permission");
+
             setupPermissions();
             setupEconomy();
             setupChat();
         }
-        catch (Exception ex)
+        catch (ClassNotFoundException e)
         {
-            // meh
+            SimpleClans.log("[SimpleClans] Vault.jar not found. No economy support.");
+            //my class isn't there!
         }
     }
 
@@ -169,11 +173,13 @@ public final class PermissionsManager
     @SuppressWarnings({"deprecation", "deprecation"})
     public String getPrefix(Player p)
     {
+        String out = "";
+
         try
         {
             if (chat != null)
             {
-                return chat.getPlayerPrefix(p);
+                out = chat.getPlayerPrefix(p);
             }
         }
         catch (Exception ex)
@@ -183,7 +189,7 @@ public final class PermissionsManager
 
         if (hasPEX)
         {
-            return PermissionsEx.getUser(p).getPrefix(p.getWorld().getName());
+            out = PermissionsEx.getUser(p).getPrefix(p.getWorld().getName());
         }
 
         if (handler != null)
@@ -202,15 +208,25 @@ public final class PermissionsManager
                         prefix = "";
                     }
                 }
-                return prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
+
+                out = prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
             }
             catch (Exception e)
             {
                 System.out.println(e.getMessage());
-                return "";
             }
         }
-        return "";
+
+        // add in colorMe color
+
+        Plugin colorMe = plugin.getServer().getPluginManager().getPlugin("ColorMe");
+
+        if (colorMe != null)
+        {
+            out += ((ColorMe)colorMe).getColor(p.getName());
+        }
+
+        return out;
     }
 
     /**

@@ -592,4 +592,37 @@ public class Helper
     {
         return loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " " + loc.getWorld().getName();
     }
+
+
+    /**
+     * Whether the two locations refer to the same block
+     *
+     * @param loc
+     * @param loc2
+     * @return
+     */
+    public static boolean isSameBlock(Location loc, Location loc2)
+    {
+        if (loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ())
+        {
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * Whether the two locations refer to the same location, ignoring pitch and yaw
+     *
+     * @param loc
+     * @param loc2
+     * @return
+     */
+    public static boolean isSameLocation(Location loc, Location loc2)
+    {
+        if (loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ())
+        {
+            return true;
+        }
+        return false;
+    }
 }

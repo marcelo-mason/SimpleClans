@@ -28,6 +28,7 @@ public class SimpleClans extends JavaPlugin
     private SettingsManager settingsManager;
     private PermissionsManager permissionsManager;
     private CommandManager commandManager;
+    private TeleportManager teleportManager;
     private SCPlayerListener playerListener;
     private SCEntityListener entityListener;
 
@@ -72,6 +73,7 @@ public class SimpleClans extends JavaPlugin
         clanManager = new ClanManager();
         storageManager = new StorageManager();
         commandManager = new CommandManager();
+        teleportManager = new TeleportManager();
 
         playerListener = new SCPlayerListener();
         entityListener = new SCEntityListener();
@@ -86,7 +88,7 @@ public class SimpleClans extends JavaPlugin
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Low, this);
         getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Low, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Lowest, this);
+        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Highest, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
         getServer().getPluginManager().registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
@@ -162,5 +164,10 @@ public class SimpleClans extends JavaPlugin
     public ResourceBundle getLang()
     {
         return lang;
+    }
+
+    public TeleportManager getTeleportManager()
+    {
+        return teleportManager;
     }
 }

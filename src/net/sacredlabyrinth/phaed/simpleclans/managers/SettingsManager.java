@@ -107,6 +107,8 @@ public final class SettingsManager
     private FileConfiguration config;
     private boolean compatMode;
     private boolean homebaseSetOnce;
+    private int waitSecs;
+
     /**
      *
      */
@@ -189,6 +191,7 @@ public final class SettingsManager
         commandDeny = config.getString("commands.deny");
         commandAccept = config.getString("commands.accept");
         homebaseSetOnce = config.getBoolean("clan.homebase-can-be-set-only-once");
+        waitSecs = config.getInt("clan.homebase-teleport-wait-secs");
         confirmationForPromote = config.getBoolean("clan.confirmation-for-demote");
         confirmationForDemote = config.getBoolean("clan.confirmation-for-promote");
         clanTrustByDefault = config.getBoolean("clan.trust-members-by-default");
@@ -1063,5 +1066,15 @@ public final class SettingsManager
     public boolean isHomebaseSetOnce()
     {
         return homebaseSetOnce;
+    }
+
+    public int getWaitSecs()
+    {
+        return waitSecs;
+    }
+
+    public void setWaitSecs(int waitSecs)
+    {
+        this.waitSecs = waitSecs;
     }
 }
