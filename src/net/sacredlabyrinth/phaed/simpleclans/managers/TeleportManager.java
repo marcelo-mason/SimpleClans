@@ -26,6 +26,12 @@ public final class TeleportManager
         startCounter();
     }
 
+    /**
+     * Add player to teleport waiting queue
+     * @param player
+     * @param dest
+     * @param clanName
+     */
     public void addPlayer(Player player, Location dest, String clanName)
     {
         int secs = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
@@ -45,7 +51,7 @@ public final class TeleportManager
         }
     }
 
-    public void startCounter()
+    private void startCounter()
     {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
@@ -61,7 +67,7 @@ public final class TeleportManager
                         {
                             if (Helper.isSameBlock(player.getLocation(), state.getLocation()))
                             {
-                                Location loc = state.getLocation();
+                                Location loc = state.getDestination();
 
                                 int x = loc.getBlockX();
                                 int z = loc.getBlockZ();
@@ -84,6 +90,13 @@ public final class TeleportManager
                         }
                         else
                         {
+                            if (!Helper.isSameBlock(player.getLocation(), state.getLocation()))
+                            {
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.moved.teleport.cancelled"));
+                                waitingPlayers.remove(player.getName());
+                                return;
+                            }
+
                             ChatBlock.sendMessage(player, ChatColor.AQUA + "" + state.getCounter());
                         }
                     }

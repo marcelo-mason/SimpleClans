@@ -7,12 +7,14 @@ public class TeleportState
 {
     private String playerName;
     private Location playerLocation;
+    private Location destination;
     private int counter;
     private String clanName;
 
     public TeleportState(Player player, Location dest, String clanName)
     {
-        this.playerLocation = dest;
+        this.destination = dest;
+        this.playerLocation = player.getLocation();
         this.playerName = player.getName();
         this.clanName = clanName;
         this.counter = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
@@ -32,7 +34,7 @@ public class TeleportState
      */
     public boolean isTeleportTime()
     {
-        if (counter > 0)
+        if (counter > 1)
         {
             counter--;
             return false;
@@ -67,5 +69,10 @@ public class TeleportState
     public String getClanName()
     {
         return clanName;
+    }
+
+    public Location getDestination()
+    {
+        return destination;
     }
 }
