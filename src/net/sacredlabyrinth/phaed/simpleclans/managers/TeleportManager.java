@@ -36,12 +36,12 @@ public final class TeleportManager
 
             if (secs > 0)
             {
-                ChatBlock.sendMessage(player, ChatColor.AQUA + "Waiting for teleport, do not move for " + secs + " seconds");
+                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("waiting.for.teleport.stand.still.for.0.seconds"), secs));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + "Already waiting for teleport");
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("already.waiting.for.teleport"));
         }
     }
 
@@ -66,10 +66,10 @@ public final class TeleportManager
                                 int x = loc.getBlockX();
                                 int z = loc.getBlockZ();
 
-                                player.sendBlockChange(new Location(loc.getWorld(), x + 1, loc.getBlockY(), z + 1), Material.GLASS, (byte) 0);
-                                player.sendBlockChange(new Location(loc.getWorld(), x - 1, loc.getBlockY(), z - 1), Material.GLASS, (byte) 0);
-                                player.sendBlockChange(new Location(loc.getWorld(), x + 1, loc.getBlockY(), z - 1), Material.GLASS, (byte) 0);
-                                player.sendBlockChange(new Location(loc.getWorld(), x - 1, loc.getBlockY(), z + 1), Material.GLASS, (byte) 0);
+                                player.sendBlockChange(new Location(loc.getWorld(), x + 1, loc.getBlockY() - 1, z + 1), Material.GLASS, (byte) 0);
+                                player.sendBlockChange(new Location(loc.getWorld(), x - 1, loc.getBlockY() - 1, z - 1), Material.GLASS, (byte) 0);
+                                player.sendBlockChange(new Location(loc.getWorld(), x + 1, loc.getBlockY() - 1, z - 1), Material.GLASS, (byte) 0);
+                                player.sendBlockChange(new Location(loc.getWorld(), x - 1, loc.getBlockY() - 1, z + 1), Material.GLASS, (byte) 0);
 
                                 player.teleport(new Location(loc.getWorld(), loc.getBlockX() + .5, loc.getBlockY(), loc.getBlockZ() + .5));
 
@@ -77,7 +77,7 @@ public final class TeleportManager
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + "You moved, teleport cancelled");
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.moved.teleport.cancelled"));
                             }
 
                             waitingPlayers.remove(player.getName());
