@@ -11,6 +11,7 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
+import java.util.Iterator;
 
 public final class TeleportManager
 {
@@ -51,8 +52,10 @@ public final class TeleportManager
         {
             public void run()
             {
-                for (TeleportState state : waitingPlayers.values())
+                for (Iterator iter = waitingPlayers.values().iterator(); iter.hasNext();)
                 {
+                    TeleportState state = (TeleportState) iter.next();
+
                     Player player = state.getPlayer();
 
                     if (player != null)
@@ -80,14 +83,14 @@ public final class TeleportManager
                                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.moved.teleport.cancelled"));
                             }
 
-                            waitingPlayers.remove(player.getName());
+                            iter.remove();
                         }
                         else
                         {
                             if (!Helper.isSameBlock(player.getLocation(), state.getLocation()))
                             {
                                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.moved.teleport.cancelled"));
-                                waitingPlayers.remove(player.getName());
+                                iter.remove();
                                 return;
                             }
 
@@ -96,7 +99,7 @@ public final class TeleportManager
                     }
                     else
                     {
-                        waitingPlayers.remove(player.getName());
+                        iter.remove();
                     }
                 }
             }

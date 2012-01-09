@@ -24,6 +24,7 @@ settings:
     banned-players: []
     disallowed-tags:
     - vip
+    - clan
     language: en
     disallowed-tag-colors:
     - '4'
