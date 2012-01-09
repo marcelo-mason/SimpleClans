@@ -109,7 +109,7 @@ public class LookupCommand
                     {
                         killType = ChatColor.DARK_GRAY + plugin.getLang().getString("civilian");
                     }
-                    else if (myClan.isRival(targetClan.getTag()))
+                    else if (myClan != null && myClan.isRival(targetClan.getTag()))
                     {
                         killType = ChatColor.WHITE + plugin.getLang().getString("rival");
                     }

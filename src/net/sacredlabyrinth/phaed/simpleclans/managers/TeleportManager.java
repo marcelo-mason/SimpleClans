@@ -28,6 +28,7 @@ public final class TeleportManager
 
     /**
      * Add player to teleport waiting queue
+     *
      * @param player
      * @param dest
      * @param clanName
@@ -36,18 +37,11 @@ public final class TeleportManager
     {
         int secs = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
 
-        if (!waitingPlayers.containsKey(player.getName()))
-        {
-            waitingPlayers.put(player.getName(), new TeleportState(player, dest, clanName));
+        waitingPlayers.put(player.getName(), new TeleportState(player, dest, clanName));
 
-            if (secs > 0)
-            {
-                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("waiting.for.teleport.stand.still.for.0.seconds"), secs));
-            }
-        }
-        else
+        if (secs > 0)
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("already.waiting.for.teleport"));
+            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("waiting.for.teleport.stand.still.for.0.seconds"), secs));
         }
     }
 
@@ -99,6 +93,10 @@ public final class TeleportManager
 
                             ChatBlock.sendMessage(player, ChatColor.AQUA + "" + state.getCounter());
                         }
+                    }
+                    else
+                    {
+                        waitingPlayers.remove(player.getName());
                     }
                 }
             }

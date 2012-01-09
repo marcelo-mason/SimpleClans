@@ -2,7 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import com.sparkedia.valrix.ColorMe.ColorMe;
+import de.xghostkillerx.colorme.ColorMe;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
