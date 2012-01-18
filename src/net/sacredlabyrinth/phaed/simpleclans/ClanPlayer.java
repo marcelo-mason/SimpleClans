@@ -701,7 +701,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().warning("Player-flags corrupt, cleaning...");
+                        SimpleClans.getLog().warning("Player-flags corrupt, cleaning...");
                     }
                 }
             }

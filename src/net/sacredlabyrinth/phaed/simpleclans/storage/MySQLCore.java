@@ -34,7 +34,7 @@ public class MySQLCore implements DBCore
         this.host = host;
         this.username = username;
         this.password = password;
-        this.log = SimpleClans.getLogger();
+        this.log = SimpleClans.getLog();
 
         initialize();
     }

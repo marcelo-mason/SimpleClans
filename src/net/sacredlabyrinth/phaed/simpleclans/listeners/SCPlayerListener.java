@@ -5,6 +5,9 @@ import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
 
 import java.util.Iterator;
@@ -12,7 +15,7 @@ import java.util.Iterator;
 /**
  * @author phaed
  */
-public class SCPlayerListener extends PlayerListener
+public class SCPlayerListener implements Listener
 {
     private SimpleClans plugin;
 
@@ -27,7 +30,7 @@ public class SCPlayerListener extends PlayerListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = PlayerCommandPreprocessEvent.class, priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
         if (event.isCancelled())
@@ -123,7 +126,7 @@ public class SCPlayerListener extends PlayerListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = PlayerChatEvent.class, priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
@@ -232,7 +235,7 @@ public class SCPlayerListener extends PlayerListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = PlayerJoinEvent.class, priority = EventPriority.NORMAL)
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         final Player player = event.getPlayer();
@@ -269,7 +272,7 @@ public class SCPlayerListener extends PlayerListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = PlayerQuitEvent.class, priority = EventPriority.NORMAL)
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
@@ -284,7 +287,7 @@ public class SCPlayerListener extends PlayerListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = PlayerKickEvent.class, priority = EventPriority.NORMAL)
     public void onPlayerKick(PlayerKickEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
@@ -298,7 +301,7 @@ public class SCPlayerListener extends PlayerListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = PlayerTeleportEvent.class, priority = EventPriority.NORMAL)
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
         if (event.isCancelled())
@@ -317,7 +320,7 @@ public class SCPlayerListener extends PlayerListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = PlayerToggleSneakEvent.class, priority = EventPriority.NORMAL)
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event)
     {
         plugin.getSpoutPluginManager().processPlayer(event.getPlayer());

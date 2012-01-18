@@ -6,7 +6,11 @@ import de.xghostkillerx.colorme.ColorMe;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
+import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
+import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
@@ -23,6 +27,7 @@ public final class PermissionsManager
     private boolean hasPEX;
     private PermissionHandler handler = null;
     private SimpleClans plugin;
+    private PreciousStones ps;
 
     public static Permission permission = null;
     public static Economy economy = null;
@@ -34,6 +39,7 @@ public final class PermissionsManager
     public PermissionsManager()
     {
         plugin = SimpleClans.getInstance();
+        detectPreciousStones();
         detectPermissions();
         detectPEX();
 
@@ -111,6 +117,39 @@ public final class PermissionsManager
         else
         {
             return player.hasPermission(perm);
+        }
+    }
+
+    /**
+     * Whether a player is allowed in the area
+     *
+     * @param player
+     * @param location
+     * @return
+     */
+    public boolean teleportAllowed(Player player, Location location)
+    {
+        if (ps != null)
+        {
+            Field field = ps.getForceFieldManager().getNotAllowedSourceField(location, player.getName(), FieldFlag.PREVENT_TELEPORT);
+
+            if (field != null)
+            {
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+
+    private void detectPreciousStones()
+    {
+        Plugin plug = plugin.getServer().getPluginManager().getPlugin("PreciousStones");
+
+        if (plug != null)
+        {
+            ps = ((PreciousStones) plug);
         }
     }
 
@@ -223,7 +262,7 @@ public final class PermissionsManager
 
         if (colorMe != null)
         {
-            out += ((ColorMe)colorMe).getColor(p.getName());
+            out += ((ColorMe) colorMe).getColor(p.getName());
         }
 
         return out;

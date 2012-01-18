@@ -88,14 +88,21 @@ public class HomeCommand
                             {
                                 if (plugin.getPermissionsManager().has(player, "simpleclans.leader.home-set"))
                                 {
-                                    if (plugin.getSettingsManager().isHomebaseSetOnce() && clan.getHomeLocation() != null && !plugin.getPermissionsManager().has(player, "simpleclans.mod.home"))
+                                    if (plugin.getPermissionsManager().teleportAllowed(player, loc))
                                     {
-                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("home.base.only.once"));
-                                        return;
-                                    }
+                                        if (plugin.getSettingsManager().isHomebaseSetOnce() && clan.getHomeLocation() != null && !plugin.getPermissionsManager().has(player, "simpleclans.mod.home"))
+                                        {
+                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("home.base.only.once"));
+                                            return;
+                                        }
 
-                                    clan.setHomeLocation(loc);
-                                    ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("hombase.set"), ChatColor.YELLOW + Helper.toLocationString(loc)));
+                                        clan.setHomeLocation(loc);
+                                        ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("hombase.set"), ChatColor.YELLOW + Helper.toLocationString(loc)));
+                                    }
+                                    else
+                                    {
+                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.teleport"));
+                                    }
                                 }
                                 else
                                 {

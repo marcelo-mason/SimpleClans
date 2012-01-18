@@ -29,7 +29,7 @@ public class SQLiteCore implements DBCore
     {
         this.dbName = "SimpleClans";
         this.dbLocation = dbLocation;
-        this.log = SimpleClans.getLogger();
+        this.log = SimpleClans.getLog();
 
         initialize();
     }

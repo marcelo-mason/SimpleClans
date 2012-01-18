@@ -5,15 +5,17 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
+import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityListener;
 
 /**
  * @author phaed
  */
-public class SCEntityListener extends EntityListener
+public class SCEntityListener implements Listener
 {
     private SimpleClans plugin;
 
@@ -28,7 +30,7 @@ public class SCEntityListener extends EntityListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = EntityDeathEvent.class, priority = EventPriority.LOW)
     public void onEntityDeath(EntityDeathEvent event)
     {
         if (event.getEntity() instanceof Player)
@@ -118,7 +120,7 @@ public class SCEntityListener extends EntityListener
     /**
      * @param event
      */
-    @Override
+    @EventHandler(event = EntityDamageEvent.class, priority = EventPriority.LOW)
     public void onEntityDamage(EntityDamageEvent event)
     {
         if (event.isCancelled())

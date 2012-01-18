@@ -3,8 +3,6 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
-import org.bukkit.event.Event;
-import org.bukkit.event.Event.Priority;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.MessageFormat;
@@ -37,7 +35,7 @@ public class SimpleClans extends JavaPlugin
     /**
      * @return the logger
      */
-    public static Logger getLogger()
+    public static Logger getLog()
     {
         return logger;
     }
@@ -78,22 +76,10 @@ public class SimpleClans extends JavaPlugin
         playerListener = new SCPlayerListener();
         entityListener = new SCEntityListener();
 
-        registerEvents();
+        getServer().getPluginManager().registerEvents(entityListener, this);
+        getServer().getPluginManager().registerEvents(playerListener, this);
 
         spoutPluginManager.processAllPlayers();
-    }
-
-    private void registerEvents()
-    {
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DAMAGE, entityListener, Priority.Low, this);
-        getServer().getPluginManager().registerEvent(Event.Type.ENTITY_DEATH, entityListener, Priority.Low, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_COMMAND_PREPROCESS, playerListener, Priority.Lowest, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_CHAT, playerListener, Priority.Highest, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_JOIN, playerListener, Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_QUIT, playerListener, Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_KICK, playerListener, Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TOGGLE_SNEAK, playerListener, Priority.Normal, this);
-        getServer().getPluginManager().registerEvent(Event.Type.PLAYER_TELEPORT, playerListener, Priority.Normal, this);
     }
 
     public void onDisable()

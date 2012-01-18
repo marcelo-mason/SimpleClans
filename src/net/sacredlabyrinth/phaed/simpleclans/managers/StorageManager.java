@@ -533,7 +533,7 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        SimpleClans.getLog().info(ex.getMessage());
                     }
                 }
             }
@@ -573,7 +573,7 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        SimpleClans.getLog().info(ex.getMessage());
                     }
                 }
             }
@@ -612,7 +612,7 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        SimpleClans.getLog().info(ex.getMessage());
                     }
                 }
             }
@@ -651,7 +651,7 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        SimpleClans.getLog().info(ex.getMessage());
                     }
                 }
             }
@@ -690,7 +690,7 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        SimpleClans.getLog().info(ex.getMessage());
                     }
                 }
             }
@@ -729,7 +729,7 @@ public final class StorageManager
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLogger().info(ex.getMessage());
+                        SimpleClans.getLog().info(ex.getMessage());
                     }
                 }
             }
