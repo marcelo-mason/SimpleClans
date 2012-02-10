@@ -2,14 +2,17 @@ package net.sacredlabyrinth.phaed.simpleclans;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import org.stringtree.json.JSONReader;
-import org.stringtree.json.JSONValidatingReader;
-import org.stringtree.json.JSONWriter;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
 
 /**
  * @author phaed
@@ -36,6 +39,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean allyChat = true;
     private boolean clanChat = true;
     private boolean bbEnabled = true;
+    private boolean tagEnabled = true;
     private boolean capeEnabled = true;
 
     /**
@@ -588,6 +592,21 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Returns this player's clan's tag label.  Empty string if he's not in a clan.
+     *
+     * @return the tag
+     */
+    public String getTagLabel()
+    {
+        if (clan == null)
+        {
+            return "";
+        }
+
+        return clan.getTagLabel();
+    }
+
+    /**
      * Returns this player's trusted status
      *
      * @return the trusted
@@ -614,11 +633,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public String getFlags()
     {
-        HashMap<String, Object> flags = new HashMap<String, Object>();
+        JSONObject json = new JSONObject();
 
         // writing the list of flags to json
 
-        flags.put("channel", channel.toString());
+        json.put("channel", channel.toString());
 
         // writing the channel state settings flags
 
@@ -627,15 +646,15 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         settings.add(allyChat);
         settings.add(clanChat);
 
-        flags.put("channel-state", settings);
+        json.put("channel-state", settings);
 
         // couple of toggles
 
-        flags.put("bb-enabled", bbEnabled);
-        flags.put("cape-enabled", capeEnabled);
+        json.put("bb-enabled", bbEnabled);
+        json.put("hide-tag", tagEnabled);
+        json.put("cape-enabled", capeEnabled);
 
-
-        return (new JSONWriter()).write(flags);
+        return json.toString();
     }
 
     /**
@@ -647,18 +666,18 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         if (flagString != null && !flagString.isEmpty())
         {
-            JSONReader reader = new JSONValidatingReader();
-            HashMap<String, Object> flags = (HashMap<String, Object>) reader.read(flagString);
+            Object obj = JSONValue.parse(flagString);
+            JSONObject flags = (JSONObject) obj;
 
             if (flags != null)
             {
-                for (String flag : flags.keySet())
+                for (Object flag : flags.keySet())
                 {
                     try
                     {
                         if (flag.equals("channel"))
                         {
-                            String chn = (String) flags.get(flag);
+                            String chn = flags.get(flag).toString();
 
                             if (chn != null && !chn.isEmpty())
                             {
@@ -679,19 +698,24 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
                         if (flag.equals("channel-state"))
                         {
-                            List<Boolean> settings = (List<Boolean>) flags.get(flag);
+                            JSONArray settings = (JSONArray) flags.get(flag);
 
                             if (settings != null && !settings.isEmpty())
                             {
-                                globalChat = settings.get(0);
-                                allyChat = settings.get(1);
-                                clanChat = settings.get(2);
+                                globalChat = (Boolean) settings.get(0);
+                                allyChat = (Boolean) settings.get(1);
+                                clanChat = (Boolean) settings.get(2);
                             }
                         }
 
                         if (flag.equals("bb-enabled"))
                         {
                             bbEnabled = (Boolean) flags.get(flag);
+                        }
+
+                        if (flag.equals("hide-tag"))
+                        {
+                            tagEnabled = (Boolean) flags.get(flag);
                         }
 
                         if (flag.equals("cape-enabled"))
@@ -701,7 +725,12 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
                     }
                     catch (Exception ex)
                     {
-                        SimpleClans.getLog().warning("Player-flags corrupt, cleaning...");
+                        for (StackTraceElement el : ex.getStackTrace())
+                        {
+                            System.out.print("Failed reading flag: " + flag);
+                            System.out.print("Value: " + flags.get(flag));
+                            System.out.print(el.toString());
+                        }
                     }
                 }
             }
@@ -768,6 +797,18 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         this.capeEnabled = capeEnabled;
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(this);
+    }
+
+    public boolean isTagEnabled()
+    {
+        return tagEnabled;
+    }
+
+    public void setTagEnabled(boolean tagEnabled)
+    {
+        this.tagEnabled = tagEnabled;
+        SimpleClans.getInstance().getStorageManager().updateClanPlayer(this);
+        SimpleClans.getInstance().getClanManager().updateDisplayName(this.toPlayer());
     }
 
     public enum Channel

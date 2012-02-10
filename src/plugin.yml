@@ -1,7 +1,7 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 1.9.5
-softdepend: [Spout, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones]
+version: 2.0.7
+softdepend: [Spout, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones, mChat, mChatSuite]
 permissions:
   simpleclans.admin.reload:
     description: Can reload configuration
@@ -77,6 +77,14 @@ permissions:
     description: Can set his clan's cape url
   simpleclans.member.cape-toggle:
     description: Can toggle his cape on/off
+  simpleclans.member.kills:
+    description: Can view his and other's kills
+  simpleclans.member.tag-toggle:
+    description: Can hide his own clan tag
+  simpleclans.mod.mostkilled:
+    description: Can view his and other's clans mostkilled
+  simpleclans.mod.keep-items:
+    description: Can keep items when teleporting home
   simpleclans.leader.invite:
     description: Can invite players into his clan
   simpleclans.leader.kick:
@@ -110,6 +118,8 @@ permissions:
       simpleclans.mod.globalff: true
       simpleclans.mod.bypass: true
       simpleclans.mod.home: true
+      simpleclans.mod.mostkilled: true
+      simpleclans.mod.keep-items: true
   simpleclans.anyone:
     description: Permissions for anyone
     default: false
@@ -136,10 +146,12 @@ permissions:
       simpleclans.member.bb-add: true
       simpleclans.member.bb-toggle: true
       simpleclans.member.cape-toggle: true
+      simpleclans.member.tag-toggle: true
       simpleclans.member.ff: true
       simpleclans.member.resign: true
       simpleclans.member.ally: true
       simpleclans.member.home: true
+      simpleclans.member.kills: true
   simpleclans.leader:
     description: Permissions for those who can be clan leaders
     default: false

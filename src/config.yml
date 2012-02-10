@@ -11,6 +11,13 @@ tag:
         color: '8'
         char: ' .'
 settings:
+    teleport-home-on-spawn: false
+    drop-items-on-clan-home: false
+    keep-items-on-clan-home: false
+    item-list: []
+    show-debug-info: false
+    mchat-integration: false
+    enable-auto-groups: false
     chat-compatibility-mode: false
     rival-limit-percent: 50
     use-colorcode-from-prefix-for-name: true

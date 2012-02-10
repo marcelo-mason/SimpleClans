@@ -8,9 +8,9 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
-public class KillsCommand
+public class MostKilledCommand
 {
-    public KillsCommand()
+    public MostKilledCommand()
     {
 
     }
@@ -27,7 +27,7 @@ public class KillsCommand
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.member.kills"))
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.mostkilled"))
         {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
@@ -39,21 +39,14 @@ public class KillsCommand
                 {
                     if (cp.isTrusted())
                     {
-                        String polledPlayerName = player.getName();
-
-                        if (arg.length == 1)
-                        {
-                            polledPlayerName = arg[0];
-                        }
-
                         ChatBlock chatBlock = new ChatBlock();
 
-                        chatBlock.setFlexibility(true, false);
-                        chatBlock.setAlignment("l", "c");
+                        chatBlock.setFlexibility(true, false, false);
+                        chatBlock.setAlignment("l", "c", "l");
 
-                        chatBlock.addRow("  " + headColor + plugin.getLang().getString("victim"), plugin.getLang().getString("killcount"));
+                        chatBlock.addRow("  " + headColor + plugin.getLang().getString("victim"), headColor + plugin.getLang().getString("killcount"), headColor + plugin.getLang().getString("attacker"));
 
-                        HashMap<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getKillsPerPlayer(polledPlayerName);
+                        HashMap<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getMostKilled();
 
                         if (killsPerPlayerUnordered.isEmpty())
                         {
@@ -61,16 +54,25 @@ public class KillsCommand
                             return;
                         }
 
-                         Map<String, Integer> killsPerPlayer = Helper.sortByValue(killsPerPlayerUnordered);
+                        Map<String, Integer> killsPerPlayer = Helper.sortByValue(killsPerPlayerUnordered);
 
-                        for (String playerName : killsPerPlayer.keySet())
+                        for (String attackerVictim : killsPerPlayer.keySet())
                         {
-                            int count = killsPerPlayer.get(playerName);
+                            String[] split = attackerVictim.split(" ");
 
-                            chatBlock.addRow("  " + playerName, ChatColor.AQUA + "" + count);
+                            if (split.length < 2)
+                            {
+                                continue;
+                            }
+
+                            int count = killsPerPlayer.get(attackerVictim);
+                            String attacker = split[0];
+                            String victim = split[1];
+
+                            chatBlock.addRow("  " + ChatColor.WHITE + victim, ChatColor.AQUA + "" + count, ChatColor.YELLOW + attacker);
                         }
 
-                        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(polledPlayerName) + subColor + " " + plugin.getLang().getString("kills") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                        ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang().getString("mostkilled") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                         ChatBlock.sendBlank(player);
 
                         boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

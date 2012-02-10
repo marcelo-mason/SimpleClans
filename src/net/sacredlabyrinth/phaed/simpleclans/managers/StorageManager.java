@@ -69,7 +69,7 @@ public final class StorageManager
 
             if (core.checkConnection())
             {
-                SimpleClans.log(plugin.getLang().getString("mysql.connection.successful"));
+                SimpleClans.log("[SimpleClans] " + plugin.getLang().getString("mysql.connection.successful"));
 
                 if (!core.existsTable("sc_clans"))
                 {
@@ -97,7 +97,7 @@ public final class StorageManager
             }
             else
             {
-                SimpleClans.log(ChatColor.RED + plugin.getLang().getString("mysql.connection.failed"));
+                SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang().getString("mysql.connection.failed"));
             }
         }
         else
@@ -106,7 +106,7 @@ public final class StorageManager
 
             if (core.checkConnection())
             {
-                SimpleClans.log(plugin.getLang().getString("sqlite.connection.successful"));
+                SimpleClans.log("[SimpleClans] " + plugin.getLang().getString("sqlite.connection.successful"));
 
                 if (!core.existsTable("sc_clans"))
                 {
@@ -134,7 +134,7 @@ public final class StorageManager
             }
             else
             {
-                SimpleClans.log(ChatColor.RED + plugin.getLang().getString("sqlite.connection.failed"));
+                SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang().getString("sqlite.connection.failed"));
             }
         }
     }
@@ -162,9 +162,14 @@ public final class StorageManager
             plugin.getClanManager().importClan(clan);
         }
 
+        for (Clan clan : clans)
+        {
+            clan.validateWarring();
+        }
+
         if (clans.size() > 0)
         {
-            SimpleClans.log(MessageFormat.format(plugin.getLang().getString("clans"), clans.size()));
+            SimpleClans.log(MessageFormat.format("[SimpleClans] " + plugin.getLang().getString("clans"), clans.size()));
         }
 
         List<ClanPlayer> cps = retrieveClanPlayers();
@@ -183,7 +188,7 @@ public final class StorageManager
 
         if (cps.size() > 0)
         {
-            SimpleClans.log(MessageFormat.format(plugin.getLang().getString("clan.players"), cps.size()));
+            SimpleClans.log(MessageFormat.format("[SimpleClans] " + plugin.getLang().getString("clan.players"), cps.size()));
         }
     }
 
@@ -211,7 +216,7 @@ public final class StorageManager
 
         for (Clan clan : purge)
         {
-            SimpleClans.log(MessageFormat.format(plugin.getLang().getString("purging.clan"), clan.getName()));
+            SimpleClans.log("[SimpleClans] " + MessageFormat.format(plugin.getLang().getString("purging.clan"), clan.getName()));
             deleteClan(clan);
             clans.remove(clan);
         }
@@ -225,13 +230,16 @@ public final class StorageManager
         {
             if (cp.getInactiveDays() > plugin.getSettingsManager().getPurgePlayers())
             {
-                purge.add(cp);
+                if (!cp.isLeader())
+                {
+                    purge.add(cp);
+                }
             }
         }
 
         for (ClanPlayer cp : purge)
         {
-            SimpleClans.log(MessageFormat.format(plugin.getLang().getString("purging.player.data"), cp.getName()));
+            SimpleClans.log("[SimpleClans] " + MessageFormat.format(plugin.getLang().getString("purging.player.data"), cp.getName()));
             deleteClanPlayer(cp);
             cps.remove(cp);
         }
@@ -509,14 +517,13 @@ public final class StorageManager
      * Returns a map of victim->count of all kills that specific player did
      *
      * @param playerName
-     * @param min        cuts off players who do not meet the minimum requirement of kills
      * @return
      */
-    public HashMap<String, Integer> getKillsPerPlayer(String playerName, int min)
+    public HashMap<String, Integer> getKillsPerPlayer(String playerName)
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 
-        String query = "SELECT victim, count(victim) AS kills FROM `sc_kills` WHERE attacker = '" + playerName + "' AND count(victim) > " + min + " GROUP BY victim ORDER BY victim;";
+        String query = "SELECT victim, count(victim) AS kills FROM `sc_kills` WHERE attacker = '" + playerName + "' GROUP BY victim ORDER BY count(victim) DESC;";
         ResultSet res = core.select(query);
 
         if (res != null)
@@ -547,16 +554,15 @@ public final class StorageManager
     }
 
     /**
-     * Returns a map of tag->count of all kills that specific player did
+     * Returns a map of tag->count of all kills
      *
-     * @param playerName
      * @return
      */
-    public HashMap<String, Integer> getKillsPerClan(String playerName)
+    public HashMap<String, Integer> getMostKilled()
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 
-        String query = "SELECT victim_tag, count(victim_tag) AS kills FROM `sc_kills` WHERE attacker = '" + playerName + "' GROUP BY victim_tag ORDER BY victim_tag;";
+        String query = "SELECT attacker, victim, count(victim) AS kills FROM `sc_kills` GROUP BY attacker, victim ORDER BY 3 DESC;";
         ResultSet res = core.select(query);
 
         if (res != null)
@@ -567,9 +573,10 @@ public final class StorageManager
                 {
                     try
                     {
-                        String victimTag = res.getString("victim_tag");
+                        String attacker = res.getString("attacker");
+                        String victim = res.getString("victim");
                         int kills = res.getInt("kills");
-                        out.put(victimTag, kills);
+                        out.put(attacker + " " + victim, kills);
                     }
                     catch (Exception ex)
                     {
@@ -595,7 +602,7 @@ public final class StorageManager
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 
-        String query = "SELECT victim_tag, count(victim_tag) AS kills FROM `sc_kills` GROUP BY victim_tag ORDER BY victim_tag;";
+        String query = "SELECT victim_tag, count(victim_tag) AS kills FROM `sc_kills` GROUP BY victim_tag ORDER BY 2 DESC;";
         ResultSet res = core.select(query);
 
         if (res != null)
@@ -634,7 +641,7 @@ public final class StorageManager
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 
-        String query = "SELECT attacker_tag, count(attacker_tag) AS kills FROM `sc_kills` GROUP BY attacker_tag ORDER BY attacker_tag;";
+        String query = "SELECT attacker_tag, count(attacker_tag) AS kills FROM `sc_kills` GROUP BY attacker_tag ORDER BY 2 DESC;";
         ResultSet res = core.select(query);
 
         if (res != null)
@@ -673,7 +680,7 @@ public final class StorageManager
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 
-        String query = "SELECT attacker, count(attacker) AS kills FROM `sc_kills` GROUP BY attacker ORDER BY attacker;";
+        String query = "SELECT attacker, count(attacker) AS kills FROM `sc_kills` GROUP BY attacker ORDER BY 2 DESC;";
         ResultSet res = core.select(query);
 
         if (res != null)
@@ -712,7 +719,7 @@ public final class StorageManager
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 
-        String query = "SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY victim;";
+        String query = "SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;";
         ResultSet res = core.select(query);
 
         if (res != null)

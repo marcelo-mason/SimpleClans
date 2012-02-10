@@ -3,12 +3,15 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
 import de.xghostkillerx.colorme.ColorMe;
+import in.mDev.MiracleM4n.mChatSuite.api.mChatAPI;
+import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -32,6 +35,8 @@ public final class PermissionsManager
     public static Permission permission = null;
     public static Economy economy = null;
     public static Chat chat = null;
+    private mChatSuite mChat = null;
+
 
     /**
      *
@@ -41,31 +46,41 @@ public final class PermissionsManager
         plugin = SimpleClans.getInstance();
         detectPreciousStones();
         detectPermissions();
+        detectMChat();
         detectPEX();
 
         try
         {
             Class.forName("net.milkbowl.vault.permission.Permission");
 
-            setupPermissions();
-            setupEconomy();
             setupChat();
+            setupEconomy();
+            setupPermissions();
         }
         catch (ClassNotFoundException e)
         {
-            SimpleClans.log("[SimpleClans] Vault.jar not found. No economy support.");
-            //my class isn't there!
+            //SimpleClans.log("[PreciousStones] Vault.jar not found. No economy support.");
+            //no need to spam everyone who doesnt use vault
         }
     }
 
+    public mChatSuite getMChat()
+    {
+        return mChat;
+    }
+
     /**
-     * Check if an economy plugin is installed
+     * Whether exonomy plugin exists and is enabled
      *
      * @return
      */
     public boolean hasEconomy()
     {
-        return economy != null;
+        if (economy != null && economy.isEnabled())
+        {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -121,6 +136,133 @@ public final class PermissionsManager
     }
 
     /**
+     * Sets the mChat clan tag
+     *
+     * @param player
+     * @param value
+     */
+    public void addSetMChatClanTag(Player player, String value)
+    {
+        if(mChat != null)
+        {
+            mChatAPI api = mChat.getAPI();
+
+            api.addPlayerVar(player.getName(), "clan", value);
+        }
+    }
+
+    /**
+     * Clears the mChat clan tag
+     *
+     * @param player
+     */
+    public void clearSetMChatClanTag(Player player)
+    {
+        if(mChat != null)
+        {
+            mChatAPI api = mChat.getAPI();
+
+            api.addPlayerVar(player.getName(), "clan", "");
+        }
+    }
+
+    /**
+     * Gives the player permissions linked to a clan
+     *
+     * @param cp
+     */
+    public void addClanPermissions(ClanPlayer cp)
+    {
+        if (!plugin.getSettingsManager().isEnableAutoGroups())
+        {
+            return;
+        }
+
+        if (permission != null)
+        {
+            if (cp != null && cp.toPlayer() != null)
+            {
+                if (cp.getClan() != null)
+                {
+                    if (!permission.playerInGroup(cp.toPlayer(), "Clan" + cp.getTag()))
+                    {
+                        permission.playerAddGroup(cp.toPlayer(), "Clan" + cp.getTag());
+                    }
+
+                    if (cp.isLeader())
+                    {
+                        if (!permission.playerInGroup(cp.toPlayer(), "SCLeader"))
+                        {
+                            permission.playerAddGroup(cp.toPlayer(), "SCLeader");
+                        }
+                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+                        return;
+                    }
+
+                    if (cp.isTrusted())
+                    {
+                        if (!permission.playerInGroup(cp.toPlayer(), "SCTrusted"))
+                        {
+                            permission.playerAddGroup(cp.toPlayer(), "SCTrusted");
+                        }
+                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                        return;
+                    }
+
+                    if (!cp.isTrusted() && !cp.isLeader())
+                    {
+                        if (!permission.playerInGroup(cp.toPlayer(), "SCUntrusted"))
+                        {
+                            permission.playerAddGroup(cp.toPlayer(), "SCUntrusted");
+                        }
+                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                        return;
+                    }
+                }
+                else
+                {
+                    permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+                    permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+                    permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                }
+            }
+            else
+            {
+                permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+                permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+                permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+            }
+        }
+    }
+
+    /**
+     * Removes permissions linked to a clan from the player
+     *
+     * @param cp
+     */
+    public void removeClanPermissions(ClanPlayer cp)
+    {
+        if (!plugin.getSettingsManager().isEnableAutoGroups())
+        {
+            return;
+        }
+
+        if (permission != null)
+        {
+            if (cp.toPlayer() != null)
+            {
+                permission.playerRemoveGroup(cp.toPlayer(), "Clan" + cp.getTag());
+                permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+                permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+                permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+            }
+        }
+    }
+
+    /**
      * Whether a player is allowed in the area
      *
      * @param player
@@ -131,11 +273,16 @@ public final class PermissionsManager
     {
         if (ps != null)
         {
-            Field field = ps.getForceFieldManager().getNotAllowedSourceField(location, player.getName(), FieldFlag.PREVENT_TELEPORT);
+            Field field = ps.getForceFieldManager().getSourceField(location, FieldFlag.PREVENT_TELEPORT);
 
             if (field != null)
             {
-                return false;
+                boolean allowed = ps.getForceFieldManager().isApplyToAllowed(field, player.getName());
+
+                if (!allowed || field.hasFlag(FieldFlag.APPLY_TO_ALL))
+                {
+                    return false;
+                }
             }
         }
 
@@ -170,6 +317,16 @@ public final class PermissionsManager
         if (test != null)
         {
             hasPEX = true;
+        }
+    }
+
+    private void detectMChat()
+    {
+        Plugin test = plugin.getServer().getPluginManager().getPlugin("mChatSuite");
+
+        if (test != null)
+        {
+            mChat = (mChatSuite) test;
         }
     }
 

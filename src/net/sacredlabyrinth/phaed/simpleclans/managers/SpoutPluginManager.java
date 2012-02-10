@@ -115,6 +115,7 @@ public final class SpoutPluginManager
 
     /**
      * Clear a player's cape
+     *
      * @param player
      */
     public void clearCape(Player player)

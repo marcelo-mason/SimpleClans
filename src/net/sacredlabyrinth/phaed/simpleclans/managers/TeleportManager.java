@@ -8,10 +8,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 
 public final class TeleportManager
 {
@@ -46,15 +49,74 @@ public final class TeleportManager
         }
     }
 
+    private void dropItems(Player player)
+    {
+        if (plugin.getSettingsManager().isDropOnHome())
+        {
+            PlayerInventory inv = player.getInventory();
+            ItemStack[] contents = inv.getContents();
+
+            for (ItemStack item : contents)
+            {
+                if (item == null)
+                {
+                    continue;
+                }
+
+                List<Object> itemsList = plugin.getSettingsManager().getItemsList();
+
+                if (itemsList.contains(item.getTypeId()))
+                {
+                    player.getWorld().dropItemNaturally(player.getLocation(), item);
+                    inv.remove(item);
+                }
+            }
+        }
+        else if (plugin.getSettingsManager().isKeepOnHome())
+        {
+            try
+            {
+                PlayerInventory inv = player.getInventory();
+                ItemStack[] contents = inv.getContents().clone();
+
+                for (ItemStack item : contents)
+                {
+                    if (item == null)
+                    {
+                        continue;
+                    }
+
+                    List<Object> itemsList = plugin.getSettingsManager().getItemsList();
+
+                    if (!itemsList.contains(item.getTypeId()))
+                    {
+                        player.getWorld().dropItemNaturally(player.getLocation(), item);
+                        inv.remove(item);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                Helper.dumpStackTrace();
+            }
+        }
+    }
+
     private void startCounter()
     {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
             public void run()
             {
-                for (Iterator iter = waitingPlayers.values().iterator(); iter.hasNext();)
+                for (Iterator iter = waitingPlayers.values().iterator(); iter.hasNext(); )
                 {
                     TeleportState state = (TeleportState) iter.next();
+
+                    if (state.isProcessing())
+                    {
+                        continue;
+                    }
+                    state.setProcessing(true);
 
                     Player player = state.getPlayer();
 
@@ -74,6 +136,13 @@ public final class TeleportManager
                                 player.sendBlockChange(new Location(loc.getWorld(), x + 1, loc.getBlockY() - 1, z - 1), Material.GLASS, (byte) 0);
                                 player.sendBlockChange(new Location(loc.getWorld(), x - 1, loc.getBlockY() - 1, z + 1), Material.GLASS, (byte) 0);
 
+                                if (!plugin.getPermissionsManager().has(player, "simpleclans.mod.keep-items"))
+                                {
+                                    dropItems(player);
+                                }
+
+                                SimpleClans.debug("teleporting");
+
                                 player.teleport(new Location(loc.getWorld(), loc.getBlockX() + .5, loc.getBlockY(), loc.getBlockZ() + .5));
 
                                 ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("now.at.homebase"), state.getClanName()));
@@ -91,16 +160,19 @@ public final class TeleportManager
                             {
                                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.moved.teleport.cancelled"));
                                 iter.remove();
-                                return;
                             }
-
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + "" + state.getCounter());
+                            else
+                            {
+                                ChatBlock.sendMessage(player, ChatColor.AQUA + "" + state.getCounter());
+                            }
                         }
                     }
                     else
                     {
                         iter.remove();
                     }
+
+                    state.setProcessing(false);
                 }
             }
         }, 0, 20L);

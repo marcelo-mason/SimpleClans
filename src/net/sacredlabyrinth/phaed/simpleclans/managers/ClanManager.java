@@ -94,6 +94,7 @@ public final class ClanManager
 
     /**
      * Remove a clan from memory
+     *
      * @param tag
      */
     public void removeClan(String tag)
@@ -237,7 +238,7 @@ public final class ClanManager
 
         for (Player player : players)
         {
-            ChatBlock.sendMessage(player, ChatColor.DARK_GRAY + " * " + ChatColor.AQUA + msg);
+            ChatBlock.sendMessage(player, ChatColor.DARK_GRAY + "* " + ChatColor.AQUA + msg);
         }
 
         SimpleClans.log(ChatColor.AQUA + "[" + plugin.getLang().getString("server.announce") + "] " + ChatColor.WHITE + msg);
@@ -252,7 +253,12 @@ public final class ClanManager
     {
         // do not update displayname if in compat mode
 
-        if(plugin.getSettingsManager().isCompatMode())
+        if (plugin.getSettingsManager().isCompatMode())
+        {
+            return;
+        }
+
+        if (player == null)
         {
             return;
         }
@@ -266,23 +272,56 @@ public final class ClanManager
 
             ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-            if (cp == null)
+            if (plugin.getSettingsManager().ismChatIntegration() && plugin.getPermissionsManager().getMChat() != null)
             {
-                return;
+                if (cp == null)
+                {
+                    plugin.getPermissionsManager().clearSetMChatClanTag(player);
+                    return;
+                }
+
+                if (cp.isTagEnabled())
+                {
+                    Clan clan = cp.getClan();
+
+                    if (clan != null)
+                    {
+                        plugin.getPermissionsManager().addSetMChatClanTag(player, clan.getTagLabel());
+                    }
+                    else
+                    {
+                        plugin.getPermissionsManager().clearSetMChatClanTag(player);
+                    }
+                }
+                else
+                {
+                    plugin.getPermissionsManager().clearSetMChatClanTag(player);
+                }
             }
-
-            Clan clan = cp.getClan();
-
-            if (clan != null)
+            else
             {
-                String tag = plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag();
-                String tagLabel = plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + tag + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
+                if (cp == null)
+                {
+                    return;
+                }
 
-                fullName = tagLabel + lastColor + fullName;
+                if (cp.isTagEnabled())
+                {
+                    Clan clan = cp.getClan();
+
+                    if (clan != null)
+                    {
+                        fullName = clan.getTagLabel() + lastColor + fullName + ChatColor.WHITE;
+                    }
+
+                    player.setDisplayName(fullName);
+                }
+                else
+                {
+                    player.setDisplayName(lastColor + fullName + ChatColor.WHITE);
+                    return;
+                }
             }
-
-            player.setDisplayName(fullName);
-            //player.setListName(prefix + fullName + suffix);
         }
     }
 
@@ -885,7 +924,7 @@ public final class ClanManager
 
         int price = plugin.getSettingsManager().getVerificationPrice();
 
-         if (plugin.getPermissionsManager().hasEconomy())
+        if (plugin.getPermissionsManager().hasEconomy())
         {
             if (plugin.getPermissionsManager().playerHasMoney(player, price))
             {
@@ -1044,7 +1083,7 @@ public final class ClanManager
 
             for (ClanPlayer ally : allies)
             {
-                if(player.getName().equalsIgnoreCase(ally.getName()))
+                if (player.getName().equalsIgnoreCase(ally.getName()))
                 {
                     continue;
                 }

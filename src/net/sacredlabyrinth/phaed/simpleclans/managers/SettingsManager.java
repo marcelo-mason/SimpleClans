@@ -14,19 +14,25 @@ import java.util.List;
  */
 public final class SettingsManager
 {
+    private boolean teleportOnSpawn;
+    private boolean dropOnHome;
+    private boolean keepOnHome;
+    private boolean debugging;
     private SimpleClans plugin;
-    private String language;
+    private boolean mChatIntegration;
+    private boolean pvpOnlywhileInWar;
     private boolean useColorCodeFromPrefix;
     private boolean confirmationForPromote;
     private boolean confirmationForDemote;
     private boolean globalff;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
-    private List<String> blacklistedWorlds;
-    private List<String> bannedPlayers;
-    private List<String> disallowedWords;
-    private List<String> disallowedColors;
-    private List<String> unRivableClans;
+    private List<Object> itemsList;
+    private List<Object> blacklistedWorlds;
+    private List<Object> bannedPlayers;
+    private List<Object> disallowedWords;
+    private List<Object> disallowedColors;
+    private List<Object> unRivableClans;
     private int rivalLimitPercent;
     private boolean ePurchaseCreation;
     private boolean ePurchaseVerification;
@@ -108,6 +114,7 @@ public final class SettingsManager
     private boolean compatMode;
     private boolean homebaseSetOnce;
     private int waitSecs;
+    private boolean enableAutoGroups;
 
     /**
      *
@@ -145,6 +152,14 @@ public final class SettingsManager
             config.options().copyDefaults(true);
         }
 
+        teleportOnSpawn = config.getBoolean("settings.teleport-home-on-spawn");
+        dropOnHome = config.getBoolean("settings.drop-items-on-clan-home");
+        keepOnHome = config.getBoolean("settings.keep-items-on-clan-home");
+        itemsList = config.getList("settings.item-list");
+        debugging = config.getBoolean("settings.show-debug-info");
+        mChatIntegration = config.getBoolean("settings.mchat-integration");
+        pvpOnlywhileInWar = config.getBoolean("settings.pvp-only-while-at-war");
+        enableAutoGroups = config.getBoolean("settings.enable-auto-groups");
         useColorCodeFromPrefix = config.getBoolean("settings.use-colorcode-from-prefix-for-name");
         bannedPlayers = config.getList("settings.banned-players");
         compatMode = config.getBoolean("settings.chat-compatibility-mode");
@@ -154,7 +169,6 @@ public final class SettingsManager
         unRivableClans = config.getList("settings.unrivable-clans");
         showUnverifiedOnList = config.getBoolean("settings.show-unverified-on-list");
         requireVerification = config.getBoolean("settings.new-clan-verification-required");
-        language = config.getString("settings.language");
         serverName = config.getString("settings.server-name");
         chatTags = config.getBoolean("settings.display-chat-tags");
         rivalLimitPercent = config.getInt("settings.rival-limit-percent");
@@ -251,6 +265,17 @@ public final class SettingsManager
         }
     }
 
+    /**
+     * Check whether an item is in the list
+     *
+     * @param typeId the type
+     * @return whether the world is blacklisted
+     */
+    public boolean isItemInList(int typeId)
+    {
+        return itemsList.contains(typeId);
+    }
+
 
     /**
      * Check whether a worlds is blacklisted
@@ -260,9 +285,9 @@ public final class SettingsManager
      */
     public boolean isBlacklistedWorld(String world)
     {
-        for (String w : blacklistedWorlds)
+        for (Object w : blacklistedWorlds)
         {
-            if (w.equalsIgnoreCase(world))
+            if (((String) w).equalsIgnoreCase(world))
             {
                 return true;
             }
@@ -279,9 +304,9 @@ public final class SettingsManager
      */
     public boolean isDisallowedWord(String word)
     {
-        for (String w : disallowedWords)
+        for (Object w : disallowedWords)
         {
-            if (w.equalsIgnoreCase(word))
+            if (((String) w).equalsIgnoreCase(word))
             {
                 return true;
             }
@@ -299,7 +324,7 @@ public final class SettingsManager
      */
     public boolean hasDisallowedColor(String str)
     {
-        for (String c : getDisallowedColors())
+        for (Object c : getDisallowedColors())
         {
             if (str.contains("&" + c))
             {
@@ -317,7 +342,7 @@ public final class SettingsManager
     {
         String out = "";
 
-        for (String c : getDisallowedColors())
+        for (Object c : getDisallowedColors())
         {
             out += c + ", ";
         }
@@ -333,9 +358,9 @@ public final class SettingsManager
      */
     public boolean isUnrivable(String tag)
     {
-        for (String t : getunRivableClans())
+        for (Object t : getunRivableClans())
         {
-            if (t.equalsIgnoreCase(tag))
+            if (((String) t).equalsIgnoreCase(tag))
             {
                 return true;
             }
@@ -352,9 +377,9 @@ public final class SettingsManager
      */
     public boolean isBanned(String playerName)
     {
-        for (String pl : getBannedPlayers())
+        for (Object pl : getBannedPlayers())
         {
-            if (pl.equalsIgnoreCase(playerName))
+            if (((String) pl).equalsIgnoreCase(playerName))
             {
                 return true;
             }
@@ -412,7 +437,7 @@ public final class SettingsManager
     /**
      * @return the bannedPlayers
      */
-    public List<String> getBannedPlayers()
+    public List<Object> getBannedPlayers()
     {
         return Collections.unmodifiableList(bannedPlayers);
     }
@@ -420,7 +445,7 @@ public final class SettingsManager
     /**
      * @return the disallowedColors
      */
-    public List<String> getDisallowedColors()
+    public List<Object> getDisallowedColors()
     {
         return Collections.unmodifiableList(disallowedColors);
     }
@@ -428,7 +453,7 @@ public final class SettingsManager
     /**
      * @return the unRivableClans
      */
-    public List<String> getunRivableClans()
+    public List<Object> getunRivableClans()
     {
         return Collections.unmodifiableList(unRivableClans);
     }
@@ -963,11 +988,6 @@ public final class SettingsManager
         return eVerificationPrice;
     }
 
-    public String getLanguage()
-    {
-        return language;
-    }
-
     public boolean isBbShowOnLogin()
     {
         return bbShowOnLogin;
@@ -1076,5 +1096,45 @@ public final class SettingsManager
     public void setWaitSecs(int waitSecs)
     {
         this.waitSecs = waitSecs;
+    }
+
+    public boolean isEnableAutoGroups()
+    {
+        return enableAutoGroups;
+    }
+
+    public boolean isPvpOnlywhileInWar()
+    {
+        return pvpOnlywhileInWar;
+    }
+
+    public boolean ismChatIntegration()
+    {
+        return mChatIntegration;
+    }
+
+    public boolean isDebugging()
+    {
+        return debugging;
+    }
+
+    public boolean isKeepOnHome()
+    {
+        return keepOnHome;
+    }
+
+    public boolean isDropOnHome()
+    {
+        return dropOnHome;
+    }
+
+    public List<Object> getItemsList()
+    {
+        return Collections.unmodifiableList(itemsList);
+    }
+
+    public boolean isTeleportOnSpawn()
+    {
+        return teleportOnSpawn;
     }
 }

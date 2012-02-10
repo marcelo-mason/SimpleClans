@@ -28,12 +28,13 @@ public final class CommandManager
     private RivalCommand rivalCommand;
     private BbCommand bbCommand;
     private ModtagCommand modtagCommand;
-    private CapeCommand capeCommand;
+    private ToggleCommand toggleCommand;
     private InviteCommand inviteCommand;
     private KickCommand kickCommand;
     private TrustCommand trustCommand;
     private UntrustCommand untrustCommand;
     private PromoteCommand promoteCommand;
+    private CapeCommand capeCommand;
     private DemoteCommand demoteCommand;
     private ClanffCommand clanffCommand;
     private FfCommand ffCommand;
@@ -47,6 +48,8 @@ public final class CommandManager
     private MenuCommand menuCommand;
     private WarCommand warCommand;
     private HomeCommand homeCommand;
+    private KillsCommand killsCommand;
+    private MostKilledCommand mostKilledCommand;
 
     /**
      *
@@ -70,11 +73,12 @@ public final class CommandManager
         rivalCommand = new RivalCommand();
         bbCommand = new BbCommand();
         modtagCommand = new ModtagCommand();
-        capeCommand = new CapeCommand();
+        toggleCommand = new ToggleCommand();
         inviteCommand = new InviteCommand();
         kickCommand = new KickCommand();
         trustCommand = new TrustCommand();
         untrustCommand = new UntrustCommand();
+        capeCommand = new CapeCommand();
         promoteCommand = new PromoteCommand();
         demoteCommand = new DemoteCommand();
         clanffCommand = new ClanffCommand();
@@ -88,6 +92,8 @@ public final class CommandManager
         globalffCommand = new GlobalffCommand();
         warCommand = new WarCommand();
         homeCommand = new HomeCommand();
+        killsCommand = new KillsCommand();
+        mostKilledCommand = new MostKilledCommand();
     }
 
     /**
@@ -182,9 +188,13 @@ public final class CommandManager
                 {
                     modtagCommand.execute(player, subargs);
                 }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("toggle.command")))
+                {
+                    toggleCommand.execute(player, subargs);
+                }
                 else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("cape.command")))
                 {
-                    capeCommand.execute(player, subargs);
+                    toggleCommand.execute(player, subargs);
                 }
                 else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("invite.command")))
                 {
@@ -250,6 +260,14 @@ public final class CommandManager
                 {
                     warCommand.execute(player, subargs);
                 }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("kills.command")))
+                {
+                    killsCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang().getString("mostkilled.command")))
+                {
+                    mostKilledCommand.execute(player, subargs);
+                }
                 else
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("does.not.match"));
@@ -259,7 +277,7 @@ public final class CommandManager
         catch (Exception ex)
         {
             SimpleClans.log(ChatColor.RED + MessageFormat.format(plugin.getLang().getString("simpleclans.command.failure"), ex.getMessage()));
-            for(StackTraceElement el : ex.getStackTrace())
+            for (StackTraceElement el : ex.getStackTrace())
             {
                 System.out.print(el.toString());
             }
@@ -487,11 +505,6 @@ public final class CommandManager
         return modtagCommand;
     }
 
-    public CapeCommand getCapeCommand()
-    {
-        return capeCommand;
-    }
-
     public InviteCommand getInviteCommand()
     {
         return inviteCommand;
@@ -575,5 +588,15 @@ public final class CommandManager
     public WarCommand getWarCommand()
     {
         return warCommand;
+    }
+
+    public ToggleCommand getToggleCommand()
+    {
+        return toggleCommand;
+    }
+
+    public CapeCommand getCapeCommand()
+    {
+        return capeCommand;
     }
 }

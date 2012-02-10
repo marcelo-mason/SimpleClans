@@ -110,6 +110,14 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.stats.1.view.your.clan.member.s.stats"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.kills"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.kills"), clanCommand, ChatColor.WHITE));
+        }
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.kills"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.killsplayer"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.ally"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.ally.add.remove.tag.1.add.remove.an.ally.clan"), clanCommand, ChatColor.WHITE));
@@ -138,10 +146,6 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.bb.msg.1.add.a.message.to.the.bulletin.board"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle"))
-        {
-            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.bb.msg.1.add.a.message.to.the.bulletin.board2"), clanCommand, ChatColor.WHITE));
-        }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.modtag"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.modtag.tag.1.modify.the.clan.s.tag"), clanCommand, ChatColor.WHITE));
@@ -150,10 +154,29 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.cape.url.1.change.your.clan.s.cape"), clanCommand, ChatColor.WHITE));
         }
+
+        String toggles = "";
+
         if (isVerified && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, " simpleclans.member.cape-toggle"))
         {
-            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.cape.url.1.change.your.clan.s.cape2"), clanCommand, ChatColor.WHITE));
+            toggles += "cape/";
         }
+
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle"))
+        {
+            toggles += "bb/";
+        }
+
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle"))
+        {
+            toggles += "tag/";
+        }
+
+        if (!toggles.isEmpty())
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.toggle.command"), clanCommand, ChatColor.WHITE, Helper.stripTrailing(toggles, "/")));
+        }
+
         if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.invite"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang().getString("0.invite.player.1.invite.a.player"), clanCommand, ChatColor.WHITE));
@@ -200,6 +223,10 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang().getString("0.verify.tag.1.verify.an.unverified.clan"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.mod.mostkilled"))
+        {
+            chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang().getString("0.mostkilled"), clanCommand, ChatColor.WHITE));
+        }
         if (plugin.getPermissionsManager().has(player, "simpleclans.mod.disband"))
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang().getString("0.disband.tag.1.disband.a.clan"), clanCommand, ChatColor.WHITE));
@@ -240,6 +267,7 @@ public class MenuCommand
 
     /**
      * Adds a menu item to the /clan menu
+     *
      * @param syntax
      * @param description
      */
@@ -251,6 +279,7 @@ public class MenuCommand
     /**
      * Adds a menu item to the /clan menu, specifying syntax color
      * [color] /[syntax] - [description]
+     *
      * @param syntax
      * @param description
      * @param color

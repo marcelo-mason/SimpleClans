@@ -4,6 +4,7 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -30,7 +31,7 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = PlayerCommandPreprocessEvent.class, priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOWEST)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
         if (event.isCancelled())
@@ -126,7 +127,7 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = PlayerChatEvent.class, priority = EventPriority.HIGHEST)
+    @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
@@ -201,10 +202,9 @@ public class SCPlayerListener implements Listener
 
         if (plugin.getSettingsManager().isCompatMode())
         {
-            if (cp != null)
+            if (cp != null && cp.isTagEnabled())
             {
-                String tag = plugin.getSettingsManager().getTagDefaultColor() + cp.getClan().getColorTag();
-                String tagLabel = plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + tag + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
+                String tagLabel = cp.getClan().getTagLabel();
 
                 Player player = event.getPlayer();
 
@@ -216,14 +216,16 @@ public class SCPlayerListener implements Listener
                 {
                     event.setFormat(event.getFormat().replace("{clan}", tagLabel));
                 }
-                else if (event.getFormat().contains("%1$s"))
+                else
                 {
-                    event.setFormat(event.getFormat().replace("%1$s", tagLabel + "%1$s"));
+                    String format = event.getFormat();
+                    event.setFormat(tagLabel + format);
                 }
             }
             else
             {
                 event.setFormat(event.getFormat().replace("{clan}", ""));
+                event.setFormat(event.getFormat().replace("tagLabel", ""));
             }
         }
         else
@@ -235,7 +237,7 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = PlayerJoinEvent.class, priority = EventPriority.NORMAL)
+    @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
         final Player player = event.getPlayer();
@@ -265,6 +267,13 @@ public class SCPlayerListener implements Listener
                         }
                     }
                 }
+
+                ClanPlayer anyCp = plugin.getClanManager().getAnyClanPlayer(player.getName());
+
+                if (anyCp != null)
+                {
+                    plugin.getPermissionsManager().addClanPermissions(anyCp);
+                }
             }
         }, 1);
     }
@@ -272,7 +281,31 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = PlayerQuitEvent.class, priority = EventPriority.NORMAL)
+    @EventHandler
+    public void onPlayerRespawn(PlayerRespawnEvent event)
+    {
+        if (plugin.getSettingsManager().isTeleportOnSpawn())
+        {
+            Player player = event.getPlayer();
+
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+            if (cp != null)
+            {
+                Location loc = cp.getClan().getHomeLocation();
+
+                if (loc != null)
+                {
+                    event.setRespawnLocation(loc);
+                }
+            }
+        }
+    }
+
+    /**
+     * @param event
+     */
+    @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
@@ -287,7 +320,7 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = PlayerKickEvent.class, priority = EventPriority.NORMAL)
+    @EventHandler
     public void onPlayerKick(PlayerKickEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
@@ -301,7 +334,7 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = PlayerTeleportEvent.class, priority = EventPriority.NORMAL)
+    @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
         if (event.isCancelled())
@@ -320,7 +353,7 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = PlayerToggleSneakEvent.class, priority = EventPriority.NORMAL)
+    @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event)
     {
         plugin.getSpoutPluginManager().processPlayer(event.getPlayer());

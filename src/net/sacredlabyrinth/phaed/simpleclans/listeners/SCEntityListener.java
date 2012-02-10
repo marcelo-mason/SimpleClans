@@ -30,7 +30,7 @@ public class SCEntityListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = EntityDeathEvent.class, priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW)
     public void onEntityDeath(EntityDeathEvent event)
     {
         if (event.getEntity() instanceof Player)
@@ -67,52 +67,36 @@ public class SCEntityListener implements Listener
                 }
             }
 
-            if (attacker != null)
+            if (attacker != null && victim != null)
             {
-                ClanPlayer acp = plugin.getClanManager().getClanPlayer(attacker);
-                ClanPlayer vcp = plugin.getClanManager().getClanPlayer(victim);
+                ClanPlayer acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
+                ClanPlayer vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
 
-                // record kill for attacker
+                // record attacker kill
 
-                if (acp != null && acp.getClan().isVerified())
+                // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
+                // if both have verified clans, check for rival or default to neutral
+
+                if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified())
                 {
-                    if (vcp == null || !acp.getClan().isVerified())
-                    {
-                        acp.addCivilianKill();
-                        plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
-                    }
-                    else
-                    {
-                        if (acp.getClan().isRival(vcp.getClan().getTag()))
-                        {
-                            acp.addRivalKill();
-                            plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
-                        }
-                        else if (acp.getClan().isAlly(vcp.getClan().getTag()))
-                        {
-                            // do not record ally kills
-                        }
-                        else if (acp.getClan().equals(vcp.getClan()))
-                        {
-                            // do not record same clan kills
-                        }
-                        else
-                        {
-                            acp.addNeutralKill();
-                            plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
-                        }
-                    }
-
-                    plugin.getStorageManager().updateClanPlayer(acp);
+                    acp.addCivilianKill();
+                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
+                }
+                else if (acp.getClan().isRival(vcp.getTag()))
+                {
+                    acp.addRivalKill();
+                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
+                }
+                else
+                {
+                    acp.addNeutralKill();
+                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
                 }
 
                 // record death for victim
 
-                if (vcp != null && vcp.getClan().isVerified())
-                {
-                    vcp.addDeath();
-                    plugin.getStorageManager().updateClanPlayer(vcp);
-                }
+                vcp.addDeath();
+                plugin.getStorageManager().updateClanPlayer(vcp);
             }
         }
     }
@@ -120,7 +104,7 @@ public class SCEntityListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(event = EntityDamageEvent.class, priority = EventPriority.LOW)
+    @EventHandler(priority = EventPriority.LOW)
     public void onEntityDamage(EntityDamageEvent event)
     {
         if (event.isCancelled())

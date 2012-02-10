@@ -7,16 +7,23 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashSet;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author phaed
  */
 public class Helper
 {
+        /**
+     * Dumps stacktrace to log
+     */
+    public static void dumpStackTrace()
+    {
+        for (StackTraceElement el : Thread.currentThread().getStackTrace())
+        {
+            SimpleClans.debug(el.toString());
+        }
+    }
     /**
      * Ensures only one player can be matched from a partial name
      *
@@ -624,5 +631,30 @@ public class Helper
             return true;
         }
         return false;
+    }
+
+    /**
+     * Sort hashmap by value
+     *
+     * @return
+     */
+    public static Map sortByValue(Map map)
+    {
+        List list = new LinkedList(map.entrySet());
+        Collections.sort(list, new Comparator()
+        {
+            public int compare(Object o1, Object o2)
+            {
+                return ((Comparable) ((Map.Entry) (o2)).getValue()).compareTo(((Map.Entry) (o1)).getValue());
+            }
+        });
+
+        Map result = new LinkedHashMap();
+        for (Iterator it = list.iterator(); it.hasNext(); )
+        {
+            Map.Entry entry = (Map.Entry) it.next();
+            result.put(entry.getKey(), entry.getValue());
+        }
+        return result;
     }
 }

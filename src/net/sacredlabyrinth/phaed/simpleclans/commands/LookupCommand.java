@@ -103,18 +103,21 @@ public class LookupCommand
 
                 if (arg.length == 1 && targetClan != null)
                 {
-                    String killType = ChatColor.GRAY + plugin.getLang().getString("neutral");
-
-                    if (targetClan == null)
+                    if (!targetCp.equals(myCp))
                     {
-                        killType = ChatColor.DARK_GRAY + plugin.getLang().getString("civilian");
-                    }
-                    else if (myClan != null && myClan.isRival(targetClan.getTag()))
-                    {
-                        killType = ChatColor.WHITE + plugin.getLang().getString("rival");
-                    }
+                        String killType = ChatColor.GRAY + plugin.getLang().getString("neutral");
 
-                    ChatBlock.sendMessage(player, MessageFormat.format(plugin.getLang().getString("kill.type.0"), killType));
+                        if (targetClan == null)
+                        {
+                            killType = ChatColor.DARK_GRAY + plugin.getLang().getString("civilian");
+                        }
+                        else if (myClan != null && myClan.isRival(targetClan.getTag()))
+                        {
+                            killType = ChatColor.WHITE + plugin.getLang().getString("rival");
+                        }
+
+                        ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang().getString("kill.type.0"), killType));
+                    }
                 }
 
                 ChatBlock.sendBlank(player);

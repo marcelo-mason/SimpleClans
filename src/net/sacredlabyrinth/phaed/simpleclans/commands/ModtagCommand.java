@@ -56,6 +56,7 @@ public class ModtagCommand
                                         {
                                             clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("tag.changed.to.0"), Helper.parseColors(newtag)));
                                             clan.changeClanTag(newtag);
+                                            plugin.getClanManager().updateDisplayName(player.getPlayer());
                                         }
                                         else
                                         {

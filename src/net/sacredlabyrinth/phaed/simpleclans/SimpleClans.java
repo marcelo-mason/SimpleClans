@@ -6,7 +6,6 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.text.MessageFormat;
-import java.util.Locale;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -41,6 +40,17 @@ public class SimpleClans extends JavaPlugin
     }
 
     /**
+     * @return the logger
+     */
+    public static void debug(String msg)
+    {
+        if (getInstance().getSettingsManager().isDebugging())
+        {
+            logger.log(Level.INFO, msg);
+        }
+    }
+
+    /**
      * @return the instance
      */
     public static SimpleClans getInstance()
@@ -50,7 +60,14 @@ public class SimpleClans extends JavaPlugin
 
     public static void log(String msg, Object... arg)
     {
-        logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
+        if (arg == null || arg.length == 0)
+        {
+            logger.log(Level.INFO, msg);
+        }
+        else
+        {
+            logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
+        }
     }
 
     public void onEnable()
@@ -58,10 +75,7 @@ public class SimpleClans extends JavaPlugin
         instance = this;
         settingsManager = new SettingsManager();
 
-        if (lang == null)
-        {
-            lang = PropertyResourceBundle.getBundle("languages.lang", new Locale(settingsManager.getLanguage()));
-        }
+        lang = PropertyResourceBundle.getBundle("languages.lang");
 
         logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 

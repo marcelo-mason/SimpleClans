@@ -10,6 +10,7 @@ public class TeleportState
     private Location destination;
     private int counter;
     private String clanName;
+    private boolean processing;
 
     public TeleportState(Player player, Location dest, String clanName)
     {
@@ -74,5 +75,15 @@ public class TeleportState
     public Location getDestination()
     {
         return destination;
+    }
+
+    public boolean isProcessing()
+    {
+        return processing;
+    }
+
+    public void setProcessing(boolean processing)
+    {
+        this.processing = processing;
     }
 }

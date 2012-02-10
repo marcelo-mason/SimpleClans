@@ -25,104 +25,63 @@ public class CapeCommand
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (arg.length == 1 && arg[0].equalsIgnoreCase("toggle"))
+        if (plugin.getPermissionsManager().has(player, "simpleclans.leader.cape"))
         {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.member.cape-toggle"))
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+            if (cp != null)
             {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                Clan clan = cp.getClan();
 
-                if (cp != null)
+                if (clan.isVerified())
                 {
-                    Clan clan = cp.getClan();
-
-                    if (clan.isVerified())
+                    if (clan.isLeader(player))
                     {
-                        if (cp.isCapeEnabled())
+                        if (arg.length == 1)
                         {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("capeoff"));
-                            cp.setCapeEnabled(false);
-                            plugin.getSpoutPluginManager().clearCape(player);
-                        }
-                        else
-                        {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("capeon"));
-                            cp.setCapeEnabled(true);
-                        }
-                    }
-                    else
-                    {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
-                    }
-                }
-                else
-                {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
-                }
-            }
-            else
-            {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
-            }
-        }
-        else
-        {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.leader.cape"))
-            {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                            String url = arg[0];
 
-                if (cp != null)
-                {
-                    Clan clan = cp.getClan();
-
-                    if (clan.isVerified())
-                    {
-                        if (clan.isLeader(player))
-                        {
-                            if (arg.length == 1)
+                            if (url.contains(".png"))
                             {
-                                String url = arg[0];
-
-                                if (url.contains(".png"))
+                                if (Helper.testURL(url))
                                 {
-                                    if (Helper.testURL(url))
-                                    {
-                                        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("changed.the.clan.cape"), Helper.capitalize(player.getName())));
-                                        clan.setClanCape(url);
-                                    }
-                                    else
-                                    {
-                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("url.error"));
-                                    }
+                                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("changed.the.clan.cape"), Helper.capitalize(player.getName())));
+                                    clan.setClanCape(url);
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("cape.must.be.png"));
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("url.error"));
                                 }
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.cape.url"), plugin.getSettingsManager().getCommandClan()));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("cape.must.be.png"));
                             }
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.cape.url"), plugin.getSettingsManager().getCommandClan()));
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
             }
         }
+        else
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+        }
     }
+
 }

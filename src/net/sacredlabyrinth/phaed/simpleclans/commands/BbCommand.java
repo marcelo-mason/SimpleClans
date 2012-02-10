@@ -42,41 +42,22 @@ public class BbCommand
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
                     }
                 }
-                else
+                else if (plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add"))
                 {
-                    String cmd = arg[0];
-
-                    if (cmd.equalsIgnoreCase("toggle") && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle"))
+                    if (cp.isTrusted())
                     {
-                        if (cp.isBbEnabled())
-                        {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("bboff"));
-                            cp.setBbEnabled(false);
-                        }
-                        else
-                        {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("bbon"));
-                            cp.setBbEnabled(true);
-                        }
-                        plugin.getStorageManager().updateClanPlayer(cp);
-                    }
-                    else if (plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add"))
-                    {
-                        if (cp.isTrusted())
-                        {
-                            String msg = Helper.toMessage(arg);
-                            clan.addBb(player.getName(), ChatColor.AQUA + player.getName() + ": " + ChatColor.WHITE + msg);
-                            plugin.getStorageManager().updateClan(clan);
-                        }
-                        else
-                        {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
-                        }
+                        String msg = Helper.toMessage(arg);
+                        clan.addBb(player.getName(), ChatColor.AQUA + player.getName() + ": " + ChatColor.WHITE + msg);
+                        plugin.getStorageManager().updateClan(clan);
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
                     }
+                }
+                else
+                {
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
                 }
             }
             else
