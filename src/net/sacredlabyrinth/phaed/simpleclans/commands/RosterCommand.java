@@ -39,7 +39,7 @@ public class RosterCommand
 
                 if (cp == null)
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
                 }
                 else
                 {
@@ -48,7 +48,7 @@ public class RosterCommand
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
         }
         else if (arg.length == 1)
@@ -59,17 +59,17 @@ public class RosterCommand
 
                 if (clan == null)
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.clan.matched"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clan.matched"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
         }
 
         if (clan != null)
@@ -79,13 +79,13 @@ public class RosterCommand
                 ChatBlock chatBlock = new ChatBlock();
 
                 ChatBlock.sendBlank(player);
-                ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor + " " + plugin.getLang().getString("roster") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor + " " + plugin.getLang("roster") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                 ChatBlock.sendBlank(player);
-                ChatBlock.sendMessage(player, headColor + plugin.getLang().getString("legend") + " " + plugin.getSettingsManager().getPageLeaderColor() + plugin.getLang().getString("leader") + headColor + ", " + plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang().getString("trusted") + headColor + ", " + plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang().getString("untrusted"));
+                ChatBlock.sendMessage(player, headColor + plugin.getLang("legend") + " " + plugin.getSettingsManager().getPageLeaderColor() + plugin.getLang("leader") + headColor + ", " + plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang("trusted") + headColor + ", " + plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang("untrusted"));
                 ChatBlock.sendBlank(player);
 
                 chatBlock.setFlexibility(false, true, false, true);
-                chatBlock.addRow("  " + headColor + plugin.getLang().getString("player"), plugin.getLang().getString("seen"), plugin.getLang().getString("player"), plugin.getLang().getString("seen"));
+                chatBlock.addRow("  " + headColor + plugin.getLang("player"), plugin.getLang("seen"), plugin.getLang("player"), plugin.getLang("seen"));
 
                 List<String> row = new ArrayList<String>();
 
@@ -107,7 +107,7 @@ public class RosterCommand
                     }
 
                     String name = plugin.getSettingsManager().getPageLeaderColor() + cp.getName();
-                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang().getString("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     row.add(name);
                     row.add(lastSeen);
@@ -131,7 +131,7 @@ public class RosterCommand
                     }
 
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
-                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang().getString("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     row.add(name);
                     row.add(lastSeen);
@@ -154,19 +154,19 @@ public class RosterCommand
                 {
                     plugin.getStorageManager().addChatBlock(player, chatBlock);
                     ChatBlock.sendBlank(player);
-                    ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang().getString("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                    ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
                 }
 
                 ChatBlock.sendBlank(player);
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
         }
     }
 }

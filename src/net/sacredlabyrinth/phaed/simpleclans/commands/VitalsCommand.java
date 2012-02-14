@@ -45,17 +45,17 @@ public class VitalsCommand
                         {
                             ChatBlock chatBlock = new ChatBlock();
                             ChatBlock.sendBlank(player);
-                            ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor+ " " + plugin.getLang().getString("vitals") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                            ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor+ " " + plugin.getLang("vitals") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                             ChatBlock.sendBlank(player);
-                            ChatBlock.sendMessage(player, headColor + plugin.getLang().getString("weapons") + ": " + MessageFormat.format(plugin.getLang().getString("0.s.sword.1.2.b.bow.3.4.a.arrow"), ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE));
-                            ChatBlock.sendMessage(player, headColor + plugin.getLang().getString("materials") + ": " + ChatColor.AQUA + plugin.getLang().getString("diamond") + ChatColor.DARK_GRAY + ", " + ChatColor.YELLOW + plugin.getLang().getString("gold") + ChatColor.DARK_GRAY + ", " + ChatColor.GRAY + plugin.getLang().getString("stone") + ChatColor.DARK_GRAY + ", " + ChatColor.WHITE + plugin.getLang().getString("iron") + ChatColor.DARK_GRAY + ", " + ChatColor.GOLD + plugin.getLang().getString("wood"));
+                            ChatBlock.sendMessage(player, headColor + plugin.getLang("weapons") + ": " + MessageFormat.format(plugin.getLang("0.s.sword.1.2.b.bow.3.4.a.arrow"), ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE));
+                            ChatBlock.sendMessage(player, headColor + plugin.getLang("materials") + ": " + ChatColor.AQUA + plugin.getLang("diamond") + ChatColor.DARK_GRAY + ", " + ChatColor.YELLOW + plugin.getLang("gold") + ChatColor.DARK_GRAY + ", " + ChatColor.GRAY + plugin.getLang("stone") + ChatColor.DARK_GRAY + ", " + ChatColor.WHITE + plugin.getLang("iron") + ChatColor.DARK_GRAY + ", " + ChatColor.GOLD + plugin.getLang("wood"));
 
                             ChatBlock.sendBlank(player);
 
                             chatBlock.setFlexibility(true, false, false, false, false, false);
                             chatBlock.setAlignment("l", "l", "l", "c", "c", "c");
 
-                            chatBlock.addRow("  " + headColor + plugin.getLang().getString("name"), plugin.getLang().getString("health"), plugin.getLang().getString("hunger"), plugin.getLang().getString("food"), plugin.getLang().getString("armor"), plugin.getLang().getString("weapons"));
+                            chatBlock.addRow("  " + headColor + plugin.getLang("name"), plugin.getLang("health"), plugin.getLang("hunger"), plugin.getLang("food"), plugin.getLang("armor"), plugin.getLang("weapons"));
 
                             List<ClanPlayer> members = Helper.stripOffLinePlayers(clan.getLeaders());
                             members.addAll(Helper.stripOffLinePlayers(clan.getNonLeaders()));
@@ -104,34 +104,34 @@ public class VitalsCommand
                             {
                                 plugin.getStorageManager().addChatBlock(player, chatBlock);
                                 ChatBlock.sendBlank(player);
-                                ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang().getString("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                                ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
                             }
 
                             ChatBlock.sendBlank(player);
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.vitals"), plugin.getSettingsManager().getCommandClan()));
+                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.vitals"), plugin.getSettingsManager().getCommandClan()));
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("only.trusted.players.can.access.clan.vitals"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.vitals"));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

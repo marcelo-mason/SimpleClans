@@ -47,15 +47,15 @@ public class ListCommand
                     ChatBlock chatBlock = new ChatBlock();
 
                     ChatBlock.sendBlank(player);
-                    ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang().getString("clans.lower") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                    ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang("clans.lower") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                     ChatBlock.sendBlank(player);
-                    ChatBlock.sendMessage(player, headColor + plugin.getLang().getString("total.clans") + " " + subColor + clans.size());
+                    ChatBlock.sendMessage(player, headColor + plugin.getLang("total.clans") + " " + subColor + clans.size());
                     ChatBlock.sendBlank(player);
 
                     chatBlock.setAlignment("c", "l", "c", "c");
                     chatBlock.setFlexibility(false, true, false, false);
 
-                    chatBlock.addRow("  " + headColor + plugin.getLang().getString("rank"), plugin.getLang().getString("name"), plugin.getLang().getString("kdr"), plugin.getLang().getString("members"));
+                    chatBlock.addRow("  " + headColor + plugin.getLang("rank"), plugin.getLang("name"), plugin.getLang("kdr"), plugin.getLang("members"));
 
                     int rank = 1;
 
@@ -85,24 +85,24 @@ public class ListCommand
                     {
                         plugin.getStorageManager().addChatBlock(player, chatBlock);
                         ChatBlock.sendBlank(player);
-                        ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang().getString("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                        ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
                     }
 
                     ChatBlock.sendBlank(player);
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.clans.have.been.created"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clans.have.been.created"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.list"), plugin.getSettingsManager().getCommandClan()));
+                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.list"), plugin.getSettingsManager().getCommandClan()));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

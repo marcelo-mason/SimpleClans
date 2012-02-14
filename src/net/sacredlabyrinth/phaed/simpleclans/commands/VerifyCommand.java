@@ -41,8 +41,8 @@ public class VerifyCommand
                 if (plugin.getClanManager().purchaseVerification(player))
                 {
                     clan.verifyClan();
-                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("clan.0.has.been.verified"), clan.getName()));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("the.clan.has.been.verified"));
+                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
                 }
             }
         }
@@ -57,27 +57,27 @@ public class VerifyCommand
                     if (!cclan.isVerified())
                     {
                         cclan.verifyClan();
-                        cclan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("clan.0.has.been.verified"), cclan.getName()));
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("the.clan.has.been.verified"));
+                        cclan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), cclan.getName()));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("the.clan.is.already.verified"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.is.already.verified"));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED +plugin.getLang().getString("the.clan.does.not.exist"));
+                    ChatBlock.sendMessage(player, ChatColor.RED +plugin.getLang("the.clan.does.not.exist"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.verify.tag"), plugin.getSettingsManager().getCommandClan()));
+                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.verify.tag"), plugin.getSettingsManager().getCommandClan()));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

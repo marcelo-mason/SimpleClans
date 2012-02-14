@@ -56,51 +56,51 @@ public class InviteCommand
                                         if (cpInv == null)
                                         {
                                             plugin.getRequestManager().addInviteRequest(cp, invited.getName(), clan);
-                                            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.asked.to.join"), Helper.capitalize(invited.getName()), clan.getName()));
+                                            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.asked.to.join"), Helper.capitalize(invited.getName()), clan.getName()));
                                         }
                                         else
                                         {
-                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("the.player.is.already.member.of.another.clan"));
+                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.already.member.of.another.clan"));
                                         }
                                     }
                                     else
                                     {
-                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("this.player.is.banned.from.using.clan.commands"));
+                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.banned.from.using.clan.commands"));
                                     }
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.cannot.invite.yourself"));
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.invite.yourself"));
                                 }
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("the.player.doesn.t.not.have.the.permissions.to.join.clans"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.doesn.t.not.have.the.permissions.to.join.clans"));
                             }
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.player.matched"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.invite.player"), plugin.getSettingsManager().getCommandClan()));
+                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.invite.player"), plugin.getSettingsManager().getCommandClan()));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

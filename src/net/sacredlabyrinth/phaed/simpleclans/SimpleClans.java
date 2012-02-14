@@ -161,9 +161,9 @@ public class SimpleClans extends JavaPlugin
     /**
      * @return the lang
      */
-    public ResourceBundle getLang()
+    public String getLang(String msg)
     {
-        return lang;
+        return lang.getString(msg);
     }
 
     public TeleportManager getTeleportManager()

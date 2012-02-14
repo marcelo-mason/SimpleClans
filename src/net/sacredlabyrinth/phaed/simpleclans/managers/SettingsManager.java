@@ -14,6 +14,7 @@ import java.util.List;
  */
 public final class SettingsManager
 {
+    private boolean tagBasedClanChat;
     private boolean teleportOnSpawn;
     private boolean dropOnHome;
     private boolean keepOnHome;
@@ -232,6 +233,7 @@ public final class SettingsManager
         allyChatPlayerBracketLeft = config.getString("allychat.player-bracket.left");
         allyChatPlayerBracketRight = config.getString("allychat.player-bracket.right");
         clanChatEnable = config.getBoolean("clanchat.enable");
+        tagBasedClanChat = config.getBoolean("clanchat.tag-based-clan-chat");
         clanChatAnnouncementColor = config.getString("clanchat.announcement-color");
         clanChatMessageColor = config.getString("clanchat.message-color");
         clanChatNameColor = config.getString("clanchat.name-color");
@@ -1136,5 +1138,10 @@ public final class SettingsManager
     public boolean isTeleportOnSpawn()
     {
         return teleportOnSpawn;
+    }
+
+    public boolean isTagBasedClanChat()
+    {
+        return tagBasedClanChat;
     }
 }

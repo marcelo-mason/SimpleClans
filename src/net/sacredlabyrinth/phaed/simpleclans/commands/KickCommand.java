@@ -51,47 +51,47 @@ public class KickCommand
                                 {
                                     if (!clan.isLeader(kicked))
                                     {
-                                        clan.addBb(player.getName(),  ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.kicked.by"), Helper.capitalize(kicked), player.getName()));
+                                        clan.addBb(player.getName(),  ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.kicked.by"), Helper.capitalize(kicked), player.getName()));
                                         clan.removePlayerFromClan(kicked);
                                     }
                                     else
                                     {
-                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.cannot.kick.another.leader"));
+                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.kick.another.leader"));
                                     }
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("the.player.is.not.a.member.of.your.clan"));
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.not.a.member.of.your.clan"));
                                 }
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.cannot.kick.yourself"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.kick.yourself"));
                             }
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.player.matched"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.kick.player"), plugin.getSettingsManager().getCommandClan()));
+                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.kick.player"), plugin.getSettingsManager().getCommandClan()));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

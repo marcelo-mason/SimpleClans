@@ -35,6 +35,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private HashSet<String> pastClans = new HashSet<String>();
     private VoteResult vote;
     private Channel channel;
+
+    private boolean useChatShortcut = false;
     private boolean globalChat = true;
     private boolean allyChat = true;
     private boolean clanChat = true;
@@ -208,15 +210,15 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         if (days < 1)
         {
-            return SimpleClans.getInstance().getLang().getString("today");
+            return SimpleClans.getInstance().getLang("today");
         }
         else if (Math.round(days) == 1)
         {
-            return MessageFormat.format(SimpleClans.getInstance().getLang().getString("1.color.day"), ChatColor.GRAY);
+            return MessageFormat.format(SimpleClans.getInstance().getLang("1.color.day"), ChatColor.GRAY);
         }
         else
         {
-            return MessageFormat.format(SimpleClans.getInstance().getLang().getString("many.color.days"), Math.round(days), ChatColor.GRAY);
+            return MessageFormat.format(SimpleClans.getInstance().getLang("many.color.days"), Math.round(days), ChatColor.GRAY);
         }
     }
 
@@ -534,7 +536,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         if (out.trim().isEmpty())
         {
-            return SimpleClans.getInstance().getLang().getString("none");
+            return SimpleClans.getInstance().getLang("none");
         }
 
         return out;
@@ -650,6 +652,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         // couple of toggles
 
+        json.put("chat-shortcut", useChatShortcut);
         json.put("bb-enabled", bbEnabled);
         json.put("hide-tag", tagEnabled);
         json.put("cape-enabled", capeEnabled);
@@ -721,6 +724,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
                         if (flag.equals("cape-enabled"))
                         {
                             capeEnabled = (Boolean) flags.get(flag);
+                        }
+
+                        if (flag.equals("chat-shortcut"))
+                        {
+                            useChatShortcut = (Boolean) flags.get(flag);
                         }
                     }
                     catch (Exception ex)
@@ -809,6 +817,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         this.tagEnabled = tagEnabled;
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(this);
         SimpleClans.getInstance().getClanManager().updateDisplayName(this.toPlayer());
+    }
+
+    public boolean isUseChatShortcut()
+    {
+        return useChatShortcut;
     }
 
     public enum Channel

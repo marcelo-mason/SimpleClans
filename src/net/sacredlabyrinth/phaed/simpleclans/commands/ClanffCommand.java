@@ -42,41 +42,41 @@ public class ClanffCommand
                     {
                         String action = arg[0];
 
-                        if (action.equalsIgnoreCase(plugin.getLang().getString("allow")))
+                        if (action.equalsIgnoreCase(plugin.getLang("allow")))
                         {
-                            clan.addBb(player.getName(), ChatColor.AQUA + plugin.getLang().getString("clan.wide.friendly.fire.is.allowed"));
+                            clan.addBb(player.getName(), ChatColor.AQUA + plugin.getLang("clan.wide.friendly.fire.is.allowed"));
                             clan.setFriendlyFire(true);
                             plugin.getStorageManager().updateClan(clan);
                         }
-                        else if (action.equalsIgnoreCase(plugin.getLang().getString("block")))
+                        else if (action.equalsIgnoreCase(plugin.getLang("block")))
                         {
-                            clan.addBb(player.getName(), ChatColor.AQUA + plugin.getLang().getString("clan.wide.friendly.fire.blocked"));
+                            clan.addBb(player.getName(), ChatColor.AQUA + plugin.getLang("clan.wide.friendly.fire.blocked"));
                             clan.setFriendlyFire(false);
                             plugin.getStorageManager().updateClan(clan);
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.clanff"), plugin.getSettingsManager().getCommandClan()));
+                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.clanff"), plugin.getSettingsManager().getCommandClan()));
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.clanff"), plugin.getSettingsManager().getCommandClan()));
+                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.clanff"), plugin.getSettingsManager().getCommandClan()));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

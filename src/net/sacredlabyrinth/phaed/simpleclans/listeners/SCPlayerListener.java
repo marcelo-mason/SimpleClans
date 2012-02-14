@@ -65,9 +65,40 @@ public class SCPlayerListener implements Listener
 
         String command = split[0];
 
-        if (plugin.getClanManager().isClan(command))
+        if (plugin.getSettingsManager().isTagBasedClanChat() && plugin.getClanManager().isClan(command))
         {
             if (!plugin.getSettingsManager().getClanChatEnable())
+            {
+                return;
+            }
+
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+            if (cp == null)
+            {
+                return;
+            }
+
+            if (cp.getTag().equalsIgnoreCase(command))
+            {
+                event.setCancelled(true);
+
+                if (split.length > 1)
+                {
+                    plugin.getClanManager().processClanChat(player, cp.getTag(), Helper.toMessage(Helper.removeFirst(split)));
+                }
+            }
+        }
+        if (command.equals("."))
+        {
+            if (!plugin.getSettingsManager().getClanChatEnable())
+            {
+                return;
+            }
+
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+            if (cp == null)
             {
                 return;
             }
@@ -76,7 +107,7 @@ public class SCPlayerListener implements Listener
 
             if (split.length > 1)
             {
-                plugin.getClanManager().processClanChat(player, command, Helper.toMessage(Helper.removeFirst(split)));
+                plugin.getClanManager().processClanChat(player, cp.getTag(), Helper.toMessage(Helper.removeFirst(split)));
             }
         }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAlly()))

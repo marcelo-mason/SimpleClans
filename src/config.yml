@@ -80,6 +80,7 @@ page:
     separator: '-'
     size: 13
 clanchat:
+    tag-based-clan-chat: false
     name-color: e
     player-bracket:
         left: <

@@ -44,13 +44,13 @@ public class LeaderboardCommand
                 ChatBlock chatBlock = new ChatBlock();
 
                 ChatBlock.sendBlank(player);
-                ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang().getString("leaderboard.command") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang("leaderboard.command") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                 ChatBlock.sendBlank(player);
-                ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang().getString("total.clan.players.0"), subColor + clanPlayers.size()));
+                ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("total.clan.players.0"), subColor + clanPlayers.size()));
                 ChatBlock.sendBlank(player);
 
                 chatBlock.setAlignment("c", "l", "c", "c", "c", "c");
-                chatBlock.addRow("  " + headColor + plugin.getLang().getString("rank"), plugin.getLang().getString("player"), plugin.getLang().getString("kdr"), plugin.getLang().getString("clan"), plugin.getLang().getString("seen"));
+                chatBlock.addRow("  " + headColor + plugin.getLang("rank"), plugin.getLang("player"), plugin.getLang("kdr"), plugin.getLang("clan"), plugin.getLang("seen"));
 
                 int rank = 1;
 
@@ -67,9 +67,9 @@ public class LeaderboardCommand
 
 
                     String name = (cp.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : ((cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()))) + cp.getName();
-                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang().getString("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
-                    String clanTag = ChatColor.WHITE + plugin.getLang().getString("free.agent");
+                    String clanTag = ChatColor.WHITE + plugin.getLang("free.agent");
 
                     if (cp.getClan() != null)
                     {
@@ -86,19 +86,19 @@ public class LeaderboardCommand
                 {
                     plugin.getStorageManager().addChatBlock(player, chatBlock);
                     ChatBlock.sendBlank(player);
-                    ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang().getString("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                    ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
                 }
 
                 ChatBlock.sendBlank(player);
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.leaderboard"), plugin.getSettingsManager().getCommandClan()));
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.leaderboard"), plugin.getSettingsManager().getCommandClan()));
         }
     }
 }

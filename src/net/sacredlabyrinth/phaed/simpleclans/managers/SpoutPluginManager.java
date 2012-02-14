@@ -152,7 +152,7 @@ public final class SpoutPluginManager
 
         if (test != null)
         {
-            SimpleClans.log(plugin.getLang().getString("spout.features.enabled"));
+            SimpleClans.log(plugin.getLang("spout.features.enabled"));
             return true;
         }
         return false;

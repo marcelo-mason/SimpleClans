@@ -44,13 +44,13 @@ public class MostKilledCommand
                         chatBlock.setFlexibility(true, false, false);
                         chatBlock.setAlignment("l", "c", "l");
 
-                        chatBlock.addRow("  " + headColor + plugin.getLang().getString("victim"), headColor + plugin.getLang().getString("killcount"), headColor + plugin.getLang().getString("attacker"));
+                        chatBlock.addRow("  " + headColor + plugin.getLang("victim"), headColor + plugin.getLang("killcount"), headColor + plugin.getLang("attacker"));
 
                         HashMap<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getMostKilled();
 
                         if (killsPerPlayerUnordered.isEmpty())
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("nokillsfound"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nokillsfound"));
                             return;
                         }
 
@@ -72,7 +72,7 @@ public class MostKilledCommand
                             chatBlock.addRow("  " + ChatColor.WHITE + victim, ChatColor.AQUA + "" + count, ChatColor.YELLOW + attacker);
                         }
 
-                        ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang().getString("mostkilled") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                        ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang("mostkilled") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                         ChatBlock.sendBlank(player);
 
                         boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
@@ -81,29 +81,29 @@ public class MostKilledCommand
                         {
                             plugin.getStorageManager().addChatBlock(player, chatBlock);
                             ChatBlock.sendBlank(player);
-                            ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang().getString("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                            ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
                         }
 
                         ChatBlock.sendBlank(player);
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("only.trusted.players.can.access.clan.stats"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

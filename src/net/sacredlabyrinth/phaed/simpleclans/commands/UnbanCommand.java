@@ -39,25 +39,25 @@ public class UnbanCommand
 
                     if (pl != null)
                     {
-                        ChatBlock.sendMessage(pl, ChatColor.AQUA + plugin.getLang().getString("you.have.been.unbanned.from.clan.commands"));
+                        ChatBlock.sendMessage(pl, ChatColor.AQUA + plugin.getLang("you.have.been.unbanned.from.clan.commands"));
                     }
 
                     plugin.getSettingsManager().removeBanned(banned);
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("player.removed.from.the.banned.list"));
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("player.removed.from.the.banned.list"));
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("this.player.is.not.banned"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.not.banned"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.ban.unban"), plugin.getSettingsManager().getCommandClan()));
+                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.ban.unban"), plugin.getSettingsManager().getCommandClan()));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

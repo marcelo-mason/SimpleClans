@@ -55,53 +55,53 @@ public class UntrustCommand
 
                                         if (tcp.isTrusted())
                                         {
-                                            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("has.been.given.untrusted.status.by"), Helper.capitalize(trusted), player.getName()));
+                                            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.untrusted.status.by"), Helper.capitalize(trusted), player.getName()));
                                             tcp.setTrusted(false);
                                             plugin.getStorageManager().updateClanPlayer(tcp);
                                         }
                                         else
                                         {
-                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("this.player.is.already.untrusted"));
+                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.already.untrusted"));
                                         }
                                     }
                                     else
                                     {
-                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("leaders.cannot.be.untrusted"));
+                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("leaders.cannot.be.untrusted"));
                                     }
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("the.player.is.not.a.member.of.your.clan"));
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.not.a.member.of.your.clan"));
                                 }
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player,  ChatColor.RED + plugin.getLang().getString("you.cannot.untrust.yourself"));
+                                ChatBlock.sendMessage(player,  ChatColor.RED + plugin.getLang("you.cannot.untrust.yourself"));
                             }
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.player.matched"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.untrust.player"), plugin.getSettingsManager().getCommandClan()));
+                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.untrust.player"), plugin.getSettingsManager().getCommandClan()));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

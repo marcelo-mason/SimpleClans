@@ -47,7 +47,7 @@ public class WarCommand
                             {
                                 if (clan.isRival(war.getTag()))
                                 {
-                                    if (action.equals(plugin.getLang().getString("start")))
+                                    if (action.equals(plugin.getLang("start")))
                                     {
                                         if (!clan.isWarring(war.getTag()))
                                         {
@@ -56,68 +56,68 @@ public class WarCommand
                                             if (!onlineLeaders.isEmpty())
                                             {
                                                 plugin.getRequestManager().addWarStartRequest(cp, war, clan);
-                                                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("leaders.have.been.asked.to.accept.the.war.request"), Helper.capitalize(war.getName())));
+                                                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.have.been.asked.to.accept.the.war.request"), Helper.capitalize(war.getName())));
                                             }
                                             else
                                             {
-                                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("at.least.one.leader.accept.the.alliance"));
+                                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("at.least.one.leader.accept.the.alliance"));
                                             }
                                         }
                                         else
                                         {
-                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clans.already.at.war"));
+                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clans.already.at.war"));
                                         }
                                     }
-                                    else if (action.equals(plugin.getLang().getString("end")))
+                                    else if (action.equals(plugin.getLang("end")))
                                     {
                                         if (clan.isWarring(war.getTag()))
                                         {
                                             plugin.getRequestManager().addWarEndRequest(cp, war, clan);
-                                            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("leaders.asked.to.end.rivalry"), Helper.capitalize(war.getName())));
+                                            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.asked.to.end.rivalry"), Helper.capitalize(war.getName())));
                                         }
                                         else
                                         {
-                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clans.not.at.war"));
+                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clans.not.at.war"));
                                         }
                                     }
                                     else
                                     {
-                                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.war"), plugin.getSettingsManager().getCommandClan()));
+                                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.war"), plugin.getSettingsManager().getCommandClan()));
                                     }
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.can.only.start.war.with.rivals"));
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.can.only.start.war.with.rivals"));
                                 }
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.clan.matched"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clan.matched"));
                             }
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.war"), plugin.getSettingsManager().getCommandClan()));
+                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.war"), plugin.getSettingsManager().getCommandClan()));
                         }
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

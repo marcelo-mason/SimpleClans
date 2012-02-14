@@ -1174,7 +1174,7 @@ public class Clan implements Serializable, Comparable<Clan>
             }
         }
 
-        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang().getString("clan.announce") + ChatColor.AQUA + "] " + ChatColor.AQUA + "[" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
+        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang("clan.announce") + ChatColor.AQUA + "] " + ChatColor.AQUA + "[" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
     }
 
     /**
@@ -1197,7 +1197,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang().getString("leader.announce") + ChatColor.AQUA + "] " + ChatColor.WHITE + message);
+        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang("leader.announce") + ChatColor.AQUA + "] " + ChatColor.WHITE + message);
     }
 
     /**
@@ -1246,7 +1246,7 @@ public class Clan implements Serializable, Comparable<Clan>
         if (isVerified())
         {
             ChatBlock.sendBlank(player);
-            ChatBlock.saySingle(player, MessageFormat.format(SimpleClans.getInstance().getLang().getString("bulletin.board.header"), SimpleClans.getInstance().getSettingsManager().getBbAccentColor(), SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor(), Helper.capitalize(getName())));
+            ChatBlock.saySingle(player, MessageFormat.format(SimpleClans.getInstance().getLang("bulletin.board.header"), SimpleClans.getInstance().getSettingsManager().getBbAccentColor(), SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor(), Helper.capitalize(getName())));
 
             int maxSize = SimpleClans.getInstance().getSettingsManager().getBbSize();
 
@@ -1293,21 +1293,21 @@ public class Clan implements Serializable, Comparable<Clan>
 
         for (Clan c : clans)
         {
-            String disbanded = SimpleClans.getInstance().getLang().getString("clan.disbanded");
+            String disbanded = SimpleClans.getInstance().getLang("clan.disbanded");
 
             if (c.removeWarringClan(this))
             {
-                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang().getString("you.are.no.longer.at.war"), Helper.capitalize(c.getName()), getColorTag()));
+                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("you.are.no.longer.at.war"), Helper.capitalize(c.getName()), getColorTag()));
             }
 
             if (c.removeRival(getTag()))
             {
-                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang().getString("has.been.disbanded.rivalry.ended"), Helper.capitalize(getName())));
+                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("has.been.disbanded.rivalry.ended"), Helper.capitalize(getName())));
             }
 
             if (c.removeAlly(getTag()))
             {
-                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang().getString("has.been.disbanded.alliance.ended"), Helper.capitalize(getName())));
+                c.addBb(disbanded, ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("has.been.disbanded.alliance.ended"), Helper.capitalize(getName())));
             }
         }
 

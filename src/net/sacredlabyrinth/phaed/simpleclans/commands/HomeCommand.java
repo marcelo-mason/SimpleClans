@@ -38,11 +38,11 @@ public class HomeCommand
             if (clan != null)
             {
                 clan.setHomeLocation(loc);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("hombase.mod.set"), clan.getName()) + " " + ChatColor.YELLOW + Helper.toLocationString(loc));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("hombase.mod.set"), clan.getName()) + " " + ChatColor.YELLOW + Helper.toLocationString(loc));
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("the.clan.does.not.exist"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.does.not.exist"));
             }
             return;
         }
@@ -65,7 +65,7 @@ public class HomeCommand
 
                             if (loc == null)
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("hombase.not.set"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("hombase.not.set"));
                                 return;
                             }
 
@@ -73,7 +73,7 @@ public class HomeCommand
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                         }
                     }
                     else
@@ -92,26 +92,26 @@ public class HomeCommand
                                     {
                                         if (plugin.getSettingsManager().isHomebaseSetOnce() && clan.getHomeLocation() != null && !plugin.getPermissionsManager().has(player, "simpleclans.mod.home"))
                                         {
-                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("home.base.only.once"));
+                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("home.base.only.once"));
                                             return;
                                         }
 
                                         clan.setHomeLocation(loc);
-                                        ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("hombase.set"), ChatColor.YELLOW + Helper.toLocationString(loc)));
+                                        ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("hombase.set"), ChatColor.YELLOW + Helper.toLocationString(loc)));
                                     }
                                     else
                                     {
-                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.teleport"));
+                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.teleport"));
                                     }
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                                 }
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                             }
                         }
                         else if (ttag.equalsIgnoreCase("regroup"))
@@ -159,37 +159,37 @@ public class HomeCommand
                                             pl.teleport(new Location(loc.getWorld(), x + .5, loc.getBlockY(), z + .5));
                                         }
                                     }
-                                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("hombase.set") + ChatColor.YELLOW + Helper.toLocationString(loc));
+                                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("hombase.set") + ChatColor.YELLOW + Helper.toLocationString(loc));
                                 }
                                 else
                                 {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                                 }
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("no.leader.permissions"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                             }
                         }
                         else
                         {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                         }
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("only.trusted.players.can.access.clan.vitals"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.vitals"));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("clan.is.not.verified"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
         }
     }
 }

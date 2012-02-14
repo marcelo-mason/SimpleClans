@@ -45,7 +45,7 @@ public final class TeleportManager
 
         if (secs > 0)
         {
-            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("waiting.for.teleport.stand.still.for.0.seconds"), secs));
+            ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("waiting.for.teleport.stand.still.for.0.seconds"), secs));
         }
     }
 
@@ -145,11 +145,11 @@ public final class TeleportManager
 
                                 player.teleport(new Location(loc.getWorld(), loc.getBlockX() + .5, loc.getBlockY(), loc.getBlockZ() + .5));
 
-                                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang().getString("now.at.homebase"), state.getClanName()));
+                                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("now.at.homebase"), state.getClanName()));
                             }
                             else
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.moved.teleport.cancelled"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.moved.teleport.cancelled"));
                             }
 
                             iter.remove();
@@ -158,7 +158,7 @@ public final class TeleportManager
                         {
                             if (!Helper.isSameBlock(player.getLocation(), state.getLocation()))
                             {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("you.moved.teleport.cancelled"));
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.moved.teleport.cancelled"));
                                 iter.remove();
                             }
                             else

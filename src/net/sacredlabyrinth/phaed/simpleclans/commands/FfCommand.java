@@ -37,36 +37,36 @@ public class FfCommand
                 {
                     String action = arg[0];
 
-                    if (action.equalsIgnoreCase(plugin.getLang().getString("allow")))
+                    if (action.equalsIgnoreCase(plugin.getLang("allow")))
                     {
                         cp.setFriendlyFire(true);
                         plugin.getStorageManager().updateClanPlayer(cp);
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("personal.friendly.fire.is.set.to.allowed"));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("personal.friendly.fire.is.set.to.allowed"));
                     }
-                    else if (action.equalsIgnoreCase(plugin.getLang().getString("auto")))
+                    else if (action.equalsIgnoreCase(plugin.getLang("auto")))
                     {
                         cp.setFriendlyFire(false);
                         plugin.getStorageManager().updateClanPlayer(cp);
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang().getString("friendy.fire.is.now.managed.by.your.clan"));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("friendy.fire.is.now.managed.by.your.clan"));
                     }
                     else
                     {
-                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.ff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
+                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.ff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
                     }
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang().getString("usage.0.ff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
+                    ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.ff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
                 }
             }
             else
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("not.a.member.of.any.clan"));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
         }
         else
         {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang().getString("insufficient.permissions"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }
