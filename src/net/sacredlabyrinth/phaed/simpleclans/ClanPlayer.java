@@ -43,6 +43,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean bbEnabled = true;
     private boolean tagEnabled = true;
     private boolean capeEnabled = true;
+    private String rank = "";
 
     /**
      *
@@ -637,6 +638,13 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         JSONObject json = new JSONObject();
 
+        // the player's rank inside his clan
+
+        if (rank != null)
+        {
+            json.put("rank", rank);
+        }
+
         // writing the list of flags to json
 
         json.put("channel", channel.toString());
@@ -678,6 +686,16 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
                 {
                     try
                     {
+                        if (flag.equals("rank"))
+                        {
+                            if(flags.get(flag) == null)
+                            {
+                                continue;
+                            }
+
+                            rank = flags.get(flag).toString();
+                        }
+
                         if (flag.equals("channel"))
                         {
                             String chn = flags.get(flag).toString();
@@ -822,6 +840,16 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public boolean isUseChatShortcut()
     {
         return useChatShortcut;
+    }
+
+    public String getRank()
+    {
+        return rank;
+    }
+
+    public void setRank(String rank)
+    {
+        this.rank = rank;
     }
 
     public enum Channel

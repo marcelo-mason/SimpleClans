@@ -1321,8 +1321,6 @@ public class Clan implements Serializable, Comparable<Clan>
                 SimpleClans.getInstance().getStorageManager().deleteClan(thisOne);
             }
         }, 1);
-
-
     }
 
     /**

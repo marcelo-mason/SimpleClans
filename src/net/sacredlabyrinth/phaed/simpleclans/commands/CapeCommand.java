@@ -83,5 +83,4 @@ public class CapeCommand
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
-
 }

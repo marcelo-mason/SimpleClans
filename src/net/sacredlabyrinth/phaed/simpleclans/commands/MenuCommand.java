@@ -185,6 +185,10 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.kick.player.1.kick.a.player.from.the.clan"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.setrank"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.trust.setrank"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.trust.untrust.player.1.set.trust.level1"), clanCommand, ChatColor.WHITE));
@@ -204,6 +208,10 @@ public class MenuCommand
         if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.ff"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.clanff.allow.block.1.toggle.clan.s.friendly.fire"), clanCommand, ChatColor.WHITE));
+        }
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.disband"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.disband.1.disband.your.clan"), clanCommand, ChatColor.WHITE));
         }
         if (plugin.getPermissionsManager().has(player, "simpleclans.member.ff"))
         {

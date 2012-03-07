@@ -81,6 +81,7 @@ public class LookupCommand
                 }
 
                 String status = targetClan == null ? ChatColor.WHITE + plugin.getLang("free.agent") : (targetCp.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() + plugin.getLang("leader") : (targetCp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang("trusted") : plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang("untrusted")));
+                String rank = ChatColor.WHITE + "" + Helper.parseColors(targetCp.getRank());
                 String joinDate = ChatColor.WHITE + "" + targetCp.getJoinDateString();
                 String lastSeen = ChatColor.WHITE + "" + targetCp.getLastSeenString();
                 String inactive = ChatColor.WHITE + "" + targetCp.getInactiveDays() + subColor + "/" + ChatColor.WHITE + plugin.getSettingsManager().getPurgePlayers() + " days";
@@ -92,6 +93,7 @@ public class LookupCommand
                 String pastClans = ChatColor.WHITE + "" + targetCp.getPastClansString(headColor + ", ");
 
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("clan.0"), clanName));
+                ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("rank.0"), rank));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("status.0"), status));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("kdr.0"), kdr));
                 ChatBlock.sendMessage(player, "  " + subColor + plugin.getLang("kill.totals") + " " + headColor + "[" + plugin.getLang("rival") + ":" + rival + " " + headColor + "" + plugin.getLang("neutral") + ":" + neutral + " " + headColor + "" + plugin.getLang("civilian") + ":" + civilian + headColor + "]");

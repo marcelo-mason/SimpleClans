@@ -1009,15 +1009,57 @@ public final class ClanManager
         else
         {
             String code = "" + ChatColor.RED + ChatColor.WHITE + ChatColor.RED + ChatColor.BLACK;
-            String message = code + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + cp.getClan().getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
-            SimpleClans.log(message);
+            String tag = "";
+
+            if (cp.getRank() != null && !cp.getRank().isEmpty())
+            {
+                tag = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getClanChatRankColor() + cp.getRank() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " ";
+            }
+            else
+            {
+                tag = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + cp.getClan().getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " ";
+            }
+
+            String message = code + Helper.parseColors(tag) + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
+            String eyeMessage = code + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + cp.getClan().getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
+
+            SimpleClans.log(eyeMessage);
 
             List<ClanPlayer> cps = cp.getClan().getMembers();
 
             for (ClanPlayer cpp : cps)
             {
                 Player member = plugin.getServer().getPlayer(cpp.getName());
+
                 ChatBlock.sendMessage(member, message);
+            }
+
+            sendToAllSeeing(eyeMessage, cps);
+        }
+    }
+
+    public void sendToAllSeeing(String msg, List<ClanPlayer> cps)
+    {
+        Player[] players = plugin.getServer().getOnlinePlayers();
+
+        for (Player player : players)
+        {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye"))
+            {
+                boolean alreadySent = false;
+
+                for (ClanPlayer cpp : cps)
+                {
+                    if (cpp.getName().equalsIgnoreCase(player.getName()))
+                    {
+                        alreadySent = true;
+                    }
+                }
+
+                if (!alreadySent)
+                {
+                    ChatBlock.sendMessage(player, ChatColor.YELLOW + Helper.stripColors(msg));
+                }
             }
         }
     }

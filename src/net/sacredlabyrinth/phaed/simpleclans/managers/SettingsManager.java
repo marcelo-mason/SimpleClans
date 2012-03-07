@@ -14,6 +14,7 @@ import java.util.List;
  */
 public final class SettingsManager
 {
+    private String clanChatRankColor;
     private boolean tagBasedClanChat;
     private boolean teleportOnSpawn;
     private boolean dropOnHome;
@@ -28,12 +29,12 @@ public final class SettingsManager
     private boolean globalff;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
-    private List<Object> itemsList;
-    private List<Object> blacklistedWorlds;
-    private List<Object> bannedPlayers;
-    private List<Object> disallowedWords;
-    private List<Object> disallowedColors;
-    private List<Object> unRivableClans;
+    private List<Integer> itemsList;
+    private List<String> blacklistedWorlds;
+    private List<String> bannedPlayers;
+    private List<String> disallowedWords;
+    private List<String> disallowedColors;
+    private List<String> unRivableClans;
     private int rivalLimitPercent;
     private boolean ePurchaseCreation;
     private boolean ePurchaseVerification;
@@ -156,18 +157,18 @@ public final class SettingsManager
         teleportOnSpawn = config.getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = config.getBoolean("settings.drop-items-on-clan-home");
         keepOnHome = config.getBoolean("settings.keep-items-on-clan-home");
-        itemsList = config.getList("settings.item-list");
+        itemsList = config.getIntegerList("settings.item-list");
         debugging = config.getBoolean("settings.show-debug-info");
         mChatIntegration = config.getBoolean("settings.mchat-integration");
         pvpOnlywhileInWar = config.getBoolean("settings.pvp-only-while-at-war");
         enableAutoGroups = config.getBoolean("settings.enable-auto-groups");
         useColorCodeFromPrefix = config.getBoolean("settings.use-colorcode-from-prefix-for-name");
-        bannedPlayers = config.getList("settings.banned-players");
+        bannedPlayers = config.getStringList("settings.banned-players");
         compatMode = config.getBoolean("settings.chat-compatibility-mode");
-        disallowedColors = config.getList("settings.disallowed-tag-colors");
-        blacklistedWorlds = config.getList("settings.blacklisted-worlds");
-        disallowedWords = config.getList("settings.disallowed-tags");
-        unRivableClans = config.getList("settings.unrivable-clans");
+        disallowedColors = config.getStringList("settings.disallowed-tag-colors");
+        blacklistedWorlds = config.getStringList("settings.blacklisted-worlds");
+        disallowedWords = config.getStringList("settings.disallowed-tags");
+        unRivableClans = config.getStringList("settings.unrivable-clans");
         showUnverifiedOnList = config.getBoolean("settings.show-unverified-on-list");
         requireVerification = config.getBoolean("settings.new-clan-verification-required");
         serverName = config.getString("settings.server-name");
@@ -237,6 +238,7 @@ public final class SettingsManager
         clanChatAnnouncementColor = config.getString("clanchat.announcement-color");
         clanChatMessageColor = config.getString("clanchat.message-color");
         clanChatNameColor = config.getString("clanchat.name-color");
+        clanChatRankColor = config.getString("clanchat.rank.color");
         clanChatBracketColor = config.getString("clanchat.tag-bracket.color");
         clanChatTagBracketLeft = config.getString("clanchat.tag-bracket.left");
         clanChatTagBracketRight = config.getString("clanchat.tag-bracket.right");
@@ -439,7 +441,7 @@ public final class SettingsManager
     /**
      * @return the bannedPlayers
      */
-    public List<Object> getBannedPlayers()
+    public List<String> getBannedPlayers()
     {
         return Collections.unmodifiableList(bannedPlayers);
     }
@@ -447,7 +449,7 @@ public final class SettingsManager
     /**
      * @return the disallowedColors
      */
-    public List<Object> getDisallowedColors()
+    public List<String> getDisallowedColors()
     {
         return Collections.unmodifiableList(disallowedColors);
     }
@@ -455,7 +457,7 @@ public final class SettingsManager
     /**
      * @return the unRivableClans
      */
-    public List<Object> getunRivableClans()
+    public List<String> getunRivableClans()
     {
         return Collections.unmodifiableList(unRivableClans);
     }
@@ -1130,7 +1132,7 @@ public final class SettingsManager
         return dropOnHome;
     }
 
-    public List<Object> getItemsList()
+    public List<Integer> getItemsList()
     {
         return Collections.unmodifiableList(itemsList);
     }
@@ -1143,5 +1145,10 @@ public final class SettingsManager
     public boolean isTagBasedClanChat()
     {
         return tagBasedClanChat;
+    }
+
+    public String getClanChatRankColor()
+    {
+        return Helper.toColor(clanChatRankColor);
     }
 }

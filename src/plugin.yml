@@ -1,10 +1,12 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 2.0.9
+version: 2.2
 softdepend: [Spout, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones, mChat, mChatSuite]
 permissions:
   simpleclans.admin.reload:
     description: Can reload configuration
+  simpleclans.admin.all-seeing-eye:
+    description: Can see all clan chats
   simpleclans.mod.verify:
     description: Can verify simpleclans
   simpleclans.mod.ban:
@@ -103,12 +105,15 @@ permissions:
     description: Can set trust levels for members
   simpleclans.leader.war:
     description: Can start wars
-  simpleclans.admin:
+  simpleclans.leader.setrank:
+    description: Can set ranks
+  simpleclans.admin.*:
     description: Permissions for admins
     default: op
     children:
       simpleclans.admin.reload: true
-  simpleclans.mod:
+      simpleclans.admin.all-seeing-eye: true
+  simpleclans.mod.*:
     description: Permissions for moderators
     default: op
     children:
@@ -120,7 +125,7 @@ permissions:
       simpleclans.mod.home: true
       simpleclans.mod.mostkilled: true
       simpleclans.mod.keep-items: true
-  simpleclans.anyone:
+  simpleclans.anyone.*:
     description: Permissions for anyone
     default: false
     children:
@@ -131,7 +136,7 @@ permissions:
       simpleclans.anyone.leaderboard: true
       simpleclans.anyone.alliances: true
       simpleclans.anyone.rivalries: true
-  simpleclans.member:
+  simpleclans.member.*:
     description: Permissions for those who can be clan members
     default: false
     children:
@@ -152,7 +157,7 @@ permissions:
       simpleclans.member.ally: true
       simpleclans.member.home: true
       simpleclans.member.kills: true
-  simpleclans.leader:
+  simpleclans.leader.*:
     description: Permissions for those who can be clan leaders
     default: false
     children:
@@ -172,3 +177,4 @@ permissions:
       simpleclans.leader.war: true
       simpleclans.leader.home-set: true
       simpleclans.leader.home-regroup: true
+      simpleclans.leader.setrank: true

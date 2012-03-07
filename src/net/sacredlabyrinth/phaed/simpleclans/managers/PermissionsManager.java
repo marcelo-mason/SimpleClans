@@ -2,7 +2,6 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import de.xghostkillerx.colorme.ColorMe;
 import in.mDev.MiracleM4n.mChatSuite.api.mChatAPI;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import net.milkbowl.vault.chat.Chat;
@@ -35,7 +34,7 @@ public final class PermissionsManager
     public static Permission permission = null;
     public static Economy economy = null;
     public static Chat chat = null;
-    private mChatSuite mChat = null;
+    private mChatSuite mchat = null;
 
 
     /**
@@ -66,7 +65,7 @@ public final class PermissionsManager
 
     public mChatSuite getMChat()
     {
-        return mChat;
+        return mchat;
     }
 
     /**
@@ -143,9 +142,9 @@ public final class PermissionsManager
      */
     public void addSetMChatClanTag(Player player, String value)
     {
-        if(mChat != null)
+        if(mchat != null)
         {
-            mChatAPI api = mChat.getAPI();
+            mChatAPI api = mchat.getAPI();
 
             api.addPlayerVar(player.getName(), "clan", value);
         }
@@ -158,9 +157,9 @@ public final class PermissionsManager
      */
     public void clearSetMChatClanTag(Player player)
     {
-        if(mChat != null)
+        if(mchat != null)
         {
-            mChatAPI api = mChat.getAPI();
+            mChatAPI api = mchat.getAPI();
 
             api.addPlayerVar(player.getName(), "clan", "");
         }
@@ -326,7 +325,7 @@ public final class PermissionsManager
 
         if (test != null)
         {
-            mChat = (mChatSuite) test;
+            mchat = (mChatSuite) test;
         }
     }
 
@@ -415,12 +414,14 @@ public final class PermissionsManager
 
         // add in colorMe color
 
+        /*
         Plugin colorMe = plugin.getServer().getPluginManager().getPlugin("ColorMe");
 
         if (colorMe != null)
         {
             out += ((ColorMe) colorMe).getColor(p.getName());
         }
+        */
 
         return out;
     }

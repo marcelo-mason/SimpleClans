@@ -1,13 +1,15 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import java.util.Arrays;
-import org.bukkit.entity.Player;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  *
@@ -820,7 +822,7 @@ public class ChatBlock
 
                         try
                         {
-                            lastColor = ChatColor.getByCode(Integer.parseInt(msg.charAt(x) + "", 16)) + "";
+                            lastColor = ChatColor.getByChar(msg.charAt(x)) + "";
                         }
                         catch (Exception ignored)
                         {

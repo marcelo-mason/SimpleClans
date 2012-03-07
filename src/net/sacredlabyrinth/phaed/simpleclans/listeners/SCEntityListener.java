@@ -150,8 +150,29 @@ public class SCEntityListener implements Listener
             ClanPlayer acp = plugin.getClanManager().getClanPlayer(attacker);
             ClanPlayer vcp = plugin.getClanManager().getClanPlayer(victim);
 
+
             Clan vclan = vcp == null ? null : vcp.getClan();
             Clan aclan = acp == null ? null : acp.getClan();
+
+
+            if (plugin.getSettingsManager().isPvpOnlywhileInWar())
+            {
+                // if one doesn't have clan then they cant be at war
+
+                if (aclan == null || vclan == null)
+                {
+                    event.setCancelled(true);
+                    return;
+                }
+
+                // if not warring no pvp
+
+                if (!aclan.isWarring(vclan))
+                {
+                    event.setCancelled(true);
+                    return;
+                }
+            }
 
             if (vclan != null)
             {

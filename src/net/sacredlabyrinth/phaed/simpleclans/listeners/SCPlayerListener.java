@@ -315,6 +315,11 @@ public class SCPlayerListener implements Listener
     @EventHandler
     public void onPlayerRespawn(PlayerRespawnEvent event)
     {
+        if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
+        {
+            return;
+        }
+
         if (plugin.getSettingsManager().isTeleportOnSpawn())
         {
             Player player = event.getPlayer();

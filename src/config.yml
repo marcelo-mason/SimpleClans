@@ -80,15 +80,16 @@ page:
     separator: '-'
     size: 13
 clanchat:
+    rank.color: e
     tag-based-clan-chat: false
     name-color: e
     player-bracket:
-        left: <
+        left: '<'
         right: '>'
     announcement-color: e
     message-color: b
     tag-bracket:
-        color: '8'
+        color: e
         left: '['
         right: ']'
     enable: true

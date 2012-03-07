@@ -257,7 +257,7 @@ public class Helper
             return "";
         }
 
-        return ChatColor.getByCode(Integer.valueOf(hexValue, 16)).toString();
+        return ChatColor.getByChar(hexValue).toString();
     }
 
     /**

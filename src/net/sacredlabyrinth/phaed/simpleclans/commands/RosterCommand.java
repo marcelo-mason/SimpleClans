@@ -5,7 +5,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -85,9 +84,7 @@ public class RosterCommand
                 ChatBlock.sendBlank(player);
 
                 chatBlock.setFlexibility(false, true, false, true);
-                chatBlock.addRow("  " + headColor + plugin.getLang("player"), plugin.getLang("seen"), plugin.getLang("player"), plugin.getLang("seen"));
-
-                List<String> row = new ArrayList<String>();
+                chatBlock.addRow("  " + headColor + plugin.getLang("player"), plugin.getLang("rank"),  plugin.getLang("seen"));
 
                 List<ClanPlayer> leaders = clan.getLeaders();
                 plugin.getClanManager().sortClanPlayersByLastSeen(leaders);
@@ -109,14 +106,7 @@ public class RosterCommand
                     String name = plugin.getSettingsManager().getPageLeaderColor() + cp.getName();
                     String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
-                    row.add(name);
-                    row.add(lastSeen);
-
-                    if (row.size() == 4)
-                    {
-                        chatBlock.addRow("  " + row.get(0), row.get(1), row.get(2), row.get(3));
-                        row.clear();
-                    }
+                    chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }
 
                 for (ClanPlayer cp : members)
@@ -133,19 +123,7 @@ public class RosterCommand
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
                     String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
-                    row.add(name);
-                    row.add(lastSeen);
-
-                    if (row.size() == 4)
-                    {
-                        chatBlock.addRow("  " + row.get(0), row.get(1), row.get(2), row.get(3));
-                        row.clear();
-                    }
-                }
-
-                if (!row.isEmpty())
-                {
-                    chatBlock.addRow("  " + row.get(0), row.size() > 1 ? row.get(1) : "", row.size() > 2 ? row.get(2) : "", row.size() > 4 ? row.get(3) : "");
+                    chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }
 
                 boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

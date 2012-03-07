@@ -63,7 +63,7 @@ public final class TeleportManager
                     continue;
                 }
 
-                List<Object> itemsList = plugin.getSettingsManager().getItemsList();
+                List<Integer> itemsList = plugin.getSettingsManager().getItemsList();
 
                 if (itemsList.contains(item.getTypeId()))
                 {
@@ -86,7 +86,7 @@ public final class TeleportManager
                         continue;
                     }
 
-                    List<Object> itemsList = plugin.getSettingsManager().getItemsList();
+                    List<Integer> itemsList = plugin.getSettingsManager().getItemsList();
 
                     if (!itemsList.contains(item.getTypeId()))
                     {
