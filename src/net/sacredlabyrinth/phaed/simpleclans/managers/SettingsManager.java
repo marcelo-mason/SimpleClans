@@ -981,7 +981,7 @@ public final class SettingsManager
     }
     
     /**
-     * @return the ePurchaseVerification
+     * @return the ePurchaseInvite
      */
     public boolean isePurchaseInvite()
     {
@@ -1005,7 +1005,7 @@ public final class SettingsManager
     }
     
     /**
-     * @return the eVerificationPrice
+     * @return the eInvitePrice
      */
     public int getInvitePrice()
     {
