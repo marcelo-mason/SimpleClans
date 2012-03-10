@@ -38,8 +38,10 @@ public final class SettingsManager
     private int rivalLimitPercent;
     private boolean ePurchaseCreation;
     private boolean ePurchaseVerification;
+    private boolean ePurchaseInvite;
     private int eCreationPrice;
     private int eVerificationPrice;
+    private int eInvitePrice;
     private String alertUrl;
     private boolean inGameTags;
     private boolean inGameTagsColored;
@@ -176,8 +178,10 @@ public final class SettingsManager
         rivalLimitPercent = config.getInt("settings.rival-limit-percent");
         ePurchaseCreation = config.getBoolean("economy.purchase-clan-create");
         ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify");
+        ePurchaseInvite = config.getBoolean("economy.purchase-clan-invite");
         eCreationPrice = config.getInt("economy.creation-price");
         eVerificationPrice = config.getInt("economy.verification-price");
+        eInvitePrice = config.getInt("economy.invite-price");
         alertUrl = config.getString("spout.alert-url");
         inGameTags = config.getBoolean("spout.in-game-tags");
         inGameTagsColored = config.getBoolean("spout.in-game-tags-colored");
@@ -975,6 +979,14 @@ public final class SettingsManager
     {
         return ePurchaseVerification;
     }
+    
+    /**
+     * @return the ePurchaseVerification
+     */
+    public boolean isePurchaseInvite()
+    {
+        return ePurchaseInvite;
+    }
 
     /**
      * @return the eCreationPrice
@@ -990,6 +1002,14 @@ public final class SettingsManager
     public int getVerificationPrice()
     {
         return eVerificationPrice;
+    }
+    
+    /**
+     * @return the eVerificationPrice
+     */
+    public int getInvitePrice()
+    {
+        return eInvitePrice;
     }
 
     public boolean isBbShowOnLogin()
