@@ -876,8 +876,8 @@ public final class ClanManager
             }
         });
     }
-
-    /**
+    
+      /**
      * Purchase clan creation
      *
      * @param player
@@ -891,6 +891,38 @@ public final class ClanManager
         }
 
         int price = plugin.getSettingsManager().getCreationPrice();
+
+        if (plugin.getPermissionsManager().hasEconomy())
+        {
+            if (plugin.getPermissionsManager().playerHasMoney(player, price))
+            {
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+            }
+            else
+            {
+                player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /**
+     * Purchase invite
+     *
+     * @param player
+     * @return
+     */
+    public boolean purchaseInvite(Player player)
+    {
+        if (!plugin.getSettingsManager().iseInviteCreation())
+        {
+            return true;
+        }
+
+        int price = plugin.getSettingsManager().getInvitePrice();
 
         if (plugin.getPermissionsManager().hasEconomy())
         {
