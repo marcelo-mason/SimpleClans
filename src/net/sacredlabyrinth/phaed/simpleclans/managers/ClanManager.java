@@ -876,7 +876,7 @@ public final class ClanManager
             }
         });
     }
-    
+
       /**
      * Purchase clan creation
      *
@@ -908,7 +908,7 @@ public final class ClanManager
 
         return true;
     }
-    
+
     /**
      * Purchase invite
      *
@@ -917,7 +917,7 @@ public final class ClanManager
      */
     public boolean purchaseInvite(Player player)
     {
-        if (!plugin.getSettingsManager().iseInviteCreation())
+        if (!plugin.getSettingsManager().isePurchaseInvite())
         {
             return true;
         }
