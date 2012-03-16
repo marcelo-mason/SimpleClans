@@ -164,6 +164,12 @@ public class SCEntityListener implements Listener
                     event.setCancelled(true);
                     return;
                 }
+                
+                if (plugin.getPermissionsManager().has(victim, "simpleclans.mod.nopvpinwar") 
+                        && attacker != null && victim != null) {
+                    event.setCancelled(true);
+                    return;
+                }
 
                 // if not warring no pvp
 
