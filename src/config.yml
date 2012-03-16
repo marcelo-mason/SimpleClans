@@ -55,6 +55,8 @@ economy:
     purchase-clan-create: false
     verification-price: 1000
     purchase-clan-verify: false
+    invite-price: 20
+    purchase-clan-invite: false
 kill-weights:
     rival: 2.0
     civilian: 0.0
