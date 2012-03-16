@@ -1058,7 +1058,7 @@ public final class ClanManager
 
                 if (!alreadySent)
                 {
-                    ChatBlock.sendMessage(player, ChatColor.YELLOW + Helper.stripColors(msg));
+                    ChatBlock.sendMessage(player, ChatColor.DARK_GRAY + Helper.stripColors(msg));
                 }
             }
         }
