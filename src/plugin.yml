@@ -1,6 +1,6 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: 2.2.1
+version: 2.2.2
 softdepend: [Spout, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones, mChat, mChatSuite]
 permissions:
   simpleclans.admin.reload:
@@ -21,6 +21,8 @@ permissions:
     description: Can set other clan's home
   simpleclans.mod.bypass:
     description: Can bypass restrictions
+  simpleclans.mod.nopvpinwar:
+    description: Can bypass pvp in wars
   simpleclans.anyone.list:
     description: Can list simpleclans
   simpleclans.anyone.profile:
@@ -125,6 +127,7 @@ permissions:
       simpleclans.mod.home: true
       simpleclans.mod.mostkilled: true
       simpleclans.mod.keep-items: true
+      simpleclans.mod.nopvpinwar: true
   simpleclans.anyone.*:
     description: Permissions for anyone
     default: false
