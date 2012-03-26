@@ -979,7 +979,7 @@ public final class SettingsManager
     {
         return ePurchaseVerification;
     }
-    
+
     /**
      * @return the ePurchaseInvite
      */
@@ -1003,7 +1003,7 @@ public final class SettingsManager
     {
         return eVerificationPrice;
     }
-    
+
     /**
      * @return the eInvitePrice
      */

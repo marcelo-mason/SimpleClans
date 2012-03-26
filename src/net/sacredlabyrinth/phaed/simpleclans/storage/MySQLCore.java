@@ -9,7 +9,6 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 /**
- *
  * @author cc_madelg
  */
 public class MySQLCore implements DBCore
@@ -22,7 +21,6 @@ public class MySQLCore implements DBCore
     private String database;
 
     /**
-     *
      * @param host
      * @param database
      * @param username
@@ -61,7 +59,14 @@ public class MySQLCore implements DBCore
      */
     public Connection getConnection()
     {
-        if (connection == null)
+        try
+        {
+            if (connection == null || connection.isClosed())
+            {
+                initialize();
+            }
+        }
+        catch (SQLException e)
         {
             initialize();
         }
@@ -97,6 +102,7 @@ public class MySQLCore implements DBCore
 
     /**
      * Execute a select statement
+     *
      * @param query
      * @return
      */
@@ -117,6 +123,7 @@ public class MySQLCore implements DBCore
 
     /**
      * Execute an insert statement
+     *
      * @param query
      */
     public void insert(String query)
@@ -137,6 +144,7 @@ public class MySQLCore implements DBCore
 
     /**
      * Execute an update statement
+     *
      * @param query
      */
     public void update(String query)
@@ -157,6 +165,7 @@ public class MySQLCore implements DBCore
 
     /**
      * Execute a delete statement
+     *
      * @param query
      */
     public void delete(String query)
@@ -177,6 +186,7 @@ public class MySQLCore implements DBCore
 
     /**
      * Execute a statement
+     *
      * @param query
      * @return
      */
@@ -197,6 +207,7 @@ public class MySQLCore implements DBCore
 
     /**
      * Check whether a table exists
+     *
      * @param table
      * @return
      */
