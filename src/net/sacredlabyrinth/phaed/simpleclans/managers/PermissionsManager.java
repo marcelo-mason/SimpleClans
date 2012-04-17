@@ -2,7 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import com.nijiko.permissions.PermissionHandler;
 import com.nijikokun.bukkit.Permissions.Permissions;
-import in.mDev.MiracleM4n.mChatSuite.api.mChatAPI;
+import in.mDev.MiracleM4n.mChatSuite.api.API;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -144,7 +144,7 @@ public final class PermissionsManager
     {
         if(mchat != null)
         {
-            mChatAPI api = mchat.getAPI();
+            API api = mchat.getAPI();
 
             api.addPlayerVar(player.getName(), "clan", value);
         }
@@ -159,7 +159,7 @@ public final class PermissionsManager
     {
         if(mchat != null)
         {
-            mChatAPI api = mchat.getAPI();
+            API api = mchat.getAPI();
 
             api.addPlayerVar(player.getName(), "clan", "");
         }
