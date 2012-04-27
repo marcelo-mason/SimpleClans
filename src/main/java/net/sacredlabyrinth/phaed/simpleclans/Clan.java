@@ -1510,8 +1510,11 @@ public class Clan implements Serializable, Comparable<Clan>
 
     public void setHomeLocation(Location home)
     {
+        Location above = home;
+        above.setY(home.getBlockY()+1);
+        
         homeX = home.getBlockX();
-        homeY = home.getWorld().getHighestBlockYAt(home);
+        homeY = home.getBlockY();
         homeZ = home.getBlockZ();
         homeWorld = home.getWorld().getName();
 
@@ -1524,7 +1527,12 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (world != null)
         {
-            return new Location(world, homeX, world.getHighestBlockYAt(homeX, homeZ), homeZ);
+            if (world.getBlockAt(homeX, homeY, homeZ).getTypeId() == 0 && world.getBlockAt(homeX, homeY + 1, homeZ).getTypeId() == 0 && homeY == 0) {
+                return new Location(world, homeX, homeY, homeZ); 
+            } else {
+                return new Location(world, homeX, world.getHighestBlockYAt(homeX, homeZ), homeZ);
+            }
+            
         }
 
         return null;
