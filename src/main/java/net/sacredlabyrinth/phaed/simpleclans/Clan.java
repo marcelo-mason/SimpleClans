@@ -1511,7 +1511,7 @@ public class Clan implements Serializable, Comparable<Clan>
     public void setHomeLocation(Location home)
     {
         homeX = home.getBlockX();
-        homeY = home.getBlockY();
+        homeY = home.getWorld().getHighestBlockYAt(home);
         homeZ = home.getBlockZ();
         homeWorld = home.getWorld().getName();
 
@@ -1524,7 +1524,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (world != null)
         {
-            return new Location(world, homeX, homeY, homeZ);
+            return new Location(world, homeX, world.getHighestBlockYAt(homeX, homeZ), homeZ);
         }
 
         return null;
