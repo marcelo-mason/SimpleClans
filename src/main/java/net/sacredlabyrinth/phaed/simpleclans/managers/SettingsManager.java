@@ -180,8 +180,8 @@ public final class SettingsManager
         rivalLimitPercent = config.getInt("settings.rival-limit-percent");
         ePurchaseCreation = config.getBoolean("economy.purchase-clan-create");
         ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify");
-        ePurchaseInvite = config.getBoolean("economy.purchase-home-teleport");
-        ePurchaseHomeTeleport = config.getBoolean("economy.purchase-clan-invite");
+        ePurchaseInvite = config.getBoolean("economy.purchase-clan-invite");
+        ePurchaseHomeTeleport = config.getBoolean("economy.purchase-home-teleport");
         eCreationPrice = config.getInt("economy.creation-price");
         eVerificationPrice = config.getInt("economy.verification-price");
         eInvitePrice = config.getInt("economy.invite-price");
