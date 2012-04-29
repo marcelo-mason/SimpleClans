@@ -31,7 +31,7 @@ public class SCPlayerListener implements Listener
     /**
      * @param event
      */
-    @EventHandler(priority = EventPriority.LOWEST)
+    @EventHandler(priority = EventPriority.LOW)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
         if (event.isCancelled())

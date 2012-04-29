@@ -76,7 +76,7 @@ public class SimpleClans extends JavaPlugin
         settingsManager = new SettingsManager();
 
         lang = PropertyResourceBundle.getBundle("languages.lang");
-
+        
         logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
         spoutPluginManager = new SpoutPluginManager();
@@ -98,6 +98,8 @@ public class SimpleClans extends JavaPlugin
 
     public void onDisable()
     {
+        ResourceBundle.clearCache();
+        lang = null;
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
     }
