@@ -57,6 +57,8 @@ economy:
     purchase-clan-verify: false
     invite-price: 20
     purchase-clan-invite: false
+    purchase-home-teleport: false
+    home-teleport-price: 5
 kill-weights:
     rival: 2.0
     civilian: 0.0

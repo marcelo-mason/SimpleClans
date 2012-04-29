@@ -61,15 +61,17 @@ public class HomeCommand
                     {
                         if (plugin.getPermissionsManager().has(player, "simpleclans.member.home"))
                         {
-                            Location loc = clan.getHomeLocation();
+                            if (plugin.getClanManager().purchaseHomeTeleport(player)) {
+                                Location loc = clan.getHomeLocation();
 
-                            if (loc == null)
-                            {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("hombase.not.set"));
-                                return;
+                                if (loc == null)
+                                {
+                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("hombase.not.set"));
+                                    return;
+                                }
+
+                                plugin.getTeleportManager().addPlayer(player, clan.getHomeLocation(), clan.getName());
                             }
-
-                            plugin.getTeleportManager().addPlayer(player, clan.getHomeLocation(), clan.getName());
                         }
                         else
                         {

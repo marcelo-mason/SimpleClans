@@ -39,9 +39,11 @@ public final class SettingsManager
     private boolean ePurchaseCreation;
     private boolean ePurchaseVerification;
     private boolean ePurchaseInvite;
+    private boolean ePurchaseHomeTeleport;
     private int eCreationPrice;
     private int eVerificationPrice;
     private int eInvitePrice;
+    private int eHomeTeleportPrice;
     private String alertUrl;
     private boolean inGameTags;
     private boolean inGameTagsColored;
@@ -178,10 +180,12 @@ public final class SettingsManager
         rivalLimitPercent = config.getInt("settings.rival-limit-percent");
         ePurchaseCreation = config.getBoolean("economy.purchase-clan-create");
         ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify");
-        ePurchaseInvite = config.getBoolean("economy.purchase-clan-invite");
+        ePurchaseInvite = config.getBoolean("economy.purchase-home-teleport");
+        ePurchaseHomeTeleport = config.getBoolean("economy.purchase-clan-invite");
         eCreationPrice = config.getInt("economy.creation-price");
         eVerificationPrice = config.getInt("economy.verification-price");
         eInvitePrice = config.getInt("economy.invite-price");
+        eHomeTeleportPrice = config.getInt("economy.home-teleport-price");
         alertUrl = config.getString("spout.alert-url");
         inGameTags = config.getBoolean("spout.in-game-tags");
         inGameTagsColored = config.getBoolean("spout.in-game-tags-colored");
@@ -1170,5 +1174,19 @@ public final class SettingsManager
     public String getClanChatRankColor()
     {
         return Helper.toColor(clanChatRankColor);
+    }
+
+    /**
+     * @return the ePurchaseHomeTeleport
+     */
+    public boolean isePurchaseHomeTeleport() {
+        return ePurchaseHomeTeleport;
+    }
+
+    /**
+     * @return the HomeTeleportPrice
+     */
+    public int getHomeTeleportPrice() {
+        return eHomeTeleportPrice;
     }
 }
