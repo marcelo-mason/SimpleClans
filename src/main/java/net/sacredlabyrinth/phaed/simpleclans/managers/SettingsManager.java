@@ -40,10 +40,12 @@ public final class SettingsManager
     private boolean ePurchaseVerification;
     private boolean ePurchaseInvite;
     private boolean ePurchaseHomeTeleport;
-    private int eCreationPrice;
-    private int eVerificationPrice;
-    private int eInvitePrice;
-    private int eHomeTeleportPrice;
+    private boolean ePurchaseHomeTeleportSet;
+    private double eCreationPrice;
+    private double eVerificationPrice;
+    private double eInvitePrice;
+    private double eHomeTeleportPrice;
+    private double eHomeTeleportPriceSet;
     private String alertUrl;
     private boolean inGameTags;
     private boolean inGameTagsColored;
@@ -182,10 +184,10 @@ public final class SettingsManager
         ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify");
         ePurchaseInvite = config.getBoolean("economy.purchase-clan-invite");
         ePurchaseHomeTeleport = config.getBoolean("economy.purchase-home-teleport");
-        eCreationPrice = config.getInt("economy.creation-price");
-        eVerificationPrice = config.getInt("economy.verification-price");
-        eInvitePrice = config.getInt("economy.invite-price");
-        eHomeTeleportPrice = config.getInt("economy.home-teleport-price");
+        eCreationPrice = config.getDouble("economy.creation-price");
+        eVerificationPrice = config.getDouble("economy.verification-price");
+        eInvitePrice = config.getDouble("economy.invite-price");
+        eHomeTeleportPrice = config.getDouble("economy.home-teleport-price");
         alertUrl = config.getString("spout.alert-url");
         inGameTags = config.getBoolean("spout.in-game-tags");
         inGameTagsColored = config.getBoolean("spout.in-game-tags-colored");
@@ -995,7 +997,7 @@ public final class SettingsManager
     /**
      * @return the eCreationPrice
      */
-    public int getCreationPrice()
+    public double getCreationPrice()
     {
         return eCreationPrice;
     }
@@ -1003,7 +1005,7 @@ public final class SettingsManager
     /**
      * @return the eVerificationPrice
      */
-    public int getVerificationPrice()
+    public double getVerificationPrice()
     {
         return eVerificationPrice;
     }
@@ -1011,7 +1013,7 @@ public final class SettingsManager
     /**
      * @return the eInvitePrice
      */
-    public int getInvitePrice()
+    public double getInvitePrice()
     {
         return eInvitePrice;
     }
@@ -1186,7 +1188,21 @@ public final class SettingsManager
     /**
      * @return the HomeTeleportPrice
      */
-    public int getHomeTeleportPrice() {
+    public double getHomeTeleportPrice() {
         return eHomeTeleportPrice;
+    }
+
+    /**
+     * @return the ePurchaseHomeTeleportSet
+     */
+    public boolean isePurchaseHomeTeleportSet() {
+        return ePurchaseHomeTeleportSet;
+    }
+
+    /**
+     * @return the HomeTeleportPriceSet
+     */
+    public double getHomeTeleportPriceSet() {
+        return eHomeTeleportPriceSet;
     }
 }

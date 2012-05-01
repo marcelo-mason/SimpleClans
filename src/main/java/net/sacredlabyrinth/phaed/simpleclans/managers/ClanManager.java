@@ -890,7 +890,7 @@ public final class ClanManager
             return true;
         }
 
-        int price = plugin.getSettingsManager().getCreationPrice();
+        double price = plugin.getSettingsManager().getCreationPrice();
 
         if (plugin.getPermissionsManager().hasEconomy())
         {
@@ -922,7 +922,7 @@ public final class ClanManager
             return true;
         }
 
-        int price = plugin.getSettingsManager().getInvitePrice();
+        double price = plugin.getSettingsManager().getInvitePrice();
 
         if (plugin.getPermissionsManager().hasEconomy())
         {
@@ -954,7 +954,39 @@ public final class ClanManager
             return true;
         }
 
-        int price = plugin.getSettingsManager().getHomeTeleportPrice();
+        double price = plugin.getSettingsManager().getHomeTeleportPrice();
+
+        if (plugin.getPermissionsManager().hasEconomy())
+        {
+            if (plugin.getPermissionsManager().playerHasMoney(player, price))
+            {
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+            }
+            else
+            {
+                player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                return false;
+            }
+        }
+
+        return true;
+    }
+    
+    /**
+     * Purchase Home Teleport Set
+     *
+     * @param player
+     * @return
+     */
+    public boolean purchaseHomeTeleportSet(Player player)
+    {
+        if (!plugin.getSettingsManager().isePurchaseHomeTeleportSet())
+        {
+            return true;
+        }
+
+        double price = plugin.getSettingsManager().getHomeTeleportPriceSet();
 
         if (plugin.getPermissionsManager().hasEconomy())
         {
@@ -986,7 +1018,7 @@ public final class ClanManager
             return true;
         }
 
-        int price = plugin.getSettingsManager().getVerificationPrice();
+        double price = plugin.getSettingsManager().getVerificationPrice();
 
         if (plugin.getPermissionsManager().hasEconomy())
         {

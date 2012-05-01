@@ -31,14 +31,16 @@ public class HomeCommand
 
         if (arg.length == 2 && arg[0].equalsIgnoreCase("set") && plugin.getPermissionsManager().has(player, "simpleclans.mod.home"))
         {
-            Location loc = player.getLocation();
-
-            Clan clan = plugin.getClanManager().getClan(arg[1]);
-
-            if (clan != null)
+            if (plugin.getClanManager().purchaseHomeTeleportSet(player))
             {
-                clan.setHomeLocation(loc);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("hombase.mod.set"), clan.getName()) + " " + ChatColor.YELLOW + Helper.toLocationString(loc));
+                Location loc = player.getLocation();
+
+                Clan clan = plugin.getClanManager().getClan(arg[1]);
+
+                if (clan != null) {
+                    clan.setHomeLocation(loc);
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("hombase.mod.set"), clan.getName()) + " " + ChatColor.YELLOW + Helper.toLocationString(loc));
+                }
             }
             else
             {
