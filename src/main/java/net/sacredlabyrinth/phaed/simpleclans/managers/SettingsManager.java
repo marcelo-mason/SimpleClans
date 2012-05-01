@@ -184,10 +184,12 @@ public final class SettingsManager
         ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify");
         ePurchaseInvite = config.getBoolean("economy.purchase-clan-invite");
         ePurchaseHomeTeleport = config.getBoolean("economy.purchase-home-teleport");
+        ePurchaseHomeTeleportSet = config.getBoolean("economy.purchase-home-teleport-set");
         eCreationPrice = config.getDouble("economy.creation-price");
         eVerificationPrice = config.getDouble("economy.verification-price");
         eInvitePrice = config.getDouble("economy.invite-price");
         eHomeTeleportPrice = config.getDouble("economy.home-teleport-price");
+        eHomeTeleportPriceSet = config.getDouble("economy.home-teleport-set-price");
         alertUrl = config.getString("spout.alert-url");
         inGameTags = config.getBoolean("spout.in-game-tags");
         inGameTagsColored = config.getBoolean("spout.in-game-tags-colored");
