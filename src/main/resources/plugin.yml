@@ -3,6 +3,8 @@ main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
 version: ${project.version}
 softdepend: [Spout, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones, mChat, mChatSuite]
 permissions:
+  simpleclans.admin.permissions:
+    description: Can grant clans permissions
   simpleclans.admin.reload:
     description: Can reload configuration
   simpleclans.admin.all-seeing-eye:

@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -28,6 +29,10 @@ public class ReloadCommand
         {
             plugin.getSettingsManager().load();
             plugin.getStorageManager().importFromDatabase();
+            plugin.getClanManager().loadPermissions();
+            for (Clan clan : plugin.getClanManager().getClans()) {
+                SimpleClans.getInstance().getClanManager().updateAllPermissions(clan);
+            }
             ChatBlock.sendMessage(player,  ChatColor.AQUA + plugin.getLang("configuration.reloaded"));
         }
         else

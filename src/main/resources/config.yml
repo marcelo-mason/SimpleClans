@@ -129,3 +129,6 @@ mysql:
     enable: false
     password: ''
     database: ''
+permissions:
+#  YourClanNameHere:
+#  - test.permission
