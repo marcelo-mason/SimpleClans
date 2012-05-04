@@ -147,8 +147,8 @@ public final class SettingsManager
         {
             try
             {
-                config.options().copyDefaults(true);
-                config.load(main);
+                getConfig().options().copyDefaults(true);
+                getConfig().load(main);
             }
             catch (Exception e)
             {
@@ -157,123 +157,123 @@ public final class SettingsManager
         }
         else
         {
-            config.options().copyDefaults(true);
+            getConfig().options().copyDefaults(true);
         }
 
-        teleportOnSpawn = config.getBoolean("settings.teleport-home-on-spawn");
-        dropOnHome = config.getBoolean("settings.drop-items-on-clan-home");
-        keepOnHome = config.getBoolean("settings.keep-items-on-clan-home");
-        itemsList = config.getIntegerList("settings.item-list");
-        debugging = config.getBoolean("settings.show-debug-info");
-        mChatIntegration = config.getBoolean("settings.mchat-integration");
-        pvpOnlywhileInWar = config.getBoolean("settings.pvp-only-while-at-war");
-        enableAutoGroups = config.getBoolean("settings.enable-auto-groups");
-        useColorCodeFromPrefix = config.getBoolean("settings.use-colorcode-from-prefix-for-name");
-        bannedPlayers = config.getStringList("settings.banned-players");
-        compatMode = config.getBoolean("settings.chat-compatibility-mode");
-        disallowedColors = config.getStringList("settings.disallowed-tag-colors");
-        blacklistedWorlds = config.getStringList("settings.blacklisted-worlds");
-        disallowedWords = config.getStringList("settings.disallowed-tags");
-        unRivableClans = config.getStringList("settings.unrivable-clans");
-        showUnverifiedOnList = config.getBoolean("settings.show-unverified-on-list");
-        requireVerification = config.getBoolean("settings.new-clan-verification-required");
-        serverName = config.getString("settings.server-name");
-        chatTags = config.getBoolean("settings.display-chat-tags");
-        rivalLimitPercent = config.getInt("settings.rival-limit-percent");
-        ePurchaseCreation = config.getBoolean("economy.purchase-clan-create");
-        ePurchaseVerification = config.getBoolean("economy.purchase-clan-verify");
-        ePurchaseInvite = config.getBoolean("economy.purchase-clan-invite");
-        ePurchaseHomeTeleport = config.getBoolean("economy.purchase-home-teleport");
-        ePurchaseHomeTeleportSet = config.getBoolean("economy.purchase-home-teleport-set");
-        eCreationPrice = config.getDouble("economy.creation-price");
-        eVerificationPrice = config.getDouble("economy.verification-price");
-        eInvitePrice = config.getDouble("economy.invite-price");
-        eHomeTeleportPrice = config.getDouble("economy.home-teleport-price");
-        eHomeTeleportPriceSet = config.getDouble("economy.home-teleport-set-price");
-        alertUrl = config.getString("spout.alert-url");
-        inGameTags = config.getBoolean("spout.in-game-tags");
-        inGameTagsColored = config.getBoolean("spout.in-game-tags-colored");
-        clanCapes = config.getBoolean("spout.enable-clan-capes");
-        defaultCapeUrl = config.getString("spout.default-cape-url");
-        purgeClan = config.getInt("purge.inactive-clan-days");
-        purgeUnverified = config.getInt("purge.unverified-clan-days");
-        purgePlayers = config.getInt("purge.inactive-player-data-days");
-        requestFreqencySecs = config.getInt("request.ask-frequency-secs");
-        requestMessageColor = config.getString("request.message-color");
-        pageSize = config.getInt("page.size");
-        pageSep = config.getString("page.separator");
-        pageSubTitleColor = config.getString("page.subtitle-color");
-        pageHeadingsColor = config.getString("page.headings-color");
-        pageLeaderColor = config.getString("page.leader-color");
-        pageTrustedColor = config.getString("page.trusted-color");
-        pageUnTrustedColor = config.getString("page.untrusted-color");
-        pageClanNameColor = config.getString("page.clan-name-color");
-        bbShowOnLogin = config.getBoolean("bb.show-on-login");
-        bbSize = config.getInt("bb.size");
-        bbColor = config.getString("bb.color");
-        bbAccentColor = config.getString("bb.accent-color");
-        commandClan = config.getString("commands.clan");
-        commandAlly = config.getString("commands.ally");
-        commandGlobal = config.getString("commands.global");
-        commandMore = config.getString("commands.more");
-        commandDeny = config.getString("commands.deny");
-        commandAccept = config.getString("commands.accept");
-        homebaseSetOnce = config.getBoolean("clan.homebase-can-be-set-only-once");
-        waitSecs = config.getInt("clan.homebase-teleport-wait-secs");
-        confirmationForPromote = config.getBoolean("clan.confirmation-for-demote");
-        confirmationForDemote = config.getBoolean("clan.confirmation-for-promote");
-        clanTrustByDefault = config.getBoolean("clan.trust-members-by-default");
-        clanMinSizeToAlly = config.getInt("clan.min-size-to-set-ally");
-        clanMinSizeToRival = config.getInt("clan.min-size-to-set-rival");
-        clanMinLength = config.getInt("clan.min-length");
-        clanMaxLength = config.getInt("clan.max-length");
-        clanFFOnByDefault = config.getBoolean("clan.ff-on-by-default");
-        tagMinLength = config.getInt("tag.min-length");
-        tagMaxLength = config.getInt("tag.max-length");
-        tagDefaultColor = config.getString("tag.default-color");
-        tagSeparator = config.getString("tag.separator.char");
-        tagSeparatorColor = config.getString("tag.separator.color");
-        tagBracketColor = config.getString("tag.bracket.color");
-        tagBracketLeft = config.getString("tag.bracket.left");
-        tagBracketRight = config.getString("tag.bracket.right");
-        allyChatEnable = config.getBoolean("allychat.enable");
-        allyChatMessageColor = config.getString("allychat.message-color");
-        allyChatTagColor = config.getString("allychat.tag-color");
-        allyChatNameColor = config.getString("allychat.name-color");
-        allyChatBracketColor = config.getString("allychat.tag-bracket.color");
-        allyChatTagBracketLeft = config.getString("allychat.tag-bracket.left");
-        allyChatTagBracketRight = config.getString("allychat.tag-bracket.right");
-        allyChatPlayerBracketLeft = config.getString("allychat.player-bracket.left");
-        allyChatPlayerBracketRight = config.getString("allychat.player-bracket.right");
-        clanChatEnable = config.getBoolean("clanchat.enable");
-        tagBasedClanChat = config.getBoolean("clanchat.tag-based-clan-chat");
-        clanChatAnnouncementColor = config.getString("clanchat.announcement-color");
-        clanChatMessageColor = config.getString("clanchat.message-color");
-        clanChatNameColor = config.getString("clanchat.name-color");
-        clanChatRankColor = config.getString("clanchat.rank.color");
-        clanChatBracketColor = config.getString("clanchat.tag-bracket.color");
-        clanChatTagBracketLeft = config.getString("clanchat.tag-bracket.left");
-        clanChatTagBracketRight = config.getString("clanchat.tag-bracket.right");
-        clanChatPlayerBracketLeft = config.getString("clanchat.player-bracket.left");
-        clanChatPlayerBracketRight = config.getString("clanchat.player-bracket.right");
-        kwRival = config.getDouble("kill-weights.rival");
-        kwNeutral = config.getDouble("kill-weights.neutral");
-        kwCivilian = config.getDouble("kill-weights.civilian");
-        useMysql = config.getBoolean("mysql.enable");
-        host = config.getString("mysql.host");
-        database = config.getString("mysql.database");
-        username = config.getString("mysql.username");
-        password = config.getString("mysql.password");
-        safeCivilians = config.getBoolean("safe-civilians");
+        teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
+        dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
+        keepOnHome = getConfig().getBoolean("settings.keep-items-on-clan-home");
+        itemsList = getConfig().getIntegerList("settings.item-list");
+        debugging = getConfig().getBoolean("settings.show-debug-info");
+        mChatIntegration = getConfig().getBoolean("settings.mchat-integration");
+        pvpOnlywhileInWar = getConfig().getBoolean("settings.pvp-only-while-at-war");
+        enableAutoGroups = getConfig().getBoolean("settings.enable-auto-groups");
+        useColorCodeFromPrefix = getConfig().getBoolean("settings.use-colorcode-from-prefix-for-name");
+        bannedPlayers = getConfig().getStringList("settings.banned-players");
+        compatMode = getConfig().getBoolean("settings.chat-compatibility-mode");
+        disallowedColors = getConfig().getStringList("settings.disallowed-tag-colors");
+        blacklistedWorlds = getConfig().getStringList("settings.blacklisted-worlds");
+        disallowedWords = getConfig().getStringList("settings.disallowed-tags");
+        unRivableClans = getConfig().getStringList("settings.unrivable-clans");
+        showUnverifiedOnList = getConfig().getBoolean("settings.show-unverified-on-list");
+        requireVerification = getConfig().getBoolean("settings.new-clan-verification-required");
+        serverName = getConfig().getString("settings.server-name");
+        chatTags = getConfig().getBoolean("settings.display-chat-tags");
+        rivalLimitPercent = getConfig().getInt("settings.rival-limit-percent");
+        ePurchaseCreation = getConfig().getBoolean("economy.purchase-clan-create");
+        ePurchaseVerification = getConfig().getBoolean("economy.purchase-clan-verify");
+        ePurchaseInvite = getConfig().getBoolean("economy.purchase-clan-invite");
+        ePurchaseHomeTeleport = getConfig().getBoolean("economy.purchase-home-teleport");
+        ePurchaseHomeTeleportSet = getConfig().getBoolean("economy.purchase-home-teleport-set");
+        eCreationPrice = getConfig().getDouble("economy.creation-price");
+        eVerificationPrice = getConfig().getDouble("economy.verification-price");
+        eInvitePrice = getConfig().getDouble("economy.invite-price");
+        eHomeTeleportPrice = getConfig().getDouble("economy.home-teleport-price");
+        eHomeTeleportPriceSet = getConfig().getDouble("economy.home-teleport-set-price");
+        alertUrl = getConfig().getString("spout.alert-url");
+        inGameTags = getConfig().getBoolean("spout.in-game-tags");
+        inGameTagsColored = getConfig().getBoolean("spout.in-game-tags-colored");
+        clanCapes = getConfig().getBoolean("spout.enable-clan-capes");
+        defaultCapeUrl = getConfig().getString("spout.default-cape-url");
+        purgeClan = getConfig().getInt("purge.inactive-clan-days");
+        purgeUnverified = getConfig().getInt("purge.unverified-clan-days");
+        purgePlayers = getConfig().getInt("purge.inactive-player-data-days");
+        requestFreqencySecs = getConfig().getInt("request.ask-frequency-secs");
+        requestMessageColor = getConfig().getString("request.message-color");
+        pageSize = getConfig().getInt("page.size");
+        pageSep = getConfig().getString("page.separator");
+        pageSubTitleColor = getConfig().getString("page.subtitle-color");
+        pageHeadingsColor = getConfig().getString("page.headings-color");
+        pageLeaderColor = getConfig().getString("page.leader-color");
+        pageTrustedColor = getConfig().getString("page.trusted-color");
+        pageUnTrustedColor = getConfig().getString("page.untrusted-color");
+        pageClanNameColor = getConfig().getString("page.clan-name-color");
+        bbShowOnLogin = getConfig().getBoolean("bb.show-on-login");
+        bbSize = getConfig().getInt("bb.size");
+        bbColor = getConfig().getString("bb.color");
+        bbAccentColor = getConfig().getString("bb.accent-color");
+        commandClan = getConfig().getString("commands.clan");
+        commandAlly = getConfig().getString("commands.ally");
+        commandGlobal = getConfig().getString("commands.global");
+        commandMore = getConfig().getString("commands.more");
+        commandDeny = getConfig().getString("commands.deny");
+        commandAccept = getConfig().getString("commands.accept");
+        homebaseSetOnce = getConfig().getBoolean("clan.homebase-can-be-set-only-once");
+        waitSecs = getConfig().getInt("clan.homebase-teleport-wait-secs");
+        confirmationForPromote = getConfig().getBoolean("clan.confirmation-for-demote");
+        confirmationForDemote = getConfig().getBoolean("clan.confirmation-for-promote");
+        clanTrustByDefault = getConfig().getBoolean("clan.trust-members-by-default");
+        clanMinSizeToAlly = getConfig().getInt("clan.min-size-to-set-ally");
+        clanMinSizeToRival = getConfig().getInt("clan.min-size-to-set-rival");
+        clanMinLength = getConfig().getInt("clan.min-length");
+        clanMaxLength = getConfig().getInt("clan.max-length");
+        clanFFOnByDefault = getConfig().getBoolean("clan.ff-on-by-default");
+        tagMinLength = getConfig().getInt("tag.min-length");
+        tagMaxLength = getConfig().getInt("tag.max-length");
+        tagDefaultColor = getConfig().getString("tag.default-color");
+        tagSeparator = getConfig().getString("tag.separator.char");
+        tagSeparatorColor = getConfig().getString("tag.separator.color");
+        tagBracketColor = getConfig().getString("tag.bracket.color");
+        tagBracketLeft = getConfig().getString("tag.bracket.left");
+        tagBracketRight = getConfig().getString("tag.bracket.right");
+        allyChatEnable = getConfig().getBoolean("allychat.enable");
+        allyChatMessageColor = getConfig().getString("allychat.message-color");
+        allyChatTagColor = getConfig().getString("allychat.tag-color");
+        allyChatNameColor = getConfig().getString("allychat.name-color");
+        allyChatBracketColor = getConfig().getString("allychat.tag-bracket.color");
+        allyChatTagBracketLeft = getConfig().getString("allychat.tag-bracket.left");
+        allyChatTagBracketRight = getConfig().getString("allychat.tag-bracket.right");
+        allyChatPlayerBracketLeft = getConfig().getString("allychat.player-bracket.left");
+        allyChatPlayerBracketRight = getConfig().getString("allychat.player-bracket.right");
+        clanChatEnable = getConfig().getBoolean("clanchat.enable");
+        tagBasedClanChat = getConfig().getBoolean("clanchat.tag-based-clan-chat");
+        clanChatAnnouncementColor = getConfig().getString("clanchat.announcement-color");
+        clanChatMessageColor = getConfig().getString("clanchat.message-color");
+        clanChatNameColor = getConfig().getString("clanchat.name-color");
+        clanChatRankColor = getConfig().getString("clanchat.rank.color");
+        clanChatBracketColor = getConfig().getString("clanchat.tag-bracket.color");
+        clanChatTagBracketLeft = getConfig().getString("clanchat.tag-bracket.left");
+        clanChatTagBracketRight = getConfig().getString("clanchat.tag-bracket.right");
+        clanChatPlayerBracketLeft = getConfig().getString("clanchat.player-bracket.left");
+        clanChatPlayerBracketRight = getConfig().getString("clanchat.player-bracket.right");
+        kwRival = getConfig().getDouble("kill-weights.rival");
+        kwNeutral = getConfig().getDouble("kill-weights.neutral");
+        kwCivilian = getConfig().getDouble("kill-weights.civilian");
+        useMysql = getConfig().getBoolean("mysql.enable");
+        host = getConfig().getString("mysql.host");
+        database = getConfig().getString("mysql.database");
+        username = getConfig().getString("mysql.username");
+        password = getConfig().getString("mysql.password");
+        safeCivilians = getConfig().getBoolean("safe-civilians");
 
         save();
     }
 
-    private void save()
+    public void save()
     {
         try
         {
-            config.save(main);
+            getConfig().save(main);
         }
         catch (IOException e)
         {
@@ -1206,5 +1206,12 @@ public final class SettingsManager
      */
     public double getHomeTeleportPriceSet() {
         return eHomeTeleportPriceSet;
+    }
+
+    /**
+     * @return the config
+     */
+    public FileConfiguration getConfig() {
+        return config;
     }
 }
