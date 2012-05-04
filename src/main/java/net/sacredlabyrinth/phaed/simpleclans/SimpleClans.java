@@ -17,7 +17,7 @@ import java.util.logging.Logger;
 public class SimpleClans extends JavaPlugin
 {
     private static SimpleClans instance;
-    private static Logger logger = Logger.getLogger("Minecraft");
+    private static final Logger logger = Logger.getLogger("Minecraft");
     private ClanManager clanManager;
     private RequestManager requestManager;
     private StorageManager storageManager;
@@ -70,6 +70,7 @@ public class SimpleClans extends JavaPlugin
         }
     }
 
+    @Override
     public void onEnable()
     {
         instance = this;
@@ -92,16 +93,17 @@ public class SimpleClans extends JavaPlugin
 
         getServer().getPluginManager().registerEvents(entityListener, this);
         getServer().getPluginManager().registerEvents(playerListener, this);
-
+        
         spoutPluginManager.processAllPlayers();
+        clanManager.loadPermissions();
     }
 
+    @Override
     public void onDisable()
     {
-        ResourceBundle.clearCache();
-        lang = null;
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
+        getClanManager().savePermissions();
     }
 
     /**

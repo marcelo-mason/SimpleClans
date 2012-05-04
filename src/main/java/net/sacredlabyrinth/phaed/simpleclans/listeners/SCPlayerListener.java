@@ -282,13 +282,15 @@ public class SCPlayerListener implements Listener
         {
             public void run()
             {
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                
                 plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
                 plugin.getSpoutPluginManager().processPlayer(player.getName());
+                cp.getClan().updatePermissions(cp);
 
                 if (plugin.getSettingsManager().isBbShowOnLogin())
                 {
-                    ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
                     if (cp != null)
                     {
