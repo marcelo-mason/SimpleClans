@@ -155,7 +155,7 @@ public final class PermissionsManager
      * @param cp
      */
     public void updatePlayerPermissions(ClanPlayer cp) {
-        if (cp != null) {
+        if (cp != null && cp.toPlayer() != null) {
             Player player = cp.toPlayer();
             if (permissions.containsKey(cp.getClan().getName())) {
                 if (!permAttaches.containsKey(cp.toPlayer())) {
@@ -186,7 +186,7 @@ public final class PermissionsManager
      */
     public void removeClanPlayerPermissions(ClanPlayer cp) {
         if (cp.getClan() != null && cp != null) {
-            if (getPermissions(cp.getClan()) != null) {
+            if (permissions.containsKey(cp.getClan().getName())) {
                 permAttaches.get(cp.toPlayer()).remove();
                 if( permAttaches.containsKey(cp.toPlayer())) {
                     permAttaches.remove(cp.toPlayer());
