@@ -95,7 +95,7 @@ public class SimpleClans extends JavaPlugin
         getServer().getPluginManager().registerEvents(playerListener, this);
         
         spoutPluginManager.processAllPlayers();
-        clanManager.loadPermissions();
+        permissionsManager.loadPermissions();
     }
 
     @Override
@@ -103,7 +103,7 @@ public class SimpleClans extends JavaPlugin
     {
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
-        getClanManager().savePermissions();
+        getPermissionsManager().savePermissions();
     }
 
     /**

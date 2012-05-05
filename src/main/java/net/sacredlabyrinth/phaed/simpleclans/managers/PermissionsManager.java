@@ -2,16 +2,20 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import in.mDev.MiracleM4n.mChatSuite.api.API;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
+import java.util.HashMap;
+import java.util.List;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;
+import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
@@ -30,6 +34,9 @@ public final class PermissionsManager
     public static Economy economy = null;
     public static Chat chat = null;
     private mChatSuite mchat = null;
+    
+    private HashMap<String, List<String>> permissions = new HashMap<String, List<String>>();
+    private HashMap<Player, PermissionAttachment> permAttaches = new HashMap<Player, PermissionAttachment>();
 
 
     /**
@@ -74,7 +81,137 @@ public final class PermissionsManager
         }
         return false;
     }
+    
+//    /**
+//     * Adds a permission to a clan
+//     * @param cp
+//     * @param permission 
+//     */
+//    public void addPermission(Clan clan, String permission) {
+//        if (permissions.containsKey(clan.getName())) {
+//            permissions.get(clan.getName()).add(permission);
+//        } else {
+//            permissions.put(clan.getName(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getName()));
+//        }
+//        for (ClanPlayer cp : clan.getMembers()) {
+//            permAttaches.get(cp.toPlayer()).setPermission(permission, true);
+//        }
+//
+//    }
+//
+//    /**
+//     * Removes a permission from a clan
+//     * @param cp
+//     * @param permission 
+//     */
+//    public void removePermission(Clan clan, String permission) {
+//        if (permissions.containsKey(clan.getName())) {
+//            permissions.get(clan.getName()).remove(permission);
+//        } else {
+//            permissions.put(clan.getName(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getName()));
+//        }
+//        for (ClanPlayer cp : clan.getMembers()) {
+//            permAttaches.get(cp.toPlayer()).unsetPermission(permission);
+//        }
+//    }
+    
+    /**
+     * Loads the permissions for each clan from the config
+     *
+     */
+    public void loadPermissions() {
+        SimpleClans.getInstance().getSettingsManager().load();
+        permissions.clear();
+        for (Clan clan : plugin.getClanManager().getClans()) {
+            permissions.put(clan.getName(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getName()));
+        }
+    }
 
+    /**
+     * Saves the permissions for earch clan from the config
+     *
+     */
+    public void savePermissions() {
+        for (Clan clan : plugin.getClanManager().getClans()) {
+            if (permissions.containsKey(clan.getName())) {
+                SimpleClans.getInstance().getSettingsManager().getConfig().set("permissions." + clan.getName(), getPermissions(clan));
+            }
+        }
+        SimpleClans.getInstance().getSettingsManager().save();
+    }
+    
+    /**
+     * Updates all pemrissions for a clan
+     * @param clan
+     */
+    public void updateClanPermissions(Clan clan) {
+        for (ClanPlayer cp : clan.getMembers()) {
+            updatePlayerPermissions(cp);
+        }
+    }
+
+    /**
+     * Setups permissions for a player
+     * @param cp
+     */
+    public void updatePlayerPermissions(ClanPlayer cp) {
+        if (cp != null) {
+            Player player = cp.toPlayer();
+            if (permissions.containsKey(cp.getClan().getName())) {
+                if (!permAttaches.containsKey(cp.toPlayer())) {
+                    permAttaches.put(cp.toPlayer(), cp.toPlayer().addAttachment(SimpleClans.getInstance()));
+                }
+                //Adds all permisisons from his clan
+                for (String perm : getPermissions(cp.getClan())) {
+                    permAttaches.get(cp.toPlayer()).setPermission(perm, true);
+                }
+                player.recalculatePermissions();
+            }
+        }
+    }
+    
+    /**
+     * Removes permissions for a clan (when it gets disbanded for example)
+     * @param clan
+     */
+    public void removeClanPermissions(Clan clan) {
+        for (ClanPlayer cp : clan.getMembers()) {
+            removeClanPlayerPermissions(cp);
+        }
+    }
+    
+    /**
+     * Removes permissions for a player (when he gets kicked for example)
+     * @param cp
+     */
+    public void removeClanPlayerPermissions(ClanPlayer cp) {
+        if (cp.getClan() != null && cp != null) {
+            if (getPermissions(cp.getClan()) != null) {
+                permAttaches.get(cp.toPlayer()).remove();
+                if( permAttaches.containsKey(cp.toPlayer())) {
+                    permAttaches.remove(cp.toPlayer());
+                }
+                cp.toPlayer().recalculatePermissions();
+            }
+        }
+    }
+    
+    /**
+     * @return the permissions for a clan
+     * @param clan
+     */
+    public List<String> getPermissions(Clan clan) {
+        return permissions.get(clan.getName());
+    }
+
+
+    /**
+     * @return the PermissionsAttachments for every player
+     */
+    public HashMap<Player, PermissionAttachment> getPermAttaches() {
+        return permAttaches;
+    }
+    
     /**
      * Charge a player some money
      *

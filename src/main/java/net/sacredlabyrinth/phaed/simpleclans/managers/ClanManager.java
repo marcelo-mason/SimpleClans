@@ -10,7 +10,6 @@ import org.bukkit.inventory.PlayerInventory;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
-import org.bukkit.permissions.PermissionAttachment;
 
 /**
  * @author phaed
@@ -20,7 +19,7 @@ public final class ClanManager {
     private SimpleClans plugin;
     private HashMap<String, Clan> clans = new HashMap<String, Clan>();
     private HashMap<String, ClanPlayer> clanPlayers = new HashMap<String, ClanPlayer>();
-    private HashMap<String, List<String>> permissions = new HashMap<String, List<String>>();
+    
 
     /**
      *
@@ -74,6 +73,8 @@ public final class ClanManager {
         plugin.getStorageManager().insertClan(clan);
         importClan(clan);
         plugin.getStorageManager().updateClanPlayer(cp);
+
+        SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
 
         plugin.getSpoutPluginManager().processPlayer(player.getName());
     }
@@ -132,75 +133,6 @@ public final class ClanManager {
         }
 
         return null;
-    }
-
-    /**
-     * Adds a permission to a clan
-     *
-     */
-    public void addPermission(String clan, String permission) {
-        if (permissions.containsKey(clan)) {
-            permissions.get(clan).add(permission);
-        } else {
-            permissions.put(clan, SimpleClans.getInstance().getConfig().getStringList("permissions." + clan));
-        }
-    }
-
-    /**
-     * Removes a permission to a clan
-     *
-     */
-    public void removePermission(String clan, String permission) {
-        permissions.get(clan).remove(permission);
-    }
-
-    /**
-     * Loads the permissions for earch clan from the config
-     *
-     */
-    public void loadPermissions() {
-        SimpleClans.getInstance().getSettingsManager().load();
-        permissions.clear();
-        for (Clan clan : getClans()) {
-            permissions.put(clan.getName(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getName()));
-        }
-    }
-
-    /**
-     * Saves the permissions for earch clan from the config
-     *
-     */
-    public void savePermissions() {
-        for (Clan clan : getClans()) {
-            if (permissions.containsKey(clan.getName())) {
-                SimpleClans.getInstance().getSettingsManager().getConfig().set("permissions." + clan.getName(), permissions.get(clan.getName()));
-            }
-        }
-        SimpleClans.getInstance().getSettingsManager().save();
-    }
-
-    /**
-     * Updates all pemrissions for a clan
-     */
-    public void updateAllPermissions(Clan clan) {
-        for (ClanPlayer cp : clan.getMembers()) {
-            HashMap<Player, PermissionAttachment> permAttaches = clan.getPermAttaches();
-            Player player = cp.toPlayer();
-            if (player.isOnline()) {
-                if (!permAttaches.containsKey(player)) {
-                    permAttaches.put(player, player.addAttachment(SimpleClans.getInstance()));
-                }
-                for (String perm : permissions.get(clan.getName())) {
-                    permAttaches.get(player).setPermission(perm, true);
-                }
-                for (String perms : permAttaches.get(player).getPermissions().keySet()) {
-                    if (!permissions.get(clan.getName()).contains(perms)) {
-                        permAttaches.get(player).unsetPermission(perms);
-                    }
-                }
-                player.recalculatePermissions();
-            }
-        }
     }
 
     /**
@@ -1116,12 +1048,5 @@ public final class ClanManager {
         }
 
         return false;
-    }
-
-    /**
-     * @return the permissions
-     */
-    public List<String> getPermissions(Clan clan) {
-        return permissions.get(clan.getName());
     }
 }
