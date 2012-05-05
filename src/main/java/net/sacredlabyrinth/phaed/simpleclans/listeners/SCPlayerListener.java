@@ -280,6 +280,7 @@ public class SCPlayerListener implements Listener
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
         {
+            @Override
             public void run()
             {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
@@ -287,7 +288,7 @@ public class SCPlayerListener implements Listener
                 plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
                 plugin.getSpoutPluginManager().processPlayer(player.getName());
-                cp.getClan().updatePermissions(cp);
+                SimpleClans.getInstance().getPermissionsManager().updatePlayerPermissions(cp);
 
                 if (plugin.getSettingsManager().isBbShowOnLogin())
                 {
