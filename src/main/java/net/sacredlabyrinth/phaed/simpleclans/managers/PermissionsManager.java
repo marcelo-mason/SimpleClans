@@ -176,7 +176,7 @@ public final class PermissionsManager
      */
     public void removeClanPermissions(Clan clan) {
         for (ClanPlayer cp : clan.getMembers()) {
-            removeClanPlayerPermissions(cp);
+             removeClanPlayerPermissions(cp);
         }
     }
     
@@ -185,13 +185,16 @@ public final class PermissionsManager
      * @param cp
      */
     public void removeClanPlayerPermissions(ClanPlayer cp) {
-        if (cp.getClan() != null && cp != null) {
-            if (permissions.containsKey(cp.getClan().getName())) {
-                permAttaches.get(cp.toPlayer()).remove();
-                if( permAttaches.containsKey(cp.toPlayer())) {
-                    permAttaches.remove(cp.toPlayer());
+        if (cp != null) {
+            if (cp.getClan() != null) {
+                if (cp.toPlayer() != null){
+                    if (permissions.containsKey(cp.getClan().getName())) {
+                        if(permAttaches.containsKey(cp.toPlayer())) {
+                        permAttaches.get(cp.toPlayer()).remove();
+                        permAttaches.remove(cp.toPlayer());
+                        }
+                    }
                 }
-                cp.toPlayer().recalculatePermissions();
             }
         }
     }

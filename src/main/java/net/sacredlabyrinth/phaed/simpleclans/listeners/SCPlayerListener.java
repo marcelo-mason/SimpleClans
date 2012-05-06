@@ -351,7 +351,10 @@ public class SCPlayerListener implements Listener
         {
             return;
         }
-
+        
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
+                        
+        SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
         plugin.getClanManager().updateLastSeen(event.getPlayer());
         plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());
     }

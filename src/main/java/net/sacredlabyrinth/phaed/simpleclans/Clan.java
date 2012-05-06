@@ -845,10 +845,12 @@ public class Clan implements Serializable, Comparable<Clan> {
     public void removePlayerFromClan(String playerName) {
         ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
 
-        // remove clan permission
+        // remove clan group-permission
         SimpleClans.getInstance().getPermissionsManager().removeClanPermissions(cp);
         
-
+        // remove permissions
+        SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
+        
         cp.setClan(null);
         cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
         cp.setLeader(false);
@@ -859,8 +861,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        //Update Permissions
-        SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
+
 
         Player matched = Helper.matchOnePlayer(playerName);
 
