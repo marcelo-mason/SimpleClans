@@ -5,7 +5,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -437,7 +439,7 @@ public final class RequestManager
      */
     public boolean endPendingRequest(String playerName)
     {
-        for (Request req : requests.values())
+        for (Request req : new LinkedList<Request>(requests.values()))
         {
             for (ClanPlayer cp : req.getAcceptors())
             {

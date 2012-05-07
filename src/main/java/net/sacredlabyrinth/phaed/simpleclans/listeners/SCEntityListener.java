@@ -71,7 +71,26 @@ public class SCEntityListener implements Listener
             {
                 ClanPlayer acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
                 ClanPlayer vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
-
+                
+                double reward = 0;
+                
+                if (!acp.isAlly(victim) && !acp.isRival(victim)) {
+                    reward = (double)acp.getKDR() * 10;
+                    //is a neutral kill
+                } else if (acp.isRival(victim)) {
+                    if (acp.getClan().isWarring(vcp.getClan())) {
+                        reward = (double)acp.getKDR() * 10 * 2 * 2;
+                    } else {
+                        reward = (double)acp.getKDR() * 10 * 2;
+                    }
+                } else if (acp.isAlly(victim)) {
+                    reward = (double)acp.getKDR() * 10 * -1;
+                }
+                
+                if (reward != 0) {
+                    plugin.getPermissionsManager().playerGrantMoney(attacker, Math.round(reward*100D)/100D);
+                }
+                
                 // record attacker kill
 
                 // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian

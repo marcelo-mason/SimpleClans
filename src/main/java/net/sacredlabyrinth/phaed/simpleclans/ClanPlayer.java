@@ -170,6 +170,24 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         return false;
     }
+    
+    /**
+     * Check whether the player is an rival with another player
+     *
+     * @param player
+     * @return
+     */
+    public boolean isRival(Player player)
+    {
+        ClanPlayer allycp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
+
+        if (allycp != null)
+        {
+            return allycp.getClan().isRival(tag);
+        }
+
+        return false;
+    }
 
 
     /**

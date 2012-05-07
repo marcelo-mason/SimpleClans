@@ -94,6 +94,13 @@ public final class StorageManager
                     String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20) NOT NULL auto_increment, `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
                     core.execute(query);
                 }
+                if (!core.existsTable("sc_war"))
+                {
+                    SimpleClans.log("Creating table: sc_kills");
+
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `id` bigint(20) NOT NULL auto_increment, `attacker_clan` varchar(16) NOT NULL, `victim_clan` varchar(16) NOT NULL, `strifes` varchar(16) NOT NULL, PRIMARY KEY  (`id`));";
+                    core.execute(query);
+                }
             }
             else
             {
@@ -129,6 +136,13 @@ public final class StorageManager
                     SimpleClans.log("Creating table: sc_kills");
 
                     String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20), `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
+                    core.execute(query);
+                }
+                if (!core.existsTable("sc_war"))
+                {
+                    SimpleClans.log("Creating table: sc_kills");
+
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `id` bigint(20) NOT NULL auto_increment, `attacker_clan` varchar(16) NOT NULL, `victim_clan` varchar(16) NOT NULL, `strifes` varchar(16) NOT NULL, PRIMARY KEY  (`id`));";
                     core.execute(query);
                 }
             }
@@ -324,7 +338,56 @@ public final class StorageManager
 
         return out;
     }
+    
+    /**
+     * Retrieves the strifes relativ to another clan
+     * @param attackerclan
+     * @param victimclan
+     * @return
+     */
+    public Integer retrieveStrifes(Clan attackerclan, Clan victimclan)
+    {
+        String query = "SELECT * FROM  `sc_war`;";
+        ResultSet res = core.select(query);
+        
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String attacker = res.getString("attacker_clan");
+                        String victim = res.getString("victim_clan");
+                        int strifes = res.getInt("strifes");
+                        
+                        if (attacker.equals(attackerclan.getTag()) && victim.equals(victimclan.getTag())) {
+                            return strifes;
+                        }
 
+                    }
+                    catch (Exception ex)
+                    {
+                        for (StackTraceElement el : ex.getStackTrace())
+                        {
+                            System.out.print(el.toString());
+                        }
+                    }
+                }
+            }
+            catch (SQLException ex)
+            {
+                for (StackTraceElement el : ex.getStackTrace())
+                {
+                    System.out.print(el.toString());
+                }
+            }
+        }
+        return 0;
+    }
+    
+    
     /**
      * Retrieves all clan players from the database
      *
@@ -429,6 +492,18 @@ public final class StorageManager
     }
 
     /**
+     * Insert a strife to a clan
+     * @param attackerclan
+     * @param victimclan
+     */
+    public void insertStrife(Clan attackerclan, Clan victimclan, Integer amount)
+    {
+        String query = "INSERT INTO `sc_war`(`attacker_clan`, `victim_clan`, `strifes`)";
+        String values = "VALUES ( " + attackerclan.getTag() + ",'" + victimclan.getTag() + "','" + (retrieveStrifes(attackerclan, victimclan) + amount) + "');";
+        core.insert(query + values);
+    }
+    
+    /**
      * Update a clan to the database
      *
      * @param clan
@@ -448,7 +523,9 @@ public final class StorageManager
     public void deleteClan(Clan clan)
     {
         String query = "DELETE FROM `sc_clans` WHERE tag = '" + clan.getTag() + "';";
+        String war = "DELETE FROM `sc_war` WHERE `attacker_clan` = '" + clan.getTag() + "'; DELETE FROM `sc_war` WHERE `victim_clan` = '" + clan.getTag() + "';";
         core.delete(query);
+        core.delete(war);
     }
 
     /**
