@@ -1,7 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
+import java.util.Iterator;
+import net.sacredlabyrinth.Phaed.PreciousStones.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -10,8 +11,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
-
-import java.util.Iterator;
 
 /**
  * @author phaed
@@ -288,7 +287,7 @@ public class SCPlayerListener implements Listener
                 plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
                 plugin.getSpoutPluginManager().processPlayer(player.getName());
-                SimpleClans.getInstance().getPermissionsManager().updatePlayerPermissions(cp);
+                SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
 
                 if (plugin.getSettingsManager().isBbShowOnLogin())
                 {

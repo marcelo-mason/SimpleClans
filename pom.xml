@@ -97,6 +97,13 @@
             <scope>compile</scope>
         </dependency>
         <dependency>
+            <groupId>org.kitteh.vanish</groupId>
+            <artifactId>VanishNoPacket</artifactId>
+            <version>dev-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/VanishNoPacket.jar</systemPath>
+        </dependency>
+        <dependency>
             <groupId>in.mDec</groupId>
             <artifactId>mChatSuite</artifactId>
             <version>dev-SNAPSHOT</version>

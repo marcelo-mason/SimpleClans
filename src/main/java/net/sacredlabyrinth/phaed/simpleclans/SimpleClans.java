@@ -1,21 +1,21 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
-import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
-import net.sacredlabyrinth.phaed.simpleclans.managers.*;
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.text.MessageFormat;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
+import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
+import net.sacredlabyrinth.phaed.simpleclans.managers.*;
+import org.bukkit.entity.Player;
+import org.bukkit.plugin.java.JavaPlugin;
 
 /**
  * @author Phaed
  */
-public class SimpleClans extends JavaPlugin
-{
+public class SimpleClans extends JavaPlugin {
+
     private static SimpleClans instance;
     private static final Logger logger = Logger.getLogger("Minecraft");
     private ClanManager clanManager;
@@ -28,24 +28,20 @@ public class SimpleClans extends JavaPlugin
     private TeleportManager teleportManager;
     private SCPlayerListener playerListener;
     private SCEntityListener entityListener;
-
     private ResourceBundle lang;
 
     /**
      * @return the logger
      */
-    public static Logger getLog()
-    {
+    public static Logger getLog() {
         return logger;
     }
 
     /**
      * @return the logger
      */
-    public static void debug(String msg)
-    {
-        if (getInstance().getSettingsManager().isDebugging())
-        {
+    public static void debug(String msg) {
+        if (getInstance().getSettingsManager().isDebugging()) {
             logger.log(Level.INFO, msg);
         }
     }
@@ -53,31 +49,25 @@ public class SimpleClans extends JavaPlugin
     /**
      * @return the instance
      */
-    public static SimpleClans getInstance()
-    {
+    public static SimpleClans getInstance() {
         return instance;
     }
 
-    public static void log(String msg, Object... arg)
-    {
-        if (arg == null || arg.length == 0)
-        {
+    public static void log(String msg, Object... arg) {
+        if (arg == null || arg.length == 0) {
             logger.log(Level.INFO, msg);
-        }
-        else
-        {
+        } else {
             logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
         }
     }
 
     @Override
-    public void onEnable()
-    {
+    public void onEnable() {
         instance = this;
         settingsManager = new SettingsManager();
 
         lang = PropertyResourceBundle.getBundle("languages.lang");
-        
+
         logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
         spoutPluginManager = new SpoutPluginManager();
@@ -93,85 +83,85 @@ public class SimpleClans extends JavaPlugin
 
         getServer().getPluginManager().registerEvents(entityListener, this);
         getServer().getPluginManager().registerEvents(playerListener, this);
-        
+
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
     }
 
     @Override
-    public void onDisable()
-    {
+    public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();
     }
-
+    
+    /**
+     * Checks if the player is vanished
+     * @param player 
+     * @param otherplayer 
+     * @return True if the player is vanished
+     */
+    public boolean isVanished(Player player, Player otherplayer) {
+        return player.canSee(otherplayer);
+    }
+    
     /**
      * @return the clanManager
      */
-    public ClanManager getClanManager()
-    {
+    public ClanManager getClanManager() {
         return clanManager;
     }
 
     /**
      * @return the requestManager
      */
-    public RequestManager getRequestManager()
-    {
+    public RequestManager getRequestManager() {
         return requestManager;
     }
 
     /**
      * @return the storageManager
      */
-    public StorageManager getStorageManager()
-    {
+    public StorageManager getStorageManager() {
         return storageManager;
     }
 
     /**
      * @return the spoutManager
      */
-    public SpoutPluginManager getSpoutPluginManager()
-    {
+    public SpoutPluginManager getSpoutPluginManager() {
         return spoutPluginManager;
     }
 
     /**
      * @return the settingsManager
      */
-    public SettingsManager getSettingsManager()
-    {
+    public SettingsManager getSettingsManager() {
         return settingsManager;
     }
 
     /**
      * @return the permissionsManager
      */
-    public PermissionsManager getPermissionsManager()
-    {
+    public PermissionsManager getPermissionsManager() {
         return permissionsManager;
     }
 
     /**
      * @return the commandManager
      */
-    public CommandManager getCommandManager()
-    {
+    public CommandManager getCommandManager() {
         return commandManager;
     }
 
     /**
      * @return the lang
      */
-    public String getLang(String msg)
-    {
+    public String getLang(String msg) {
         return lang.getString(msg);
     }
 
-    public TeleportManager getTeleportManager()
-    {
+    public TeleportManager getTeleportManager() {
         return teleportManager;
     }
 }
