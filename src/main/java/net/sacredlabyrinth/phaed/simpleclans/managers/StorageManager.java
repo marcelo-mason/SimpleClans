@@ -96,7 +96,7 @@ public final class StorageManager
                 }
                 if (!core.existsTable("sc_war"))
                 {
-                    SimpleClans.log("Creating table: sc_kills");
+                    SimpleClans.log("Creating table: sc_war");
 
                     String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `id` bigint(20) NOT NULL auto_increment, `attacker_clan` varchar(16) NOT NULL, `victim_clan` varchar(16) NOT NULL, `strifes` varchar(16) NOT NULL, PRIMARY KEY  (`id`));";
                     core.execute(query);
