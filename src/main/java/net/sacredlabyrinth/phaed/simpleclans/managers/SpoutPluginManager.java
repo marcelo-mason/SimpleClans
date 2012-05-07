@@ -7,9 +7,8 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
-import org.getspout.spoutapi.player.SpoutPlayer;
-
 import static org.getspout.spoutapi.SpoutManager.*;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * @author phaed

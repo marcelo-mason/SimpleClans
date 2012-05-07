@@ -1,13 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import org.bukkit.configuration.file.FileConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * @author phaed
@@ -123,6 +122,8 @@ public final class SettingsManager
     private boolean homebaseSetOnce;
     private int waitSecs;
     private boolean enableAutoGroups;
+    private boolean moneyperkill;
+    private double KDRMultipliesPerKill;
 
     /**
      *
@@ -265,6 +266,8 @@ public final class SettingsManager
         username = getConfig().getString("mysql.username");
         password = getConfig().getString("mysql.password");
         safeCivilians = getConfig().getBoolean("safe-civilians");
+        moneyperkill = getConfig().getBoolean("economy.money-per-kill");
+        KDRMultipliesPerKill = getConfig().getDouble("economy.money-per-kill-kdr-multipier");
 
         save();
     }
@@ -1213,5 +1216,19 @@ public final class SettingsManager
      */
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    /**
+     * @return the moneyperkill
+     */
+    public boolean isMoneyPerKill() {
+        return moneyperkill;
+    }
+
+    /**
+     * @return the KDRMultipliesPerKill
+     */
+    public double getKDRMultipliesPerKill() {
+        return KDRMultipliesPerKill;
     }
 }
