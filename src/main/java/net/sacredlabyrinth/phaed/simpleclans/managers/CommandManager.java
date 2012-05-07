@@ -51,6 +51,7 @@ public final class CommandManager
     private KillsCommand killsCommand;
     private MostKilledCommand mostKilledCommand;
     private SetRankCommand setRankCommand;
+    private PermissionsCommand permissionscommand;
 
     /**
      *
@@ -59,6 +60,7 @@ public final class CommandManager
     {
         plugin = SimpleClans.getInstance();
         menuCommand = new MenuCommand();
+        permissionscommand = new PermissionsCommand();
         createCommand = new CreateCommand();
         listCommand = new ListCommand();
         profileCommand = new ProfileCommand();
@@ -129,6 +131,10 @@ public final class CommandManager
                 if (subcommand.equalsIgnoreCase(plugin.getLang("create.command")))
                 {
                     createCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase("permissions"))
+                {
+                    permissionscommand.execute(player, subargs);
                 }
                 else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")))
                 {

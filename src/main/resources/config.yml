@@ -130,5 +130,10 @@ mysql:
     password: ''
     database: ''
 permissions:
+<<<<<<< HEAD
   YourClanNameHere:
   - test.permission
+=======
+#  YourClanNameHere:
+#  - test.permission
+>>>>>>> master
