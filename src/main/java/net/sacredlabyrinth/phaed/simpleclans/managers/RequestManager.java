@@ -1,14 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import java.text.MessageFormat;
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /**
  * @author phaed

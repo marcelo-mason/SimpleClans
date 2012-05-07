@@ -1,7 +1,9 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
+import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
@@ -72,23 +74,33 @@ public class SCEntityListener implements Listener
                 ClanPlayer acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
                 ClanPlayer vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
                 
-                double reward = 0;
-                
-                if (!acp.isAlly(victim) && !acp.isRival(victim)) {
-                    reward = (double)acp.getKDR() * 10;
+                if (plugin.getSettingsManager().isMoneyPerKill()) {
+                    double reward = 0;
+                    double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
+                    
                     //is a neutral kill
-                } else if (acp.isRival(victim)) {
-                    if (acp.getClan().isWarring(vcp.getClan())) {
-                        reward = (double)acp.getKDR() * 10 * 2 * 2;
-                    } else {
-                        reward = (double)acp.getKDR() * 10 * 2;
+                    if (acp.getClan() != null && acp.isAlly(victim) && !acp.isRival(victim)) {
+                        reward = (double)acp.getKDR() * multipier;
+                    //is a rival kill
+                    } else if (acp.isRival(victim)) {
+                        //is a war kill
+                        if (acp.getClan().isWarring(vcp.getClan())) {
+                            reward = (double)acp.getKDR() * multipier * 2 * 2;
+                        } else {
+                            reward = (double)acp.getKDR() * multipier * 2;
+                        }
+                    //is a ally kill
+                    } else if (acp.isAlly(victim)) {
+                        reward = (double)acp.getKDR() * multipier * -1;
                     }
-                } else if (acp.isAlly(victim)) {
-                    reward = (double)acp.getKDR() * 10 * -1;
-                }
-                
-                if (reward != 0) {
-                    plugin.getPermissionsManager().playerGrantMoney(attacker, Math.round(reward * 100D) / 100D);
+
+                    if (reward != 0) {
+                        for (ClanPlayer cp : acp.getClan().getOnlineMembers()) {
+                            double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
+                            cp.toPlayer().sendMessage(MessageFormat.format(plugin.getLang("the.clan.is.already.verified"), money, victim.getName(), acp.getKDR()));
+                            plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
+                        }
+                    }
                 }
                 
                 // record attacker kill
@@ -230,7 +242,6 @@ public class SCEntityListener implements Listener
                     if (vclan.isAlly(aclan.getTag()))
                     {
                         event.setCancelled(true);
-                        return;
                     }
                 }
                 else
@@ -240,7 +251,6 @@ public class SCEntityListener implements Listener
                     if (plugin.getSettingsManager().getSafeCivilians())
                     {
                         event.setCancelled(true);
-                        return;
                     }
                 }
             }
@@ -251,7 +261,6 @@ public class SCEntityListener implements Listener
                 if (plugin.getSettingsManager().getSafeCivilians())
                 {
                     event.setCancelled(true);
-                    return;
                 }
             }
         }

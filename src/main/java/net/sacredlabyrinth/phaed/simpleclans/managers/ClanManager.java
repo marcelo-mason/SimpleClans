@@ -681,6 +681,7 @@ public final class ClanManager {
     public void sortClansByKDR(List<Clan> clans) {
         Collections.sort(clans, new Comparator<Clan>() {
 
+            @Override
             public int compare(Clan c1, Clan c2) {
                 Float o1 = c1.getTotalKDR();
                 Float o2 = c2.getTotalKDR();
@@ -699,6 +700,7 @@ public final class ClanManager {
     public void sortClanPlayersByKDR(List<ClanPlayer> cps) {
         Collections.sort(cps, new Comparator<ClanPlayer>() {
 
+            @Override
             public int compare(ClanPlayer c1, ClanPlayer c2) {
                 Float o1 = c1.getKDR();
                 Float o2 = c2.getKDR();
@@ -717,6 +719,7 @@ public final class ClanManager {
     public void sortClanPlayersByLastSeen(List<ClanPlayer> cps) {
         Collections.sort(cps, new Comparator<ClanPlayer>() {
 
+            @Override
             public int compare(ClanPlayer c1, ClanPlayer c2) {
                 Double o1 = c1.getLastSeenDays();
                 Double o2 = c2.getLastSeenDays();
@@ -910,7 +913,7 @@ public final class ClanManager {
             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left clan chat");
         } else {
             String code = "" + ChatColor.RED + ChatColor.WHITE + ChatColor.RED + ChatColor.BLACK;
-            String tag = "";
+            String tag;
 
             if (cp.getRank() != null && !cp.getRank().isEmpty()) {
                 tag = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getClanChatRankColor() + cp.getRank() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " ";

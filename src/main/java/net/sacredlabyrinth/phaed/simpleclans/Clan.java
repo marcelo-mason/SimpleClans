@@ -573,6 +573,26 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         return out;
     }
+    
+    /**
+     * Get all online members (leaders, and non-leaders) in the clan
+     *
+     * @return the members
+     */
+    public List<ClanPlayer> getOnlineMembers() {
+        List<ClanPlayer> out = new ArrayList<ClanPlayer>();
+
+        for (String member : members) {
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
+            if (cp.toPlayer() != null) {
+                if (cp.toPlayer().isOnline()) {
+                       out.add(cp);
+                }
+            }
+        }
+
+        return out;
+    }
 
     /**
      * Get all leaders in the clan
