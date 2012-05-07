@@ -97,8 +97,15 @@ public class RosterCommand
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
                     boolean isAviable = false;
+                    boolean isVanished = false;
                     
-                    if (p.isOnline() && !plugin.isVanished(p, player))
+                    if (player.hasMetadata("vanished")) {
+                        if (!player.getMetadata("vanished").isEmpty()) {
+                            isVanished = player.getMetadata("vanished").get(0).asBoolean();
+                        }
+                    }
+                    
+                    if (p.isOnline() && !isVanished)
                     {
                         isAviable = true;
                     }
@@ -114,8 +121,15 @@ public class RosterCommand
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
                     boolean isAviable = false;
+                    boolean isVanished = false;
                     
-                    if (p.isOnline() && !plugin.isVanished(p, player))
+                    if (player.hasMetadata("vanished")) {
+                        if (!player.getMetadata("vanished").isEmpty()) {
+                            isVanished = player.getMetadata("vanished").get(0).asBoolean();
+                        }
+                    }
+                    
+                    if (p.isOnline() && !isVanished)
                     {
                             isAviable = true;
                     }
