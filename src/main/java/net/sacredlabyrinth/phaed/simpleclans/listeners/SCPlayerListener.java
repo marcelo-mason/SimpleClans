@@ -1,8 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
 import java.util.Iterator;
-import net.sacredlabyrinth.Phaed.PreciousStones.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

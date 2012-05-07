@@ -74,40 +74,14 @@ public class SCEntityListener implements Listener
                 ClanPlayer acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
                 ClanPlayer vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
                 
-                if (plugin.getSettingsManager().isMoneyPerKill()) {
-                    double reward = 0;
-                    double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
-                    
-                    //is a neutral kill
-                    if (acp.getClan() != null && acp.isAlly(victim) && !acp.isRival(victim)) {
-                        reward = (double)acp.getKDR() * multipier;
-                    //is a rival kill
-                    } else if (acp.isRival(victim)) {
-                        //is a war kill
-                        if (acp.getClan().isWarring(vcp.getClan())) {
-                            reward = (double)acp.getKDR() * multipier * 2 * 2;
-                        } else {
-                            reward = (double)acp.getKDR() * multipier * 2;
-                        }
-                    //is a ally kill
-                    } else if (acp.isAlly(victim)) {
-                        reward = (double)acp.getKDR() * multipier * -1;
-                    }
-
-                    if (reward != 0) {
-                        for (ClanPlayer cp : acp.getClan().getOnlineMembers()) {
-                            double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
-                            cp.toPlayer().sendMessage(MessageFormat.format(plugin.getLang("the.clan.is.already.verified"), money, victim.getName(), acp.getKDR()));
-                            plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
-                        }
-                    }
-                }
-                
                 // record attacker kill
 
                 // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
                 // if both have verified clans, check for rival or default to neutral
-
+                
+                double reward = 0;
+                double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
+                
                 if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified())
                 {
                     acp.addCivilianKill();
@@ -115,17 +89,37 @@ public class SCEntityListener implements Listener
                 }
                 else if (acp.getClan().isRival(vcp.getTag()))
                 {
+                    if (acp.getClan().isWarring(vcp.getClan())) 
+                    {
+                        reward = (double)acp.getKDR() * multipier * 2 * 2;
+                    } 
+                    else 
+                    {
+                        reward = (double)acp.getKDR() * multipier * 2;
+                    }
                     acp.addRivalKill();
                     plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
                 }
+                else if (acp.getClan().isAlly(vcp.getTag()))
+                {
+                    reward = (double)acp.getKDR() * multipier * -1;
+                }
                 else
                 {
+                    reward = (double)acp.getKDR() * multipier;
                     acp.addNeutralKill();
                     plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
                 }
 
-                // record death for victim
+                if (reward != 0 && plugin.getSettingsManager().isMoneyPerKill()) {
+                    for (ClanPlayer cp : acp.getClan().getOnlineMembers()) {
+                        double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
+                        cp.toPlayer().sendMessage(MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), acp.getKDR()));
+                        plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
+                    }
+                }
 
+                // record death for victim
                 vcp.addDeath();
                 plugin.getStorageManager().updateClanPlayer(vcp);
             }
