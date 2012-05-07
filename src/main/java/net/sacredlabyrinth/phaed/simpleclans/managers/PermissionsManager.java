@@ -226,6 +226,18 @@ public final class PermissionsManager
     {
         return economy.withdrawPlayer(player.getName(), money).transactionSuccess();
     }
+    
+    /**
+     * Grants a player some money
+     *
+     * @param player
+     * @param money
+     * @return
+     */
+    public boolean playerGrantMoney(Player player, double money)
+    {
+        return economy.depositPlayer(player.getName(), money).transactionSuccess();
+    }
 
     /**
      * Check if a user has the money
