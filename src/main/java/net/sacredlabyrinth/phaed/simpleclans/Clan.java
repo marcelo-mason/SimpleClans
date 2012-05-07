@@ -38,6 +38,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     private int homeY = 0;
     private int homeZ = 0;
     private String homeWorld = "";
+    private HashMap<Player, PermissionAttachment> permAttaches = new HashMap<Player, PermissionAttachment>();
 
     /**
      *
@@ -81,7 +82,10 @@ public class Clan implements Serializable, Comparable<Clan> {
         return other.getTag().equals(this.getTag());
     }
 
+<<<<<<< HEAD
     @Override
+=======
+>>>>>>> master
     public int compareTo(Clan other) {
         return this.getTag().compareToIgnoreCase(other.getTag());
     }
@@ -141,6 +145,52 @@ public class Clan implements Serializable, Comparable<Clan> {
      */
     public void updateLastUsed() {
         setLastUsed((new Date()).getTime());
+    }
+
+    /**
+     * Setups permissions for a player
+     */
+    public void updatePermissions(ClanPlayer cp) {
+        List<String> permissions = SimpleClans.getInstance().getClanManager().getPermissions(cp.getClan());
+        System.out.println(permissions);
+        Player player = cp.toPlayer();
+
+        if (!permAttaches.containsKey(player)) {
+            getPermAttaches().put(player, player.addAttachment(SimpleClans.getInstance()));
+        }
+        for (String perm : permissions) {
+            getPermAttaches().get(player).setPermission(perm, true);
+        }
+        for (String perms : getPermAttaches().get(player).getPermissions().keySet()) {
+            if (!permissions.contains(perms)) {
+                getPermAttaches().get(player).unsetPermission(perms);
+            }
+        }
+        player.recalculatePermissions();
+    }
+
+    /**
+     * Setups permissions for the complete clan
+     */
+    public void updateClanPermissions() {
+        for (ClanPlayer cp : this.getMembers()) {
+            List<String> permissions = SimpleClans.getInstance().getClanManager().getPermissions(cp.getClan());
+            Player player = cp.toPlayer();
+            if (player.isOnline()) {
+                if (!permAttaches.containsKey(player)) {
+                    getPermAttaches().put(player, player.addAttachment(SimpleClans.getInstance()));
+                }
+                for (String perm : permissions) {
+                    getPermAttaches().get(player).setPermission(perm, true);
+                }
+                for (String perms : getPermAttaches().get(player).getPermissions().keySet()) {
+                    if (!permissions.contains(perms)) {
+                        getPermAttaches().get(player).unsetPermission(perms);
+                    }
+                }
+                player.recalculatePermissions();
+            }
+        }
     }
 
     /**
@@ -1140,10 +1190,15 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         for (ClanPlayer cp : clanPlayers) {
             if (cp.getTag().equals(getTag())) {
+<<<<<<< HEAD
                 SimpleClans.getInstance().getPermissionsManager().removeClanPermissions(this);
                 cp.setClan(null);
 
 
+=======
+                cp.setClan(null);
+
+>>>>>>> master
                 if (isVerified()) {
                     cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
                 }
@@ -1370,5 +1425,12 @@ public class Clan implements Serializable, Comparable<Clan> {
     public String getTagLabel() {
         SimpleClans plugin = SimpleClans.getInstance();
         return plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
+    }
+
+    /**
+     * @return the permAttaches
+     */
+    public HashMap<Player, PermissionAttachment> getPermAttaches() {
+        return permAttaches;
     }
 }
