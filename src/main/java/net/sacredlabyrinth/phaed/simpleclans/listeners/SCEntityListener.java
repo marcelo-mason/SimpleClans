@@ -88,7 +88,7 @@ public class SCEntityListener implements Listener
                 }
                 
                 if (reward != 0) {
-                    plugin.getPermissionsManager().playerGrantMoney(attacker, Math.round(reward*100D)/100D);
+                    plugin.getPermissionsManager().playerGrantMoney(attacker, Math.round(reward * 100D) / 100D);
                 }
                 
                 // record attacker kill
