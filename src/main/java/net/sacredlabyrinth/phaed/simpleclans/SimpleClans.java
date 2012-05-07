@@ -96,16 +96,6 @@ public class SimpleClans extends JavaPlugin {
     }
     
     /**
-     * Checks if the player is vanished
-     * @param player 
-     * @param otherplayer 
-     * @return True if the player is vanished
-     */
-    public boolean isVanished(Player player, Player otherplayer) {
-        return player.canSee(otherplayer);
-    }
-    
-    /**
      * @return the clanManager
      */
     public ClanManager getClanManager() {
