@@ -288,11 +288,7 @@ public class SCPlayerListener implements Listener
                 plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
                 plugin.getSpoutPluginManager().processPlayer(player.getName());
-<<<<<<< HEAD
                 SimpleClans.getInstance().getPermissionsManager().updatePlayerPermissions(cp);
-=======
-                cp.getClan().updatePermissions(cp);
->>>>>>> master
 
                 if (plugin.getSettingsManager().isBbShowOnLogin())
                 {

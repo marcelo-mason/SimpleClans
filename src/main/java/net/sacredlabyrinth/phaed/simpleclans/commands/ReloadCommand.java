@@ -29,15 +29,9 @@ public class ReloadCommand
         {
             plugin.getSettingsManager().load();
             plugin.getStorageManager().importFromDatabase();
-<<<<<<< HEAD
             SimpleClans.getInstance().getPermissionsManager().loadPermissions();
             for (Clan clan : plugin.getClanManager().getClans()) {
                 SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
-=======
-            plugin.getClanManager().loadPermissions();
-            for (Clan clan : plugin.getClanManager().getClans()) {
-                SimpleClans.getInstance().getClanManager().updateAllPermissions(clan);
->>>>>>> master
             }
             ChatBlock.sendMessage(player,  ChatColor.AQUA + plugin.getLang("configuration.reloaded"));
         }
