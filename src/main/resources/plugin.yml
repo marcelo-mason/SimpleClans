@@ -1,7 +1,7 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
 version: ${project.version}
-softdepend: [Spout, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones, mChat, mChatSuite]
+softdepend: [Spout, VanishNoPacket, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones, mChat, mChatSuite]
 permissions:
   simpleclans.admin.permissions:
     description: Can grant clans permissions
@@ -183,3 +183,6 @@ permissions:
       simpleclans.leader.home-set: true
       simpleclans.leader.home-regroup: true
       simpleclans.leader.setrank: true
+commands:
+  clan:
+    description: clan

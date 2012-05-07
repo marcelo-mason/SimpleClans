@@ -96,15 +96,15 @@ public class RosterCommand
                 {
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
-                    boolean isOnline = false;
-
-                    if (p != null)
+                    boolean isAviable = false;
+                    
+                    if (p.isOnline() && !plugin.isVanished(p, player))
                     {
-                        isOnline = true;
+                        isAviable = true;
                     }
 
                     String name = plugin.getSettingsManager().getPageLeaderColor() + cp.getName();
-                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (isAviable ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }
@@ -113,15 +113,16 @@ public class RosterCommand
                 {
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
-                    boolean isOnline = false;
-
-                    if (p != null)
+                    boolean isAviable = false;
+                    
+                    if (p.isOnline() && !plugin.isVanished(p, player))
                     {
-                        isOnline = true;
+                            isAviable = true;
                     }
 
+
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
-                    String lastSeen = (isOnline ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (isAviable ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }

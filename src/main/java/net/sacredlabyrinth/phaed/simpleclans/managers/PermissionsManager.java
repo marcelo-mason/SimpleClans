@@ -82,39 +82,6 @@ public final class PermissionsManager
         return false;
     }
     
-//    /**
-//     * Adds a permission to a clan
-//     * @param cp
-//     * @param permission 
-//     */
-//    public void addPermission(Clan clan, String permission) {
-//        if (permissions.containsKey(clan.getName())) {
-//            permissions.get(clan.getName()).add(permission);
-//        } else {
-//            permissions.put(clan.getName(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getName()));
-//        }
-//        for (ClanPlayer cp : clan.getMembers()) {
-//            permAttaches.get(cp.toPlayer()).setPermission(permission, true);
-//        }
-//
-//    }
-//
-//    /**
-//     * Removes a permission from a clan
-//     * @param cp
-//     * @param permission 
-//     */
-//    public void removePermission(Clan clan, String permission) {
-//        if (permissions.containsKey(clan.getName())) {
-//            permissions.get(clan.getName()).remove(permission);
-//        } else {
-//            permissions.put(clan.getName(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getName()));
-//        }
-//        for (ClanPlayer cp : clan.getMembers()) {
-//            permAttaches.get(cp.toPlayer()).unsetPermission(permission);
-//        }
-//    }
-    
     /**
      * Loads the permissions for each clan from the config
      *
@@ -141,20 +108,20 @@ public final class PermissionsManager
     }
     
     /**
-     * Updates all pemrissions for a clan
+     * Adds all pemrissions for a clan
      * @param clan
      */
     public void updateClanPermissions(Clan clan) {
         for (ClanPlayer cp : clan.getMembers()) {
-            updatePlayerPermissions(cp);
+            addPlayerPermissions(cp);
         }
     }
 
     /**
-     * Setups permissions for a player
+     * Adds permissions for a player
      * @param cp
      */
-    public void updatePlayerPermissions(ClanPlayer cp) {
+    public void addPlayerPermissions(ClanPlayer cp) {
         if (cp != null && cp.toPlayer() != null) {
             Player player = cp.toPlayer();
             if (permissions.containsKey(cp.getClan().getName())) {
@@ -188,10 +155,13 @@ public final class PermissionsManager
         if (cp != null) {
             if (cp.getClan() != null) {
                 if (cp.toPlayer() != null){
-                    if (permissions.containsKey(cp.getClan().getName())) {
-                        if(permAttaches.containsKey(cp.toPlayer())) {
-                        permAttaches.get(cp.toPlayer()).remove();
-                        permAttaches.remove(cp.toPlayer());
+                    Player player = cp.toPlayer();
+                    if (player.isOnline()) {
+                        if (permissions.containsKey(cp.getClan().getName())) {
+                            if(permAttaches.containsKey(player)) {
+                                permAttaches.get(player).remove();
+                                permAttaches.remove(player);
+                            }
                         }
                     }
                 }
