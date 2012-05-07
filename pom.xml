@@ -3,7 +3,7 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>net.sacredlabyrinth.phaed.simpleclans</groupId>
     <artifactId>SimpleClans</artifactId>
-    <version>2.2.2-SNAPSHOT</version>
+    <version>2.2.6.4</version>
     <name>SimpleClans</name>
     <url>http://dev.bukkit.org/server-mods/simpleclans/</url>
 
@@ -100,13 +100,15 @@
             <groupId>in.mDec</groupId>
             <artifactId>mChatSuite</artifactId>
             <version>dev-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/mChatSuite.jar</systemPath>
         </dependency>
         <dependency>
             <groupId>net.sacredlabyrinth.Phaed.PreciousStones</groupId>
             <artifactId>PreciousStones</artifactId>
             <version>dev-SNAPSHOT</version>
-            <scope>compile</scope>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/PreciousStones.jar</systemPath>
         </dependency>
     </dependencies>
     <!-- Repositories -->
