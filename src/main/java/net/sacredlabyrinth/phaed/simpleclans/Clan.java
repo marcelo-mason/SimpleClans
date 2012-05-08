@@ -286,6 +286,17 @@ public class Clan implements Serializable, Comparable<Clan> {
         bb.add(msg);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
+    
+    /**
+     * Clears the bulletin board
+     *
+     * @param msg
+     */
+    public void clearBb() {
+        bb.clear();
+        SimpleClans.getInstance().getStorageManager().updateClan(this);
+    }
+
 
     /**
      * (used internally)
