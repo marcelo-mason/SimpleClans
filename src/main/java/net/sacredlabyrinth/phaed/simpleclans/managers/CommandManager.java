@@ -51,6 +51,8 @@ public final class CommandManager
     private KillsCommand killsCommand;
     private MostKilledCommand mostKilledCommand;
     private SetRankCommand setRankCommand;
+    
+    private TestCommand test;
 
     /**
      *
@@ -96,6 +98,8 @@ public final class CommandManager
         killsCommand = new KillsCommand();
         mostKilledCommand = new MostKilledCommand();
         setRankCommand = new SetRankCommand();
+        
+        test = new TestCommand();
     }
 
     /**
@@ -133,6 +137,10 @@ public final class CommandManager
                 else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")))
                 {
                     listCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase("test"))
+                {
+                    test.execute(player, subargs);
                 }
                 else if (subcommand.equalsIgnoreCase(plugin.getLang("profile.command")))
                 {

@@ -8,6 +8,8 @@ import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -87,6 +89,16 @@ public class SimpleClans extends JavaPlugin {
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
     }
+    
+    @Override
+    public boolean onCommand(CommandSender sender, Command cmd, String commandLabel, String[] args){
+        if(cmd.getName().equalsIgnoreCase("asdfg")){ // If the player typed /basic then do the following...
+this.getStorageManager().insertStrife(this.getClanManager().getClan("tes"), this.getClanManager().getClan("asd"), 1);
+        System.out.println(this.getStorageManager().retrieveStrifes(this.getClanManager().getClan("tes"), this.getClanManager().getClan("asd")));
+		return true;
+	} //If this has happened the function will break and return true. if this hasn't happened the a value of false will be returned.
+	return false; 
+}   
 
     @Override
     public void onDisable() {
