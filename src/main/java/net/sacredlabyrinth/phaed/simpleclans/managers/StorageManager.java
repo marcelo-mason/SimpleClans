@@ -419,7 +419,7 @@ public final class StorageManager {
             String queryinsert = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + amount + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
             core.insert(queryinsert);
         } else {
-            String queryinsert2 = "INSERT INTO  `sc`.`sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');"
+            String queryinsert2 = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');"
                     + "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
             core.execute(queryinsert2);
         }
