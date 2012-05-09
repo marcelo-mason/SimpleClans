@@ -412,7 +412,7 @@ public final class StorageManager {
      * @param victimclan
      */
     public void insertStrife(Clan attackerclan, Clan victimclan, Integer amount) {
-        String query = "SELECT  `clan_a` FROM `sc_war_gm` WHERE `sc_war_gm`.`clan_name` =  'clan_c';";
+        String query = "SELECT  `" + attackerclan.getTag() + "` FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
         ResultSet res = core.select(query);
 
         if (res != null) {
