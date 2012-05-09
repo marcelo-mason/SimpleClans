@@ -5,6 +5,7 @@ import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Arrow;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -81,6 +82,17 @@ public class SCEntityListener implements Listener
                 
                 double reward = 0;
                 double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
+                
+                if (!acp.getClan().equals(vcp.getClan())) {
+                    plugin.getStorageManager().insertStrife(acp.getClan(), vcp.getClan(), 1);
+                    System.out.println(plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()));
+                    if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) <= 50) {
+                        acp.getClan().addWarringClan(vcp.getClan());
+                        vcp.getClan().addWarringClan(acp.getClan());
+                        acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));
+                        vcp.getClan().addBb(vcp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(vcp.getClan().getName()), acp.getClan().getColorTag()));
+                     }
+                }
                 
                 if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified())
                 {
