@@ -86,7 +86,7 @@ public class SCEntityListener implements Listener
                 if (!acp.getClan().equals(vcp.getClan())) {
                     plugin.getStorageManager().insertStrife(acp.getClan(), vcp.getClan(), 1);
                     System.out.println(plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()));
-                    if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) <= 50) {
+                    if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= 50) {
                         acp.getClan().addWarringClan(vcp.getClan());
                         vcp.getClan().addWarringClan(acp.getClan());
                         acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));

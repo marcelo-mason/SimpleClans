@@ -38,14 +38,13 @@ public class BankCommand {
                     if (clan.isVerified()) {
                         if (cp.isTrusted()) {
                             if (arg[1].matches("[0-9]+")) {
-                                double money = Double.parseDouble(arg[1]);
                                 double clanbalance = clan.getBalance();
                                 if (arg.length == 1) {
                                     if (arg[0].equalsIgnoreCase("status")) {
                                         player.sendMessage(String.format("Clan-Balance: %s", clanbalance));
                                     }
                                 } else if (arg.length == 2) {
-
+                                    double money = Double.parseDouble(arg[1]);
                                     if (arg[0].equalsIgnoreCase("deposit")) {
                                         plugin.getPermissionsManager().playerChargeMoney(player, money);
                                         player.sendMessage(MessageFormat.format("You deposited %s", money));
@@ -66,10 +65,11 @@ public class BankCommand {
                                             }
                                         }
                                     }
+                                    SimpleClans.getInstance().getStorageManager().updateClan(clan);
                                 } else {
                                     ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
                                 }
-                                SimpleClans.getInstance().getStorageManager().updateClan(clan);
+
                             } else {
                                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
                             }
