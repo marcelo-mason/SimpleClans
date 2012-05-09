@@ -657,4 +657,13 @@ public class Helper
         }
         return result;
     }
+    
+    public static boolean isVanished(Player player) {
+        if (player.hasMetadata("vanished")) {
+            if (!player.getMetadata("vanished").isEmpty()) {
+                return player.getMetadata("vanished").get(0).asBoolean();
+            }
+        }
+        return false;
+    }
 }

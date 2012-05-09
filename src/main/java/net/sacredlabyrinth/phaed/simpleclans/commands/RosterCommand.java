@@ -96,22 +96,8 @@ public class RosterCommand
                 {
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
-                    boolean isAviable = false;
-                    boolean isVanished = false;
-                    
-                    if (player.hasMetadata("vanished")) {
-                        if (!player.getMetadata("vanished").isEmpty()) {
-                            isVanished = player.getMetadata("vanished").get(0).asBoolean();
-                        }
-                    }
-                    
-                    if (p.isOnline() && !isVanished)
-                    {
-                        isAviable = true;
-                    }
-
                     String name = plugin.getSettingsManager().getPageLeaderColor() + cp.getName();
-                    String lastSeen = (isAviable ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }
@@ -120,23 +106,8 @@ public class RosterCommand
                 {
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
-                    boolean isAviable = false;
-                    boolean isVanished = false;
-                    
-                    if (player.hasMetadata("vanished")) {
-                        if (!player.getMetadata("vanished").isEmpty()) {
-                            isVanished = player.getMetadata("vanished").get(0).asBoolean();
-                        }
-                    }
-                    
-                    if (p.isOnline() && !isVanished)
-                    {
-                            isAviable = true;
-                    }
-
-
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
-                    String lastSeen = (isAviable ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }

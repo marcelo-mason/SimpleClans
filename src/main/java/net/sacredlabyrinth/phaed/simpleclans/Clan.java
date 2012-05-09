@@ -22,6 +22,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     private String tag;
     private String colorTag;
     private String name;
+    private double balance;
     private boolean friendlyFire;
     private long founded;
     private long lastUsed;
@@ -104,6 +105,24 @@ public class Clan implements Serializable, Comparable<Clan> {
      */
     public void setName(String name) {
         this.name = name;
+    }
+    
+    /**
+     * Returns the clan's balance
+     *
+     * @return the balance
+     */
+    public double getBalance() {
+        return balance;
+    }
+
+    /**
+     * (used internally)
+     *
+     * @param balance the balance to set
+     */
+    public void setBalance(double balance) {
+        this.balance = balance;
     }
 
     /**

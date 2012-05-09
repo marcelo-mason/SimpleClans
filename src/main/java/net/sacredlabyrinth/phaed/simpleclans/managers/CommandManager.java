@@ -51,6 +51,7 @@ public final class CommandManager
     private KillsCommand killsCommand;
     private MostKilledCommand mostKilledCommand;
     private SetRankCommand setRankCommand;
+    private BankCommand bankCommand;
     
     private TestCommand test;
 
@@ -98,6 +99,7 @@ public final class CommandManager
         killsCommand = new KillsCommand();
         mostKilledCommand = new MostKilledCommand();
         setRankCommand = new SetRankCommand();
+        bankCommand = new BankCommand();
         
         test = new TestCommand();
     }
@@ -137,6 +139,10 @@ public final class CommandManager
                 else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")))
                 {
                     listCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command")))
+                {
+                    bankCommand.execute(player, subargs);
                 }
                 else if (subcommand.equalsIgnoreCase("test"))
                 {

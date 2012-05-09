@@ -124,6 +124,7 @@ public final class SettingsManager
     private boolean enableAutoGroups;
     private boolean moneyperkill;
     private double KDRMultipliesPerKill;
+    private boolean teleportBlocks;
 
     /**
      *
@@ -268,6 +269,7 @@ public final class SettingsManager
         safeCivilians = getConfig().getBoolean("safe-civilians");
         moneyperkill = getConfig().getBoolean("economy.money-per-kill");
         KDRMultipliesPerKill = getConfig().getDouble("economy.money-per-kill-kdr-multipier");
+        teleportBlocks = getConfig().getBoolean("settings.teleport-blocks");
 
         save();
     }
@@ -1230,5 +1232,12 @@ public final class SettingsManager
      */
     public double getKDRMultipliesPerKill() {
         return KDRMultipliesPerKill;
+    }
+
+    /**
+     * @return the teleportBlocks
+     */
+    public boolean isTeleportBlocks() {
+        return teleportBlocks;
     }
 }
