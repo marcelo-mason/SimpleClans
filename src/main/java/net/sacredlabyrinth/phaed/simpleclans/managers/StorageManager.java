@@ -416,13 +416,37 @@ public final class StorageManager {
         ResultSet res = core.select(query);
 
         if (res != null) {
-            String queryinsert = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + amount + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
-            core.insert(queryinsert);
-        } else {
-            String queryinsert2 = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');"
-                    + "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
-            core.execute(queryinsert2);
+            try {
+                while (res.next()) {
+                    try {
+                        if (res.getString("clan_name") != null || res.getRowId(attackerclan.getTag()) != null) {
+                            String queryinsert = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + amount + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+                            core.insert(queryinsert);
+                        } else {
+                            String queryinsert2 = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');"
+                                    + "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
+                            core.execute(queryinsert2);
+                        }
+                    } catch (Exception ex) {
+                        for (StackTraceElement el : ex.getStackTrace()) {
+                            System.out.print(el.toString());
+                        }
+                    }
+                }
+            } catch (SQLException ex) {
+                for (StackTraceElement el : ex.getStackTrace()) {
+                    System.out.print(el.toString());
+                }
+            }
         }
+//        if (res.getString(attackerclan.getTag()) != null) {
+//            String queryinsert = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + amount + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+//            core.insert(queryinsert);
+//        } else {
+//            String queryinsert2 = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');"
+//                    + "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
+//            core.execute(queryinsert2);
+//        }
     }
 
     /**
