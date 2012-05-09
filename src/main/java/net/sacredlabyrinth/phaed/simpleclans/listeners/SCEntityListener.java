@@ -84,7 +84,7 @@ public class SCEntityListener implements Listener
                 double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
                 
                 if (!acp.getClan().equals(vcp.getClan())) {
-                    plugin.getStorageManager().insertStrife(acp.getClan(), vcp.getClan(), 1);
+                    plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan());
                     System.out.println(plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()));
                     if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= 50) {
                         acp.getClan().addWarringClan(vcp.getClan());

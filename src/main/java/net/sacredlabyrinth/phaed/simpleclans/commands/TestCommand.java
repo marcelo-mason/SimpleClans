@@ -24,7 +24,7 @@ public class TestCommand
         SimpleClans plugin = SimpleClans.getInstance();
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-        plugin.getStorageManager().insertStrife(cp.getClan(), plugin.getClanManager().getClan("asd"), 1);
+        plugin.getStorageManager().addStrife(cp.getClan(), plugin.getClanManager().getClan("asd"));
         System.out.println(plugin.getStorageManager().retrieveStrifes(cp.getClan(), plugin.getClanManager().getClan("asd")));
  
     }
