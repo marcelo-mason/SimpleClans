@@ -232,6 +232,17 @@ public final class PermissionsManager
     {
         return economy.has(player.getName(), money);
     }
+    
+    /**
+     * Returns the players money
+     *
+     * @param player
+     * @return the players money
+     */
+    public double playerGetMoney(Player player)
+    {
+        return economy.getBalance(player.getName());
+    }
 
     /**
      * Check if a player has permissions

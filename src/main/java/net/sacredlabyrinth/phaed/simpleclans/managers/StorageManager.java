@@ -294,15 +294,28 @@ public final class StorageManager {
      * @return
      */
     public Integer retrieveStrifes(Clan attackerclan, Clan victimclan) {
-        String query = "SELECT * FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
-        ResultSet res = core.select(query);
         int strifes = 0;
+        String query = null;
+        String row = null;
+        try {
+
+            if (existsRow("sc_war", attackerclan.getTag())) {
+                query = "SELECT * FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+                row = attackerclan.getTag();
+            } else if (existsRow("sc_war", victimclan.getTag())) {
+                row = victimclan.getTag();
+                query = "SELECT * FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + attackerclan.getTag() + "';";
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        ResultSet res = core.select(query);
 
         if (res != null) {
             try {
                 while (res.next()) {
                     try {
-                        strifes = res.getInt(attackerclan.getTag());
+                        strifes = res.getInt(row);
                     } catch (Exception ex) {
                         for (StackTraceElement el : ex.getStackTrace()) {
                             System.out.print(el.toString());
@@ -316,6 +329,7 @@ public final class StorageManager {
             }
         }
         return strifes;
+
     }
 
     /**
@@ -405,37 +419,37 @@ public final class StorageManager {
         core.insert(query + values);
     }
 
-    /**
-     * Insert a strife to a clan
-     *
-     * @param attackerclan
-     * @param victimclan
-     */
-    public void insertStrife(Clan attackerclan, Clan victimclan, int amount) {
-        String query = "SELECT  `" + attackerclan.getTag() + "` FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
-        ResultSet res;
-        try {
-            res = core.select(query);
-            if (res == null) {
-                String addcol = "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
-                core.execute(addcol);
-            }
-            res = core.select(query);
-            if (!res.next()) {
-                String insert = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');";
-                core.insert(insert);
-            }
-
-            String queryinsert = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + amount + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
-            core.insert(queryinsert);
-
-        } catch (SQLException ex) {
-            for (StackTraceElement el : ex.getStackTrace()) {
-                System.out.print(el.toString());
-            }
-        }
-    }
-
+//    /**
+//     * Insert a strife to a clan
+//     *
+//     * @param attackerclan
+//     * @param victimclan
+//     */
+//    public void insertStrife(Clan attackerclan, Clan victimclan, int amount) {
+//        String query = "SELECT  `" + attackerclan.getTag() + "` FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+//        ResultSet res;
+//        try {
+//            if (!existsRow("sc_war", attackerclan.getTag())) {
+//                String addcol = "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
+//                core.execute(addcol);
+//            } else if (!existsRow("sc_war", victimclan.getTag())) {
+//                String addcol = "ALTER TABLE sc_war ADD COLUMN " + victimclan.getTag() + " int(255);";
+//                core.execute(addcol);
+//            }
+//            if (existsEntrie("sc_war", "clan_name", attackerclan.getTag())) {
+//                String insert = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');";
+//                core.insert(insert);
+//            }
+//
+//            String queryinsert = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + amount + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+//            core.insert(queryinsert);
+//
+//        } catch (SQLException ex) {
+//            for (StackTraceElement el : ex.getStackTrace()) {
+//                System.out.print(el.toString());
+//            }
+//        }
+//    }
     /**
      * Insert a strife to a clan
      *
@@ -443,26 +457,38 @@ public final class StorageManager {
      * @param victimclan
      */
     public void addStrife(Clan attackerclan, Clan victimclan) {
-        String query = "SELECT  `" + attackerclan.getTag() + "` FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
-        ResultSet res;
         try {
-            res = core.select(query);
-            if (res == null) {
+            String query = null;
+
+            if (!existsRow("sc_war", attackerclan.getTag()) && !existsRow("sc_war", victimclan.getTag())) {
                 String addcol = "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
                 core.execute(addcol);
             }
-            res = core.select(query);
-            if (!res.next()) {
+
+            if (!existsEntrie("sc_war", "clan_name", victimclan.getTag()) && !existsEntrie("sc_war", "clan_name", attackerclan.getTag())) {
                 String insert = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');";
                 core.insert(insert);
             }
-            String queryinsert = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + retrieveStrifes(attackerclan, victimclan) + 1 + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
-            core.insert(queryinsert);
-        } catch (SQLException ex) {
-            for (StackTraceElement el : ex.getStackTrace()) {
-                System.out.print(el.toString());
+
+            if (existsRow("sc_war", attackerclan.getTag()) && existsEntrie("sc_war", "clan_name", victimclan.getTag())) {
+                query = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + (retrieveStrifes(attackerclan, victimclan) + 1) + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+            } else if (existsRow("sc_war", victimclan.getTag()) && existsEntrie("sc_war", "clan_name", attackerclan.getTag())) {
+                query = "UPDATE  `sc_war` SET  `" + victimclan.getTag() + "` =  '" + (retrieveStrifes(attackerclan, victimclan) + 1) + "' WHERE  `sc_war`.`clan_name` =  '" + attackerclan.getTag() + "';";
             }
+            System.out.println("5");
+            core.execute(query);
+        } catch (SQLException ex) {
         }
+    }
+
+    public boolean existsRow(String tabell, String row) throws SQLException {
+        String query = "SELECT " + row + " FROM  `" + tabell + "`;";
+        return core.select(query) == null ? false : true;
+    }
+
+    public boolean existsEntrie(String tabell, String row, String entry) throws SQLException {
+        String query = "SELECT " + row + " FROM  `" + tabell + "` WHERE `" + tabell + "`.`" + row + "` =  '" + entry + "';";
+        return core.select(query).next() ? true : false;
     }
 
     /**
@@ -472,7 +498,7 @@ public final class StorageManager {
      */
     public void updateClan(Clan clan) {
         clan.updateLastUsed();
-        String query = "UPDATE `sc_clans` SET verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getBalance())) + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
+        String query = "UPDATE `sc_clans` SET verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getCapeUrl())) + "', balance = '" + clan.getBalance() + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
         core.update(query);
     }
 
