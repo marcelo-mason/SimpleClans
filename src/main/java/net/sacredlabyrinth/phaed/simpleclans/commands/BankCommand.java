@@ -56,10 +56,12 @@ public class BankCommand {
                                         clan.deposit(money, player);
                                     }
                                 } else if (arg[0].equalsIgnoreCase("withdraw")) {
-                                    if (arg[1].equalsIgnoreCase("all")) {
-                                        clan.withdraw(clanbalance, player);
-                                    } else {
-                                        clan.withdraw(money, player);
+                                    if (cp.getClan().isLeader(player)) {
+                                        if (arg[1].equalsIgnoreCase("all")) {
+                                            clan.withdraw(clanbalance, player);
+                                        } else {
+                                            clan.withdraw(money, player);
+                                        }
                                     }
                                 } else {
                                     ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
