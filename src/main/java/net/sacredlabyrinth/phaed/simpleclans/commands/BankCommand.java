@@ -16,7 +16,7 @@ import java.util.HashSet;
  * @author phaed
  */
 public class BankCommand {
-
+    
     public BankCommand() {
     }
 
@@ -28,62 +28,46 @@ public class BankCommand {
      */
     public void execute(Player player, String[] arg) {
         SimpleClans plugin = SimpleClans.getInstance();
-
+        
         if (plugin.getPermissionsManager().has(player, "simpleclans.member.bank")) {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
+            double plmoney = plugin.getPermissionsManager().playerGetMoney(player);
+            double money = 0;
+            Clan clan = cp.getClan();
+            double clanbalance = clan.getBalance();
+            
             if (cp != null) {
-                Clan clan = cp.getClan();
+                
                 if (clan.isMember(player)) {
                     if (clan.isVerified()) {
                         if (cp.isTrusted()) {
-                            double clanbalance = clan.getBalance();
                             if (arg.length == 1) {
                                 if (arg[0].equalsIgnoreCase("status")) {
-                                    player.sendMessage(MessageFormat.format("Clan-Balance: {0}", clanbalance));
+                                    player.sendMessage(ChatColor.AQUA + MessageFormat.format("Clan-Balance: {0}", clanbalance));
                                 }
                             } else if (arg.length == 2) {
                                 if (arg[1].matches("[0-9]+")) {
-                                    double money = Double.parseDouble(arg[1]);
-                                    double plmoney = plugin.getPermissionsManager().playerGetMoney(player);
-                                    if (arg[0].equalsIgnoreCase("deposit")) {
-                                        if (arg[1].equalsIgnoreCase("all")) {
-                                            plugin.getPermissionsManager().playerChargeMoney(player, plmoney);
-                                            player.sendMessage(MessageFormat.format("You withdraw {0}", plmoney));
-                                            clan.addBb(player.getName(), MessageFormat.format("{0} were withdrawn.", plmoney));
-                                            clan.setBalance(plmoney);
-                                        }
-                                        if (plugin.getPermissionsManager().playerHasMoney(player, money)) {
-                                            plugin.getPermissionsManager().playerChargeMoney(player, money);
-                                            player.sendMessage(MessageFormat.format("You deposited {0}", money));
-                                            clan.addBb(player.getName(), MessageFormat.format("{0} were deposited.", clanbalance));
-                                            clan.setBalance(clanbalance + money);
-                                        }
-                                    } else if (arg[0].equalsIgnoreCase("withdraw")) {
-                                        if (arg[1].equalsIgnoreCase("all")) {
-                                            if (clanbalance <= money) {
-                                                plugin.getPermissionsManager().playerGrantMoney(player, clanbalance);
-                                                player.sendMessage(MessageFormat.format("You withdraw {0}", clanbalance));
-                                                clan.addBb(player.getName(), MessageFormat.format("{0} were withdrawn.", clanbalance));
-                                                clan.setBalance(0);
-                                            }
-                                        } else {
-                                            if ((clanbalance - money) >= 0) {
-                                                plugin.getPermissionsManager().playerGrantMoney(player, money);
-                                                clan.addBb(player.getName(), MessageFormat.format("{0} were withdrawn.", money));
-                                                player.sendMessage(MessageFormat.format("You withdraw {0}.", money));
-                                                clan.setBalance(clanbalance - money);
-                                            }
-                                        }
+                                    money = Double.parseDouble(arg[1]);
+                                }
+                                if (arg[0].equalsIgnoreCase("deposit")) {
+                                    if (arg[1].equalsIgnoreCase("all")) {
+                                        clan.deposit(plmoney, player);
+                                    } else {
+                                        clan.deposit(money, player);
                                     }
-                                    SimpleClans.getInstance().getStorageManager().updateClan(clan);
+                                } else if (arg[0].equalsIgnoreCase("withdraw")) {
+                                    if (arg[1].equalsIgnoreCase("all")) {
+                                        clan.withdraw(clanbalance, player);
+                                    } else {
+                                        clan.withdraw(money, player);
+                                    }
                                 } else {
                                     ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
                                 }
                             } else {
                                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
                             }
-
+                            
                         } else {
                             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
                         }

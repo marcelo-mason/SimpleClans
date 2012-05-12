@@ -117,6 +117,13 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/PreciousStones.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>com.griefcraft</groupId>
+            <artifactId>LWC</artifactId>
+            <version>dev-SNAPSHOT</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/lib/LWC.jar</systemPath>
+        </dependency>
     </dependencies>
     <!-- Repositories -->
     <repositories>

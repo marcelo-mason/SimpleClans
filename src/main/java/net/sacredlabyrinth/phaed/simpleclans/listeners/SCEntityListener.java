@@ -83,15 +83,15 @@ public class SCEntityListener implements Listener
                 double reward = 0;
                 double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
                 
-                if (!acp.getClan().equals(vcp.getClan())) {
-                    plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan());
-                    System.out.println(plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()));
+                if (!acp.getClan().equals(vcp.getClan()) && !acp.getClan().isWarring(vcp.getClan()) && !vcp.getClan().isWarring(acp.getClan())) {
+                    plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), 1);
                     if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= 50) {
                         acp.getClan().addWarringClan(vcp.getClan());
                         vcp.getClan().addWarringClan(acp.getClan());
                         acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));
                         vcp.getClan().addBb(vcp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(vcp.getClan().getName()), acp.getClan().getColorTag()));
-                     }
+                        plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), -50);
+                    }
                 }
                 
                 if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified())
@@ -103,7 +103,7 @@ public class SCEntityListener implements Listener
                 {
                     if (acp.getClan().isWarring(vcp.getClan())) 
                     {
-                        reward = (double)acp.getKDR() * multipier * 2 * 2;
+                        reward = (double)acp.getKDR() * multipier * 4;
                     } 
                     else 
                     {
@@ -126,7 +126,7 @@ public class SCEntityListener implements Listener
                 if (reward != 0 && plugin.getSettingsManager().isMoneyPerKill()) {
                     for (ClanPlayer cp : acp.getClan().getOnlineMembers()) {
                         double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
-                        cp.toPlayer().sendMessage(MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), acp.getKDR()));
+                        cp.toPlayer().sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), acp.getKDR()));
                         plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
                     }
                 }

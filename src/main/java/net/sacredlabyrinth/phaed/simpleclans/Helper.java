@@ -7,7 +7,9 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 
 /**
  * @author phaed
@@ -89,7 +91,21 @@ public class Helper
             return false;
         }
     }
-
+    
+    /**
+     * Checks if a entry in a column exists
+     *
+     * @param core
+     * @param tabell
+     * @param column
+     * @param entry
+     * @return
+     */
+    public static Boolean existsEntry(DBCore core, String tabell, String column, String entry) throws SQLException {
+        String query = "SELECT " + column + " FROM  `" + tabell + "` WHERE `" + tabell + "`.`" + column + "` =  '" + entry + "';";
+        return core.select(query).next() ? true : false;
+    }
+    
     /**
      * Check for short
      *

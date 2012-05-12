@@ -90,6 +90,40 @@ public class Clan implements Serializable, Comparable<Clan> {
     }
 
     /**
+     * deposits money to the clan
+     *
+     * @param amount
+     * @param player
+     */
+    public void deposit(double amount, Player player) {
+        if (SimpleClans.getInstance().getPermissionsManager().playerHasMoney(player, amount)) {
+            if (SimpleClans.getInstance().getPermissionsManager().playerChargeMoney(player, amount) == true) {
+                player.sendMessage(ChatColor.AQUA + MessageFormat.format("You deposited {0}", amount));
+                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format("{0} were deposited.", getBalance()));
+                setBalance(getBalance() + amount);
+                SimpleClans.getInstance().getStorageManager().updateClan(this);
+            }
+        }
+    }
+
+    /**
+     * withdraws money to the clan
+     *
+     * @param amount
+     * @param player
+     */
+    public void withdraw(double amount, Player player) {
+        if (getBalance() >= amount) {
+            if (SimpleClans.getInstance().getPermissionsManager().playerGrantMoney(player, amount) == true) {
+                player.sendMessage(ChatColor.AQUA + MessageFormat.format("You withdraw {0}", amount));
+                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format("{0} were withdrawn.", amount));
+                setBalance(0);
+                SimpleClans.getInstance().getStorageManager().updateClan(this);
+            }
+        }
+    }
+
+    /**
      * Returns the clan's name
      *
      * @return the name
@@ -106,7 +140,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     public void setName(String name) {
         this.name = name;
     }
-    
+
     /**
      * Returns the clan's balance
      *
@@ -305,7 +339,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         bb.add(msg);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
-    
+
     /**
      * Clears the bulletin board
      *
@@ -315,7 +349,6 @@ public class Clan implements Serializable, Comparable<Clan> {
         bb.clear();
         SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
-
 
     /**
      * (used internally)
@@ -603,7 +636,7 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         return out;
     }
-    
+
     /**
      * Get all online members (leaders, and non-leaders) in the clan
      *
@@ -616,7 +649,7 @@ public class Clan implements Serializable, Comparable<Clan> {
             ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
             if (cp.toPlayer() != null) {
                 if (cp.toPlayer().isOnline()) {
-                       out.add(cp);
+                    out.add(cp);
                 }
             }
         }
@@ -894,10 +927,10 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         // remove clan group-permission
         SimpleClans.getInstance().getPermissionsManager().removeClanPermissions(cp);
-        
+
         // remove permissions
         SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
-        
+
         cp.setClan(null);
         cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
         cp.setLeader(false);

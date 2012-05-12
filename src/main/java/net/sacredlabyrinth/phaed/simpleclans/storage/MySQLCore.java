@@ -1,12 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.storage;
 
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 /**
  * @author cc_madelg
@@ -57,6 +56,7 @@ public class MySQLCore implements DBCore
     /**
      * @return connection
      */
+    @Override
     public Connection getConnection()
     {
         try
@@ -77,6 +77,7 @@ public class MySQLCore implements DBCore
     /**
      * @return whether connection can be established
      */
+    @Override
     public Boolean checkConnection()
     {
         return getConnection() != null;
@@ -85,6 +86,7 @@ public class MySQLCore implements DBCore
     /**
      * Close connection
      */
+    @Override
     public void close()
     {
         try
@@ -106,6 +108,7 @@ public class MySQLCore implements DBCore
      * @param query
      * @return
      */
+    @Override
     public ResultSet select(String query)
     {
         try
@@ -126,6 +129,7 @@ public class MySQLCore implements DBCore
      *
      * @param query
      */
+    @Override
     public void insert(String query)
     {
         try
@@ -147,6 +151,7 @@ public class MySQLCore implements DBCore
      *
      * @param query
      */
+    @Override
     public void update(String query)
     {
         try
@@ -168,6 +173,7 @@ public class MySQLCore implements DBCore
      *
      * @param query
      */
+    @Override
     public void delete(String query)
     {
         try
@@ -190,6 +196,7 @@ public class MySQLCore implements DBCore
      * @param query
      * @return
      */
+    @Override
     public Boolean execute(String query)
     {
         try
@@ -211,6 +218,7 @@ public class MySQLCore implements DBCore
      * @param table
      * @return
      */
+    @Override
     public Boolean existsTable(String table)
     {
         try
@@ -221,6 +229,27 @@ public class MySQLCore implements DBCore
         catch (SQLException e)
         {
             log.severe("Failed to check if table '" + table + "' exists: " + e.getMessage());
+            return false;
+        }
+    }
+    
+    /**
+     * Check whether a colum exists
+     *
+     * @param column
+     * @return
+     */
+    @Override
+    public Boolean existsColumn(String tabell, String colum)
+    {
+        try
+        {
+            ResultSet colums = getConnection().getMetaData().getColumns(null, null, tabell, colum);
+            return colums.next();
+        }
+        catch (SQLException e)
+        {
+            SimpleClans.getLog().severe("Failed to check if colum '" + colum + "' exists: " + e.getMessage());
             return false;
         }
     }
