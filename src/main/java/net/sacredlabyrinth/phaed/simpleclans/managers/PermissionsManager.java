@@ -90,7 +90,7 @@ public final class PermissionsManager
         SimpleClans.getInstance().getSettingsManager().load();
         permissions.clear();
         for (Clan clan : plugin.getClanManager().getClans()) {
-            permissions.put(clan.getName(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getName()));
+            permissions.put(clan.getTag(), SimpleClans.getInstance().getConfig().getStringList("permissions." + clan.getTag()));
         }
     }
 
@@ -100,8 +100,8 @@ public final class PermissionsManager
      */
     public void savePermissions() {
         for (Clan clan : plugin.getClanManager().getClans()) {
-            if (permissions.containsKey(clan.getName())) {
-                SimpleClans.getInstance().getSettingsManager().getConfig().set("permissions." + clan.getName(), getPermissions(clan));
+            if (permissions.containsKey(clan.getTag())) {
+                SimpleClans.getInstance().getSettingsManager().getConfig().set("permissions." + clan.getTag(), getPermissions(clan));
             }
         }
         SimpleClans.getInstance().getSettingsManager().save();
@@ -124,13 +124,16 @@ public final class PermissionsManager
     public void addPlayerPermissions(ClanPlayer cp) {
         if (cp != null && cp.toPlayer() != null) {
             Player player = cp.toPlayer();
-            if (permissions.containsKey(cp.getClan().getName())) {
+            if (permissions.containsKey(cp.getClan().getTag())) {
                 if (!permAttaches.containsKey(cp.toPlayer())) {
                     permAttaches.put(cp.toPlayer(), cp.toPlayer().addAttachment(SimpleClans.getInstance()));
                 }
                 //Adds all permisisons from his clan
                 for (String perm : getPermissions(cp.getClan())) {
                     permAttaches.get(cp.toPlayer()).setPermission(perm, true);
+                }
+                if (plugin.getSettingsManager().isAutoGroupGroupName()) {
+                    permAttaches.get(cp.toPlayer()).setPermission("group." + cp.getClan().getTag(), true);
                 }
                 player.recalculatePermissions();
             }
@@ -157,7 +160,7 @@ public final class PermissionsManager
                 if (cp.toPlayer() != null){
                     Player player = cp.toPlayer();
                     if (player.isOnline()) {
-                        if (permissions.containsKey(cp.getClan().getName())) {
+                        if (permissions.containsKey(cp.getClan().getTag())) {
                             if(permAttaches.containsKey(player)) {
                                 permAttaches.get(player).remove();
                                 permAttaches.remove(player);
@@ -174,7 +177,7 @@ public final class PermissionsManager
      * @param clan
      */
     public List<String> getPermissions(Clan clan) {
-        return permissions.get(clan.getName());
+        return permissions.get(clan.getTag());
     }
 
 

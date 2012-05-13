@@ -11,6 +11,7 @@ tag:
         color: '8'
         char: ' .'
 settings:
+    tameable-mobs-sharing: false
     teleport-blocks: false
     teleport-home-on-spawn: false
     drop-items-on-clan-home: false
@@ -122,6 +123,9 @@ allychat:
         left: '['
         right: ']'
     enable: true
+war:
+    auto-war-start: true
+    strife-limit: 50
 purge:
     inactive-player-data-days: 30
     inactive-clan-days: 7
@@ -133,5 +137,6 @@ mysql:
     password: ''
     database: ''
 permissions:
+  auto-group-groupname: true
   YourClanNameHere:
   - test.permission

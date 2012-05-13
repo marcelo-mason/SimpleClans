@@ -1,17 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
 import java.text.MessageFormat;
-import java.util.HashSet;
-import java.util.Set;
-import net.minecraft.server.EntityCreature;
-import net.minecraft.server.EntityLiving;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
-import org.bukkit.craftbukkit.entity.CraftCreature;
-import org.bukkit.craftbukkit.entity.CraftEntity;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -80,14 +74,18 @@ public class SCEntityListener implements Listener {
                 double reward = 0;
                 double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
 
-                if (!acp.getClan().equals(vcp.getClan()) && !acp.getClan().isWarring(vcp.getClan()) && !vcp.getClan().isWarring(acp.getClan())) {
-                    plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), 1);
-                    if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= 50) {
-                        acp.getClan().addWarringClan(vcp.getClan());
-                        vcp.getClan().addWarringClan(acp.getClan());
-                        acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));
-                        vcp.getClan().addBb(vcp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(vcp.getClan().getName()), acp.getClan().getColorTag()));
-                        plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), -50);
+                int strifemax = plugin.getSettingsManager().getStrifeLimit();
+
+                if (plugin.getSettingsManager().isAutoWar()) {
+                    if (!acp.getClan().equals(vcp.getClan()) && !acp.getClan().isWarring(vcp.getClan()) && !vcp.getClan().isWarring(acp.getClan())) {
+                        plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), 1);
+                        if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= strifemax) {
+                            acp.getClan().addWarringClan(vcp.getClan());
+                            vcp.getClan().addWarringClan(acp.getClan());
+                            acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));
+                            vcp.getClan().addBb(vcp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(vcp.getClan().getName()), acp.getClan().getColorTag()));
+                            plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), -strifemax);
+                        }
                     }
                 }
 
@@ -134,15 +132,17 @@ public class SCEntityListener implements Listener {
             return;
         }
 
-        if (event.getRightClicked() instanceof Tameable) {
-            Entity entity = event.getRightClicked();
-            Player player = event.getPlayer();
-            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-            Tameable tamed = (Tameable) entity;
+        if (plugin.getSettingsManager().isTamableMobsSharing()) {
+            if (event.getRightClicked() instanceof Tameable) {
+                Entity entity = event.getRightClicked();
+                Player player = event.getPlayer();
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                Tameable tamed = (Tameable) entity;
 
-            if (tamed.isTamed() && ((Wolf) entity).isSitting()) {
-                if (cp.getClan().isMember((Player) tamed.getOwner())) {
-                    tamed.setOwner(player);
+                if (tamed.isTamed() && ((Wolf) entity).isSitting()) {
+                    if (cp.getClan().isMember((Player) tamed.getOwner())) {
+                        tamed.setOwner(player);
+                    }
                 }
             }
         }
@@ -153,13 +153,15 @@ public class SCEntityListener implements Listener {
      */
     @EventHandler(priority = EventPriority.LOW)
     public void onEntityTarget(EntityTargetLivingEntityEvent event) {
-        if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Player) {
-            ClanPlayer cp = plugin.getClanManager().getClanPlayer((Player) event.getTarget());
-            Tameable wolf = (Tameable) event.getEntity();
-            if (wolf.isTamed()) {
-                if (cp.getClan().isMember((Player) wolf.getOwner())) {
-                    // cancels the event if the attacker is one out of his clan
-                    event.setCancelled(true);
+        if (plugin.getSettingsManager().isTamableMobsSharing()) {
+            if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Player) {
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer((Player) event.getTarget());
+                Tameable wolf = (Tameable) event.getEntity();
+                if (wolf.isTamed()) {
+                    if (cp.getClan().isMember((Player) wolf.getOwner())) {
+                        // cancels the event if the attacker is one out of his clan
+                        event.setCancelled(true);
+                    }
                 }
             }
         }
@@ -186,14 +188,16 @@ public class SCEntityListener implements Listener {
                 victim = (Player) sub.getEntity();
             }
 
-            if (sub.getEntity() instanceof Wolf && sub.getDamager() instanceof Player) {
-                attacker = (Player) sub.getDamager();
-                Wolf wolf = (Wolf) sub.getEntity();
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(attacker);
-                if (wolf.isTamed()) {
-                    if (cp.getClan().isMember((Player) wolf.getOwner())) {
-                        // Sets the wolf to friendly if the attacker is one out of his clan
-                        wolf.setAngry(false);
+            if (plugin.getSettingsManager().isTamableMobsSharing()) {
+                if (sub.getEntity() instanceof Wolf && sub.getDamager() instanceof Player) {
+                    attacker = (Player) sub.getDamager();
+                    Wolf wolf = (Wolf) sub.getEntity();
+                    ClanPlayer cp = plugin.getClanManager().getClanPlayer(attacker);
+                    if (wolf.isTamed()) {
+                        if (cp.getClan().isMember((Player) wolf.getOwner())) {
+                            // Sets the wolf to friendly if the attacker is one out of his clan
+                            wolf.setAngry(false);
+                        }
                     }
                 }
             }
