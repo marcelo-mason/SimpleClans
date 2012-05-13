@@ -100,11 +100,15 @@ public class Clan implements Serializable, Comparable<Clan> {
     public void deposit(double amount, Player player) {
         if (SimpleClans.getInstance().getPermissionsManager().playerHasMoney(player, amount)) {
             if (SimpleClans.getInstance().getPermissionsManager().playerChargeMoney(player, amount) == true) {
-                player.sendMessage(ChatColor.AQUA + MessageFormat.format("You deposited {0}", amount));
-                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format("{0} were deposited.", getBalance()));
+                player.sendMessage(ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("player.clan.deposit"), amount));
+                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("bb.clan.deposit"), getBalance()));
                 setBalance(getBalance() + amount);
                 SimpleClans.getInstance().getStorageManager().updateClan(this);
+            } else {
+                player.sendMessage(ChatColor.AQUA + SimpleClans.getInstance().getLang("not.sufficient.money"));
             }
+        } else {
+            player.sendMessage(ChatColor.AQUA + SimpleClans.getInstance().getLang("not.sufficient.money"));
         }
     }
 
@@ -117,11 +121,13 @@ public class Clan implements Serializable, Comparable<Clan> {
     public void withdraw(double amount, Player player) {
         if (getBalance() >= amount) {
             if (SimpleClans.getInstance().getPermissionsManager().playerGrantMoney(player, amount) == true) {
-                player.sendMessage(ChatColor.AQUA + MessageFormat.format("You withdraw {0}", amount));
-                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format("{0} were withdrawn.", amount));
+                player.sendMessage(ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("player.clan.withdraw"), amount));
+                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("bb.clan.withdraw"), amount));
                 setBalance(0);
                 SimpleClans.getInstance().getStorageManager().updateClan(this);
             }
+        } else {
+            player.sendMessage(ChatColor.AQUA + SimpleClans.getInstance().getLang("clan.bank.not.enough.money"));
         }
     }
 
