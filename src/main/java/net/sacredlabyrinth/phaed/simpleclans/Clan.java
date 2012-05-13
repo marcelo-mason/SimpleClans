@@ -36,6 +36,8 @@ public class Clan implements Serializable, Comparable<Clan> {
     private int homeY = 0;
     private int homeZ = 0;
     private String homeWorld = "";
+    private boolean allowWithdraw = false;
+    private boolean allowDeposit = true;
 
     /**
      *
@@ -1450,5 +1452,33 @@ public class Clan implements Serializable, Comparable<Clan> {
     public String getTagLabel() {
         SimpleClans plugin = SimpleClans.getInstance();
         return plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator();
+    }
+
+    /**
+     * @return the allowWithdraw
+     */
+    public boolean isAllowWithdraw() {
+        return allowWithdraw;
+    }
+
+    /**
+     * @param allowWithdraw the allowWithdraw to set
+     */
+    public void setAllowWithdraw(boolean allowWithdraw) {
+        this.allowWithdraw = allowWithdraw;
+    }
+
+    /**
+     * @return the allowDeposit
+     */
+    public boolean isAllowDeposit() {
+        return allowDeposit;
+    }
+
+    /**
+     * @param allowDeposit the allowDeposit to set
+     */
+    public void setAllowDeposit(boolean allowDeposit) {
+        this.allowDeposit = allowDeposit;
     }
 }

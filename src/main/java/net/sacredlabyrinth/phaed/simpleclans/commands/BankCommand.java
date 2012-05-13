@@ -16,7 +16,7 @@ import java.util.HashSet;
  * @author phaed
  */
 public class BankCommand {
-    
+
     public BankCommand() {
     }
 
@@ -28,16 +28,16 @@ public class BankCommand {
      */
     public void execute(Player player, String[] arg) {
         SimpleClans plugin = SimpleClans.getInstance();
-        
+
         if (plugin.getPermissionsManager().has(player, "simpleclans.member.bank")) {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
             double plmoney = plugin.getPermissionsManager().playerGetMoney(player);
             double money = 0;
             Clan clan = cp.getClan();
             double clanbalance = clan.getBalance();
-            
+
             if (cp != null) {
-                
+
                 if (clan.isMember(player)) {
                     if (clan.isVerified()) {
                         if (cp.isTrusted()) {
@@ -50,13 +50,15 @@ public class BankCommand {
                                     money = Double.parseDouble(arg[1]);
                                 }
                                 if (arg[0].equalsIgnoreCase("deposit")) {
-                                    if (arg[1].equalsIgnoreCase("all")) {
-                                        clan.deposit(plmoney, player);
-                                    } else {
-                                        clan.deposit(money, player);
+                                    if (clan.isAllowDeposit()) {
+                                        if (arg[1].equalsIgnoreCase("all")) {
+                                            clan.deposit(plmoney, player);
+                                        } else {
+                                            clan.deposit(money, player);
+                                        }
                                     }
                                 } else if (arg[0].equalsIgnoreCase("withdraw")) {
-                                    if (cp.getClan().isLeader(player)) {
+                                    if (cp.getClan().isLeader(player) || clan.isAllowWithdraw()) {
                                         if (arg[1].equalsIgnoreCase("all")) {
                                             clan.withdraw(clanbalance, player);
                                         } else {
@@ -69,7 +71,7 @@ public class BankCommand {
                             } else {
                                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
                             }
-                            
+
                         } else {
                             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
                         }
