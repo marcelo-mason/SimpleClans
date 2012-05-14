@@ -718,13 +718,21 @@ public final class StorageManager {
 
         return out;
     }
-
+    /**
+     * Updates the database to the latest version
+     *
+     * @param 
+     */
     private void updateDatabase() {
         String query = null;
+        
+        //From 2.2.6.3 to 2.3
         if (!core.existsColumn("sc_clans", "balance")) {
             query = "ALTER TABLE sc_clans ADD COLUMN `balance` double(64,2);";
 
         }
+        
+        
         if (query != null) {
             core.execute(query);
         }

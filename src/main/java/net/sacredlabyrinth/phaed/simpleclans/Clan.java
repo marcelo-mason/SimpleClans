@@ -101,7 +101,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         if (SimpleClans.getInstance().getPermissionsManager().playerHasMoney(player, amount)) {
             if (SimpleClans.getInstance().getPermissionsManager().playerChargeMoney(player, amount) == true) {
                 player.sendMessage(ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("player.clan.deposit"), amount));
-                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("bb.clan.deposit"), getBalance()));
+                addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("bb.clan.deposit"), amount));
                 setBalance(getBalance() + amount);
                 SimpleClans.getInstance().getStorageManager().updateClan(this);
             } else {

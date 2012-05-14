@@ -100,26 +100,29 @@ public class ToggleCommand {
         }
 
         if (cmd.equalsIgnoreCase("deposit")) {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.member.deposit-toggle")) {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.leader.deposit-toggle")) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
                 if (cp != null) {
                     Clan clan = cp.getClan();
-
-                    if (clan.isVerified()) {
-                        clan.setAllowDeposit(!clan.isAllowDeposit());
+                    if (clan.isLeader(player)) {
+                        if (clan.isVerified()) {
+                            clan.setAllowDeposit(!clan.isAllowDeposit());
+                        }
                     }
                 }
             }
         }
         
         if (cmd.equalsIgnoreCase("withdraw")) {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.member.withdraw-toggle")) {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.leader.withdraw-toggle")) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
                 if (cp != null) {
                     Clan clan = cp.getClan();
                     if (clan.isVerified()) {
-                        clan.setAllowWithdraw(!clan.isAllowWithdraw());
+                        if (clan.isLeader(player)) {
+                            clan.setAllowWithdraw(!clan.isAllowWithdraw());
+                        }
                     }
                 }
             }

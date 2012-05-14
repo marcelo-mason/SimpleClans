@@ -71,9 +71,6 @@ public class SCEntityListener implements Listener {
                 // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
                 // if both have verified clans, check for rival or default to neutral
 
-                double reward = 0;
-                double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
-
                 int strifemax = plugin.getSettingsManager().getStrifeLimit();
 
                 if (plugin.getSettingsManager().isAutoWar()) {
@@ -88,22 +85,27 @@ public class SCEntityListener implements Listener {
                         }
                     }
                 }
+                
+
+                double reward = 0;
+                double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
+                float kdr = acp.getKDR();
 
                 if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified()) {
                     acp.addCivilianKill();
                     plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
                 } else if (acp.getClan().isRival(vcp.getTag())) {
                     if (acp.getClan().isWarring(vcp.getClan())) {
-                        reward = (double) acp.getKDR() * multipier * 4;
+                        reward = (double) kdr * multipier * 4;
                     } else {
-                        reward = (double) acp.getKDR() * multipier * 2;
+                        reward = (double) kdr * multipier * 2;
                     }
                     acp.addRivalKill();
                     plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
                 } else if (acp.getClan().isAlly(vcp.getTag())) {
-                    reward = (double) acp.getKDR() * multipier * -1;
+                    reward = (double) kdr * multipier * -1;
                 } else {
-                    reward = (double) acp.getKDR() * multipier;
+                    reward = (double) kdr * multipier;
                     acp.addNeutralKill();
                     plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
                 }
@@ -111,7 +113,7 @@ public class SCEntityListener implements Listener {
                 if (reward != 0 && plugin.getSettingsManager().isMoneyPerKill()) {
                     for (ClanPlayer cp : acp.getClan().getOnlineMembers()) {
                         double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
-                        cp.toPlayer().sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), acp.getKDR()));
+                        cp.toPlayer().sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), kdr));
                         plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
                     }
                 }
