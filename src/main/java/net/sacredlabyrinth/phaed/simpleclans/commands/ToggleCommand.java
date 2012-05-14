@@ -109,11 +109,13 @@ public class ToggleCommand {
                         if (clan.isVerified()) {
                             clan.setAllowDeposit(!clan.isAllowDeposit());
                         }
+                    } else {
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                     }
                 }
             }
         }
-        
+
         if (cmd.equalsIgnoreCase("withdraw")) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.leader.withdraw-toggle")) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
@@ -122,6 +124,8 @@ public class ToggleCommand {
                     if (clan.isVerified()) {
                         if (clan.isLeader(player)) {
                             clan.setAllowWithdraw(!clan.isAllowWithdraw());
+                        } else {
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                         }
                     }
                 }

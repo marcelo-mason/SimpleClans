@@ -50,12 +50,14 @@ public class BankCommand {
                                     money = Double.parseDouble(arg[1]);
                                 }
                                 if (arg[0].equalsIgnoreCase("deposit")) {
-                                    if (clan.isAllowDeposit()) {
+                                    if (cp.getClan().isLeader(player) || clan.isAllowDeposit()) {
                                         if (arg[1].equalsIgnoreCase("all")) {
                                             clan.deposit(plmoney, player);
                                         } else {
                                             clan.deposit(money, player);
                                         }
+                                    } else {
+                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                                     }
                                 } else if (arg[0].equalsIgnoreCase("withdraw")) {
                                     if (cp.getClan().isLeader(player) || clan.isAllowWithdraw()) {
@@ -64,6 +66,8 @@ public class BankCommand {
                                         } else {
                                             clan.withdraw(money, player);
                                         }
+                                    } else {
+                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                                     }
                                 } else {
                                     ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
