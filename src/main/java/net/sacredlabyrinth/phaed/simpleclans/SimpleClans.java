@@ -1,14 +1,17 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import java.io.IOException;
 import java.text.MessageFormat;
+import java.util.HashSet;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -86,6 +89,9 @@ public class SimpleClans extends JavaPlugin {
 
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
+
+        setupMetrics();
+
     }
 
     @Override
@@ -94,7 +100,37 @@ public class SimpleClans extends JavaPlugin {
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();
     }
-    
+
+    public void setupMetrics() {
+        try {
+            Metrics metrics = new Metrics(this);
+
+            metrics.addCustomData(new Metrics.Plotter("Total created clans") {
+
+                @Override
+                public int getValue() {
+                    return getClanManager().getClans().size();
+                }
+            });
+
+            metrics.addCustomData(new Metrics.Plotter("Total clan players") {
+
+                @Override
+                public int getValue() {
+                    int cp = 0;
+                    for (Clan clan : getClanManager().getClans()) {
+                        cp += clan.getMembers().size();
+                    }
+                    return cp;
+                }
+            });
+
+            metrics.start();
+        } catch (IOException e) {
+            log(e.getMessage());
+        }
+    }
+
     /**
      * @return the clanManager
      */

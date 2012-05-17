@@ -12,6 +12,7 @@ import java.util.List;
  */
 public class RosterCommand
 {
+
     public RosterCommand()
     {
     }
@@ -39,18 +40,15 @@ public class RosterCommand
                 if (cp == null)
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
-                }
-                else
+                } else
                 {
                     clan = cp.getClan();
                 }
-            }
-            else
+            } else
             {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        }
-        else if (arg.length == 1)
+        } else if (arg.length == 1)
         {
             if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.roster"))
             {
@@ -60,13 +58,11 @@ public class RosterCommand
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clan.matched"));
                 }
-            }
-            else
+            } else
             {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        }
-        else
+        } else
         {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
         }
@@ -84,7 +80,7 @@ public class RosterCommand
                 ChatBlock.sendBlank(player);
 
                 chatBlock.setFlexibility(false, true, false, true);
-                chatBlock.addRow("  " + headColor + plugin.getLang("player"), plugin.getLang("rank"),  plugin.getLang("seen"));
+                chatBlock.addRow("  " + headColor + plugin.getLang("player"), plugin.getLang("rank"), plugin.getLang("seen"));
 
                 List<ClanPlayer> leaders = clan.getLeaders();
                 plugin.getClanManager().sortClanPlayersByLastSeen(leaders);
@@ -94,49 +90,22 @@ public class RosterCommand
 
                 for (ClanPlayer cp : leaders)
                 {
+
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
-                    boolean isAviable = false;
-                    boolean isVanished = false;
-                    
-                    if (player.hasMetadata("vanished")) {
-                        if (!player.getMetadata("vanished").isEmpty()) {
-                            isVanished = player.getMetadata("vanished").get(0).asBoolean();
-                        }
-                    }
-                    
-                    if (p.isOnline() && !isVanished)
-                    {
-                        isAviable = true;
-                    }
-
                     String name = plugin.getSettingsManager().getPageLeaderColor() + cp.getName();
-                    String lastSeen = (isAviable ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (p != null && p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
+
                 }
 
                 for (ClanPlayer cp : members)
                 {
                     Player p = plugin.getServer().getPlayer(cp.getName());
 
-                    boolean isAviable = false;
-                    boolean isVanished = false;
-                    
-                    if (player.hasMetadata("vanished")) {
-                        if (!player.getMetadata("vanished").isEmpty()) {
-                            isVanished = player.getMetadata("vanished").get(0).asBoolean();
-                        }
-                    }
-                    
-                    if (p.isOnline() && !isVanished)
-                    {
-                            isAviable = true;
-                    }
-
-
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
-                    String lastSeen = (isAviable ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
+                    String lastSeen = (p != null && p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
 
                     chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }
@@ -151,13 +120,11 @@ public class RosterCommand
                 }
 
                 ChatBlock.sendBlank(player);
-            }
-            else
+            } else
             {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             }
-        }
-        else
+        } else
         {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
         }

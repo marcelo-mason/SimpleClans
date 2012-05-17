@@ -7,14 +7,17 @@ import org.bukkit.entity.Player;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 
 /**
  * @author phaed
  */
 public class Helper
 {
-        /**
+
+    /**
      * Dumps stacktrace to log
      */
     public static void dumpStackTrace()
@@ -24,6 +27,7 @@ public class Helper
             SimpleClans.debug(el.toString());
         }
     }
+
     /**
      * Ensures only one player can be matched from a partial name
      *
@@ -83,11 +87,25 @@ public class Helper
         {
             Byte.parseByte(input);
             return true;
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             return false;
         }
+    }
+
+    /**
+     * Checks if a entry in a column exists
+     *
+     * @param core
+     * @param tabell
+     * @param column
+     * @param entry
+     * @return
+     */
+    public static Boolean existsEntry(DBCore core, String tabell, String column, String entry) throws SQLException
+    {
+        String query = "SELECT " + column + " FROM  `" + tabell + "` WHERE `" + tabell + "`.`" + column + "` =  '" + entry + "';";
+        return core.select(query).next() ? true : false;
     }
 
     /**
@@ -102,8 +120,7 @@ public class Helper
         {
             Short.parseShort(input);
             return true;
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             return false;
         }
@@ -121,8 +138,7 @@ public class Helper
         {
             Integer.parseInt(input);
             return true;
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             return false;
         }
@@ -140,8 +156,7 @@ public class Helper
         {
             Float.parseFloat(input);
             return true;
-        }
-        catch (Exception ex)
+        } catch (Exception ex)
         {
             return false;
         }
@@ -410,11 +425,8 @@ public class Helper
     }
 
     /*
-     * Retrieves the last color code
-     * @param msg
-     * @return
+     * Retrieves the last color code @param msg @return
      */
-
     /**
      * @param msg
      * @return
@@ -564,8 +576,7 @@ public class Helper
             {
                 return false;
             }
-        }
-        catch (IOException e)
+        } catch (IOException e)
         {
             return false;
         }
@@ -588,7 +599,6 @@ public class Helper
         return str.replace("'", "''");
     }
 
-
     /**
      * Returns a prettier coordinate, does not include world
      *
@@ -599,7 +609,6 @@ public class Helper
     {
         return loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() + " " + loc.getWorld().getName();
     }
-
 
     /**
      * Whether the two locations refer to the same block
@@ -618,7 +627,8 @@ public class Helper
     }
 
     /**
-     * Whether the two locations refer to the same location, ignoring pitch and yaw
+     * Whether the two locations refer to the same location, ignoring pitch and
+     * yaw
      *
      * @param loc
      * @param loc2
@@ -643,6 +653,7 @@ public class Helper
         List list = new LinkedList(map.entrySet());
         Collections.sort(list, new Comparator()
         {
+
             public int compare(Object o1, Object o2)
             {
                 return ((Comparable) ((Map.Entry) (o2)).getValue()).compareTo(((Map.Entry) (o1)).getValue());
@@ -650,11 +661,26 @@ public class Helper
         });
 
         Map result = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext(); )
+        for (Iterator it = list.iterator(); it.hasNext();)
         {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
+    }
+
+    public static boolean isVanished(Player player)
+    {
+        if (player != null)
+        {
+            if (player.hasMetadata("vanished"))
+            {
+                if (!player.getMetadata("vanished").isEmpty())
+                {
+                    return player.getMetadata("vanished").get(0).asBoolean();
+                }
+            }
+        }
+        return false;
     }
 }

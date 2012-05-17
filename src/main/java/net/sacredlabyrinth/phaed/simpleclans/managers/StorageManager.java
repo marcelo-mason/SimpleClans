@@ -1,12 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
-import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
-import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -16,12 +9,19 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /**
  * @author phaed
  */
 public final class StorageManager
 {
+
     private SimpleClans plugin;
     private DBCore core;
     private HashMap<String, ChatBlock> chatBlocks = new HashMap<String, ChatBlock>();
@@ -33,6 +33,7 @@ public final class StorageManager
     {
         plugin = SimpleClans.getInstance();
         initiateDB();
+        updateDatabase();
         importFromDatabase();
     }
 
@@ -75,7 +76,7 @@ public final class StorageManager
                 {
                     SimpleClans.log("Creating table: sc_clans");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20) NOT NULL auto_increment, `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, PRIMARY KEY  (`id`), UNIQUE KEY `uq_simpleclans_1` (`tag`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20) NOT NULL auto_increment, `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, `balance` double(64,2), PRIMARY KEY  (`id`), UNIQUE KEY `uq_simpleclans_1` (`tag`));";
                     core.execute(query);
                 }
 
@@ -98,16 +99,14 @@ public final class StorageManager
                 {
                     SimpleClans.log("Creating table: sc_war");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `id` bigint(20) NOT NULL auto_increment, `attacker_clan` varchar(16) NOT NULL, `victim_clan` varchar(16) NOT NULL, `strifes` varchar(16) NOT NULL, PRIMARY KEY  (`id`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `clan_name` varchar(16) NOT NULL, PRIMARY KEY  (`clan_name`));";
                     core.execute(query);
                 }
-            }
-            else
+            } else
             {
                 SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("mysql.connection.failed"));
             }
-        }
-        else
+        } else
         {
             core = new SQLiteCore(plugin.getDataFolder().getPath());
 
@@ -119,7 +118,7 @@ public final class StorageManager
                 {
                     SimpleClans.log("Creating table: sc_clans");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20), `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, PRIMARY KEY  (`id`), UNIQUE (`tag`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20), `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, `balance` double(64,2) default 0.0,  PRIMARY KEY  (`id`), UNIQUE (`tag`));";
                     core.execute(query);
                 }
 
@@ -140,13 +139,12 @@ public final class StorageManager
                 }
                 if (!core.existsTable("sc_war"))
                 {
-                    SimpleClans.log("Creating table: sc_kills");
+                    SimpleClans.log("Creating table: sc_war");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `id` bigint(20) NOT NULL auto_increment, `attacker_clan` varchar(16) NOT NULL, `victim_clan` varchar(16) NOT NULL, `strifes` varchar(16) NOT NULL, PRIMARY KEY  (`id`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `clan_name` varchar(16) NOT NULL, PRIMARY KEY  (`clan_name`));";
                     core.execute(query);
                 }
-            }
-            else
+            } else
             {
                 SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("sqlite.connection.failed"));
             }
@@ -218,8 +216,7 @@ public final class StorageManager
                 {
                     purge.add(clan);
                 }
-            }
-            else
+            } else
             {
                 if (clan.getInactiveDays() > plugin.getSettingsManager().getPurgeUnverified())
                 {
@@ -291,6 +288,7 @@ public final class StorageManager
                         String flags = res.getString("flags");
                         long founded = res.getLong("founded");
                         long last_used = res.getLong("last_used");
+                        double balance = res.getDouble("balance");
 
                         if (founded == 0)
                         {
@@ -315,10 +313,10 @@ public final class StorageManager
                         clan.setCapeUrl(cape_url);
                         clan.setFounded(founded);
                         clan.setLastUsed(last_used);
+                        clan.setBalance(balance);
 
                         out.add(clan);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         for (StackTraceElement el : ex.getStackTrace())
                         {
@@ -326,30 +324,39 @@ public final class StorageManager
                         }
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                for (StackTraceElement el : ex.getStackTrace())
-                {
-                    System.out.print(el.toString());
-                }
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
         return out;
     }
-    
+
     /**
      * Retrieves the strifes relativ to another clan
+     *
      * @param attackerclan
      * @param victimclan
      * @return
      */
     public Integer retrieveStrifes(Clan attackerclan, Clan victimclan)
     {
-        String query = "SELECT * FROM  `sc_war`;";
+        int strifes = 0;
+        String query = null;
+        String row = null;
+        if (core.existsColumn("sc_war", attackerclan.getTag()))
+        {
+            query = "SELECT * FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+            row = attackerclan.getTag();
+        } else if (core.existsColumn("sc_war", victimclan.getTag()))
+        {
+            row = victimclan.getTag();
+            query = "SELECT * FROM `sc_war` WHERE `sc_war`.`clan_name` =  '" + attackerclan.getTag() + "';";
+        }
         ResultSet res = core.select(query);
-        
+
         if (res != null)
         {
             try
@@ -358,36 +365,25 @@ public final class StorageManager
                 {
                     try
                     {
-                        String attacker = res.getString("attacker_clan");
-                        String victim = res.getString("victim_clan");
-                        int strifes = res.getInt("strifes");
-                        
-                        if (attacker.equals(attackerclan.getTag()) && victim.equals(victimclan.getTag())) {
-                            return strifes;
-                        }
-
-                    }
-                    catch (Exception ex)
+                        strifes = res.getInt(row);
+                    } catch (Exception ex)
                     {
                         for (StackTraceElement el : ex.getStackTrace())
                         {
-                            System.out.print(el.toString());
+                            SimpleClans.getLog().severe(el.toString());
                         }
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                for (StackTraceElement el : ex.getStackTrace())
-                {
-                    System.out.print(el.toString());
-                }
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
-        return 0;
+        return strifes;
+
     }
-    
-    
+
     /**
      * Retrieves all clan players from the database
      *
@@ -457,8 +453,7 @@ public final class StorageManager
                         }
 
                         out.add(cp);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         for (StackTraceElement el : ex.getStackTrace())
                         {
@@ -466,13 +461,10 @@ public final class StorageManager
                         }
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                for (StackTraceElement el : ex.getStackTrace())
-                {
-                    System.out.print(el.toString());
-                }
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
@@ -486,23 +478,47 @@ public final class StorageManager
      */
     public void insertClan(Clan clan)
     {
-        String query = "INSERT INTO `sc_clans` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`) ";
-        String values = "VALUES ( " + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "','" + Helper.escapeQuotes(clan.getFlags()) + "');";
+        String query = "INSERT INTO `sc_clans` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`, `balance`) ";
+        String values = "VALUES ( " + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "','" + Helper.escapeQuotes(clan.getFlags()) + "','" + Helper.escapeQuotes(String.valueOf(clan.getBalance())) + "');";
         core.insert(query + values);
     }
 
     /**
      * Insert a strife to a clan
+     *
      * @param attackerclan
      * @param victimclan
      */
-    public void insertStrife(Clan attackerclan, Clan victimclan, Integer amount)
+    public void addStrife(Clan attackerclan, Clan victimclan, int amount)
     {
-        String query = "INSERT INTO `sc_war`(`attacker_clan`, `victim_clan`, `strifes`)";
-        String values = "VALUES ( " + attackerclan.getTag() + ",'" + victimclan.getTag() + "','" + (retrieveStrifes(attackerclan, victimclan) + amount) + "');";
-        core.insert(query + values);
+        try
+        {
+            String query = null;
+            if (!core.existsColumn("sc_war", attackerclan.getTag()) && !core.existsColumn("sc_war", victimclan.getTag()))
+            {
+                String addcol = "ALTER TABLE sc_war ADD COLUMN " + attackerclan.getTag() + " int(255);";
+                core.execute(addcol);
+            }
+            if (!Helper.existsEntry(core, "sc_war", "clan_name", victimclan.getTag()) && !Helper.existsEntry(core, "sc_war", "clan_name", attackerclan.getTag()))
+            {
+                String insert = "INSERT INTO  `sc_war` (`clan_name`) VALUES ('" + victimclan.getTag() + "');";
+                core.insert(insert);
+            }
+            if (core.existsColumn("sc_war", attackerclan.getTag()) && Helper.existsEntry(core, "sc_war", "clan_name", victimclan.getTag()))
+            {
+                query = "UPDATE  `sc_war` SET  `" + attackerclan.getTag() + "` =  '" + (retrieveStrifes(attackerclan, victimclan) + amount) + "' WHERE  `sc_war`.`clan_name` =  '" + victimclan.getTag() + "';";
+            } else if (core.existsColumn("sc_war", victimclan.getTag()) && Helper.existsEntry(core, "sc_war", "clan_name", attackerclan.getTag()))
+            {
+                query = "UPDATE  `sc_war` SET  `" + victimclan.getTag() + "` =  '" + (retrieveStrifes(attackerclan, victimclan) + amount) + "' WHERE  `sc_war`.`clan_name` =  '" + attackerclan.getTag() + "';";
+            }
+            core.execute(query);
+        } catch (SQLException ex)
+        {
+            SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+            SimpleClans.getLog().log(Level.SEVERE, null, ex);
+        }
     }
-    
+
     /**
      * Update a clan to the database
      *
@@ -511,7 +527,7 @@ public final class StorageManager
     public void updateClan(Clan clan)
     {
         clan.updateLastUsed();
-        String query = "UPDATE `sc_clans` SET verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
+        String query = "UPDATE `sc_clans` SET verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getCapeUrl())) + "', balance = '" + clan.getBalance() + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
         core.update(query);
     }
 
@@ -523,9 +539,29 @@ public final class StorageManager
     public void deleteClan(Clan clan)
     {
         String query = "DELETE FROM `sc_clans` WHERE tag = '" + clan.getTag() + "';";
-        String war = "DELETE FROM `sc_war` WHERE `attacker_clan` = '" + clan.getTag() + "'; DELETE FROM `sc_war` WHERE `victim_clan` = '" + clan.getTag() + "';";
+        String war = null;
+        if (core.existsColumn("sc_war", clan.getTag()))
+        {
+            String warc = "ALTER TABLE `sc_war` DROP COLUMN `" + clan.getTag() + "`;";
+        }
+
+        try
+        {
+            if (Helper.existsEntry(core, "sc_war", "clan_name", clan.getTag()))
+            {
+                war += "DELETE FROM `sc_war` WHERE clan_name = '" + clan.getTag() + "';";
+            }
+        } catch (SQLException ex)
+        {
+            SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+            SimpleClans.getLog().log(Level.SEVERE, null, ex);
+        }
+        if (war != null)
+        {
+            core.delete(war);
+        }
         core.delete(query);
-        core.delete(war);
+
     }
 
     /**
@@ -614,16 +650,17 @@ public final class StorageManager
                         String victim = res.getString("victim");
                         int kills = res.getInt("kills");
                         out.put(victim, kills);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         SimpleClans.getLog().info(ex.getMessage());
+
+
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
@@ -654,16 +691,17 @@ public final class StorageManager
                         String victim = res.getString("victim");
                         int kills = res.getInt("kills");
                         out.put(attacker + " " + victim, kills);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         SimpleClans.getLog().info(ex.getMessage());
+
+
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
@@ -693,16 +731,17 @@ public final class StorageManager
                         String victimTag = res.getString("victim_tag");
                         int kills = res.getInt("kills");
                         out.put(victimTag, kills);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         SimpleClans.getLog().info(ex.getMessage());
+
+
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
@@ -732,16 +771,17 @@ public final class StorageManager
                         String victimTag = res.getString("attacker_tag");
                         int kills = res.getInt("kills");
                         out.put(victimTag, kills);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         SimpleClans.getLog().info(ex.getMessage());
+
+
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
@@ -771,16 +811,17 @@ public final class StorageManager
                         String attacker = res.getString("attacker");
                         int kills = res.getInt("kills");
                         out.put(attacker, kills);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         SimpleClans.getLog().info(ex.getMessage());
+
+
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
@@ -810,19 +851,43 @@ public final class StorageManager
                         String victim = res.getString("victim");
                         int kills = res.getInt("kills");
                         out.put(victim, kills);
-                    }
-                    catch (Exception ex)
+                    } catch (Exception ex)
                     {
                         SimpleClans.getLog().info(ex.getMessage());
+
+
                     }
                 }
-            }
-            catch (SQLException ex)
+            } catch (SQLException ex)
             {
-                Logger.getLogger(StorageManager.class.getName()).log(Level.SEVERE, null, ex);
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
             }
         }
 
         return out;
+    }
+
+    /**
+     * Updates the database to the latest version
+     *
+     * @param
+     */
+    private void updateDatabase()
+    {
+        String query = null;
+
+        //From 2.2.6.3 to 2.3
+        if (!core.existsColumn("sc_clans", "balance"))
+        {
+            query = "ALTER TABLE sc_clans ADD COLUMN `balance` double(64,2);";
+
+        }
+
+
+        if (query != null)
+        {
+            core.execute(query);
+        }
     }
 }

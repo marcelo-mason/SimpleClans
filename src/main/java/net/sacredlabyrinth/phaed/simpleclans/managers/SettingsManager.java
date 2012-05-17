@@ -124,7 +124,12 @@ public final class SettingsManager
     private boolean enableAutoGroups;
     private boolean moneyperkill;
     private double KDRMultipliesPerKill;
-
+    private boolean teleportBlocks;
+    private boolean AutoGroupGroupName;
+    private boolean tamableMobsSharing;
+    private int strifeLimit;
+    private boolean autoWar;
+    
     /**
      *
      */
@@ -268,7 +273,12 @@ public final class SettingsManager
         safeCivilians = getConfig().getBoolean("safe-civilians");
         moneyperkill = getConfig().getBoolean("economy.money-per-kill");
         KDRMultipliesPerKill = getConfig().getDouble("economy.money-per-kill-kdr-multipier");
-
+        teleportBlocks = getConfig().getBoolean("settings.teleport-blocks");
+        AutoGroupGroupName = getConfig().getBoolean("permissions.auto-group-groupname");
+        tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
+        strifeLimit = getConfig().getInt("war.strife-limit");
+        autoWar = getConfig().getBoolean("war.auto-war-start");
+        
         save();
     }
 
@@ -1230,5 +1240,40 @@ public final class SettingsManager
      */
     public double getKDRMultipliesPerKill() {
         return KDRMultipliesPerKill;
+    }
+
+    /**
+     * @return the teleportBlocks
+     */
+    public boolean isTeleportBlocks() {
+        return teleportBlocks;
+    }
+
+    /**
+     * @return the AutoGroupGroupName
+     */
+    public boolean isAutoGroupGroupName() {
+        return AutoGroupGroupName;
+    }
+
+    /**
+     * @return the tamableMobsSharing
+     */
+    public boolean isTamableMobsSharing() {
+        return tamableMobsSharing;
+    }
+
+    /**
+     * @return the strifeLimit
+     */
+    public int getStrifeLimit() {
+        return strifeLimit;
+    }
+
+    /**
+     * @return the autoWar
+     */
+    public boolean isAutoWar() {
+        return autoWar;
     }
 }
