@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
+import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
@@ -93,7 +94,7 @@ public final class StorageManager
                 if (!core.existsTable("sc_strifes")) {
                     SimpleClans.log("Creating table: sc_strifes");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_strifes` ( `clan` varchar(16) NOT NULL, `clan_relation` varchar(16) NOT NULL, PRIMARY KEY  (`clan`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_strifes` ( `clan` varchar(16) NOT NULL, `opponent_clan` varchar(16) NOT NULL, `strifes` int(11) default NULL, PRIMARY KEY  (`clan`));";
                     core.execute(query);
                 }
             } else {
@@ -129,7 +130,7 @@ public final class StorageManager
                 if (!core.existsTable("sc_strifes")) {
                     SimpleClans.log("Creating table: sc_strifes");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_strifes` ( `clan` varchar(16) NOT NULL, `clan_relation` varchar(16) NOT NULL, PRIMARY KEY  (`clan`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_strifes` ( `clan` varchar(16) NOT NULL, `opponent_clan` varchar(16) NOT NULL, `strifes` int(11) default NULL, PRIMARY KEY  (`clan`));";
                     core.execute(query);
                 }
             } else {
@@ -305,9 +306,23 @@ public final class StorageManager
      */
     public Integer retrieveStrifes(Clan attackerclan, Clan victimclan)
     {
+        String query = null;
+        ResultSet res = null;
+        try {
+            if (Helper.existsEntry(core, "sc_strifes", "clan", attackerclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", victimclan.getTag())) {
+                query = "SELECT `strifes` FROM `sc_strifes` WHERE `clan` = '" + attackerclan.getTag() + "' AND `opponent_clan` = '" + victimclan.getTag() + "';";
+            } else if (Helper.existsEntry(core, "sc_strifes", "clan", victimclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", attackerclan.getTag())) {
+                query = "SELECT `strifes` FROM `sc_strifes` WHERE `clan` = '" + victimclan.getTag() + "' AND `opponent_clan` = '" + attackerclan.getTag() + "';";
+            }
 
-        String query = "SELECT `strifes` FROM `sc_strifes` WHERE `clan` = 'attacker' AND `clanrelation` = 'victim';";
-        ResultSet res = core.select(query);
+        } catch (SQLException ex) {
+            SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+            SimpleClans.getLog().log(Level.SEVERE, null, ex);
+        }
+
+        if (query != null) {
+            res = core.select(query);
+        }
 
         if (res != null) {
             try {
@@ -427,13 +442,15 @@ public final class StorageManager
         try {
             String query = null;
 
-            if (!Helper.existsEntry(core, "sc_war", "clan", attackerclan.getTag())) {
-                query = "INSERT INTO  `sc`.`sc_strifes` (`clan` ,`clanrelation` ,`strifes`)VALUES ('" + attackerclan.getTag() + "',  '" + victimclan.getTag() + "',  '" + (retrieveStrifes(attackerclan, victimclan) + amount) + "':";
-
-            } else if (!Helper.existsEntry(core, "sc_war", "clan", victimclan.getTag())) {
-                query = "INSERT INTO  `sc`.`sc_strifes` (`clan` ,`clanrelation` ,`strifes`)VALUES ('" + victimclan.getTag() + "',  '" + attackerclan.getTag() + "',  '" + amount + "':";
-
+            if (!Helper.existsEntry(core, "sc_strifes", "clan", attackerclan.getTag()) && !Helper.existsEntry(core, "sc_strifes", "opponent_clan", victimclan.getTag()) && !Helper.existsEntry(core, "sc_strifes", "clan", victimclan.getTag()) && !Helper.existsEntry(core, "sc_strifes", "opponent_clan", attackerclan.getTag())) {
+                query = "INSERT INTO  `sc_strifes` (`clan` ,`opponent_clan` ,`strifes`)VALUES ('" + attackerclan.getTag() + "',  '" + victimclan.getTag() + "',  '" + 1 + "');";
             }
+            if (Helper.existsEntry(core, "sc_strifes", "clan", attackerclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", victimclan.getTag())) {
+                query = "UPDATE `sc_strifes` SET strifes = " + (retrieveStrifes(attackerclan, victimclan) + amount) + " WHERE `clan` = '" + attackerclan.getTag() + "' AND `opponent_clan` = '" + victimclan.getTag() + "';";
+            } else if (Helper.existsEntry(core, "sc_strifes", "clan", victimclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", attackerclan.getTag())) {
+                query = "UPDATE `sc_strifes` SET strifes = " + (retrieveStrifes(attackerclan, victimclan) + amount) + " WHERE `clan` = '" + victimclan.getTag() + "' AND `opponent_clan` = '" + attackerclan.getTag() + "';";
+            }
+
             if (query != null) {
                 core.execute(query);
             }
@@ -463,7 +480,7 @@ public final class StorageManager
     public void deleteClan(Clan clan)
     {
         String query = "DELETE FROM `sc_clans` WHERE tag = '" + clan.getTag() + "';";
-        String strifes = "DELETE FROM `sc_strifes` WHERE clan = '" + clan.getTag() + "' AND clan_relation = '" + clan.getTag() + "';";
+        String strifes = "DELETE FROM `sc_strifes` WHERE clan = '" + clan.getTag() + "' AND opponent_clan = '" + clan.getTag() + "';";
         core.delete(query + strifes);
 
     }
