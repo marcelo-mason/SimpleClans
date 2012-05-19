@@ -49,8 +49,8 @@ commands:
     more: more
     ally: ally
     clan: clan
-    accept: accept
-    deny: deny
+    accept: saccept
+    deny: sdeny
     global: global
 economy:
     creation-price: 100.0
