@@ -362,73 +362,101 @@ public final class ClanManager {
         String out = "";
 
         ItemStack h = inv.getHelmet();
-
-        if (h.getType().equals(Material.CHAINMAIL_HELMET)) {
-            out += ChatColor.WHITE + plugin.getLang("armor.h");
-        } else if (h.getType().equals(Material.DIAMOND_HELMET)) {
-            out += ChatColor.AQUA + plugin.getLang("armor.h");
-        } else if (h.getType().equals(Material.GOLD_HELMET)) {
-            out += ChatColor.YELLOW + plugin.getLang("armor.h");
-        } else if (h.getType().equals(Material.IRON_HELMET)) {
-            out += ChatColor.GRAY + plugin.getLang("armor.h");
-        } else if (h.getType().equals(Material.LEATHER_HELMET)) {
-            out += ChatColor.GOLD + plugin.getLang("armor.h");
-        } else if (h.getType().equals(Material.AIR)) {
+        Material htype;
+        
+        try {
+            htype = h.getType();
+        } catch (Exception ex) {
+            htype = null;
+        }
+        
+        if (htype == null) {
             out += ChatColor.BLACK + plugin.getLang("armor.h");
+        } else if (htype.equals(Material.CHAINMAIL_HELMET)) {
+            out += ChatColor.WHITE + plugin.getLang("armor.h");
+        } else if (htype.equals(Material.DIAMOND_HELMET)) {
+            out += ChatColor.AQUA + plugin.getLang("armor.h");
+        } else if (htype.equals(Material.GOLD_HELMET)) {
+            out += ChatColor.YELLOW + plugin.getLang("armor.h");
+        } else if (htype.equals(Material.IRON_HELMET)) {
+            out += ChatColor.GRAY + plugin.getLang("armor.h");
+        } else if (htype.equals(Material.LEATHER_HELMET)) {
+            out += ChatColor.GOLD + plugin.getLang("armor.h");
         } else {
             out += ChatColor.RED + plugin.getLang("armor.h");
         }
 
         ItemStack c = inv.getChestplate();
+        Material ctype;
+        
+        try {
+            ctype = c.getType();
+        } catch(Exception ex) {
+            ctype = null;
+        }
 
-        if (c.getType().equals(Material.CHAINMAIL_CHESTPLATE)) {
-            out += ChatColor.WHITE + plugin.getLang("armor.c");
-        } else if (c.getType().equals(Material.DIAMOND_CHESTPLATE)) {
-            out += ChatColor.AQUA + plugin.getLang("armor.c");
-        } else if (c.getType().equals(Material.GOLD_CHESTPLATE)) {
-            out += ChatColor.YELLOW + plugin.getLang("armor.c");
-        } else if (c.getType().equals(Material.IRON_CHESTPLATE)) {
-            out += ChatColor.GRAY + plugin.getLang("armor.c");
-        } else if (c.getType().equals(Material.LEATHER_CHESTPLATE)) {
-            out += ChatColor.GOLD + plugin.getLang("armor.c");
-        } else if (c.getType().equals(Material.AIR)) {
+        if (ctype == null) {
             out += ChatColor.BLACK + plugin.getLang("armor.c");
+        } else if (ctype.equals(Material.CHAINMAIL_CHESTPLATE)) {
+            out += ChatColor.WHITE + plugin.getLang("armor.c");
+        } else if (ctype.equals(Material.DIAMOND_CHESTPLATE)) {
+            out += ChatColor.AQUA + plugin.getLang("armor.c");
+        } else if (ctype.equals(Material.GOLD_CHESTPLATE)) {
+            out += ChatColor.YELLOW + plugin.getLang("armor.c");
+        } else if (ctype.equals(Material.IRON_CHESTPLATE)) {
+            out += ChatColor.GRAY + plugin.getLang("armor.c");
+        } else if (ctype.equals(Material.LEATHER_CHESTPLATE)) {
+            out += ChatColor.GOLD + plugin.getLang("armor.c");
         } else {
             out += ChatColor.RED + plugin.getLang("armor.c");
         }
 
         ItemStack l = inv.getLeggings();
-
-        if (l.getType().equals(Material.CHAINMAIL_LEGGINGS)) {
+        Material ltype;
+        
+        try {
+            ltype = l.getType();
+        } catch(Exception ex) {
+            ltype = null;
+        }
+         
+        if (ltype == null) {
+            out += ChatColor.BLACK + plugin.getLang("armor.l");
+        } else if (ltype.equals(Material.CHAINMAIL_LEGGINGS)) {
             out += ChatColor.WHITE + plugin.getLang("armor.l");
-        } else if (l.getType().equals(Material.DIAMOND_LEGGINGS)) {
-            out += plugin.getLang("armor.l");
-        } else if (l.getType().equals(Material.GOLD_LEGGINGS)) {
-            out += plugin.getLang("armor.l");
-        } else if (l.getType().equals(Material.IRON_LEGGINGS)) {
-            out += plugin.getLang("armor.l");
-        } else if (l.getType().equals(Material.LEATHER_LEGGINGS)) {
-            out += plugin.getLang("armor.l");
-        } else if (l.getType().equals(Material.AIR)) {
-            out += plugin.getLang("armor.l");
+        } else if (ltype.equals(Material.DIAMOND_LEGGINGS)) {
+            out += ChatColor.AQUA + plugin.getLang("armor.l");
+        } else if (ltype.equals(Material.GOLD_LEGGINGS)) {
+            out += ChatColor.YELLOW + plugin.getLang("armor.l");
+        } else if (ltype.equals(Material.IRON_LEGGINGS)) {
+            out += ChatColor.GRAY + plugin.getLang("armor.l");
+        } else if (ltype.equals(Material.LEATHER_LEGGINGS)) {
+            out += ChatColor.GOLD + plugin.getLang("armor.l");
         } else {
-            out += plugin.getLang("armor.l");
+            out += ChatColor.RED + plugin.getLang("armor.l");
         }
 
         ItemStack b = inv.getBoots();
+        Material btype;
+        
+        try {
+            btype = b.getType();
+        } catch(Exception ex) {
+            btype = null;
+        }
 
-        if (b.getType().equals(Material.CHAINMAIL_BOOTS)) {
-            out += ChatColor.WHITE + plugin.getLang("armor.B");
-        } else if (b.getType().equals(Material.DIAMOND_BOOTS)) {
-            out += ChatColor.AQUA + plugin.getLang("armor.B");
-        } else if (b.getType().equals(Material.GOLD_BOOTS)) {
-            out += ChatColor.YELLOW + plugin.getLang("armor.B");
-        } else if (b.getType().equals(Material.IRON_BOOTS)) {
-            out += ChatColor.WHITE + plugin.getLang("armor.B");
-        } else if (b.getType().equals(Material.LEATHER_BOOTS)) {
-            out += ChatColor.GOLD + plugin.getLang("armor.B");
-        } else if (b.getType().equals(Material.AIR)) {
+        if (btype == null) {
             out += ChatColor.BLACK + plugin.getLang("armor.B");
+        } else if (btype.equals(Material.CHAINMAIL_BOOTS)) {
+            out += ChatColor.WHITE + plugin.getLang("armor.B");
+        } else if (btype.equals(Material.DIAMOND_BOOTS)) {
+            out += ChatColor.AQUA + plugin.getLang("armor.B");
+        } else if (btype.equals(Material.GOLD_BOOTS)) {
+            out += ChatColor.YELLOW + plugin.getLang("armor.B");
+        } else if (btype.equals(Material.IRON_BOOTS)) {
+            out += ChatColor.GRAY + plugin.getLang("armor.B");
+        } else if (btype.equals(Material.LEATHER_BOOTS)) {
+            out += ChatColor.GOLD + plugin.getLang("armor.B");
         } else {
             out += ChatColor.RED + plugin.getLang("armor.B");
         }
