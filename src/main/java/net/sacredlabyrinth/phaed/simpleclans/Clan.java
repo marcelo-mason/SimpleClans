@@ -1242,7 +1242,7 @@ public class Clan implements Serializable, Comparable<Clan> {
                 SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
             }
         }
-
+        
         clans.remove(this);
 
         for (Clan c : clans) {
@@ -1265,6 +1265,7 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(SimpleClans.getInstance(), new Runnable() {
 
+            @Override
             public void run() {
                 SimpleClans.getInstance().getClanManager().removeClan(thisOne.getTag());
                 SimpleClans.getInstance().getStorageManager().deleteClan(thisOne);

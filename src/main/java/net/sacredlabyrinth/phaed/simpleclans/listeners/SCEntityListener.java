@@ -109,6 +109,8 @@ public class SCEntityListener implements Listener
                     plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
                 } else if (acp.getClan().isAlly(vcp.getTag())) {
                     reward = (double) kdr * multipier * -1;
+                    acp.addNeutralKill();
+                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
                 } else {
                     reward = (double) kdr * multipier;
                     acp.addNeutralKill();
@@ -142,6 +144,7 @@ public class SCEntityListener implements Listener
 
         if (plugin.getSettingsManager().isTamableMobsSharing()) {
             if (event.getRightClicked() instanceof Tameable) {
+                
                 Entity entity = event.getRightClicked();
                 Player player = event.getPlayer();
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);

@@ -52,6 +52,7 @@ public final class CommandManager
     private MostKilledCommand mostKilledCommand;
     private SetRankCommand setRankCommand;
     private BankCommand bankCommand;
+    private StrifesCommand strifesCommand;
 
     /**
      *
@@ -98,6 +99,7 @@ public final class CommandManager
         mostKilledCommand = new MostKilledCommand();
         setRankCommand = new SetRankCommand();
         bankCommand = new BankCommand();
+        strifesCommand = new StrifesCommand();
     }
 
     /**
@@ -135,6 +137,10 @@ public final class CommandManager
                 else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")))
                 {
                     listCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase("strifes"))
+                {
+                    strifesCommand.execute(player, subargs);
                 }
                 else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command")))
                 {

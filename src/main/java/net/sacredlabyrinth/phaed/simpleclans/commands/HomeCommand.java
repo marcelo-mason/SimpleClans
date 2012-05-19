@@ -73,6 +73,8 @@ public class HomeCommand
                                 }
 
                                 plugin.getTeleportManager().addPlayer(player, clan.getHomeLocation(), clan.getName());
+                            } else {
+                                System.out.println("4");
                             }
                         }
                         else
@@ -98,16 +100,18 @@ public class HomeCommand
                                         {
                                             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("home.base.only.once"));
                                             return;
+                                        } else {
+                                            System.out.println("3");
                                         }
 
                                         clan.setHomeLocation(loc);
                                         ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("hombase.set"), ChatColor.YELLOW + Helper.toLocationString(loc)));
-                                    }
+                                    } 
                                     else
                                     {
                                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.teleport"));
                                     }
-                                }
+                                } 
                                 else
                                 {
                                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
@@ -135,6 +139,8 @@ public class HomeCommand
                                         if (pl == null || pl.equals(player))
                                         {
                                             continue;
+                                        } else {
+                                            System.out.println("2");
                                         }
 
                                         if (pl != null)
@@ -161,6 +167,8 @@ public class HomeCommand
                                             z = z + zz;
 
                                             pl.teleport(new Location(loc.getWorld(), x + .5, loc.getBlockY(), z + .5));
+                                        } else {
+                                            System.out.println("1");   
                                         }
                                     }
                                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("hombase.set") + ChatColor.YELLOW + Helper.toLocationString(loc));
