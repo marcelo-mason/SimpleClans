@@ -69,11 +69,6 @@ public class SCEntityListener implements Listener
                 ClanPlayer acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
                 ClanPlayer vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
 
-                // record attacker kill
-
-                // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
-                // if both have verified clans, check for rival or default to neutral
-
                 int strifemax = plugin.getSettingsManager().getStrifeLimit();
 
                 if (plugin.getSettingsManager().isAutoWar()) {
@@ -91,6 +86,10 @@ public class SCEntityListener implements Listener
                     }
                 }
 
+                // record attacker kill
+
+                // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
+                // if both have verified clans, check for rival or default to neutral
 
                 double reward = 0;
                 double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
@@ -128,6 +127,7 @@ public class SCEntityListener implements Listener
                 // record death for victim
                 vcp.addDeath();
                 plugin.getStorageManager().updateClanPlayer(vcp);
+                plugin.getStorageManager().updateClanPlayer(acp);
             }
         }
     }

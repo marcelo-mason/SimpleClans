@@ -22,8 +22,7 @@ public class Helper
      */
     public static void dumpStackTrace()
     {
-        for (StackTraceElement el : Thread.currentThread().getStackTrace())
-        {
+        for (StackTraceElement el : Thread.currentThread().getStackTrace()) {
             SimpleClans.debug(el.toString());
         }
     }
@@ -38,8 +37,7 @@ public class Helper
     {
         List<Player> players = SimpleClans.getInstance().getServer().matchPlayer(playername);
 
-        if (players.size() == 1)
-        {
+        if (players.size() == 1) {
             return players.get(0);
         }
 
@@ -56,8 +54,7 @@ public class Helper
     {
         List<Player> players = SimpleClans.getInstance().getServer().matchPlayer(playerName);
 
-        if (players.size() == 1)
-        {
+        if (players.size() == 1) {
             return SimpleClans.getInstance().getPermissionsManager().getPrefix(players.get(0)) + players.get(0).getDisplayName() + SimpleClans.getInstance().getPermissionsManager().getSuffix(players.get(0));
         }
 
@@ -83,12 +80,10 @@ public class Helper
      */
     public static boolean isByte(String input)
     {
-        try
-        {
+        try {
             Byte.parseByte(input);
             return true;
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -116,12 +111,10 @@ public class Helper
      */
     public static boolean isShort(String input)
     {
-        try
-        {
+        try {
             Short.parseShort(input);
             return true;
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -134,12 +127,10 @@ public class Helper
      */
     public static boolean isInteger(String input)
     {
-        try
-        {
+        try {
             Integer.parseInt(input);
             return true;
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -152,12 +143,10 @@ public class Helper
      */
     public static boolean isFloat(String input)
     {
-        try
-        {
+        try {
             Float.parseFloat(input);
             return true;
-        } catch (Exception ex)
-        {
+        } catch (Exception ex) {
             return false;
         }
     }
@@ -195,10 +184,8 @@ public class Helper
     {
         String r = "";
 
-        for (int i = 0; i < s.length(); i++)
-        {
-            if (s.charAt(i) != c)
-            {
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != c) {
                 r += s.charAt(i);
             }
         }
@@ -217,10 +204,8 @@ public class Helper
     {
         String r = "";
 
-        for (int i = 0; i < s.length(); i++)
-        {
-            if (s.charAt(i) != c)
-            {
+        for (int i = 0; i < s.length(); i++) {
+            if (s.charAt(i) != c) {
                 r += s.charAt(i);
                 break;
             }
@@ -237,8 +222,7 @@ public class Helper
      */
     public static String capitalize(String content)
     {
-        if (content.length() < 2)
-        {
+        if (content.length() < 2) {
             return content;
         }
 
@@ -267,8 +251,7 @@ public class Helper
      */
     public static String toColor(String hexValue)
     {
-        if (hexValue == null)
-        {
+        if (hexValue == null) {
             return "";
         }
 
@@ -337,8 +320,7 @@ public class Helper
     {
         List<String> out = fromArray(args);
 
-        if (!out.isEmpty())
-        {
+        if (!out.isEmpty()) {
             out.remove(0);
         }
         return toArray(out);
@@ -354,8 +336,7 @@ public class Helper
     {
         String out = "";
 
-        for (String arg : args)
-        {
+        for (String arg : args) {
             out += arg + " ";
         }
 
@@ -373,8 +354,7 @@ public class Helper
     {
         String out = "";
 
-        for (String arg : args)
-        {
+        for (String arg : args) {
             out += arg + ", ";
         }
 
@@ -392,8 +372,7 @@ public class Helper
     {
         String out = "";
 
-        for (String arg : args)
-        {
+        for (String arg : args) {
             out += arg + sep;
         }
 
@@ -435,21 +414,18 @@ public class Helper
     {
         msg = msg.replaceAll(String.valueOf((char) 194), "").trim();
 
-        if (msg.length() < 2)
-        {
+        if (msg.length() < 2) {
             return "";
         }
 
         String one = msg.substring(msg.length() - 2, msg.length() - 1);
         String two = msg.substring(msg.length() - 1);
 
-        if (one.equals("\u00a7"))
-        {
+        if (one.equals("\u00a7")) {
             return one + two;
         }
 
-        if (one.equals("&"))
-        {
+        if (one.equals("&")) {
             return Helper.toColor(two);
         }
 
@@ -477,8 +453,7 @@ public class Helper
      */
     public static String stripTrailing(String msg, String sep)
     {
-        if (msg.length() < sep.length())
-        {
+        if (msg.length() < sep.length()) {
             return msg;
         }
 
@@ -486,13 +461,11 @@ public class Helper
         String first = msg.substring(0, sep.length());
         String last = msg.substring(msg.length() - sep.length(), msg.length());
 
-        if (first.equals(sep))
-        {
+        if (first.equals(sep)) {
             out = msg.substring(sep.length());
         }
 
-        if (last.equals(sep))
-        {
+        if (last.equals(sep)) {
             out = msg.substring(0, msg.length() - sep.length());
         }
 
@@ -509,8 +482,7 @@ public class Helper
     {
         String out = "";
 
-        for (int i = 0; i < 320; i++)
-        {
+        for (int i = 0; i < 320; i++) {
             out += sep;
         }
         return out;
@@ -526,10 +498,8 @@ public class Helper
     {
         Player[] online = SimpleClans.getInstance().getServer().getOnlinePlayers();
 
-        for (Player o : online)
-        {
-            if (o.getName().equalsIgnoreCase(playerName))
-            {
+        for (Player o : online) {
+            if (o.getName().equalsIgnoreCase(playerName)) {
                 return true;
             }
         }
@@ -547,10 +517,8 @@ public class Helper
     {
         List<ClanPlayer> out = new ArrayList<ClanPlayer>();
 
-        for (ClanPlayer cp : in)
-        {
-            if (SimpleClans.getInstance().getServer().getPlayer(cp.getName()) != null)
-            {
+        for (ClanPlayer cp : in) {
+            if (SimpleClans.getInstance().getServer().getPlayer(cp.getName()) != null) {
                 out.add(cp);
             }
         }
@@ -566,18 +534,15 @@ public class Helper
      */
     public static boolean testURL(String strUrl)
     {
-        try
-        {
+        try {
             URL url = new URL(strUrl);
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
             urlConn.connect();
 
-            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
-            {
+            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
                 return false;
             }
-        } catch (IOException e)
-        {
+        } catch (IOException e) {
             return false;
         }
 
@@ -592,8 +557,7 @@ public class Helper
      */
     public static String escapeQuotes(String str)
     {
-        if (str == null)
-        {
+        if (str == null) {
             return "";
         }
         return str.replace("'", "''");
@@ -619,8 +583,7 @@ public class Helper
      */
     public static boolean isSameBlock(Location loc, Location loc2)
     {
-        if (loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ())
-        {
+        if (loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ()) {
             return true;
         }
         return false;
@@ -636,8 +599,7 @@ public class Helper
      */
     public static boolean isSameLocation(Location loc, Location loc2)
     {
-        if (loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ())
-        {
+        if (loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ()) {
             return true;
         }
         return false;
@@ -661,24 +623,23 @@ public class Helper
         });
 
         Map result = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext();)
-        {
+        for (Iterator it = list.iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
     }
 
+    /**
+     * Checks if the player is Vanished
+     *
+     * @return
+     */
     public static boolean isVanished(Player player)
     {
-        if (player != null)
-        {
-            if (player.hasMetadata("vanished"))
-            {
-                if (!player.getMetadata("vanished").isEmpty())
-                {
-                    return player.getMetadata("vanished").get(0).asBoolean();
-                }
+        if (player != null && player.hasMetadata("vanished")) {
+            if (!player.getMetadata("vanished").isEmpty()) {
+                return player.getMetadata("vanished").get(0).asBoolean();
             }
         }
         return false;
