@@ -44,6 +44,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean tagEnabled = true;
     private boolean capeEnabled = true;
     private String rank = "";
+    private boolean allSeeingEyeEnabled;
 
     /**
      *
@@ -868,6 +869,22 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public void setRank(String rank)
     {
         this.rank = rank;
+    }
+
+    /**
+     * @return The toggle state of all-seeing-eye
+     */
+    public boolean isAllSeeingEyeEnabled()
+    {
+        return allSeeingEyeEnabled;
+    }
+
+    /**
+     * @param allSeeingEyeEnabled True or false
+     */
+    public void setAllSeeingEyeEnabled(boolean allSeeingEyeEnabled)
+    {
+        this.allSeeingEyeEnabled = allSeeingEyeEnabled;
     }
 
     public enum Channel

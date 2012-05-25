@@ -2,13 +2,10 @@ package net.sacredlabyrinth.phaed.simpleclans;
 
 import java.io.IOException;
 import java.text.MessageFormat;
-import java.util.HashSet;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
-import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;

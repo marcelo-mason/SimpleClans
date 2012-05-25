@@ -10,9 +10,11 @@ import org.bukkit.entity.Player;
 /**
  * @author phaed
  */
-public class ToggleCommand {
+public class ToggleCommand
+{
 
-    public ToggleCommand() {
+    public ToggleCommand()
+    {
     }
 
     /**
@@ -21,7 +23,8 @@ public class ToggleCommand {
      * @param player
      * @param arg
      */
-    public void execute(Player player, String[] arg) {
+    public void execute(Player player, String[] arg)
+    {
         SimpleClans plugin = SimpleClans.getInstance();
 
         if (arg.length == 0) {
@@ -128,6 +131,18 @@ public class ToggleCommand {
                             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                         }
                     }
+                }
+            }
+        }
+
+        if (cmd.equalsIgnoreCase("all-seeing-eye") || cmd.equalsIgnoreCase("ase")) {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye-toggle")) {
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+                if (cp != null) {
+                    cp.setAllSeeingEyeEnabled(!cp.isAllSeeingEyeEnabled());
+                } else {
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                 }
             }
         }

@@ -13,7 +13,8 @@ import org.bukkit.inventory.PlayerInventory;
 /**
  * @author phaed
  */
-public final class ClanManager {
+public final class ClanManager
+{
 
     private SimpleClans plugin;
     private HashMap<String, Clan> clans = new HashMap<String, Clan>();
@@ -22,14 +23,16 @@ public final class ClanManager {
     /**
      *
      */
-    public ClanManager() {
+    public ClanManager()
+    {
         plugin = SimpleClans.getInstance();
     }
 
     /**
      * Deletes all clans and clan players in memory
      */
-    public void cleanData() {
+    public void cleanData()
+    {
         clans.clear();
         clanPlayers.clear();
     }
@@ -39,7 +42,8 @@ public final class ClanManager {
      *
      * @param clan
      */
-    public void importClan(Clan clan) {
+    public void importClan(Clan clan)
+    {
         this.clans.put(clan.getTag(), clan);
     }
 
@@ -48,7 +52,8 @@ public final class ClanManager {
      *
      * @param cp
      */
-    public void importClanPlayer(ClanPlayer cp) {
+    public void importClanPlayer(ClanPlayer cp)
+    {
         this.clanPlayers.put(cp.getCleanName(), cp);
     }
 
@@ -59,7 +64,8 @@ public final class ClanManager {
      * @param colorTag
      * @param name
      */
-    public void createClan(Player player, String colorTag, String name) {
+    public void createClan(Player player, String colorTag, String name)
+    {
         ClanPlayer cp = getCreateClanPlayer(player.getName());
 
         boolean verified = !plugin.getSettingsManager().isRequireVerification() || plugin.getPermissionsManager().has(player, "simpleclans.mod.verify");
@@ -82,7 +88,8 @@ public final class ClanManager {
      *
      * @param cp
      */
-    public void deleteClanPlayer(ClanPlayer cp) {
+    public void deleteClanPlayer(ClanPlayer cp)
+    {
         clanPlayers.remove(cp.getCleanName());
         plugin.getStorageManager().deleteClanPlayer(cp);
     }
@@ -92,7 +99,8 @@ public final class ClanManager {
      *
      * @param tag
      */
-    public void removeClan(String tag) {
+    public void removeClan(String tag)
+    {
         clans.remove(tag);
     }
 
@@ -102,7 +110,8 @@ public final class ClanManager {
      * @param tag
      * @return
      */
-    public boolean isClan(String tag) {
+    public boolean isClan(String tag)
+    {
         return clans.containsKey(Helper.cleanTag(tag));
 
     }
@@ -113,7 +122,8 @@ public final class ClanManager {
      * @param tag
      * @return
      */
-    public Clan getClan(String tag) {
+    public Clan getClan(String tag)
+    {
         return clans.get(Helper.cleanTag(tag));
     }
 
@@ -123,7 +133,8 @@ public final class ClanManager {
      * @param playerName
      * @return null if not in a clan
      */
-    public Clan getClanByPlayerName(String playerName) {
+    public Clan getClanByPlayerName(String playerName)
+    {
         ClanPlayer cp = getClanPlayer(playerName);
 
         if (cp != null) {
@@ -136,7 +147,8 @@ public final class ClanManager {
     /**
      * @return the clans
      */
-    public List<Clan> getClans() {
+    public List<Clan> getClans()
+    {
         return new ArrayList<Clan>(clans.values());
     }
 
@@ -145,7 +157,8 @@ public final class ClanManager {
      *
      * @return
      */
-    public List<ClanPlayer> getAllClanPlayers() {
+    public List<ClanPlayer> getAllClanPlayers()
+    {
         return new ArrayList<ClanPlayer>(clanPlayers.values());
     }
 
@@ -156,7 +169,8 @@ public final class ClanManager {
      * @param player
      * @return
      */
-    public ClanPlayer getClanPlayer(Player player) {
+    public ClanPlayer getClanPlayer(Player player)
+    {
         return getClanPlayer(player.getName());
     }
 
@@ -167,7 +181,8 @@ public final class ClanManager {
      * @param playerName
      * @return
      */
-    public ClanPlayer getClanPlayer(String playerName) {
+    public ClanPlayer getClanPlayer(String playerName)
+    {
         ClanPlayer cp = clanPlayers.get(playerName.toLowerCase());
 
         if (cp == null) {
@@ -190,7 +205,8 @@ public final class ClanManager {
      * @param playerName
      * @return
      */
-    public ClanPlayer getAnyClanPlayer(String playerName) {
+    public ClanPlayer getAnyClanPlayer(String playerName)
+    {
         return clanPlayers.get(playerName.toLowerCase());
     }
 
@@ -200,7 +216,8 @@ public final class ClanManager {
      * @param playerName
      * @return
      */
-    public ClanPlayer getCreateClanPlayer(String playerName) {
+    public ClanPlayer getCreateClanPlayer(String playerName)
+    {
         if (clanPlayers.containsKey(playerName.toLowerCase())) {
             return clanPlayers.get(playerName.toLowerCase());
         }
@@ -218,7 +235,8 @@ public final class ClanManager {
      *
      * @param msg
      */
-    public void serverAnnounce(String msg) {
+    public void serverAnnounce(String msg)
+    {
         Player[] players = plugin.getServer().getOnlinePlayers();
 
         for (Player player : players) {
@@ -233,7 +251,8 @@ public final class ClanManager {
      *
      * @param player
      */
-    public void updateDisplayName(Player player) {
+    public void updateDisplayName(Player player)
+    {
         // do not update displayname if in compat mode
 
         if (plugin.getSettingsManager().isCompatMode()) {
@@ -294,7 +313,8 @@ public final class ClanManager {
      *
      * @param player
      */
-    public void updateLastSeen(Player player) {
+    public void updateLastSeen(Player player)
+    {
         ClanPlayer cp = getAnyClanPlayer(player.getName());
 
         if (cp != null) {
@@ -313,7 +333,8 @@ public final class ClanManager {
     /**
      * @param playerName
      */
-    public void ban(String playerName) {
+    public void ban(String playerName)
+    {
         ClanPlayer cp = getClanPlayer(playerName);
         Clan clan = cp.getClan();
 
@@ -340,7 +361,8 @@ public final class ClanManager {
      *
      * @return
      */
-    public int getRivableClanCount() {
+    public int getRivableClanCount()
+    {
         int clanCount = 0;
 
         for (Clan tm : clans.values()) {
@@ -358,18 +380,19 @@ public final class ClanManager {
      * @param inv
      * @return
      */
-    public String getArmorString(PlayerInventory inv) {
+    public String getArmorString(PlayerInventory inv)
+    {
         String out = "";
 
         ItemStack h = inv.getHelmet();
         Material htype;
-        
+
         try {
             htype = h.getType();
         } catch (Exception ex) {
             htype = null;
         }
-        
+
         if (htype == null) {
             out += ChatColor.BLACK + plugin.getLang("armor.h");
         } else if (htype.equals(Material.CHAINMAIL_HELMET)) {
@@ -388,10 +411,10 @@ public final class ClanManager {
 
         ItemStack c = inv.getChestplate();
         Material ctype;
-        
+
         try {
             ctype = c.getType();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ctype = null;
         }
 
@@ -413,13 +436,13 @@ public final class ClanManager {
 
         ItemStack l = inv.getLeggings();
         Material ltype;
-        
+
         try {
             ltype = l.getType();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             ltype = null;
         }
-         
+
         if (ltype == null) {
             out += ChatColor.BLACK + plugin.getLang("armor.l");
         } else if (ltype.equals(Material.CHAINMAIL_LEGGINGS)) {
@@ -438,10 +461,10 @@ public final class ClanManager {
 
         ItemStack b = inv.getBoots();
         Material btype;
-        
+
         try {
             btype = b.getType();
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             btype = null;
         }
 
@@ -470,7 +493,8 @@ public final class ClanManager {
      * @param inv
      * @return
      */
-    public String getWeaponString(PlayerInventory inv) {
+    public String getWeaponString(PlayerInventory inv)
+    {
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
 
         String out = "";
@@ -530,7 +554,8 @@ public final class ClanManager {
         return out;
     }
 
-    private int getItemCount(HashMap<Integer, ? extends ItemStack> all) {
+    private int getItemCount(HashMap<Integer, ? extends ItemStack> all)
+    {
         int count = 0;
 
         for (ItemStack is : all.values()) {
@@ -546,7 +571,8 @@ public final class ClanManager {
      * @param inv
      * @return
      */
-    public String getFoodString(PlayerInventory inv) {
+    public String getFoodString(PlayerInventory inv)
+    {
         double out = 0;
 
         int count = getItemCount(inv.all(320)); // cooked porkchop
@@ -658,7 +684,8 @@ public final class ClanManager {
      * @param health
      * @return
      */
-    public String getHealthString(int health) {
+    public String getHealthString(int health)
+    {
         String out = "";
 
         if (health >= 16) {
@@ -682,7 +709,8 @@ public final class ClanManager {
      * @param health
      * @return
      */
-    public String getHungerString(int health) {
+    public String getHungerString(int health)
+    {
         String out = "";
 
         if (health >= 16) {
@@ -706,11 +734,14 @@ public final class ClanManager {
      * @param clans
      * @return
      */
-    public void sortClansByKDR(List<Clan> clans) {
-        Collections.sort(clans, new Comparator<Clan>() {
+    public void sortClansByKDR(List<Clan> clans)
+    {
+        Collections.sort(clans, new Comparator<Clan>()
+        {
 
             @Override
-            public int compare(Clan c1, Clan c2) {
+            public int compare(Clan c1, Clan c2)
+            {
                 Float o1 = c1.getTotalKDR();
                 Float o2 = c2.getTotalKDR();
 
@@ -725,11 +756,14 @@ public final class ClanManager {
      * @param cps
      * @return
      */
-    public void sortClanPlayersByKDR(List<ClanPlayer> cps) {
-        Collections.sort(cps, new Comparator<ClanPlayer>() {
+    public void sortClanPlayersByKDR(List<ClanPlayer> cps)
+    {
+        Collections.sort(cps, new Comparator<ClanPlayer>()
+        {
 
             @Override
-            public int compare(ClanPlayer c1, ClanPlayer c2) {
+            public int compare(ClanPlayer c1, ClanPlayer c2)
+            {
                 Float o1 = c1.getKDR();
                 Float o2 = c2.getKDR();
 
@@ -744,11 +778,14 @@ public final class ClanManager {
      * @param cps
      * @return
      */
-    public void sortClanPlayersByLastSeen(List<ClanPlayer> cps) {
-        Collections.sort(cps, new Comparator<ClanPlayer>() {
+    public void sortClanPlayersByLastSeen(List<ClanPlayer> cps)
+    {
+        Collections.sort(cps, new Comparator<ClanPlayer>()
+        {
 
             @Override
-            public int compare(ClanPlayer c1, ClanPlayer c2) {
+            public int compare(ClanPlayer c1, ClanPlayer c2)
+            {
                 Double o1 = c1.getLastSeenDays();
                 Double o2 = c2.getLastSeenDays();
 
@@ -763,7 +800,8 @@ public final class ClanManager {
      * @param player
      * @return
      */
-    public boolean purchaseCreation(Player player) {
+    public boolean purchaseCreation(Player player)
+    {
         if (!plugin.getSettingsManager().isePurchaseCreation()) {
             return true;
         }
@@ -789,7 +827,8 @@ public final class ClanManager {
      * @param player
      * @return
      */
-    public boolean purchaseInvite(Player player) {
+    public boolean purchaseInvite(Player player)
+    {
         if (!plugin.getSettingsManager().isePurchaseInvite()) {
             return true;
         }
@@ -815,7 +854,8 @@ public final class ClanManager {
      * @param player
      * @return
      */
-    public boolean purchaseHomeTeleport(Player player) {
+    public boolean purchaseHomeTeleport(Player player)
+    {
         if (!plugin.getSettingsManager().isePurchaseHomeTeleport()) {
             return true;
         }
@@ -841,7 +881,8 @@ public final class ClanManager {
      * @param player
      * @return
      */
-    public boolean purchaseHomeTeleportSet(Player player) {
+    public boolean purchaseHomeTeleportSet(Player player)
+    {
         if (!plugin.getSettingsManager().isePurchaseHomeTeleportSet()) {
             return true;
         }
@@ -867,7 +908,8 @@ public final class ClanManager {
      * @param player
      * @return
      */
-    public boolean purchaseVerification(Player player) {
+    public boolean purchaseVerification(Player player)
+    {
         if (!plugin.getSettingsManager().isePurchaseVerification()) {
             return true;
         }
@@ -893,7 +935,8 @@ public final class ClanManager {
      * @param player
      * @param msg
      */
-    public void processClanChat(Player player, String tag, String msg) {
+    public void processClanChat(Player player, String tag, String msg)
+    {
         Clan clan = plugin.getClanManager().getClan(tag);
 
         if (!clan.isMember(player)) {
@@ -908,7 +951,8 @@ public final class ClanManager {
      *
      * @param msg
      */
-    public void processClanChat(Player player, String msg) {
+    public void processClanChat(Player player, String msg)
+    {
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player.getName());
 
         if (cp == null) {
@@ -966,21 +1010,24 @@ public final class ClanManager {
         }
     }
 
-    public void sendToAllSeeing(String msg, List<ClanPlayer> cps) {
+    public void sendToAllSeeing(String msg, List<ClanPlayer> cps)
+    {
         Player[] players = plugin.getServer().getOnlinePlayers();
 
         for (Player player : players) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye")) {
-                boolean alreadySent = false;
+                if (plugin.getClanManager().getAnyClanPlayer(player.getName()).isAllSeeingEyeEnabled()) {
+                    boolean alreadySent = false;
 
-                for (ClanPlayer cpp : cps) {
-                    if (cpp.getName().equalsIgnoreCase(player.getName())) {
-                        alreadySent = true;
+                    for (ClanPlayer cpp : cps) {
+                        if (cpp.getName().equalsIgnoreCase(player.getName())) {
+                            alreadySent = true;
+                        }
                     }
-                }
 
-                if (!alreadySent) {
-                    ChatBlock.sendMessage(player, ChatColor.DARK_GRAY + Helper.stripColors(msg));
+                    if (!alreadySent) {
+                        ChatBlock.sendMessage(player, ChatColor.DARK_GRAY + Helper.stripColors(msg));
+                    }
                 }
             }
         }
@@ -991,7 +1038,8 @@ public final class ClanManager {
      *
      * @param msg
      */
-    public void processAllyChat(Player player, String msg) {
+    public void processAllyChat(Player player, String msg)
+    {
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
         if (cp == null) {
@@ -1049,7 +1097,8 @@ public final class ClanManager {
      *
      * @param msg
      */
-    public boolean processGlobalChat(Player player, String msg) {
+    public boolean processGlobalChat(Player player, String msg)
+    {
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player.getName());
 
         if (cp == null) {
