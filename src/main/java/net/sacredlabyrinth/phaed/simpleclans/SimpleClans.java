@@ -14,7 +14,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * @author Phaed
  */
-public class SimpleClans extends JavaPlugin {
+public class SimpleClans extends JavaPlugin
+{
 
     private static SimpleClans instance;
     private static final Logger logger = Logger.getLogger("Minecraft");
@@ -33,36 +34,47 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the logger
      */
-    public static Logger getLog() {
+    public static Logger getLog()
+    {
         return logger;
     }
 
     /**
      * @return the logger
      */
-    public static void debug(String msg) {
+    public static void debug(String msg)
+    {
         if (getInstance().getSettingsManager().isDebugging()) {
-            logger.log(Level.INFO, msg);
+            if (msg != null) {
+                logger.log(Level.INFO, msg);
+            }
         }
     }
 
     /**
      * @return the instance
      */
-    public static SimpleClans getInstance() {
+    public static SimpleClans getInstance()
+    {
         return instance;
     }
 
-    public static void log(String msg, Object... arg) {
+    public static void log(String msg, Object... arg)
+    {
         if (arg == null || arg.length == 0) {
-            logger.log(Level.INFO, msg);
+            if (msg != null) {
+                logger.log(Level.INFO, msg);
+            }
         } else {
-            logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
+            if (arg != null) {
+                logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
+            }
         }
     }
 
     @Override
-    public void onEnable() {
+    public void onEnable()
+    {
         instance = this;
         settingsManager = new SettingsManager();
 
@@ -92,28 +104,34 @@ public class SimpleClans extends JavaPlugin {
     }
 
     @Override
-    public void onDisable() {
+    public void onDisable()
+    {
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();
     }
 
-    public void setupMetrics() {
+    public void setupMetrics()
+    {
         try {
             Metrics metrics = new Metrics(this);
 
-            metrics.addCustomData(new Metrics.Plotter("Total created clans") {
+            metrics.addCustomData(new Metrics.Plotter("Total created clans")
+            {
 
                 @Override
-                public int getValue() {
+                public int getValue()
+                {
                     return getClanManager().getClans().size();
                 }
             });
 
-            metrics.addCustomData(new Metrics.Plotter("Total clan players") {
+            metrics.addCustomData(new Metrics.Plotter("Total clan players")
+            {
 
                 @Override
-                public int getValue() {
+                public int getValue()
+                {
                     int cp = 0;
                     for (Clan clan : getClanManager().getClans()) {
                         cp += clan.getMembers().size();
@@ -131,60 +149,69 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the clanManager
      */
-    public ClanManager getClanManager() {
+    public ClanManager getClanManager()
+    {
         return clanManager;
     }
 
     /**
      * @return the requestManager
      */
-    public RequestManager getRequestManager() {
+    public RequestManager getRequestManager()
+    {
         return requestManager;
     }
 
     /**
      * @return the storageManager
      */
-    public StorageManager getStorageManager() {
+    public StorageManager getStorageManager()
+    {
         return storageManager;
     }
 
     /**
      * @return the spoutManager
      */
-    public SpoutPluginManager getSpoutPluginManager() {
+    public SpoutPluginManager getSpoutPluginManager()
+    {
         return spoutPluginManager;
     }
 
     /**
      * @return the settingsManager
      */
-    public SettingsManager getSettingsManager() {
+    public SettingsManager getSettingsManager()
+    {
         return settingsManager;
     }
 
     /**
      * @return the permissionsManager
      */
-    public PermissionsManager getPermissionsManager() {
+    public PermissionsManager getPermissionsManager()
+    {
         return permissionsManager;
     }
 
     /**
      * @return the commandManager
      */
-    public CommandManager getCommandManager() {
+    public CommandManager getCommandManager()
+    {
         return commandManager;
     }
 
     /**
      * @return the lang
      */
-    public String getLang(String msg) {
+    public String getLang(String msg)
+    {
         return lang.getString(msg);
     }
 
-    public TeleportManager getTeleportManager() {
+    public TeleportManager getTeleportManager()
+    {
         return teleportManager;
     }
 }
