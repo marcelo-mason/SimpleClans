@@ -676,7 +676,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         for (String member : members) {
             ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
 
-            if (cp.isLeader()) {
+            if (cp != null && cp.isLeader()) {
                 out.add(cp);
             }
         }

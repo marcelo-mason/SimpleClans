@@ -62,13 +62,9 @@ public class SimpleClans extends JavaPlugin
     public static void log(String msg, Object... arg)
     {
         if (arg == null || arg.length == 0) {
-            if (msg != null) {
-                logger.log(Level.INFO, msg);
-            }
+            logger.log(Level.INFO, msg);
         } else {
-            if (arg != null) {
-                logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
-            }
+            logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
         }
     }
 
