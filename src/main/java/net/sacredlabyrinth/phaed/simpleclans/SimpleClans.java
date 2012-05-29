@@ -6,6 +6,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
@@ -111,8 +112,10 @@ public class SimpleClans extends JavaPlugin
     {
         try {
             Metrics metrics = new Metrics(this);
+            Graph clanGraph = metrics.createGraph("Clan Graph");
+            Graph clanPlayerGraph = metrics.createGraph("Clan-Player Graph");
 
-            metrics.addCustomData(new Metrics.Plotter("Total created clans")
+            clanGraph.addPlotter(new Metrics.Plotter("Total created clans")
             {
 
                 @Override
@@ -122,7 +125,7 @@ public class SimpleClans extends JavaPlugin
                 }
             });
 
-            metrics.addCustomData(new Metrics.Plotter("Total clan players")
+            clanPlayerGraph.addPlotter(new Metrics.Plotter("Total clan players")
             {
 
                 @Override
