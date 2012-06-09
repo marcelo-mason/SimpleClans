@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.util.ChatPaginator;
 
 /**
  *
@@ -17,6 +18,7 @@ import java.util.regex.Pattern;
  */
 public class ChatBlock
 {
+
     private static final int lineLength = 319;
     private ArrayList<Boolean> columnFlexes = new ArrayList<Boolean>();
     private ArrayList<Integer> columnSizes = new ArrayList<Integer>();
@@ -43,8 +45,7 @@ public class ChatBlock
      */
     public void setFlexibility(boolean... columnFlex)
     {
-        for (boolean flex : columnFlex)
-        {
+        for (boolean flex : columnFlex) {
             columnFlexes.add(flex);
         }
     }
@@ -58,13 +59,11 @@ public class ChatBlock
     {
         int ll = lineLength;
 
-        if (prefix != null)
-        {
+        if (prefix != null) {
             ll = lineLength - (int) msgLength(prefix);
         }
 
-        for (double percentage : columnPercentages)
-        {
+        for (double percentage : columnPercentages) {
             columnSizes.add((int) Math.floor((percentage / 100) * ll));
         }
     }
@@ -154,18 +153,15 @@ public class ChatBlock
      */
     boolean sendBlock(Player player, String prefix, int amount)
     {
-        if (player == null)
-        {
+        if (player == null) {
             return false;
         }
 
-        if (rows.size() == 0)
-        {
+        if (rows.size() == 0) {
             return false;
         }
 
-        if (amount == 0)
-        {
+        if (amount == 0) {
             amount = rows.size();
         }
 
@@ -176,65 +172,46 @@ public class ChatBlock
         // if no column sizes provided then
         // make some up based on the data
 
-        if (columnSizes.isEmpty())
-        {
+        if (columnSizes.isEmpty()) {
             // generate columns sizes
 
-            for (int i = 0; i <  rows.get(0).length; i++)
-            {
+            for (int i = 0; i < rows.get(0).length; i++) {
                 columnSizes.add(getMaxWidth(i) + 4);
             }
         }
 
         // size up all sections
 
-        for (int i = 0; i < amount; i++)
-        {
-            if (rows.size() == 0)
-            {
+        for (int i = 0; i < amount; i++) {
+            if (rows.size() == 0) {
                 continue;
             }
 
             List<String> measuredCols = new ArrayList<String>();
             String row[] = rows.pollFirst();
 
-            for (int sid = 0; sid < row.length; sid++)
-            {
+            for (int sid = 0; sid < row.length; sid++) {
                 String col = "";
                 String section = row[sid];
                 double colsize = (columnSizes.size() >= (sid + 1)) ? columnSizes.get(sid) : 0;
                 String align = (columnAlignments.size() >= (sid + 1)) ? columnAlignments.get(sid) : "l";
 
-                if (align.equalsIgnoreCase("r"))
-                {
-                    if (msgLength(section) > colsize)
-                    {
+                if (align.equalsIgnoreCase("r")) {
+                    if (msgLength(section) > colsize) {
                         col = cropLeftToFit(section, colsize);
-                    }
-                    else if (msgLength(section) < colsize)
-                    {
+                    } else if (msgLength(section) < colsize) {
                         col = paddLeftToFit(section, colsize);
                     }
-                }
-                else if (align.equalsIgnoreCase("l"))
-                {
-                    if (msgLength(section) > colsize)
-                    {
+                } else if (align.equalsIgnoreCase("l")) {
+                    if (msgLength(section) > colsize) {
                         col = cropRightToFit(section, colsize);
-                    }
-                    else if (msgLength(section) < colsize)
-                    {
+                    } else if (msgLength(section) < colsize) {
                         col = paddRightToFit(section, colsize);
                     }
-                }
-                else if (align.equalsIgnoreCase("c"))
-                {
-                    if (msgLength(section) > colsize)
-                    {
+                } else if (align.equalsIgnoreCase("c")) {
+                    if (msgLength(section) > colsize) {
                         col = cropRightToFit(section, colsize);
-                    }
-                    else if (msgLength(section) < colsize)
-                    {
+                    } else if (msgLength(section) < colsize) {
                         col = centerInLineOf(section, colsize);
                     }
                 }
@@ -247,15 +224,12 @@ public class ChatBlock
             int colspacing = 12;
             int availableSpacing = colspacing;
 
-            while (calculatedRowSize(measuredCols) < lineLength && availableSpacing > 0)
-            {
-                for (int j = 0; j < measuredCols.size(); j++)
-                {
+            while (calculatedRowSize(measuredCols) < lineLength && availableSpacing > 0) {
+                for (int j = 0; j < measuredCols.size(); j++) {
                     String col = measuredCols.get(j);
                     measuredCols.set(j, col + " ");
 
-                    if (calculatedRowSize(measuredCols) >= lineLength)
-                    {
+                    if (calculatedRowSize(measuredCols) >= lineLength) {
                         break;
                     }
 
@@ -266,35 +240,28 @@ public class ChatBlock
 
             // cut off from flexible columns if too big
 
-            if (columnFlexes.size() == measuredCols.size())
-            {
-                while (calculatedRowSize(measuredCols) > lineLength)
-                {
+            if (columnFlexes.size() == measuredCols.size()) {
+                while (calculatedRowSize(measuredCols) > lineLength) {
                     boolean didFlex = false;
 
-                    for (int j = 0; j < measuredCols.size(); j++)
-                    {
+                    for (int j = 0; j < measuredCols.size(); j++) {
                         boolean flex = columnFlexes.get(j);
 
-                        if (flex)
-                        {
+                        if (flex) {
                             String col = measuredCols.get(j);
 
-                            if (col.length() > 0)
-                            {
+                            if (col.length() > 0) {
                                 measuredCols.set(j, col.substring(0, col.length() - 1));
                                 didFlex = true;
                             }
                         }
 
-                        if (calculatedRowSize(measuredCols) <= lineLength)
-                        {
+                        if (calculatedRowSize(measuredCols) <= lineLength) {
                             break;
                         }
                     }
 
-                    if (!didFlex)
-                    {
+                    if (!didFlex) {
                         break;
                     }
                 }
@@ -304,8 +271,7 @@ public class ChatBlock
 
             String finalString = "";
 
-            for (String measured : measuredCols)
-            {
+            for (String measured : measuredCols) {
                 finalString += measured;
             }
 
@@ -313,12 +279,17 @@ public class ChatBlock
 
             String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString, lineLength);
 
-            if (color.length() > 0)
-            {
+            if (color.length() > 0) {
                 msg = color + msg;
             }
 
-            player.sendMessage(msg);
+            if (msg.length() > 100) {
+                for (String s : ChatPaginator.wordWrap(msg, lineLength)) {
+                    player.sendMessage(s);
+                }
+            } else {
+                player.sendMessage(msg);
+            }
 
             prefix_used = true;
         }
@@ -330,8 +301,7 @@ public class ChatBlock
     {
         int out = 0;
 
-        for (String col : cols)
-        {
+        for (String col : cols) {
             out += msgLength(col);
         }
 
@@ -347,8 +317,7 @@ public class ChatBlock
     {
         double maxWidth = 0;
 
-        for (String[] row : rows)
-        {
+        for (String[] row : rows) {
             maxWidth = Math.max(maxWidth, msgLength(row[col]));
         }
 
@@ -378,8 +347,7 @@ public class ChatBlock
 
         // if too big for line return it as is
 
-        if (diff < 0)
-        {
+        if (diff < 0) {
             return msg;
         }
 
@@ -404,8 +372,7 @@ public class ChatBlock
      */
     public static String makeEmpty(String str)
     {
-        if (str == null)
-        {
+        if (str == null) {
             return "";
         }
 
@@ -420,13 +387,11 @@ public class ChatBlock
      */
     private static String cropRightToFit(String msg, double length)
     {
-        if (msg == null || msg.length() == 0 || length == 0)
-        {
+        if (msg == null || msg.length() == 0 || length == 0) {
             return "";
         }
 
-        while (msgLength(msg) > length)
-        {
+        while (msgLength(msg) > length) {
             msg = msg.substring(0, msg.length() - 2);
         }
 
@@ -441,13 +406,11 @@ public class ChatBlock
      */
     private static String cropLeftToFit(String msg, double length)
     {
-        if (msg == null || msg.length() == 0 || length == 0)
-        {
+        if (msg == null || msg.length() == 0 || length == 0) {
             return "";
         }
 
-        while (msgLength(msg) >= length)
-        {
+        while (msgLength(msg) >= length) {
             msg = msg.substring(1);
         }
 
@@ -456,19 +419,18 @@ public class ChatBlock
 
     /**
      * Padds left til the string is a certain size
+     *
      * @param msg
      * @param length
      * @return
      */
     private static String paddLeftToFit(String msg, double length)
     {
-        if (msgLength(msg) >= length)
-        {
+        if (msgLength(msg) >= length) {
             return msg;
         }
 
-        while (msgLength(msg) < length)
-        {
+        while (msgLength(msg) < length) {
             msg = " " + msg;
         }
 
@@ -477,19 +439,18 @@ public class ChatBlock
 
     /**
      * Padds right til the string is a certain size
+     *
      * @param msg
      * @param length
      * @return
      */
     private static String paddRightToFit(String msg, double length)
     {
-        if (msgLength(msg) >= length)
-        {
+        if (msgLength(msg) >= length) {
             return msg;
         }
 
-        while (msgLength(msg) < length)
-        {
+        while (msgLength(msg) < length) {
             msg += " ";
         }
 
@@ -498,6 +459,7 @@ public class ChatBlock
 
     /**
      * Finds the length on the screen of a string. Ignores colors.
+     *
      * @param str
      * @return
      */
@@ -508,15 +470,11 @@ public class ChatBlock
 
         // Loop through all the characters, skipping any color characters and their following color codes
 
-        for (int x = 0; x < str.length(); x++)
-        {
+        for (int x = 0; x < str.length(); x++) {
             int len = charLength(str.charAt(x));
-            if (len > 0)
-            {
+            if (len > 0) {
                 length += len;
-            }
-            else
-            {
+            } else {
                 x++;
             }
         }
@@ -541,47 +499,34 @@ public class ChatBlock
 
     /**
      * Finds the visual length of the character on the screen.
+     *
      * @param x
      * @return
      */
     private static int charLength(char x)
     {
-        if ("i.:,;|!".indexOf(x) != -1)
-        {
+        if ("i.:,;|!".indexOf(x) != -1) {
             return 2;
-        }
-        else if ("l'".indexOf(x) != -1)
-        {
+        } else if ("l'".indexOf(x) != -1) {
             return 3;
-        }
-        else if ("tI[]".indexOf(x) != -1)
-        {
+        } else if ("tI[]".indexOf(x) != -1) {
             return 4;
-        }
-        else if ("fk{}<>\"*()".indexOf(x) != -1)
-        {
+        } else if ("fk{}<>\"*()".indexOf(x) != -1) {
             return 5;
-        }
-        else if ("abcdeghjmnopqrsuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890\\/#?$%-=_+&^".indexOf(x) != -1)
-        {
+        } else if ("abcdeghjmnopqrsuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890\\/#?$%-=_+&^".indexOf(x) != -1) {
             return 6;
-        }
-        else if ("@~".indexOf(x) != -1)
-        {
+        } else if ("@~".indexOf(x) != -1) {
             return 7;
-        }
-        else if (x == ' ')
-        {
+        } else if (x == ' ') {
             return 4;
-        }
-        else
-        {
+        } else {
             return -1;
         }
     }
 
     /**
      * Cuts the message apart into whole words short enough to fit on one line
+     *
      * @param msg
      * @return
      */
@@ -598,8 +543,7 @@ public class ChatBlock
 
         // While i is less than the length of the array of words
 
-        while (!split.isEmpty())
-        {
+        while (!split.isEmpty()) {
             int len = 0;
 
             // Create an array list to hold individual words
@@ -609,14 +553,12 @@ public class ChatBlock
             // Loop through the words finding their length and increasing
             // j, the end point for the sub string
 
-            while (!split.isEmpty() && split.get(0) != null && len <= lineLength)
-            {
+            while (!split.isEmpty() && split.get(0) != null && len <= lineLength) {
                 double wordLength = msgLength(split.get(0)) + 4;
 
                 // If a word is too long for a line
 
-                if (wordLength > lineLength)
-                {
+                if (wordLength > lineLength) {
                     String[] tempArray = wordCut(len, split.remove(0));
                     words.add(tempArray[0]);
                     split.add(tempArray[1]);
@@ -626,8 +568,7 @@ public class ChatBlock
 
                 len += wordLength;
 
-                if (len < lineLength)
-                {
+                if (len < lineLength) {
                     words.add(split.remove(0));
                 }
             }
@@ -650,8 +591,7 @@ public class ChatBlock
     private static String combineSplit(String[] string)
     {
         StringBuilder builder = new StringBuilder();
-        for (String aString : string)
-        {
+        for (String aString : string) {
             builder.append(aString);
             builder.append(" ");
         }
@@ -662,6 +602,7 @@ public class ChatBlock
 
     /**
      * Cuts apart a word that is too long to fit on one line
+     *
      * @param lengthBefore
      * @param str
      * @return
@@ -674,21 +615,16 @@ public class ChatBlock
 
         String[] output = new String[2];
         int x = 0;
-        while (length < lineLength && x < str.length())
-        {
+        while (length < lineLength && x < str.length()) {
             int len = charLength(str.charAt(x));
-            if (len > 0)
-            {
+            if (len > 0) {
                 length += len;
-            }
-            else
-            {
+            } else {
                 x++;
             }
             x++;
         }
-        if (x > str.length())
-        {
+        if (x > str.length()) {
             x = str.length();
         }
 
@@ -704,41 +640,41 @@ public class ChatBlock
 
     /**
      * Outputs a single line out, crops overflow
+     *
      * @param receiver
      * @param msg
      */
     public static void saySingle(Player receiver, String msg)
     {
-        if (receiver == null)
-        {
+        if (receiver == null) {
             return;
         }
 
-        receiver.sendMessage(colorize(new String[] {cropRightToFit(msg, lineLength)})[0]);
+        receiver.sendMessage(colorize(new String[]{cropRightToFit(msg, lineLength)})[0]);
     }
 
     /**
      * Outputs a message to a user
+     *
      * @param receiver
      * @param msg
      */
     public static void sendMessage(Player receiver, String msg)
     {
-        if (receiver == null)
-        {
+        if (receiver == null) {
             return;
         }
 
         String[] message = colorize(wordWrap(msg));
 
-        for (String out : message)
-        {
+        for (String out : message) {
             receiver.sendMessage(out);
         }
     }
 
     /**
      * Send blank lie
+     *
      * @param color
      */
     public void startColor(String color)
@@ -748,12 +684,12 @@ public class ChatBlock
 
     /**
      * Send blank lie
+     *
      * @param receiver
      */
     public static void sendBlank(Player receiver)
     {
-        if (receiver == null)
-        {
+        if (receiver == null) {
             return;
         }
 
@@ -762,6 +698,7 @@ public class ChatBlock
 
     /**
      * Colors each line
+     *
      * @param message
      * @return
      */
@@ -787,8 +724,7 @@ public class ChatBlock
      */
     public static String colorize(String message)
     {
-        return colorizeBase((new String[]
-                {
+        return colorizeBase((new String[]{
                     message
                 }))[0];
     }
@@ -801,31 +737,24 @@ public class ChatBlock
      */
     private static String[] colorizeBase(String[] message)
     {
-        if (message != null && message[0] != null && !message[0].isEmpty())
-        {
+        if (message != null && message[0] != null && !message[0].isEmpty()) {
             // Go through each line
 
             String prevColor = "";
             String lastColor = "";
 
             int counter = 0;
-            for (String msg : message)
-            {
+            for (String msg : message) {
                 // Loop through looking for a color code
-                for (int x = 0; x < msg.length(); x++)
-                {
+                for (int x = 0; x < msg.length(); x++) {
                     // If the char is color code
-                    if (msg.codePointAt(x) == 167)
-                    {
+                    if (msg.codePointAt(x) == 167) {
                         // advance x to the next character
                         x += 1;
 
-                        try
-                        {
+                        try {
                             lastColor = ChatColor.getByChar(msg.charAt(x)) + "";
-                        }
-                        catch (Exception ignored)
-                        {
+                        } catch (Exception ignored) {
                         }
                     }
                 }
