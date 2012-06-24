@@ -284,12 +284,14 @@ public class SCPlayerListener implements Listener
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
+        Player player = event.getPlayer();
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
+
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName())) {
             return;
         }
 
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
-
+        player.getInventory().clear();
         SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
         plugin.getClanManager().updateLastSeen(event.getPlayer());
         plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());

@@ -483,7 +483,8 @@ public final class StorageManager
     {
         String query = "DELETE FROM `sc_clans` WHERE tag = '" + clan.getTag() + "';";
         String strifes = "DELETE FROM `sc_strifes` WHERE clan = '" + clan.getTag() + "' AND opponent_clan = '" + clan.getTag() + "';";
-        core.delete(query + strifes);
+        core.delete(query);
+        core.delete(strifes);
     }
 
     /**
