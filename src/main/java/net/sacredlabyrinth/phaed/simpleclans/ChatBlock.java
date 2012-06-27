@@ -283,7 +283,7 @@ public class ChatBlock
                 msg = color + msg;
             }
 
-            if (msg.length() > 100) {
+            if (msg.length() > 255) {
                 for (String s : ChatPaginator.wordWrap(msg, lineLength)) {
                     player.sendMessage(s);
                 }

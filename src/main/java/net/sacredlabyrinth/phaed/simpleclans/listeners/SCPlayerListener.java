@@ -28,9 +28,6 @@ public class SCPlayerListener implements Listener
         plugin = SimpleClans.getInstance();
     }
 
-    /**
-     * @param event
-     */
     @EventHandler(priority = EventPriority.LOW)
     public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event)
     {
@@ -126,9 +123,6 @@ public class SCPlayerListener implements Listener
         }
     }
 
-    /**
-     * @param event
-     */
     @EventHandler(priority = EventPriority.HIGHEST)
     public void onPlayerChat(PlayerChatEvent event)
     {
@@ -210,9 +204,6 @@ public class SCPlayerListener implements Listener
         }
     }
 
-    /**
-     * @param event
-     */
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event)
     {
@@ -253,9 +244,6 @@ public class SCPlayerListener implements Listener
         }, 1);
     }
 
-    /**
-     * @param event
-     */
     @EventHandler(priority = EventPriority.MONITOR)
     public void onPlayerRespawn(PlayerRespawnEvent event)
     {
@@ -278,28 +266,20 @@ public class SCPlayerListener implements Listener
         }
     }
 
-    /**
-     * @param event
-     */
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        Player player = event.getPlayer();
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
 
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName())) {
             return;
         }
 
-        player.getInventory().clear();
         SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
         plugin.getClanManager().updateLastSeen(event.getPlayer());
         plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());
     }
 
-    /**
-     * @param event
-     */
     @EventHandler
     public void onPlayerKick(PlayerKickEvent event)
     {

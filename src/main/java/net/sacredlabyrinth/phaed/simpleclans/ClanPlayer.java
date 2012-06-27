@@ -1,11 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import org.json.simple.JSONValue;
-
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
@@ -13,6 +7,11 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
+import org.json.simple.JSONValue;
 
 /**
  * @author phaed
@@ -88,6 +87,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         return other.getName().equals(this.getName());
     }
 
+    @Override
     public int compareTo(ClanPlayer other)
     {
         return this.getName().compareToIgnoreCase(other.getName());
