@@ -6,6 +6,7 @@ import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -81,6 +82,16 @@ public final class ClanManager
         SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
 
         plugin.getSpoutPluginManager().processPlayer(player.getName());
+    }
+
+    public boolean isClaimed(World world, int x, int z)
+    {
+        for (Clan clans1 : plugin.getClanManager().getClans()) {
+            if (clans1.isClaimed(world, x, z)) {
+                return true;
+            }
+        }
+        return false;
     }
 
     /**

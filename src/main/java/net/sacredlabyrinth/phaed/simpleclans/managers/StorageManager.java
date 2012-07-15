@@ -35,6 +35,27 @@ public final class StorageManager
         initiateDB();
         updateDatabase();
         importFromDatabase();
+        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new SaveThread(), 20L, 6000L);
+    }
+
+    private class SaveThread implements Runnable
+    {
+
+        @Override
+        public void run()
+        {
+            saveClaims();
+        }
+    }
+
+    public void saveClaims()
+    {
+        for (Clan clan : plugin.getClanManager().getClans()) {
+            if (clan.isClaimedChanged()) {
+                setClaimedPlots(clan);
+                clan.setClaimedChanged(false);
+            }
+        }
     }
 
     /**
@@ -73,7 +94,7 @@ public final class StorageManager
                 if (!core.existsTable("sc_clans")) {
                     SimpleClans.log("Creating table: sc_clans");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20) NOT NULL auto_increment, `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, `balance` double(64,2), PRIMARY KEY  (`id`), UNIQUE KEY `uq_simpleclans_1` (`tag`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20) NOT NULL auto_increment, `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `plots` varchar(5000) NOT NULL, `flags` text NOT NULL, `balance` double(64,2), PRIMARY KEY  (`id`), UNIQUE KEY `uq_simpleclans_1` (`tag`));";
                     core.execute(query);
                 }
 
@@ -109,7 +130,7 @@ public final class StorageManager
                 if (!core.existsTable("sc_clans")) {
                     SimpleClans.log("Creating table: sc_clans");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20), `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, `balance` double(64,2) default 0.0,  PRIMARY KEY  (`id`), UNIQUE (`tag`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20), `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `plots` varchar(5000) NOT NULL, `flags` text NOT NULL, `balance` double(64,2) default 0.0,  PRIMARY KEY  (`id`), UNIQUE (`tag`));";
                     core.execute(query);
                 }
 
@@ -254,6 +275,7 @@ public final class StorageManager
                         String packed_bb = res.getString("packed_bb");
                         String cape_url = res.getString("cape_url");
                         String flags = res.getString("flags");
+                        String plotString = res.getString("plots");
                         long founded = res.getLong("founded");
                         long last_used = res.getLong("last_used");
                         double balance = res.getDouble("balance");
@@ -281,11 +303,21 @@ public final class StorageManager
                         clan.setLastUsed(last_used);
                         clan.setBalance(balance);
 
+                        String[] plots = plotString.split(";");
+
+                        for (String plot : plots) {
+                            String[] splittedCords = plot.split(",");
+                            if (splittedCords.length == 3) {
+                                int x = Integer.parseInt(splittedCords[1]);
+                                int z = Integer.parseInt(splittedCords[2]);
+                                String world = plugin.getSettingsManager().getWorldByNumber(Integer.parseInt(splittedCords[0]));
+                                clan.addClaimedChunk(world, x, z);
+                            }
+                        }
+
                         out.add(clan);
                     } catch (Exception ex) {
-                        for (StackTraceElement el : ex.getStackTrace()) {
-                            System.out.print(el.toString());
-                        }
+                        SimpleClans.debug(null, ex);
                     }
                 }
             } catch (SQLException ex) {
@@ -295,6 +327,16 @@ public final class StorageManager
         }
 
         return out;
+    }
+
+    public void setClaimedPlots(Clan clan)
+    {
+        StringBuilder sb = new StringBuilder();
+        for (ChunkLocation chunk : clan.getClaimedChunks()) {
+            sb.append(plugin.getSettingsManager().getWorldNumber(chunk.getWorld())).append(',').append(chunk.getX()).append(',').append(chunk.getZ()).append(';');
+        }
+        String query = "UPDATE `sc_clans` SET plots = '" + sb.toString() + "' WHERE name = '" + clan.getName() + "';";
+        core.update(query);
     }
 
     /**
@@ -330,9 +372,7 @@ public final class StorageManager
                     try {
                         return res.getInt("strifes");
                     } catch (Exception ex) {
-                        for (StackTraceElement el : ex.getStackTrace()) {
-                            System.out.print(el.toString());
-                        }
+                        SimpleClans.debug(null, ex);
                     }
                 }
             } catch (SQLException ex) {
@@ -405,9 +445,9 @@ public final class StorageManager
 
                         out.add(cp);
                     } catch (Exception ex) {
-                        for (StackTraceElement el : ex.getStackTrace()) {
-                            System.out.print(el.toString());
-                        }
+
+                        SimpleClans.debug(null, ex);
+
                     }
                 }
             } catch (SQLException ex) {
@@ -426,8 +466,8 @@ public final class StorageManager
      */
     public void insertClan(Clan clan)
     {
-        String query = "INSERT INTO `sc_clans` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`, `balance`) ";
-        String values = "VALUES ( " + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "','" + Helper.escapeQuotes(clan.getFlags()) + "','" + Helper.escapeQuotes(String.valueOf(clan.getBalance())) + "');";
+        String query = "INSERT INTO `sc_clans` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `plots`, `flags`, `balance`) ";
+        String values = "VALUES ( " + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "', '','" + Helper.escapeQuotes(clan.getFlags()) + "','" + Helper.escapeQuotes(String.valueOf(clan.getBalance())) + "');";
         core.insert(query + values);
     }
 

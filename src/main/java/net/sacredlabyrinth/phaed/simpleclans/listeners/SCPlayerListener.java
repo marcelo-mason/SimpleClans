@@ -1,16 +1,18 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
 import java.util.Iterator;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
+import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * @author phaed
@@ -213,6 +215,7 @@ public class SCPlayerListener implements Listener
             return;
         }
 
+
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
         {
 
@@ -224,7 +227,7 @@ public class SCPlayerListener implements Listener
                 plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
                 plugin.getSpoutPluginManager().processPlayer(player.getName());
-                SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
+                plugin.getPermissionsManager().addPlayerPermissions(cp);
 
                 if (plugin.getSettingsManager().isBbShowOnLogin()) {
 
@@ -242,6 +245,20 @@ public class SCPlayerListener implements Listener
                 }
             }
         }, 1);
+    }
+
+    @EventHandler
+    public void onSpoutcraftEnable(SpoutCraftEnableEvent event)
+    {
+        SpoutPlayer sp = event.getPlayer();
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(sp);
+
+        cp.setupClanView();
+        cp.addClanView(sp);
+
+        for (ClanPlayer cps : cp.getClan().getOnlineMembers()) {
+            cps.updateClanView(null);
+        }
     }
 
     @EventHandler(priority = EventPriority.MONITOR)
@@ -270,14 +287,19 @@ public class SCPlayerListener implements Listener
     public void onPlayerQuit(PlayerQuitEvent event)
     {
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
+        Clan clan = cp.getClan();
 
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName())) {
             return;
         }
 
-        SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
+        plugin.getPermissionsManager().removeClanPlayerPermissions(cp);
         plugin.getClanManager().updateLastSeen(event.getPlayer());
         plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());
+
+        for (ClanPlayer cps : clan.getOnlineMembers()) {
+            cps.updateClanView(cp);
+        }
     }
 
     @EventHandler
@@ -290,9 +312,6 @@ public class SCPlayerListener implements Listener
         plugin.getClanManager().updateLastSeen(event.getPlayer());
     }
 
-    /**
-     * @param event
-     */
     @EventHandler
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
@@ -307,12 +326,29 @@ public class SCPlayerListener implements Listener
         plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
     }
 
-    /**
-     * @param event
-     */
     @EventHandler
     public void onPlayerToggleSneak(PlayerToggleSneakEvent event)
     {
         plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
     }
+//
+//    @EventHandler
+//    public void onPlayerMove(PlayerMoveEvent event)
+//    {
+//        Location from = event.getFrom();
+//        Location to = event.getTo();
+//        //World world = from.getWorld();
+//
+//        for (Clan clan : plugin.getClanManager().getClans()) {
+//            for (ChunkLocation chunk : clan.getClaimedChunks()) {
+//                if (event.getFrom().getBlockX() != event.getTo().getBlockX()
+//                        || event.getFrom().getBlockY() != event.getTo().getBlockY()
+//                        || event.getFrom().getBlockZ() != event.getTo().getBlockZ()) {
+//                    if (Helper.isLocationInsideChunk(to, chunk)) {
+//                        event.getPlayer().sendMessage("asdf");
+//                    }
+//                }
+//            }
+//        }
+//    }
 }

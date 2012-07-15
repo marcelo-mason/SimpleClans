@@ -1,5 +1,3 @@
-package net.sacredlabyrinth.phaed.simpleclans;
-
 /*
  * Copyright 2011 Tyler Blair. All rights reserved.
  *
@@ -27,6 +25,8 @@ package net.sacredlabyrinth.phaed.simpleclans;
  * authors and contributors and should not be interpreted as representing official policies,
  * either expressed or implied, of anybody else.
  */
+
+package net.sacredlabyrinth.phaed.simpleclans;
 
 import java.io.*;
 import java.net.Proxy;

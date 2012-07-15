@@ -2,10 +2,13 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.World;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
@@ -13,6 +16,7 @@ import org.bukkit.configuration.file.FileConfiguration;
  */
 public final class SettingsManager
 {
+
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
     private boolean teleportOnSpawn;
@@ -129,7 +133,7 @@ public final class SettingsManager
     private boolean tamableMobsSharing;
     private int strifeLimit;
     private boolean autoWar;
-    
+
     /**
      *
      */
@@ -149,20 +153,14 @@ public final class SettingsManager
     {
         boolean exists = (main).exists();
 
-        if (exists)
-        {
-            try
-            {
+        if (exists) {
+            try {
                 getConfig().options().copyDefaults(true);
                 getConfig().load(main);
-            }
-            catch (Exception e)
-            {
+            } catch (Exception e) {
                 e.printStackTrace();
             }
-        }
-        else
-        {
+        } else {
             getConfig().options().copyDefaults(true);
         }
 
@@ -278,18 +276,35 @@ public final class SettingsManager
         tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         strifeLimit = getConfig().getInt("war.strife-limit");
         autoWar = getConfig().getBoolean("war.auto-war-start");
-        
+
+        ConfigurationSection section = null;
+
+        if (!config.isConfigurationSection("worlds")) {
+            getConfig().createSection("worlds");
+        }
+
+        section = config.getConfigurationSection("worlds");
+
+        int highest = 0;
+
+        for (String i : section.getKeys(false)) {
+            highest = section.getInt(i) + 1;
+        }
+
+        for (World world : plugin.getServer().getWorlds()) {
+            if (!section.isInt(world.getName())) {
+                section.set(world.getName(), highest);
+                highest++;
+            }
+        }
         save();
     }
 
     public void save()
     {
-        try
-        {
+        try {
             getConfig().save(main);
-        }
-        catch (IOException e)
-        {
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }
@@ -305,7 +320,6 @@ public final class SettingsManager
         return itemsList.contains(typeId);
     }
 
-
     /**
      * Check whether a worlds is blacklisted
      *
@@ -314,10 +328,8 @@ public final class SettingsManager
      */
     public boolean isBlacklistedWorld(String world)
     {
-        for (Object w : blacklistedWorlds)
-        {
-            if (((String) w).equalsIgnoreCase(world))
-            {
+        for (Object w : blacklistedWorlds) {
+            if (((String) w).equalsIgnoreCase(world)) {
                 return true;
             }
         }
@@ -333,10 +345,8 @@ public final class SettingsManager
      */
     public boolean isDisallowedWord(String word)
     {
-        for (Object w : disallowedWords)
-        {
-            if (((String) w).equalsIgnoreCase(word))
-            {
+        for (Object w : disallowedWords) {
+            if (((String) w).equalsIgnoreCase(word)) {
                 return true;
             }
         }
@@ -353,15 +363,29 @@ public final class SettingsManager
      */
     public boolean hasDisallowedColor(String str)
     {
-        for (Object c : getDisallowedColors())
-        {
-            if (str.contains("&" + c))
-            {
+        for (Object c : getDisallowedColors()) {
+            if (str.contains("&" + c)) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public int getWorldNumber(String world)
+    {
+        return getConfig().getConfigurationSection("worlds").getInt(world);
+    }
+
+    public String getWorldByNumber(int i)
+    {
+        ConfigurationSection section = config.getConfigurationSection("worlds");
+        for (String worlds : section.getKeys(false)) {
+            if (section.getInt(worlds) == i) {
+                return worlds;
+            }
+        }
+        return null;
     }
 
     /**
@@ -371,8 +395,7 @@ public final class SettingsManager
     {
         String out = "";
 
-        for (Object c : getDisallowedColors())
-        {
+        for (Object c : getDisallowedColors()) {
             out += c + ", ";
         }
 
@@ -387,10 +410,8 @@ public final class SettingsManager
      */
     public boolean isUnrivable(String tag)
     {
-        for (Object t : getunRivableClans())
-        {
-            if (((String) t).equalsIgnoreCase(tag))
-            {
+        for (Object t : getunRivableClans()) {
+            if (((String) t).equalsIgnoreCase(tag)) {
                 return true;
             }
         }
@@ -406,10 +427,8 @@ public final class SettingsManager
      */
     public boolean isBanned(String playerName)
     {
-        for (Object pl : getBannedPlayers())
-        {
-            if (((String) pl).equalsIgnoreCase(playerName))
-            {
+        for (Object pl : getBannedPlayers()) {
+            if (((String) pl).equalsIgnoreCase(playerName)) {
                 return true;
             }
         }
@@ -424,8 +443,7 @@ public final class SettingsManager
      */
     public void addBanned(String playerName)
     {
-        if (!bannedPlayers.contains(playerName))
-        {
+        if (!bannedPlayers.contains(playerName)) {
             getBannedPlayers().add(playerName);
         }
 
@@ -439,8 +457,7 @@ public final class SettingsManager
      */
     public void removeBanned(String playerName)
     {
-        if (getBannedPlayers().contains(playerName))
-        {
+        if (getBannedPlayers().contains(playerName)) {
             getBannedPlayers().remove(playerName);
         }
 
@@ -748,13 +765,11 @@ public final class SettingsManager
      */
     public String getTagSeparator()
     {
-        if (tagSeparator.equals(" ."))
-        {
+        if (tagSeparator.equals(" .")) {
             return ".";
         }
 
-        if (tagSeparator == null)
-        {
+        if (tagSeparator == null) {
             return "";
         }
 
@@ -1196,84 +1211,96 @@ public final class SettingsManager
     /**
      * @return the ePurchaseHomeTeleport
      */
-    public boolean isePurchaseHomeTeleport() {
+    public boolean isePurchaseHomeTeleport()
+    {
         return ePurchaseHomeTeleport;
     }
 
     /**
      * @return the HomeTeleportPrice
      */
-    public double getHomeTeleportPrice() {
+    public double getHomeTeleportPrice()
+    {
         return eHomeTeleportPrice;
     }
 
     /**
      * @return the ePurchaseHomeTeleportSet
      */
-    public boolean isePurchaseHomeTeleportSet() {
+    public boolean isePurchaseHomeTeleportSet()
+    {
         return ePurchaseHomeTeleportSet;
     }
 
     /**
      * @return the HomeTeleportPriceSet
      */
-    public double getHomeTeleportPriceSet() {
+    public double getHomeTeleportPriceSet()
+    {
         return eHomeTeleportPriceSet;
     }
 
     /**
      * @return the config
      */
-    public FileConfiguration getConfig() {
+    public FileConfiguration getConfig()
+    {
         return config;
     }
 
     /**
      * @return the moneyperkill
      */
-    public boolean isMoneyPerKill() {
+    public boolean isMoneyPerKill()
+    {
         return moneyperkill;
     }
 
     /**
      * @return the KDRMultipliesPerKill
      */
-    public double getKDRMultipliesPerKill() {
+    public double getKDRMultipliesPerKill()
+    {
         return KDRMultipliesPerKill;
     }
 
     /**
      * @return the teleportBlocks
      */
-    public boolean isTeleportBlocks() {
+    public boolean isTeleportBlocks()
+    {
         return teleportBlocks;
     }
 
     /**
      * @return the AutoGroupGroupName
      */
-    public boolean isAutoGroupGroupName() {
+    public boolean isAutoGroupGroupName()
+    {
         return AutoGroupGroupName;
     }
 
     /**
      * @return the tamableMobsSharing
      */
-    public boolean isTamableMobsSharing() {
+    public boolean isTamableMobsSharing()
+    {
         return tamableMobsSharing;
     }
 
     /**
      * @return the strifeLimit
      */
-    public int getStrifeLimit() {
+    public int getStrifeLimit()
+    {
         return strifeLimit;
     }
 
     /**
      * @return the autoWar
      */
-    public boolean isAutoWar() {
+    public boolean isAutoWar()
+    {
         return autoWar;
     }
 }

@@ -72,6 +72,35 @@ public class Helper
         return o instanceof java.lang.Integer;
     }
 
+//    public static boolean isLocationInsideChunk(Location loc, ChunkLocation chunk)
+//    {
+//        System.out.println("--------------------------");
+//        System.out.println(loc.getBlockX());
+//        System.out.println(chunk.getX() << 4);
+//        System.out.println(loc.getBlockX() < chunk.getX() << 4);
+//        System.out.println(loc.getBlockX() > (chunk.getX() - 1) << 4);
+//        System.out.println(loc.getBlockZ() < chunk.getZ() << 4);
+//        System.out.println(loc.getBlockZ() > (chunk.getZ() - 1) << 4);
+//        if (loc.getBlockX() > chunk.getX() << 4
+//                && loc.getBlockX() > (chunk.getX() - 1) << 4
+//                && loc.getBlockZ() > chunk.getZ() << 4
+//                && loc.getBlockZ() > (chunk.getZ() - 1) << 4) {
+//            return true;
+//        }
+//        return false;
+//    }
+//
+//    public static boolean isLocationOutsiteChunk(Location loc, ChunkLocation chunk)
+//    {
+//        if (loc.getBlockX() > chunk.getX() << 4
+//                && loc.getBlockX() < (chunk.getX() - 1) << 4
+//                && loc.getBlockZ() > chunk.getZ() << 4
+//                && loc.getBlockZ() < (chunk.getZ() - 1) << 4) {
+//            return true;
+//        }
+//        return false;
+//    }
+
     /**
      * Check for byte
      *

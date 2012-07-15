@@ -7,6 +7,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
+import net.sacredlabyrinth.phaed.simpleclans.listeners.SCBlockListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
@@ -28,8 +29,6 @@ public class SimpleClans extends JavaPlugin
     private PermissionsManager permissionsManager;
     private CommandManager commandManager;
     private TeleportManager teleportManager;
-    private SCPlayerListener playerListener;
-    private SCEntityListener entityListener;
     private ResourceBundle lang;
 
     /**
@@ -48,6 +47,15 @@ public class SimpleClans extends JavaPlugin
         if (getInstance().getSettingsManager().isDebugging()) {
             if (msg != null) {
                 logger.log(Level.INFO, msg);
+            }
+        }
+    }
+    
+    public static void debug(String msg, Throwable ex)
+    {
+        if (getInstance().getSettingsManager().isDebugging()) {
+            if (msg != null) {
+                logger.log(Level.OFF, msg, ex);
             }
         }
     }
@@ -87,11 +95,13 @@ public class SimpleClans extends JavaPlugin
         commandManager = new CommandManager();
         teleportManager = new TeleportManager();
 
-        playerListener = new SCPlayerListener();
-        entityListener = new SCEntityListener();
+        SCPlayerListener playerListener = new SCPlayerListener();
+        SCEntityListener entityListener = new SCEntityListener();
+        SCBlockListener blockListener = new SCBlockListener(this);
 
         getServer().getPluginManager().registerEvents(entityListener, this);
         getServer().getPluginManager().registerEvents(playerListener, this);
+        getServer().getPluginManager().registerEvents(blockListener, this);
 
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
@@ -103,6 +113,7 @@ public class SimpleClans extends JavaPlugin
     @Override
     public void onDisable()
     {
+        getStorageManager().saveClaims();
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();

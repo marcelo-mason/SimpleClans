@@ -3,12 +3,20 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import net.sacredlabyrinth.phaed.simpleclans.managers.SpoutPluginManager;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.gui.GenericLabel;
+import org.getspout.spoutapi.gui.Label;
+import org.getspout.spoutapi.gui.Screen;
+import org.getspout.spoutapi.gui.WidgetAnchor;
+import org.getspout.spoutapi.player.SpoutPlayer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -18,6 +26,7 @@ import org.json.simple.JSONValue;
  */
 public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 {
+
     private static final long serialVersionUID = 1L;
     private String name;
     private boolean leader;
@@ -34,7 +43,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private HashSet<String> pastClans = new HashSet<String>();
     private VoteResult vote;
     private Channel channel;
-
     private boolean useChatShortcut = false;
     private boolean globalChat = true;
     private boolean allyChat = true;
@@ -44,6 +52,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean capeEnabled = true;
     private String rank = "";
     private boolean allSeeingEyeEnabled;
+    private boolean hasClanView = false;
+    private Label clanView;
 
     /**
      *
@@ -69,6 +79,16 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         this.channel = Channel.NONE;
     }
 
+    public boolean hasClanView()
+    {
+        return hasClanView;
+    }
+
+    public void setClanView(boolean hasClanView)
+    {
+        this.hasClanView = hasClanView;
+    }
+
     @Override
     public int hashCode()
     {
@@ -78,8 +98,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     @Override
     public boolean equals(Object obj)
     {
-        if (!(obj instanceof ClanPlayer))
-        {
+        if (!(obj instanceof ClanPlayer)) {
             return false;
         }
 
@@ -100,6 +119,72 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
+     * Updates the widget
+     * 
+     * @param without 
+     */
+    public void updateClanView(ClanPlayer without)
+    {
+        StringBuilder info = new StringBuilder();
+        List<ClanPlayer> members1 = new ArrayList<ClanPlayer>(getClan().getOnlineMembers());
+
+        if (without != null) {
+            members1.remove(without);
+        }
+
+        info.append(ChatColor.DARK_GRAY);
+        info.append("Clan-Members: ");
+        info.append(ChatColor.GRAY);
+        info.append(members1.size());
+        info.append('/');
+        info.append(this.getClan().getSize());
+        info.append("\n");
+        info.append(ChatColor.DARK_GRAY);
+
+        clanView.setText(info.toString());
+    }
+
+    /**
+     * Sets the widget up
+     * 
+     */
+    public final void setupClanView()
+    {
+        if (getClan() != null) {
+            clanView = new GenericLabel();
+            clanView.setDirty(true);
+            clanView.setAutoDirty(true);
+            clanView.setX(10).setY(10).setWidth(100).setHeight(30);;
+            clanView.setAlign(WidgetAnchor.TOP_LEFT);
+            clanView.setAuto(true);
+
+            updateClanView(null);
+        }
+    }
+
+    /**
+     * Adds a widget to the player's screen
+     *
+     * @param sp
+     */
+    public void addClanView(SpoutPlayer sp)
+    {
+        Screen screen = sp.getMainScreen();
+        screen.removeWidgets(SimpleClans.getInstance());
+        screen.attachWidget(SimpleClans.getInstance(), clanView);
+    }
+
+    /**
+     * Adds a widget to the player's screen
+     *
+     * @param cp
+     */
+    public void addClanView(ClanPlayer cp)
+    {
+        addClanView(cp.toSpoutPlayer());
+    }
+
+    /**
      * (used internally)
      *
      * @return the name
@@ -107,6 +192,16 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public String getName()
     {
         return name;
+    }
+
+    /**
+     * Returns the SpoutPlayer
+     *
+     * @return
+     */
+    public SpoutPlayer toSpoutPlayer()
+    {
+        return SpoutManager.getPlayer(toPlayer());
     }
 
     /**
@@ -146,8 +241,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public void setLeader(boolean leader)
     {
-        if (leader)
-        {
+        if (leader) {
             trusted = leader;
         }
 
@@ -164,14 +258,13 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         ClanPlayer allycp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
 
-        if (allycp != null)
-        {
+        if (allycp != null) {
             return allycp.getClan().isAlly(tag);
         }
 
         return false;
     }
-    
+
     /**
      * Check whether the player is an rival with another player
      *
@@ -182,14 +275,12 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         ClanPlayer allycp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
 
-        if (allycp != null)
-        {
+        if (allycp != null) {
             return allycp.getClan().isRival(tag);
         }
 
         return false;
     }
-
 
     /**
      * Returns the last seen date for this player in milliseconds
@@ -220,7 +311,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns a verbal representation of how many days ago a player was last seen
+     * Returns a verbal representation of how many days ago a player was last
+     * seen
      *
      * @return
      */
@@ -228,16 +320,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         double days = Dates.differenceInDays(new Timestamp(lastSeen), new Timestamp((new Date()).getTime()));
 
-        if (days < 1)
-        {
+        if (days < 1) {
             return SimpleClans.getInstance().getLang("today");
-        }
-        else if (Math.round(days) == 1)
-        {
+        } else if (Math.round(days) == 1) {
             return MessageFormat.format(SimpleClans.getInstance().getLang("1.color.day"), ChatColor.GRAY);
-        }
-        else
-        {
+        } else {
             return MessageFormat.format(SimpleClans.getInstance().getLang("many.color.days"), Math.round(days), ChatColor.GRAY);
         }
     }
@@ -347,7 +434,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Sets whether this player is allowing friendly fire (does not update clanplayer to db)
+     * Sets whether this player is allowing friendly fire (does not update
+     * clanplayer to db)
      *
      * @param friendlyFire the friendlyFire to set
      */
@@ -397,7 +485,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Adds one death to this player  (does not update clanplayer to db)
+     * Adds one death to this player (does not update clanplayer to db)
      */
     public void addDeath()
     {
@@ -405,7 +493,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns weighted kill score for this player (kills multiplied by the different weights)
+     * Returns weighted kill score for this player (kills multiplied by the
+     * different weights)
      *
      * @return
      */
@@ -424,8 +513,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         int totalDeaths = getDeaths();
 
-        if (totalDeaths == 0)
-        {
+        if (totalDeaths == 0) {
             totalDeaths = 1;
         }
 
@@ -433,7 +521,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns the player's join date to his current clan in milliseconds, 0 if not in a clan
+     * Returns the player's join date to his current clan in milliseconds, 0 if
+     * not in a clan
      *
      * @return the joinDate
      */
@@ -459,8 +548,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public String getJoinDateString()
     {
-        if (joinDate == 0)
-        {
+        if (joinDate == 0) {
             return "";
         }
 
@@ -499,8 +587,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         HashSet<String> pt = getPastClans();
 
-        for (String pastClan : pt)
-        {
+        for (String pastClan : pt) {
             PackedPastClans += pastClan + "|";
         }
 
@@ -528,7 +615,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Removes a past clan from the player (does not update the clanplayer to db)
+     * Removes a past clan from the player (does not update the clanplayer to
+     * db)
      *
      * @param tag is the clan's colored tag
      */
@@ -538,7 +626,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns a separator delimited string with the color tags for all past clans this player has been in
+     * Returns a separator delimited string with the color tags for all past
+     * clans this player has been in
      *
      * @param sep
      * @return
@@ -547,15 +636,13 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         String out = "";
 
-        for (String pastClan : getPastClans())
-        {
+        for (String pastClan : getPastClans()) {
             out += pastClan + sep;
         }
 
         out = Helper.stripTrailing(out, sep);
 
-        if (out.trim().isEmpty())
-        {
+        if (out.trim().isEmpty()) {
             return SimpleClans.getInstance().getLang("none");
         }
 
@@ -591,12 +678,9 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public void setClan(Clan clan)
     {
-        if (clan == null)
-        {
+        if (clan == null) {
             this.tag = "";
-        }
-        else
-        {
+        } else {
             this.tag = clan.getTag();
         }
 
@@ -604,7 +688,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns this player's clan's tag.  Empty string if he's not in a clan.
+     * Returns this player's clan's tag. Empty string if he's not in a clan.
      *
      * @return the tag
      */
@@ -614,14 +698,14 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     /**
-     * Returns this player's clan's tag label.  Empty string if he's not in a clan.
+     * Returns this player's clan's tag label. Empty string if he's not in a
+     * clan.
      *
      * @return the tag
      */
     public String getTagLabel()
     {
-        if (clan == null)
-        {
+        if (clan == null) {
             return "";
         }
 
@@ -659,8 +743,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         // the player's rank inside his clan
 
-        if (rank != null)
-        {
+        if (rank != null) {
             json.put("rank", rank);
         }
 
@@ -694,87 +777,65 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public void setFlags(String flagString)
     {
-        if (flagString != null && !flagString.isEmpty())
-        {
+        if (flagString != null && !flagString.isEmpty()) {
             Object obj = JSONValue.parse(flagString);
             JSONObject flags = (JSONObject) obj;
 
-            if (flags != null)
-            {
-                for (Object flag : flags.keySet())
-                {
-                    try
-                    {
-                        if (flag.equals("rank"))
-                        {
-                            if(flags.get(flag) == null)
-                            {
+            if (flags != null) {
+                for (Object flag : flags.keySet()) {
+                    try {
+                        if (flag.equals("rank")) {
+                            if (flags.get(flag) == null) {
                                 continue;
                             }
 
                             rank = flags.get(flag).toString();
                         }
 
-                        if (flag.equals("channel"))
-                        {
+                        if (flag.equals("channel")) {
                             String chn = flags.get(flag).toString();
 
-                            if (chn != null && !chn.isEmpty())
-                            {
-                                if (chn.equalsIgnoreCase("clan"))
-                                {
+                            if (chn != null && !chn.isEmpty()) {
+                                if (chn.equalsIgnoreCase("clan")) {
                                     channel = Channel.CLAN;
-                                }
-                                else if (chn.equalsIgnoreCase("ally"))
-                                {
+                                } else if (chn.equalsIgnoreCase("ally")) {
                                     channel = Channel.ALLY;
-                                }
-                                else
-                                {
+                                } else {
                                     channel = Channel.NONE;
                                 }
                             }
                         }
 
-                        if (flag.equals("channel-state"))
-                        {
+                        if (flag.equals("channel-state")) {
                             JSONArray settings = (JSONArray) flags.get(flag);
 
-                            if (settings != null && !settings.isEmpty())
-                            {
+                            if (settings != null && !settings.isEmpty()) {
                                 globalChat = (Boolean) settings.get(0);
                                 allyChat = (Boolean) settings.get(1);
                                 clanChat = (Boolean) settings.get(2);
                             }
                         }
 
-                        if (flag.equals("bb-enabled"))
-                        {
+                        if (flag.equals("bb-enabled")) {
                             bbEnabled = (Boolean) flags.get(flag);
                         }
 
-                        if (flag.equals("hide-tag"))
-                        {
+                        if (flag.equals("hide-tag")) {
                             tagEnabled = (Boolean) flags.get(flag);
                         }
 
-                        if (flag.equals("cape-enabled"))
-                        {
+                        if (flag.equals("cape-enabled")) {
                             capeEnabled = (Boolean) flags.get(flag);
                         }
 
-                        if (flag.equals("chat-shortcut"))
-                        {
+                        if (flag.equals("chat-shortcut")) {
                             useChatShortcut = (Boolean) flags.get(flag);
                         }
-                    }
-                    catch (Exception ex)
-                    {
-                        for (StackTraceElement el : ex.getStackTrace())
-                        {
+                    } catch (Exception ex) {
+                        for (StackTraceElement el : ex.getStackTrace()) {
                             System.out.print("Failed reading flag: " + flag);
                             System.out.print("Value: " + flags.get(flag));
-                            System.out.print(el.toString());
+                            SimpleClans.debug(null, ex);
                         }
                     }
                 }
@@ -889,6 +950,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
     public enum Channel
     {
+
         CLAN,
         ALLY,
         NONE
@@ -899,4 +961,3 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         return SimpleClans.getInstance().getServer().getPlayer(this.name);
     }
 }
-

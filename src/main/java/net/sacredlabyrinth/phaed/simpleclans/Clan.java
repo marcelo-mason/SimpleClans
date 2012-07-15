@@ -8,6 +8,12 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
+import org.getspout.spoutapi.SpoutManager;
+import org.getspout.spoutapi.gui.GenericLabel;
+import org.getspout.spoutapi.gui.Label;
+import org.getspout.spoutapi.gui.Screen;
+import org.getspout.spoutapi.gui.WidgetAnchor;
+import org.getspout.spoutapi.player.SpoutPlayer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -39,6 +45,8 @@ public class Clan implements Serializable, Comparable<Clan>
     private String homeWorld = "";
     private boolean allowWithdraw = false;
     private boolean allowDeposit = true;
+    private Set<ChunkLocation> claimed = new HashSet<ChunkLocation>();
+    private boolean claimedChanged;
 
     /**
      *
@@ -96,6 +104,80 @@ public class Clan implements Serializable, Comparable<Clan>
     public String toString()
     {
         return tag;
+    }
+
+    public boolean isClaimedChanged()
+    {
+        return claimedChanged;
+    }
+
+    public void setClaimedChanged(boolean claimedChanged)
+    {
+        this.claimedChanged = claimedChanged;
+    }
+
+    public boolean isClaimed(Location loc)
+    {
+        for (ChunkLocation chunkloc : claimed) {
+            if (chunkloc.containsBlockLocation(loc)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    public boolean isClaimed(World world, int x, int z)
+    {
+        for (ChunkLocation chunkloc : claimed) {
+            if (chunkloc.containsBlockLocation(world, x, z)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    public boolean isClaimedNear(World world, int x, int z)
+    {
+        for (ChunkLocation chunk : claimed) {
+            if (chunk.isChunkLocation(world, x + 1, z)
+                    || chunk.isChunkLocation(world, x, z + 1)
+                    || chunk.isChunkLocation(world, x - 1, z)
+                    || chunk.isChunkLocation(world, x, z - 1)) {
+                return true;
+            }
+        }
+
+        if (claimed.isEmpty()) {
+            return true;
+        }
+
+        return false;
+    }
+
+    public void addClaimedLocation(String world, int x, int z)
+    {
+        addClaimedChunk(world, x >> 4, z >> 4);
+    }
+
+    public void addClaimedChunk(String world, int x, int z)
+    {
+        claimed.add(new ChunkLocation(world, x, z));
+    }
+
+    public void removeClaimedLocation(String world, int x, int z)
+    {
+        addClaimedChunk(world, x >> 4, z >> 4);
+    }
+
+    public void removeClaimedChunk(String world, int x, int z)
+    {
+        claimed.remove(new ChunkLocation(world, x, z));
+    }
+
+    public Set<ChunkLocation> getClaimedChunks()
+    {
+        return claimed;
     }
 
     /**
@@ -715,9 +797,7 @@ public class Clan implements Serializable, Comparable<Clan>
         for (String member : members) {
             ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
             if (cp.toPlayer() != null) {
-                if (cp.toPlayer().isOnline()) {
-                    out.add(cp);
-                }
+                out.add(cp);
             }
         }
 
@@ -990,6 +1070,13 @@ public class Clan implements Serializable, Comparable<Clan>
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
 
+        cp.setupClanView();
+        cp.addClanView(cp);
+
+        for (ClanPlayer cps : cp.getClan().getOnlineMembers()) {
+            cps.updateClanView(null);
+        }
+
         Player player = Helper.matchOnePlayer(cp.getName());
 
         if (player != null) {
@@ -1023,6 +1110,9 @@ public class Clan implements Serializable, Comparable<Clan>
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
 
+        for (ClanPlayer cps : this.getOnlineMembers()) {
+            cps.updateClanView(cp);
+        }
 
         Player matched = Helper.matchOnePlayer(playerName);
 
