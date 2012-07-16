@@ -24,11 +24,35 @@ public class ChunkLocation
     private int z;
     private String world;
 
-    public ChunkLocation(String world, int x, int z)
+    public ChunkLocation()
+    {
+    }
+
+    public ChunkLocation(String world, int x, int z, boolean normal)
     {
         this.x = x;
         this.z = z;
         this.world = world;
+        
+        if (normal) {
+            this.x = x >> 4;
+            this.z = z >> 4;
+        }
+    }
+
+    public void setWorld(String world)
+    {
+        this.world = world;
+    }
+
+    public void setZ(int z)
+    {
+        this.z = z;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
     }
 
     public int getX()
@@ -57,7 +81,7 @@ public class ChunkLocation
         int ChunkZ = locZ >> 4;
         return locWorld.getName().equals(world) && ChunkX == x && ChunkZ == z;
     }
-    
+
     public boolean isChunkLocation(World locWorld, int locX, int locZ)
     {
         return locWorld.getName().equals(world) && locX == x && locZ == z;
@@ -82,6 +106,14 @@ public class ChunkLocation
             return false;
         }
 
+        if (world == null) {
+            return false;
+        }
+
+        if (!world.equals(chunkLoc.getWorld())) {
+            return false;
+        }
+
         if (x != chunkLoc.x) {
             return false;
         }
@@ -90,5 +122,11 @@ public class ChunkLocation
         }
 
         return true;
+    }
+
+    @Override
+    public String toString()
+    {
+        return world + "," + x + "," + z;
     }
 }

@@ -1,5 +1,9 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -11,11 +15,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-
 public final class TeleportManager
 {
     private SimpleClans plugin;
@@ -24,9 +23,9 @@ public final class TeleportManager
     /**
      *
      */
-    public TeleportManager()
+    public TeleportManager(SimpleClans plugin)
     {
-        plugin = SimpleClans.getInstance();
+        this.plugin = plugin;
         startCounter();
     }
 
@@ -39,7 +38,7 @@ public final class TeleportManager
      */
     public void addPlayer(Player player, Location dest, String clanName)
     {
-        int secs = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
+        int secs = plugin.getSettingsManager().getWaitSecs();
 
         waitingPlayers.put(player.getName(), new TeleportState(player, dest, clanName));
 

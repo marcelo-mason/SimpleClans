@@ -18,7 +18,7 @@ import org.bukkit.plugin.java.JavaPlugin;
  */
 public class SimpleClans extends JavaPlugin
 {
-
+    
     private static SimpleClans instance;
     private static final Logger logger = Logger.getLogger("Minecraft");
     private ClanManager clanManager;
@@ -45,29 +45,22 @@ public class SimpleClans extends JavaPlugin
     public static void debug(String msg)
     {
         if (getInstance().getSettingsManager().isDebugging()) {
-            if (msg != null) {
-                logger.log(Level.INFO, msg);
-            }
+            logger.log(Level.INFO, msg);
         }
     }
     
     public static void debug(String msg, Throwable ex)
     {
         if (getInstance().getSettingsManager().isDebugging()) {
-            if (msg != null) {
-                logger.log(Level.OFF, msg, ex);
-            }
+            logger.log(Level.SEVERE, msg, ex);
         }
     }
-
-    /**
-     * @return the instance
-     */
+    
     public static SimpleClans getInstance()
     {
         return instance;
     }
-
+    
     public static void log(String msg, Object... arg)
     {
         if (arg == null || arg.length == 0) {
@@ -76,40 +69,44 @@ public class SimpleClans extends JavaPlugin
             logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
         }
     }
-
+    
     @Override
     public void onEnable()
     {
+        long start = System.currentTimeMillis();
         instance = this;
         settingsManager = new SettingsManager();
-
+        
         lang = PropertyResourceBundle.getBundle("languages.lang");
-
+        
         logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
-
-        spoutPluginManager = new SpoutPluginManager();
+        
+        spoutPluginManager = new SpoutPluginManager(this);
         permissionsManager = new PermissionsManager();
-        requestManager = new RequestManager();
-        clanManager = new ClanManager();
-        storageManager = new StorageManager();
+        requestManager = new RequestManager(this);
+        clanManager = new ClanManager(this);
+        storageManager = new StorageManager(this);
         commandManager = new CommandManager();
-        teleportManager = new TeleportManager();
-
-        SCPlayerListener playerListener = new SCPlayerListener();
-        SCEntityListener entityListener = new SCEntityListener();
+        teleportManager = new TeleportManager(this);
+        
+        SCPlayerListener playerListener = new SCPlayerListener(this);
+        SCEntityListener entityListener = new SCEntityListener(this);
         SCBlockListener blockListener = new SCBlockListener(this);
-
+        
         getServer().getPluginManager().registerEvents(entityListener, this);
         getServer().getPluginManager().registerEvents(playerListener, this);
         getServer().getPluginManager().registerEvents(blockListener, this);
-
+        
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
-
+        
         setupMetrics();
-
+        
+        long end = System.currentTimeMillis();
+        
+        debug("Enabling took " + (end - start) + "ms.");
     }
-
+    
     @Override
     public void onDisable()
     {
@@ -118,27 +115,27 @@ public class SimpleClans extends JavaPlugin
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();
     }
-
+    
     public void setupMetrics()
     {
         try {
             Metrics metrics = new Metrics(this);
             Graph clanGraph = metrics.createGraph("Clan Graph");
             Graph clanPlayerGraph = metrics.createGraph("Clan-Player Graph");
-
+            
             clanGraph.addPlotter(new Metrics.Plotter("Total created clans")
             {
-
+                
                 @Override
                 public int getValue()
                 {
                     return getClanManager().getClans().size();
                 }
             });
-
+            
             clanPlayerGraph.addPlotter(new Metrics.Plotter("Total clan players")
             {
-
+                
                 @Override
                 public int getValue()
                 {
@@ -149,7 +146,7 @@ public class SimpleClans extends JavaPlugin
                     return cp;
                 }
             });
-
+            
             metrics.start();
         } catch (IOException e) {
             log(e.getMessage());
@@ -219,7 +216,7 @@ public class SimpleClans extends JavaPlugin
     {
         return lang.getString(msg);
     }
-
+    
     public TeleportManager getTeleportManager()
     {
         return teleportManager;

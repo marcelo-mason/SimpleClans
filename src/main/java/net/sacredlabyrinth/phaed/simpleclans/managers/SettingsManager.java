@@ -1,8 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
@@ -17,13 +14,13 @@ import org.bukkit.configuration.file.FileConfiguration;
 public final class SettingsManager
 {
 
+    private SimpleClans plugin;
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
     private boolean teleportOnSpawn;
     private boolean dropOnHome;
     private boolean keepOnHome;
     private boolean debugging;
-    private SimpleClans plugin;
     private boolean mChatIntegration;
     private boolean pvpOnlywhileInWar;
     private boolean useColorCodeFromPrefix;
@@ -120,7 +117,6 @@ public final class SettingsManager
     private String username;
     private String password;
     private boolean safeCivilians;
-    private File main;
     private FileConfiguration config;
     private boolean compatMode;
     private boolean homebaseSetOnce;
@@ -141,7 +137,6 @@ public final class SettingsManager
     {
         plugin = SimpleClans.getInstance();
         config = plugin.getConfig();
-        main = new File(plugin.getDataFolder() + File.separator + "config.yml");
         load();
     }
 
@@ -151,18 +146,8 @@ public final class SettingsManager
     @SuppressWarnings("unchecked")
     public void load()
     {
-        boolean exists = (main).exists();
 
-        if (exists) {
-            try {
-                getConfig().options().copyDefaults(true);
-                getConfig().load(main);
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        } else {
-            getConfig().options().copyDefaults(true);
-        }
+        config.options().copyDefaults(true);
 
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
@@ -277,7 +262,7 @@ public final class SettingsManager
         strifeLimit = getConfig().getInt("war.strife-limit");
         autoWar = getConfig().getBoolean("war.auto-war-start");
 
-        ConfigurationSection section = null;
+        ConfigurationSection section;
 
         if (!config.isConfigurationSection("worlds")) {
             getConfig().createSection("worlds");
@@ -300,13 +285,14 @@ public final class SettingsManager
         save();
     }
 
+    public void reload()
+    {
+        plugin.reloadConfig();
+    }
+
     public void save()
     {
-        try {
-            getConfig().save(main);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        plugin.saveConfig();
     }
 
     /**

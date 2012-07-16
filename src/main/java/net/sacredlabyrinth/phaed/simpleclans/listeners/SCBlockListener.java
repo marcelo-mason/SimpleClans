@@ -39,8 +39,13 @@ public class SCBlockListener implements Listener
     public void onBlockBreak(BlockBreakEvent event)
     {
         Player player = event.getPlayer();
+
+        if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName())) {
+            return;
+        }
+
         Block block = event.getBlock();
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+        ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
         Clan clan = cp.getClan();
 
         if (clan == null) {
@@ -59,8 +64,13 @@ public class SCBlockListener implements Listener
     public void onBlockPlace(BlockPlaceEvent event)
     {
         Player player = event.getPlayer();
+
+        if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName())) {
+            return;
+        }
+
         Block block = event.getBlock();
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+        ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
         Clan clan = cp.getClan();
 
         if (clan == null) {
@@ -79,11 +89,16 @@ public class SCBlockListener implements Listener
     public void onPlayerInteract(PlayerInteractEvent event)
     {
         Player player = event.getPlayer();
+
+        if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName())) {
+            return;
+        }
+
         Block block = event.getClickedBlock();
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+        ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
         Clan clan = cp.getClan();
 
-        if (clan == null) {
+        if (clan == null || block == null) {
             return;
         }
 

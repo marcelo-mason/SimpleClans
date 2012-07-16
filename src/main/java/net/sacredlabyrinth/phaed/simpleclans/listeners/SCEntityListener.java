@@ -27,9 +27,9 @@ public class SCEntityListener implements Listener
     /**
      *
      */
-    public SCEntityListener()
+    public SCEntityListener(SimpleClans plugin)
     {
-        plugin = SimpleClans.getInstance();
+        this.plugin = plugin;
     }
 
     /**
@@ -132,10 +132,7 @@ public class SCEntityListener implements Listener
         }
     }
 
-    /**
-     * @param event
-     */
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority= EventPriority.LOW,ignoreCancelled=true)
     public void onPlayerInteract(PlayerInteractEntityEvent event)
     {
         if (event.isCancelled()) {
@@ -144,7 +141,7 @@ public class SCEntityListener implements Listener
 
         if (plugin.getSettingsManager().isTamableMobsSharing()) {
             if (event.getRightClicked() instanceof Tameable) {
-                
+
                 Entity entity = event.getRightClicked();
                 Player player = event.getPlayer();
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
@@ -159,10 +156,7 @@ public class SCEntityListener implements Listener
         }
     }
 
-    /**
-     * @param event
-     */
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority= EventPriority.LOW,ignoreCancelled=true)
     public void onEntityTarget(EntityTargetLivingEntityEvent event)
     {
         if (plugin.getSettingsManager().isTamableMobsSharing()) {
@@ -179,16 +173,9 @@ public class SCEntityListener implements Listener
         }
     }
 
-    /**
-     * @param event
-     */
-    @EventHandler(priority = EventPriority.LOW)
+    @EventHandler(priority= EventPriority.LOW,ignoreCancelled=true)
     public void onEntityDamage(EntityDamageEvent event)
     {
-        if (event.isCancelled()) {
-            return;
-        }
-
         Player attacker = null;
         Player victim = null;
 
@@ -290,15 +277,15 @@ public class SCEntityListener implements Listener
                     }
                 } else {
                     // not part of a clan - check if safeCivilians is set
-
-                    if (plugin.getSettingsManager().getSafeCivilians()) {
+                    // ignore setting if he has a specific permissions
+                    if (plugin.getSettingsManager().getSafeCivilians() && !plugin.getPermissionsManager().has(victim, "simpleclans.ignore-safe-civilians")) {
                         event.setCancelled(true);
                     }
                 }
             } else {
                 // not part of a clan - check if safeCivilians is set
-
-                if (plugin.getSettingsManager().getSafeCivilians()) {
+                // ignore setting if he has a specific permissions
+                if (plugin.getSettingsManager().getSafeCivilians() && !plugin.getPermissionsManager().has(victim, "simpleclans.ignore-safe-civilians")) {
                     event.setCancelled(true);
                 }
             }

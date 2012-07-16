@@ -431,14 +431,11 @@ public final class PermissionsManager
         return (permission != null);
     }
 
-    private Boolean setupChat()
+    private boolean setupChat()
     {
-        RegisteredServiceProvider<Chat> chatProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.chat.Chat.class);
-        if (chatProvider != null) {
-            chat = chatProvider.getProvider();
-        }
-
-        return (chat != null);
+        RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
+        chat = rsp.getProvider();
+        return chat != null;
     }
 
     private Boolean setupEconomy()
@@ -451,11 +448,6 @@ public final class PermissionsManager
         return (economy != null);
     }
 
-    /**
-     * @param p
-     * @return
-     */
-    @SuppressWarnings({"deprecation", "deprecation"})
     public String getPrefix(Player p)
     {
         String out = "";
@@ -469,42 +461,27 @@ public final class PermissionsManager
         }
 
         if (permission != null && chat != null) {
-            try {
-                String world = p.getWorld().getName();
-                String name = p.getName();
-                String prefix = chat.getPlayerPrefix(name, world);
-                if (prefix == null || prefix.isEmpty()) {
-                    String group = permission.getPrimaryGroup(world, name);
-                    prefix = chat.getGroupPrefix(world, group);
-                    if (prefix == null) {
-                        prefix = "";
-                    }
+            //try {
+            String world = p.getWorld().getName();
+            String name = p.getName();
+            String prefix = chat.getPlayerPrefix(name, world);
+            if (prefix == null || prefix.isEmpty()) {
+                String group = permission.getPrimaryGroup(world, name);
+                prefix = chat.getGroupPrefix(world, group);
+                if (prefix == null) {
+                    prefix = "";
                 }
-
-                out = prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
             }
+
+            out = prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
+            //} catch (Exception e) {
+
+            //}
         }
-
-        // add in colorMe color
-
-        /*
-         * Plugin colorMe =
-         * plugin.getServer().getPluginManager().getPlugin("ColorMe");
-         *
-         * if (colorMe != null) { out += ((ColorMe)
-         * colorMe).getColor(p.getName()); }
-         */
 
         return out;
     }
 
-    /**
-     * @param p
-     * @return
-     */
-    @SuppressWarnings({"deprecation", "deprecation"})
     public String getSuffix(Player p)
     {
         try {

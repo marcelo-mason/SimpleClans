@@ -19,9 +19,9 @@ public final class RequestManager
     /**
      *
      */
-    public RequestManager()
+    public RequestManager(SimpleClans plugin)
     {
-        plugin = SimpleClans.getInstance();
+        this.plugin = plugin;
         askerTask();
     }
 

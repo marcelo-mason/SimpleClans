@@ -8,7 +8,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
@@ -29,9 +28,9 @@ public final class StorageManager
     /**
      *
      */
-    public StorageManager()
+    public StorageManager(SimpleClans plugin)
     {
-        plugin = SimpleClans.getInstance();
+        this.plugin = plugin;
         initiateDB();
         updateDatabase();
         importFromDatabase();
@@ -288,7 +287,7 @@ public final class StorageManager
                             last_used = (new Date()).getTime();
                         }
 
-                        Clan clan = new Clan();
+                        Clan clan = new Clan(plugin);
                         clan.setFlags(flags);
                         clan.setVerified(verified);
                         clan.setFriendlyFire(friendly_fire);
@@ -421,7 +420,7 @@ public final class StorageManager
                             join_date = (new Date()).getTime();
                         }
 
-                        ClanPlayer cp = new ClanPlayer();
+                        ClanPlayer cp = new ClanPlayer(plugin);
                         cp.setFlags(flags);
                         cp.setName(name);
                         cp.setLeader(leader);
@@ -436,7 +435,7 @@ public final class StorageManager
                         cp.setTrusted(leader || trusted);
 
                         if (!tag.isEmpty()) {
-                            Clan clan = SimpleClans.getInstance().getClanManager().getClan(tag);
+                            Clan clan = plugin.getClanManager().getClan(tag);
 
                             if (clan != null) {
                                 cp.setClan(clan);

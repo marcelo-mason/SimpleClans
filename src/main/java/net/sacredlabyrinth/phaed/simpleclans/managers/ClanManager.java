@@ -24,9 +24,9 @@ public final class ClanManager
     /**
      *
      */
-    public ClanManager()
+    public ClanManager(SimpleClans plugin)
     {
-        plugin = SimpleClans.getInstance();
+        this.plugin = plugin;
     }
 
     /**
@@ -71,7 +71,7 @@ public final class ClanManager
 
         boolean verified = !plugin.getSettingsManager().isRequireVerification() || plugin.getPermissionsManager().has(player, "simpleclans.mod.verify");
 
-        Clan clan = new Clan(colorTag, name, verified);
+        Clan clan = new Clan(plugin, colorTag, name, verified);
         clan.addPlayerToClan(cp);
         cp.setLeader(true);
 
@@ -84,14 +84,19 @@ public final class ClanManager
         plugin.getSpoutPluginManager().processPlayer(player.getName());
     }
 
-    public boolean isClaimed(World world, int x, int z)
+    public Clan getClaimedClan(World world, int x, int z)
     {
         for (Clan clans1 : plugin.getClanManager().getClans()) {
             if (clans1.isClaimed(world, x, z)) {
-                return true;
+                return clans1;
             }
         }
-        return false;
+        return null;
+    }
+
+    public boolean isClaimed(World world, int x, int z)
+    {
+        return getClaimedClan(world, x, z) != null;
     }
 
     /**
@@ -174,6 +179,23 @@ public final class ClanManager
     }
 
     /**
+     * Returns the collection of all online clan players, including the disabled
+     * ones
+     *
+     * @return
+     */
+    public Set<ClanPlayer> getAllOnlineClanPlayers()
+    {
+        Set<ClanPlayer> onlinePlayers = new HashSet<ClanPlayer>();
+        for (ClanPlayer clanPlayer : clanPlayers.values()) {
+            if (clanPlayer.isOnline()) {
+                onlinePlayers.add(clanPlayer);
+            }
+        }
+        return onlinePlayers;
+    }
+
+    /**
      * Gets the ClanPlayer data object if a player is currently in a clan, null
      * if he's not in a clan
      *
@@ -233,7 +255,7 @@ public final class ClanManager
             return clanPlayers.get(playerName.toLowerCase());
         }
 
-        ClanPlayer cp = new ClanPlayer(playerName);
+        ClanPlayer cp = new ClanPlayer(plugin, playerName);
 
         plugin.getStorageManager().insertClanPlayer(cp);
         importClanPlayer(cp);

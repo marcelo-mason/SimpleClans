@@ -1,11 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
 import java.util.Iterator;
-import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
-import org.bukkit.Chunk;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -25,9 +25,9 @@ public class SCPlayerListener implements Listener
     /**
      *
      */
-    public SCPlayerListener()
+    public SCPlayerListener(SimpleClans plugin)
     {
-        plugin = SimpleClans.getInstance();
+        this.plugin = plugin;
     }
 
     @EventHandler(priority = EventPriority.LOW)
@@ -248,16 +248,13 @@ public class SCPlayerListener implements Listener
     }
 
     @EventHandler
-    public void onSpoutcraftEnable(SpoutCraftEnableEvent event)
+    public void onSpoutCraftCreate(SpoutCraftEnableEvent event)
     {
         SpoutPlayer sp = event.getPlayer();
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(sp);
 
-        cp.setupClanView();
-        cp.addClanView(sp);
-
-        for (ClanPlayer cps : cp.getClan().getOnlineMembers()) {
-            cps.updateClanView(null);
+        if (cp != null) {
+            cp.setupClanView(sp);
         }
     }
 
@@ -286,20 +283,17 @@ public class SCPlayerListener implements Listener
     @EventHandler
     public void onPlayerQuit(PlayerQuitEvent event)
     {
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
-        Clan clan = cp.getClan();
+        Player player = event.getPlayer();
+        ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
+
 
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName())) {
             return;
         }
 
         plugin.getPermissionsManager().removeClanPlayerPermissions(cp);
-        plugin.getClanManager().updateLastSeen(event.getPlayer());
-        plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());
-
-        for (ClanPlayer cps : clan.getOnlineMembers()) {
-            cps.updateClanView(cp);
-        }
+        plugin.getClanManager().updateLastSeen(player);
+        plugin.getRequestManager().endPendingRequest(player.getName());
     }
 
     @EventHandler

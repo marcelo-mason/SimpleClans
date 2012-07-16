@@ -10,6 +10,10 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
+import org.getspout.spoutapi.Spout;
+import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * @author phaed
@@ -61,6 +65,18 @@ public class Helper
         return playerName;
     }
 
+    public static void setTitle(Entity entity, String title)
+    {
+        if (entity instanceof LivingEntity) {
+            Spout.getServer().setTitle((LivingEntity) entity, title);
+        }
+    }
+
+    public static void setTitle(LivingEntity entity, SpoutPlayer player, String title)
+    {
+        player.setTitleFor(player, title);
+    }
+
     /**
      * Check for integer
      *
@@ -100,7 +116,6 @@ public class Helper
 //        }
 //        return false;
 //    }
-
     /**
      * Check for byte
      *

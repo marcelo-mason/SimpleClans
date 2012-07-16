@@ -6,10 +6,12 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import static org.getspout.spoutapi.SpoutManager.*;
-import org.getspout.spoutapi.gui.*;
+import org.getspout.spoutapi.gui.GenericLabel;
+import org.getspout.spoutapi.gui.Label;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
@@ -24,10 +26,12 @@ public final class SpoutPluginManager
     /**
      *
      */
-    public SpoutPluginManager()
+    public SpoutPluginManager(SimpleClans plugin)
     {
-        plugin = SimpleClans.getInstance();
+        this.plugin = plugin;
         hasSpout = checkSpout();
+
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateLocationInfo(), 20L, 40L);
     }
 
     /**
@@ -40,6 +44,28 @@ public final class SpoutPluginManager
 
             for (Player player : onlinePlayers) {
                 processPlayer(player);
+            }
+        }
+    }
+
+    private class UpdateLocationInfo implements Runnable
+    {
+
+        @Override
+        public void run()
+        {
+            for (Player player : plugin.getServer().getOnlinePlayers()) {
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+                if (cp == null) {
+                    return;
+                }
+
+                Location loc = player.getLocation();
+                Clan clanHere = plugin.getClanManager().getClaimedClan(loc.getWorld(), loc.getBlockX(), loc.getBlockZ());
+                String text = "§7" + (clanHere == null ? "No Clan here" : clanHere.getName());
+
+                cp.updateClanView(text);
             }
         }
     }
@@ -117,8 +143,9 @@ public final class SpoutPluginManager
         memberlabel.setY(0);
 
         sp.getMainScreen().attachWidget(plugin, memberlabel);
-        
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable() {
+
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+        {
 
             @Override
             public void run()

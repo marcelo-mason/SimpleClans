@@ -1,11 +1,10 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.commands.*;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-
-import java.text.MessageFormat;
 
 /**
  * @author phaed
@@ -212,10 +211,8 @@ public final class CommandManager
                 }
             }
         } catch (Exception ex) {
-            SimpleClans.log(ChatColor.RED + MessageFormat.format(plugin.getLang("simpleclans.command.failure"), ex.getMessage()));
-            for (StackTraceElement el : ex.getStackTrace()) {
-                SimpleClans.debug(null, ex);
-            }
+            SimpleClans.debug(MessageFormat.format(plugin.getLang("simpleclans.command.failure"), ex));
+            ex.printStackTrace();
         }
     }
 

@@ -27,7 +27,7 @@ public class ReloadCommand
 
         if (plugin.getPermissionsManager().has(player, "simpleclans.admin.reload"))
         {
-            plugin.getSettingsManager().load();
+            plugin.getSettingsManager().reload();
             plugin.getStorageManager().importFromDatabase();
             SimpleClans.getInstance().getPermissionsManager().loadPermissions();
             for (Clan clan : plugin.getClanManager().getClans()) {
