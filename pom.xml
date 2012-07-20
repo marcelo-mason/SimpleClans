@@ -131,6 +131,17 @@
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/LWC.jar</systemPath>
         </dependency>
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+            <version>4.10</version>
+            <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>classmexer</groupId>
+            <artifactId>com.javamex.classmexer</artifactId>
+            <version>0.03</version>
+        </dependency>
     </dependencies>
     <!-- Repositories -->
     <repositories>
@@ -145,6 +156,12 @@
         <repository>
             <id>spout-repo</id>
             <url>http://repo.spout.org</url>
+        </repository>
+        <repository>
+            <url>http://repo1.maven.org/maven2/</url>
+            <id>junit_4</id>
+            <layout>default</layout>
+            <name>Repository for library Library[junit_4]</name>
         </repository>
     </repositories>
 

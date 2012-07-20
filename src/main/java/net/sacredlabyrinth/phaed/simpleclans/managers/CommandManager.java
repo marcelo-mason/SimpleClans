@@ -54,6 +54,8 @@ public final class CommandManager
     private BankCommand bankCommand;
     private StrifesCommand strifesCommand;
     private ClaimCommand claimCommand;
+    private UnClaimCommand unclaimCommand;
+    private MapCommand mapCommand;
 
     /**
      *
@@ -101,7 +103,12 @@ public final class CommandManager
         setRankCommand = new SetRankCommand();
         bankCommand = new BankCommand();
         strifesCommand = new StrifesCommand();
-        claimCommand = new ClaimCommand();
+
+        if (plugin.getSettingsManager().isClaimingEnabled()) {
+            claimCommand = new ClaimCommand();
+            unclaimCommand = new UnClaimCommand();
+            mapCommand = new MapCommand();
+        }
     }
 
     /**
@@ -134,8 +141,12 @@ public final class CommandManager
                     strifesCommand.execute(player, subargs);
                 } else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command"))) {
                     bankCommand.execute(player, subargs);
-                } else if (subcommand.equalsIgnoreCase("claim")) {
+                } else if (plugin.getSettingsManager().isClaimingEnabled() && subcommand.equalsIgnoreCase(plugin.getLang("claim.command"))) {
                     claimCommand.execute(player, subargs);
+                } else if (plugin.getSettingsManager().isClaimingEnabled() && subcommand.equalsIgnoreCase(plugin.getLang("unclaim.command"))) {
+                    unclaimCommand.execute(player, subargs);
+                } else if (plugin.getSettingsManager().isClaimingEnabled() && subcommand.equalsIgnoreCase(plugin.getLang("map.command"))) {
+                    mapCommand.execute(player, subargs);
                 } else if (subcommand.equalsIgnoreCase(plugin.getLang("profile.command"))) {
                     profileCommand.execute(player, subargs);
                 } else if (subcommand.equalsIgnoreCase(plugin.getLang("roster.command"))) {

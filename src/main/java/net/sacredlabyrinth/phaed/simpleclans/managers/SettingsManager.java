@@ -1,9 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -129,6 +132,13 @@ public final class SettingsManager
     private boolean tamableMobsSharing;
     private int strifeLimit;
     private boolean autoWar;
+    private boolean claimingEnabled;
+    private boolean powerBased;
+    private boolean clanSizeBased;
+    private List<String> claimingAllowedBlocks;
+    private boolean claimingSpoutFeatures;
+    private static Map<String, Integer> worlds = new HashMap<String, Integer>();
+    private String header = "- SimpleClans Configuration -\nYou have to restart the server, if you want to enable claiming.";
 
     /**
      *
@@ -143,10 +153,10 @@ public final class SettingsManager
     /**
      * Load the configuration
      */
-    @SuppressWarnings("unchecked")
     public void load()
     {
-
+        config.options().header(header);
+        config.options().copyHeader(true);
         config.options().copyDefaults(true);
 
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
@@ -261,6 +271,11 @@ public final class SettingsManager
         tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         strifeLimit = getConfig().getInt("war.strife-limit");
         autoWar = getConfig().getBoolean("war.auto-war-start");
+        claimingEnabled = getConfig().getBoolean("claiming.enabled");
+        powerBased = getConfig().getBoolean("claiming.power-based");
+        clanSizeBased = getConfig().getBoolean("claiming.clan-size-based");
+        claimingAllowedBlocks = getConfig().getStringList("claiming.allowed-blocks");
+        claimingSpoutFeatures = getConfig().getBoolean("claiming.spout-features");
 
         ConfigurationSection section;
 
@@ -277,11 +292,14 @@ public final class SettingsManager
         }
 
         for (World world : plugin.getServer().getWorlds()) {
-            if (!section.isInt(world.getName())) {
-                section.set(world.getName(), highest);
+            String name = world.getName();
+            if (!section.isInt(name)) {
+                section.set(name, highest);
                 highest++;
             }
+            worlds.put(name, section.getInt(name));
         }
+
         save();
     }
 
@@ -293,6 +311,26 @@ public final class SettingsManager
     public void save()
     {
         plugin.saveConfig();
+    }
+
+    public boolean isClaimedBlockAllowed(Material type)
+    {
+        return claimingAllowedBlocks.contains(type.toString());
+    }
+
+    public boolean isClaimingSpoutFeatures()
+    {
+        return claimingSpoutFeatures;
+    }
+
+    public boolean isPowerBased()
+    {
+        return powerBased;
+    }
+
+    public boolean isClanSizeBased()
+    {
+        return clanSizeBased;
     }
 
     /**
@@ -358,17 +396,21 @@ public final class SettingsManager
         return false;
     }
 
-    public int getWorldNumber(String world)
+    public boolean isClaimingEnabled()
     {
-        return getConfig().getConfigurationSection("worlds").getInt(world);
+        return claimingEnabled;
     }
 
-    public String getWorldByNumber(int i)
+    public static int getWorldNumber(String world)
     {
-        ConfigurationSection section = config.getConfigurationSection("worlds");
-        for (String worlds : section.getKeys(false)) {
-            if (section.getInt(worlds) == i) {
-                return worlds;
+        return worlds.get(world);
+    }
+
+    public static String getWorldByNumber(int i)
+    {
+        for (String world : worlds.keySet()) {
+            if (worlds.get(world) == i) {
+                return world;
             }
         }
         return null;

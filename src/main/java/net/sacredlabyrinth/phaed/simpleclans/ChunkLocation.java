@@ -10,19 +10,23 @@
  */
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import org.bukkit.Location;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
+import org.bukkit.Bukkit;
 import org.bukkit.World;
 
 /**
  *
  * @author Max
  */
-public class ChunkLocation
+public class ChunkLocation implements Cloneable
 {
 
     private int x;
     private int z;
     private String world;
+    private boolean changed = false;
 
     public ChunkLocation()
     {
@@ -33,26 +37,21 @@ public class ChunkLocation
         this.x = x;
         this.z = z;
         this.world = world;
-        
+
         if (normal) {
             this.x = x >> 4;
             this.z = z >> 4;
         }
     }
 
-    public void setWorld(String world)
+    public boolean isChanged()
     {
-        this.world = world;
+        return changed;
     }
 
-    public void setZ(int z)
+    public void setChanged(boolean changed)
     {
-        this.z = z;
-    }
-
-    public void setX(int x)
-    {
-        this.x = x;
+        this.changed = changed;
     }
 
     public int getX()
@@ -70,21 +69,50 @@ public class ChunkLocation
         return world;
     }
 
-    public boolean containsBlockLocation(Location loc)
+    public World getNormalWorld()
     {
-        return containsBlockLocation(loc.getWorld(), loc.getBlockX(), loc.getBlockZ());
+        return Bukkit.getWorld(world);
     }
 
-    public boolean containsBlockLocation(World locWorld, int locX, int locZ)
+    public void setWorld(String world)
     {
-        int ChunkX = locX >> 4;
-        int ChunkZ = locZ >> 4;
-        return locWorld.getName().equals(world) && ChunkX == x && ChunkZ == z;
+        this.world = world;
     }
 
-    public boolean isChunkLocation(World locWorld, int locX, int locZ)
+    public void setZ(int z)
     {
-        return locWorld.getName().equals(world) && locX == x && locZ == z;
+        this.z = z;
+    }
+
+    public void setX(int x)
+    {
+        this.x = x;
+    }
+
+    public int getNormalX()
+    {
+        return x << 4;
+    }
+
+    public int getNormalZ()
+    {
+        return z << 4;
+    }
+
+    /**
+     * Attempts to clone this object
+     *
+     * @return
+     */
+    @Override
+    protected ChunkLocation clone()
+    {
+        try {
+            return (ChunkLocation) super.clone();
+        } catch (CloneNotSupportedException ex) {
+            SimpleClans.debug(null, ex);
+        }
+        return null;
     }
 
     @Override
@@ -106,12 +134,10 @@ public class ChunkLocation
             return false;
         }
 
-        if (world == null) {
-            return false;
-        }
-
-        if (!world.equals(chunkLoc.getWorld())) {
-            return false;
+        if (world != null) {
+            if (!world.equals(chunkLoc.getWorld())) {
+                return false;
+            }
         }
 
         if (x != chunkLoc.x) {
@@ -128,5 +154,10 @@ public class ChunkLocation
     public String toString()
     {
         return world + "," + x + "," + z;
+    }
+
+    public String toLocationString()
+    {
+        return SettingsManager.getWorldNumber(world) + "," + x + "," + z;
     }
 }

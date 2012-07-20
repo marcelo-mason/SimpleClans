@@ -1,16 +1,16 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
 import java.util.Iterator;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
+import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
@@ -247,14 +247,24 @@ public class SCPlayerListener implements Listener
         }, 1);
     }
 
-    @EventHandler
-    public void onSpoutCraftCreate(SpoutCraftEnableEvent event)
+    @EventHandler(priority = EventPriority.MONITOR)
+    public void onWorldChange(PlayerChangedWorldEvent event)
     {
-        SpoutPlayer sp = event.getPlayer();
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(sp);
+        Player player = event.getPlayer();
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
         if (cp != null) {
-            cp.setupClanView(sp);
+            ChunkLocation chunk = cp.getClan().getHomeChunk();
+            World world = chunk.getNormalWorld();
+
+            if (!world.equals(player.getWorld())) {
+                return;
+            }
+
+            int x = chunk.getNormalX();
+            int z = chunk.getNormalZ();
+
+            cp.toSpoutPlayer().addWaypoint("Homeblock", x, chunk.getNormalWorld().getHighestBlockYAt(x, z), z);
         }
     }
 
@@ -325,24 +335,4 @@ public class SCPlayerListener implements Listener
     {
         plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
     }
-//
-//    @EventHandler
-//    public void onPlayerMove(PlayerMoveEvent event)
-//    {
-//        Location from = event.getFrom();
-//        Location to = event.getTo();
-//        //World world = from.getWorld();
-//
-//        for (Clan clan : plugin.getClanManager().getClans()) {
-//            for (ChunkLocation chunk : clan.getClaimedChunks()) {
-//                if (event.getFrom().getBlockX() != event.getTo().getBlockX()
-//                        || event.getFrom().getBlockY() != event.getTo().getBlockY()
-//                        || event.getFrom().getBlockZ() != event.getTo().getBlockZ()) {
-//                    if (Helper.isLocationInsideChunk(to, chunk)) {
-//                        event.getPlayer().sendMessage("asdf");
-//                    }
-//                }
-//            }
-//        }
-//    }
 }

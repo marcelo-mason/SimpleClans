@@ -1,17 +1,13 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import static org.getspout.spoutapi.SpoutManager.*;
-import org.getspout.spoutapi.gui.GenericLabel;
-import org.getspout.spoutapi.gui.Label;
+import org.getspout.spoutapi.gui.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
@@ -48,6 +44,45 @@ public final class SpoutPluginManager
         }
     }
 
+    private void sendInfo(SpoutPlayer sp, String text, float size, Color color, long duration)
+    {
+
+        final Screen screen = sp.getMainScreen();
+        final Label info = new GenericLabel(text);
+        if (color != null) {
+            info.setTextColor(color);
+        }
+        info.setAlign(WidgetAnchor.CENTER_CENTER);
+        info.setAnchor(WidgetAnchor.CENTER_CENTER);
+        info.setScale(size);
+//        info.setX(screen.getWidth() / 2 - 40);
+//        info.setY(screen.getHeight() / 2);
+        info.setWidth(30);
+        info.setHeight(10);
+        info.animate(WidgetAnim.POS_Y, 1F, (short) duration, (short) 1, false, false).animateStart();
+        screen.attachWidget(plugin, info);
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                screen.removeWidget(info);
+            }
+        }, duration);
+    }
+
+    public void enterClanRegion(SpoutPlayer sp, String tag)
+    {
+        sendInfo(sp, tag, 2.2F, new Color(61, 212, 19), 35L);
+    }
+
+    public void leaveClanRegion(SpoutPlayer sp)
+    {
+        sendInfo(sp, ChatColor.DARK_GREEN + "Wilderness", 2.2F, null, 35L);
+    }
+
     private class UpdateLocationInfo implements Runnable
     {
 
@@ -55,17 +90,28 @@ public final class SpoutPluginManager
         public void run()
         {
             for (Player player : plugin.getServer().getOnlinePlayers()) {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-                if (cp == null) {
+                if (cp == null || !cp.isClanViewSettedUp()) {
                     return;
                 }
 
                 Location loc = player.getLocation();
-                Clan clanHere = plugin.getClanManager().getClaimedClan(loc.getWorld(), loc.getBlockX(), loc.getBlockZ());
-                String text = "§7" + (clanHere == null ? "No Clan here" : clanHere.getName());
+                ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
+                Clan clanHere = plugin.getClanManager().getClanAt(chunk);
+                boolean homeblock = clanHere == null ? false : clanHere.getHomeChunk().equals(chunk);
 
-                cp.updateClanView(text);
+                StringBuilder sb = new StringBuilder();
+                if (clanHere == null) {
+                    sb.append(ChatColor.DARK_GREEN).append(plugin.getLang("wilderness"));
+                } else {
+                    sb.append(clanHere.getTag());
+                    if (homeblock) {
+                        sb.append(" (").append(plugin.getLang("homeblock")).append(')');
+                    }
+                }
+
+                cp.updateClanView(sb.toString());
             }
         }
     }
@@ -103,8 +149,10 @@ public final class SpoutPluginManager
 
                 if (plugin.getSettingsManager().isClanCapes()) {
                     if (!clan.getCapeUrl().isEmpty()) {
-                        if (clan.getCapeUrl().toLowerCase().contains(".png")) {
+                        try {
                             sp.setCape(clan.getCapeUrl());
+                        } catch (UnsupportedOperationException ex) {
+                            SimpleClans.debug("Failed at parsing the cape url for clan " + clan.getName() + " (" + ex.getMessage() + ")");
                         }
                     } else {
                         if (plugin.getSettingsManager().getDefaultCapeUrl().toLowerCase().contains(".png")) {

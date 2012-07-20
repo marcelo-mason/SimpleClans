@@ -434,7 +434,9 @@ public final class PermissionsManager
     private boolean setupChat()
     {
         RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
-        chat = rsp.getProvider();
+        if (rsp != null) {
+            chat = rsp.getProvider();
+        }
         return chat != null;
     }
 

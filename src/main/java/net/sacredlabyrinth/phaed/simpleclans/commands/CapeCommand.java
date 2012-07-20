@@ -11,6 +11,7 @@ import java.text.MessageFormat;
  */
 public class CapeCommand
 {
+
     public CapeCommand()
     {
     }
@@ -25,61 +26,40 @@ public class CapeCommand
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.leader.cape"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.leader.cape")) {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-            if (cp != null)
-            {
+            if (cp != null) {
                 Clan clan = cp.getClan();
 
-                if (clan.isVerified())
-                {
-                    if (clan.isLeader(player))
-                    {
-                        if (arg.length == 1)
-                        {
+                if (clan.isVerified()) {
+                    if (clan.isLeader(player)) {
+                        if (arg.length == 1) {
                             String url = arg[0];
 
-                            if (url.contains(".png"))
-                            {
-                                if (Helper.testURL(url))
-                                {
+                            if (url.substring(url.length() - 4, url.length()).equalsIgnoreCase(".png") && url.length() > 5 && url.length() < 255) {
+                                if (Helper.testURL(url)) {
                                     clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("changed.the.clan.cape"), Helper.capitalize(player.getName())));
                                     clan.setClanCape(url);
-                                }
-                                else
-                                {
+                                } else {
                                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("url.error"));
                                 }
-                            }
-                            else
-                            {
+                            } else {
                                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("cape.must.be.png"));
                             }
-                        }
-                        else
-                        {
+                        } else {
                             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.cape.url"), plugin.getSettingsManager().getCommandClan()));
                         }
-                    }
-                    else
-                    {
+                    } else {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                     }
-                }
-                else
-                {
+                } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
                 }
-            }
-            else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
-        }
-        else
-        {
+        } else {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }

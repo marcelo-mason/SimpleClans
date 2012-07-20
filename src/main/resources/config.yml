@@ -89,6 +89,12 @@ page:
     leader-color: '4'
     separator: '-'
     size: 13
+claiming:
+  enabled: false
+  spout-features: false
+  allowed-blocks: []
+  power-based: false
+  clan-size-based: true
 clanchat:
     rank.color: e
     tag-based-clan-chat: false

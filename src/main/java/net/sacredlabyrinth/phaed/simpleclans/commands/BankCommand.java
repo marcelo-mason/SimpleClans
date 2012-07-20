@@ -10,14 +10,17 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.HashSet;
+import net.sacredlabyrinth.phaed.simpleclans.*;
 
 /**
  *
  * @author phaed
  */
-public class BankCommand {
+public class BankCommand
+{
 
-    public BankCommand() {
+    public BankCommand()
+    {
     }
 
     /**
@@ -26,7 +29,8 @@ public class BankCommand {
      * @param player
      * @param arg
      */
-    public void execute(Player player, String[] arg) {
+    public void execute(Player player, String[] arg)
+    {
         SimpleClans plugin = SimpleClans.getInstance();
 
         if (plugin.getPermissionsManager().has(player, "simpleclans.member.bank")) {
@@ -49,12 +53,18 @@ public class BankCommand {
                                 if (arg[1].matches("[0-9]+")) {
                                     money = Double.parseDouble(arg[1]);
                                 }
+
+                                BankResult result = null;
+                                double amount = 0;
+
                                 if (arg[0].equalsIgnoreCase("deposit")) {
                                     if (cp.getClan().isLeader(player) || clan.isAllowDeposit()) {
                                         if (arg[1].equalsIgnoreCase("all")) {
-                                            clan.deposit(plmoney, player);
+                                            amount = plmoney;
+                                            result = clan.deposit(plmoney, player);
                                         } else {
-                                            clan.deposit(money, player);
+                                            amount = money;
+                                            result = clan.deposit(money, player);
                                         }
                                     } else {
                                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
@@ -62,15 +72,41 @@ public class BankCommand {
                                 } else if (arg[0].equalsIgnoreCase("withdraw")) {
                                     if (cp.getClan().isLeader(player) || clan.isAllowWithdraw()) {
                                         if (arg[1].equalsIgnoreCase("all")) {
-                                            clan.withdraw(clanbalance, player);
+                                            amount = clanbalance;
+                                            result = clan.withdraw(clanbalance, player);
                                         } else {
-                                            clan.withdraw(money, player);
+                                            amount = money;
+                                            result = clan.withdraw(money, player);
                                         }
                                     } else {
                                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                                     }
                                 } else {
                                     ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));
+                                }
+
+                                if (result != null) {
+
+                                    switch (result) {
+                                        case BANK_NOT_ENOUGH_MONEY:
+                                            player.sendMessage(ChatColor.AQUA + plugin.getLang("clan.bank.not.enough.money"));
+                                            break;
+                                        case PLAYER_NOT_ENOUGH_MONEY:
+                                            player.sendMessage(ChatColor.AQUA + plugin.getLang("not.sufficient.money"));
+                                            break;
+                                        case SUCCESS_DEPOSIT:
+                                            player.sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.clan.deposit"), amount));
+                                            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("bb.clan.deposit"), amount));
+                                            break;
+                                        case SUCCESS_WITHDRAW:
+                                            player.sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.clan.withdraw"), amount));
+                                            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("bb.clan.withdraw"), amount));
+                                            break;
+                                        case FAILED:
+                                            player.sendMessage(ChatColor.DARK_RED + plugin.getLang("transaction.failed"));
+                                            break;
+                                    }
+
                                 }
                             } else {
                                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.bank"), plugin.getSettingsManager().getCommandClan()));

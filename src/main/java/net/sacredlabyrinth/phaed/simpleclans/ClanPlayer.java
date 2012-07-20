@@ -118,6 +118,11 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         return name;
     }
 
+    public boolean usesSpout()
+    {
+        return toSpoutPlayer().isSpoutCraftEnabled();
+    }
+
     public final void setupClanView(SpoutPlayer sp)
     {
         Screen screen = sp.getMainScreen();
@@ -127,10 +132,13 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         screen.attachWidget(plugin, clanView);
     }
-    
-    public void removeClanView() {
-        toSpoutPlayer().getMainScreen().removeWidget(clanView);
-        clanView = null;
+
+    public void removeClanView()
+    {
+        if (clanView != null) {
+            toSpoutPlayer().getMainScreen().removeWidget(clanView);
+            clanView = null;
+        }
     }
 
     public void updateClanView(String text)
@@ -139,8 +147,9 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
             clanView.setText(text);
         }
     }
-    
-    public boolean isClanViewSettedUp() {
+
+    public boolean isClanViewSettedUp()
+    {
         return clanView != null;
     }
 
@@ -186,7 +195,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public int getPower()
     {
-        int out = getDeaths() - (neutralKills + civilianKills + rivalKills);
+        int out = (neutralKills + civilianKills + rivalKills) - getDeaths();
 
         if (out > 10) {
             out = 10;

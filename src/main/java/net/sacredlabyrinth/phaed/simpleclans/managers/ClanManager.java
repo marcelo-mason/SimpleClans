@@ -5,6 +5,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
@@ -79,24 +80,91 @@ public final class ClanManager
         importClan(clan);
         plugin.getStorageManager().updateClanPlayer(cp);
 
-        SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
+        plugin.getPermissionsManager().updateClanPermissions(clan);
 
         plugin.getSpoutPluginManager().processPlayer(player.getName());
     }
 
-    public Clan getClaimedClan(World world, int x, int z)
+    /**
+     * Returns a clan at a specific location
+     *
+     * @param world
+     * @param x
+     * @param z
+     * @return
+     */
+    public Clan getClanAt(World world, int x, int z)
+    {
+        return getClanAt(new ChunkLocation(world.getName(), x, z, true));
+    }
+
+    /**
+     * Returns a clan at a specific location
+     *
+     * @param loc
+     * @return
+     */
+    public Clan getClanAt(Location loc)
+    {
+        return getClanAt(loc.getWorld(), loc.getBlockX(), loc.getBlockZ());
+    }
+
+    /**
+     * Returns a clan at a specific location
+     *
+     * @param chunk
+     * @return
+     */
+    public Clan getClanAt(ChunkLocation chunk)
     {
         for (Clan clans1 : plugin.getClanManager().getClans()) {
-            if (clans1.isClaimed(world, x, z)) {
+            if (clans1.isClaimed(chunk)) {
                 return clans1;
             }
         }
         return null;
     }
 
+    /**
+     * Returns if the location is claimed
+     *
+     * @param world
+     * @param x
+     * @param z
+     * @return
+     */
     public boolean isClaimed(World world, int x, int z)
     {
-        return getClaimedClan(world, x, z) != null;
+        return getClanAt(world, x, z) != null;
+    }
+
+    /**
+     * Resets the kdr of all players (!Warning! clears all deaths/kills)
+     *
+     */
+    public void resetKDRs()
+    {
+        for (ClanPlayer cp : getAllClanPlayers()) {
+            cp.setDeaths(0);
+            cp.setNeutralKills(0);
+            cp.setCivilianKills(0);
+            cp.setRivalKills(0);
+            plugin.getStorageManager().updateClanPlayer(cp);
+        }
+    }
+
+    /**
+     * Resets the kdr of a player (!Warning! clears all deaths/kills)
+     *
+     * @param cp
+     */
+    public void resetKDR(ClanPlayer cp)
+    {
+        cp.setDeaths(0);
+        cp.setNeutralKills(0);
+        cp.setCivilianKills(0);
+        cp.setRivalKills(0);
+        plugin.getStorageManager().updateClanPlayer(cp);
     }
 
     /**
@@ -364,6 +432,8 @@ public final class ClanManager
     }
 
     /**
+     * Bans a player
+     *
      * @param playerName
      */
     public void ban(String playerName)
@@ -399,7 +469,7 @@ public final class ClanManager
         int clanCount = 0;
 
         for (Clan tm : clans.values()) {
-            if (!SimpleClans.getInstance().getSettingsManager().isUnrivable(tm.getTag())) {
+            if (!plugin.getSettingsManager().isUnrivable(tm.getTag())) {
                 clanCount++;
             }
         }
@@ -779,6 +849,33 @@ public final class ClanManager
                 Float o2 = c2.getTotalKDR();
 
                 return o2.compareTo(o1);
+            }
+        });
+    }
+
+    /**
+     * Sort clan players by Health. (Goes up from 0 health)
+     *
+     * @param clans
+     * @return
+     */
+    public void sortClanPlayersByHealth(List<ClanPlayer> players)
+    {
+        Collections.sort(players, new Comparator<ClanPlayer>()
+        {
+
+            @Override
+            public int compare(ClanPlayer c1, ClanPlayer c2)
+            {
+                Player p = c1.toPlayer();
+                Player p2 = c2.toPlayer();
+                if (p == null || p2 == null) {
+                    return -1;
+                }
+
+                Integer h = p.getHealth();
+                Integer h2 = p2.getHealth();
+                return h.compareTo(h2);
             }
         });
     }

@@ -49,6 +49,17 @@ public class Helper
     }
 
     /**
+     * Convert color hex values with ampersand to special character
+     *
+     * @param msg
+     * @return
+     */
+    public static String parseColors(String msg)
+    {
+        return msg.replace("&", "\u00a7");
+    }
+
+    /**
      * Get a players full color name if he is online
      *
      * @param playerName
@@ -421,17 +432,6 @@ public class Helper
         }
 
         return stripTrailing(out, sep);
-    }
-
-    /**
-     * Convert color hex values with ampersand to special character
-     *
-     * @param msg
-     * @return
-     */
-    public static String parseColors(String msg)
-    {
-        return msg.replace("&", "\u00a7");
     }
 
     /**
