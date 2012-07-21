@@ -1126,11 +1126,7 @@ public final class ClanManager
             String message = code + Helper.parseColors(tag) + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
             String eyeMessage = code + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + cp.getClan().getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getClanChatNameColor() + plugin.getSettingsManager().getClanChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getClanChatPlayerBracketRight() + " " + plugin.getSettingsManager().getClanChatMessageColor() + msg;
 
-<<<<<<< HEAD
-            plugin.getServer().getConsoleSender().sendMessage(eyeMessage + " <--- Is the the annoying null message?");
-=======
-            //plugin.getServer().getConsoleSender().sendMessage(eyeMessage);
->>>>>>> cbc5a746def5615c18d171e3f8918ba4fd8a236f
+            plugin.getServer().getConsoleSender().sendMessage(eyeMessage);
 
             List<ClanPlayer> cps = cp.getClan().getMembers();
 
