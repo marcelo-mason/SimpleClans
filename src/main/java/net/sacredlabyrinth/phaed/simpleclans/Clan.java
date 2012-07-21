@@ -6,7 +6,6 @@ import java.text.MessageFormat;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansPlayerJoinEvent;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansPlayerLeaveEvent;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -70,8 +69,8 @@ public class Clan implements Serializable, Comparable<Clan>
         this.tag = Helper.cleanTag(tag);
         this.colorTag = Helper.parseColors(tag);
         this.name = name;
-        this.founded = (new Date()).getTime();
-        this.lastUsed = (new Date()).getTime();
+        this.founded = System.currentTimeMillis();
+        this.lastUsed = System.currentTimeMillis();
         this.verified = verified;
         this.capeUrl = "";
 
@@ -187,10 +186,10 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (plugin.getSettingsManager().isClanSizeBased()) {
             int clanSize = getSize();
-
-            if (clanSize == 1) {
-                return 0;
-            }
+//
+//            if (clanSize == 1) {
+//                return 0;
+//            }
 
             int claimsseBasedOnMembers = 0;
 
@@ -200,7 +199,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
             return claimsseBasedOnMembers;
         } else if (plugin.getSettingsManager().isPowerBased()) {
-            return getPower();
+            return getPower() * plugin.getSettingsManager().getClaimsPerPower();
         }
         return 0;
     }
@@ -409,7 +408,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void updateLastUsed()
     {
-        setLastUsed((new Date()).getTime());
+        setLastUsed(System.currentTimeMillis());
     }
 
     /**
@@ -419,7 +418,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public int getInactiveDays()
     {
-        Timestamp now = new Timestamp((new Date()).getTime());
+        Timestamp now = new Timestamp(System.currentTimeMillis());
         return (int) Math.floor(Dates.differenceInDays(new Timestamp(getLastUsed()), now));
     }
 
@@ -1220,6 +1219,8 @@ public class Clan implements Serializable, Comparable<Clan>
         // add clan permission
         plugin.getPermissionsManager().addClanPermissions(cp);
 
+        plugin.getPermissionsManager().setupPlayerPermissions(cp);
+
         plugin.getServer().getPluginManager().callEvent(new SimpleClansPlayerJoinEvent(cp, this));
 
         if (!cp.isClanViewSettedUp()) {
@@ -1288,6 +1289,7 @@ public class Clan implements Serializable, Comparable<Clan>
         plugin.getStorageManager().updateClan(this);
         plugin.getSpoutPluginManager().processPlayer(cp.getName());
 
+        plugin.getPermissionsManager().updatePlayerPermissions(cp);
         // add clan permission
         plugin.getPermissionsManager().addClanPermissions(cp);
     }
@@ -1306,6 +1308,8 @@ public class Clan implements Serializable, Comparable<Clan>
         plugin.getStorageManager().updateClanPlayer(cp);
         plugin.getStorageManager().updateClan(this);
         plugin.getSpoutPluginManager().processPlayer(cp.getName());
+
+        plugin.getPermissionsManager().updatePlayerPermissions(cp);
 
         // add clan permission
         plugin.getPermissionsManager().addClanPermissions(cp);

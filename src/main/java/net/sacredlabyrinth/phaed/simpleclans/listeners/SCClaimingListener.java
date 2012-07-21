@@ -48,31 +48,29 @@ public class SCClaimingListener implements Listener
         Player player = event.getPlayer();
 
         if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName())) {
+            //System.out.println("backlist");
             return;
         }
 
         Block block = event.getBlock();
 
         if (plugin.getSettingsManager().isClaimedBlockAllowed(block.getType())) {
+            //System.out.println("allowed");
             return;
         }
 
         ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-        if (cp == null) {
-            return;
+        Clan clan = null;
+
+        if (cp != null) {
+            clan = cp.getClan();
         }
-
-        Clan clan = cp.getClan();
-
-//        if (clan == null) {
-//            return;
-//        }
 
         Location loc = player.getLocation();
 
-        long start = System.currentTimeMillis();
-        long startns = System.nanoTime();
+//        long start = System.currentTimeMillis();
+//        long startns = System.nanoTime();
         Clan clanHere = plugin.getClanManager().getClanAt(loc);
 
         if (clanHere != null) {
@@ -99,21 +97,22 @@ public class SCClaimingListener implements Listener
                 }
             }
 
-            if (!clanHere.hasPermission(PermissionType.DENY_MEMBER_BREAK) && clanHere.isMember(player)) {
+            if (!clanHere.hasPermission(PermissionType.DENY_MEMBER_BREAK) && clanHere.isMember(player) && cp.isTrusted()) {
                 //System.out.println("DENY_MEMBER_BREAK");
                 return;
             }
 
             //return always if the player is the leader of the clan
             if (clanHere.isLeader(player)) {
+                //System.out.println("leader");
                 return;
             }
 
             event.setCancelled(true);
         }
-        long endns = System.nanoTime();
-        long end = System.currentTimeMillis();
-        System.out.println("Checking(break) took: " + (endns - startns) + "ns " + (end - start) + "ms");
+//        long endns = System.nanoTime();
+//        long end = System.currentTimeMillis();
+//        System.out.println("Checking(break) took: " + (endns - startns) + "ns " + (end - start) + "ms");
     }
 
     @EventHandler
@@ -133,11 +132,11 @@ public class SCClaimingListener implements Listener
 
         ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-        if (cp == null) {
-            return;
-        }
+        Clan clan = null;
 
-        Clan clan = cp.getClan();
+        if (cp != null) {
+            clan = cp.getClan();
+        }
 
         Location loc = player.getLocation();
 
@@ -147,18 +146,18 @@ public class SCClaimingListener implements Listener
 
             if (clan != null) {
                 if (clanHere.hasPermission(PermissionType.ALLOW_ALLY_BUILD) && clanHere.isAlly(clan.getTag())) {
-                    //System.out.println("ALLOW_ALLY_BREAK");
+                    //System.out.println("ALLOW_ALLY_BUILD");
                     return;
                 }
 
                 if (clanHere.hasPermission(PermissionType.ALLOW_UNVERIFIED_BUILD) && !cp.isTrusted()) {
-                    //System.out.println("ALLOW_UNVERIFIED_BREAK");
+                    //System.out.println("ALLOW_UNVERIFIED_BUILD");
                     return;
                 }
             }
 
             if (clanHere.hasPermission(PermissionType.ALLOW_OUTSIDER_BUILD)) {
-                //System.out.println("ALLOW_OUTSIDER_BREAK");
+                //System.out.println("ALLOW_OUTSIDER_BUILD");
                 if (clanHere == null) {
                     return;
                 }
@@ -167,13 +166,14 @@ public class SCClaimingListener implements Listener
                 }
             }
 
-            if (!clanHere.hasPermission(PermissionType.DENY_MEMBER_BUILD) && clanHere.isMember(player)) {
-                //System.out.println("DENY_MEMBER_BREAK");
+            if (!clanHere.hasPermission(PermissionType.DENY_MEMBER_BUILD) && clanHere.isMember(player) && cp.isTrusted()) {
+                //System.out.println("DENY_MEMBER_BUILD");
                 return;
             }
 
             //return always if the player is the leader of the clan
             if (clanHere.isLeader(player)) {
+                //System.out.println("leader");
                 return;
             }
 
@@ -202,11 +202,11 @@ public class SCClaimingListener implements Listener
 
         ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-        if (cp == null) {
-            return;
-        }
+        Clan clan = null;
 
-        Clan clan = cp.getClan();
+        if (cp != null) {
+            clan = cp.getClan();
+        }
 
         Location loc = player.getLocation();
 
@@ -215,19 +215,19 @@ public class SCClaimingListener implements Listener
         if (clanHere != null) {
 
             if (clan != null) {
-                if (clanHere.hasPermission(PermissionType.ALLOW_ALLY_BREAK) && clanHere.isAlly(clan.getTag())) {
-                    //System.out.println("ALLOW_ALLY_BREAK");
+                if (clanHere.hasPermission(PermissionType.ALLOW_ALLY_INTERACT) && clanHere.isAlly(clan.getTag())) {
+                    //System.out.println("ALLOW_ALLY_INTERACT");
                     return;
                 }
 
-                if (clanHere.hasPermission(PermissionType.ALLOW_UNVERIFIED_BREAK) && !cp.isTrusted()) {
-                    //System.out.println("ALLOW_UNVERIFIED_BREAK");
+                if (clanHere.hasPermission(PermissionType.ALLOW_UNVERIFIED_INTERACT) && !cp.isTrusted()) {
+                    //System.out.println("ALLOW_UNVERIFIED_INTERACT");
                     return;
                 }
             }
 
-            if (clanHere.hasPermission(PermissionType.ALLOW_OUTSIDER_BUILD)) {
-                //System.out.println("ALLOW_OUTSIDER_BREAK");
+            if (clanHere.hasPermission(PermissionType.ALLOW_OUTSIDER_INTERACT)) {
+                //System.out.println("ALLOW_OUTSIDER_INTERACT");
                 if (clanHere == null) {
                     return;
                 }
@@ -236,13 +236,14 @@ public class SCClaimingListener implements Listener
                 }
             }
 
-            if (!clanHere.hasPermission(PermissionType.DENY_MEMBER_BREAK) && clanHere.isMember(player)) {
-                //System.out.println("DENY_MEMBER_BREAK");
+            if (!clanHere.hasPermission(PermissionType.DENY_MEMBER_INTERACT) && clanHere.isMember(player) && cp.isTrusted()) {
+                //System.out.println("DENY_MEMBER_INTERACT");
                 return;
             }
 
             //return always if the player is the leader of the clan
             if (clanHere.isLeader(player)) {
+                //System.out.println("leader");
                 return;
             }
 
@@ -270,14 +271,14 @@ public class SCClaimingListener implements Listener
                     if (sp.isSpoutCraftEnabled()) {
                         plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
                     } else {
-                        sp.sendMessage(ChatColor.DARK_GREEN + plugin.getLang("enter.clan.region"));
+                        sp.sendMessage(ChatColor.GRAY + clanTo.getTag());
                     }
                 }
             } else {
                 if (sp.isSpoutCraftEnabled()) {
                     plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
                 } else {
-                    sp.sendMessage(ChatColor.DARK_GREEN + plugin.getLang("enter.clan.region"));
+                    sp.sendMessage(ChatColor.GRAY + clanTo.getTag());
                 }
             }
         } else {
@@ -285,7 +286,7 @@ public class SCClaimingListener implements Listener
                 if (sp.isSpoutCraftEnabled()) {
                     plugin.getSpoutPluginManager().leaveClanRegion(sp);
                 } else {
-                    sp.sendMessage(ChatColor.DARK_GREEN + plugin.getLang("leave.clan.region"));
+                    sp.sendMessage(ChatColor.DARK_GREEN + plugin.getLang("wilderness"));
                 }
             }
         }

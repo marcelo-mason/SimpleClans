@@ -9,6 +9,7 @@ import java.util.LinkedList;
 import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.permissions.PermissionAttachment;
 import org.getspout.spoutapi.SpoutManager;
 import org.getspout.spoutapi.gui.GenericLabel;
 import org.getspout.spoutapi.gui.Label;
@@ -52,6 +53,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private String rank = "";
     private boolean allSeeingEyeEnabled;
     private Label clanView;
+    private PermissionAttachment permAttach = null;
 
     /**
      *
@@ -156,6 +158,36 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public boolean isOnline()
     {
         return toPlayer() != null;
+    }
+
+    public void addPermission(String perm)
+    {
+        permAttach.setPermission(perm, true);
+    }
+
+    public void removePermission(String perm)
+    {
+        permAttach.unsetPermission(perm);
+    }
+
+    public void setupPermissionAttachment()
+    {
+        if (permAttach == null) {
+            permAttach = toPlayer().addAttachment(plugin);
+        }
+    }
+
+    public void removePermissionAttachment()
+    {
+        if (permAttach != null) {
+            permAttach.remove();
+            permAttach = null;
+        }
+    }
+
+    public void recalculatePermissions()
+    {
+        toPlayer().recalculatePermissions();
     }
 
     /**

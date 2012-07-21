@@ -10,9 +10,6 @@
  */
 package net.sacredlabyrinth.phaed.simpleclans.beta;
 
-import com.javamex.classmexer.MemoryUtil;
-import com.javamex.classmexer.MemoryUtil.VisibilityFilter;
-import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 
 /**
@@ -68,9 +65,5 @@ public class Test
 //        long end = System.currentTimeMillis();
 //        System.out.println(end - start);
 
-        long noBytes = MemoryUtil.deepMemoryUsageOf(new Clan(null, "asf", "asdf", true), VisibilityFilter.ALL);
-        System.out.println(noBytes);
-            
     }
-
 }

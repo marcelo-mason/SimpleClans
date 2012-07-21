@@ -13,6 +13,7 @@ import java.text.NumberFormat;
  */
 public class ProfileCommand
 {
+
     public ProfileCommand()
     {
     }
@@ -32,60 +33,40 @@ public class ProfileCommand
 
         Clan clan = null;
 
-        if (arg.length == 0)
-        {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.member.profile"))
-            {
+        if (arg.length == 0) {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.member.profile")) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-                if (cp == null)
-                {
+                if (cp == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
-                }
-                else
-                {
-                    if (cp.getClan().isVerified())
-                    {
+                } else {
+                    if (cp.getClan().isVerified()) {
                         clan = cp.getClan();
-                    }
-                    else
-                    {
+                    } else {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
                     }
                 }
-            }
-            else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        }
-        else if (arg.length == 1)
-        {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.profile"))
-            {
+        } else if (arg.length == 1) {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.profile")) {
                 clan = plugin.getClanManager().getClan(arg[0]);
 
-                if (clan == null)
-                {
+                if (clan == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clan.matched"));
                 }
-            }
-            else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        }
-        else
-        {
+        } else {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.profile.tag"), plugin.getSettingsManager().getCommandClan()));
         }
 
-        if (clan != null)
-        {
-            if (clan.isVerified())
-            {
+        if (clan != null) {
+            if (clan.isVerified()) {
                 ChatBlock.sendBlank(player);
-                ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor+ " " + plugin.getLang("profile") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor + " " + plugin.getLang("profile") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                 ChatBlock.sendBlank(player);
 
                 String name = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getPageClanNameColor() + clan.getName();
@@ -102,6 +83,7 @@ public class ProfileCommand
                 String neutral = ChatColor.WHITE + "" + clan.getTotalNeutral();
                 String civ = ChatColor.WHITE + "" + clan.getTotalCivilian();
                 String status = ChatColor.WHITE + "" + (clan.isVerified() ? plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang("verified") : plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang("unverified"));
+                String claims = ChatColor.WHITE + "" + clan.getClaimCount();
 
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("name.0"), name));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("status.0"), status));
@@ -112,13 +94,14 @@ public class ProfileCommand
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("deaths.0"), deaths));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("allies.0"), allies));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("rivals.0"), rivals));
+                if (plugin.getSettingsManager().isClaimingEnabled()) {
+                    ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format("Claims: {0}", claims));
+                }
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("founded.0"), founded));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("inactive.0"), inactive));
 
                 ChatBlock.sendBlank(player);
-            }
-            else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             }
         }

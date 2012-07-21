@@ -1,9 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Material;
@@ -138,7 +135,9 @@ public final class SettingsManager
     private List<String> claimingAllowedBlocks;
     private boolean claimingSpoutFeatures;
     private static Map<String, Integer> worlds = new HashMap<String, Integer>();
-    private String header = "- SimpleClans Configuration -\nYou have to restart the server, if you want to enable claiming.";
+    private boolean permissionsEnabled;
+    private int claimsPerPower;
+    private String header = "- SimpleClans Configuration -\nYou have to restart the server, if you want to enable claiming.\nDon't modify the 'worlds' section unless you know what you do!\nAutogrouping was removed! You can define permissions for leaders/trusted/untrusted and clans now directly here!";
 
     /**
      *
@@ -276,6 +275,8 @@ public final class SettingsManager
         clanSizeBased = getConfig().getBoolean("claiming.clan-size-based");
         claimingAllowedBlocks = getConfig().getStringList("claiming.allowed-blocks");
         claimingSpoutFeatures = getConfig().getBoolean("claiming.spout-features");
+        permissionsEnabled = getConfig().getBoolean("permissions.enabled");
+        claimsPerPower = getConfig().getInt("claiming.claims-per-power");
 
         ConfigurationSection section;
 
@@ -301,6 +302,36 @@ public final class SettingsManager
         }
 
         save();
+    }
+
+    public Set<String> getClanPermissions(String tag)
+    {
+        return new HashSet<String>(config.getConfigurationSection("permissions.clans").getStringList(tag));
+    }
+
+    public Set<String> getDefaultLeaderPermissions(String tag)
+    {
+        return new HashSet<String>(config.getStringList("permissions.defaultLeader"));
+    }
+
+    public Set<String> getDefaultTrustedPermissions(String tag)
+    {
+        return new HashSet<String>(config.getStringList("permissions.defaultTrusted"));
+    }
+
+    public Set<String> getDefaultUnTrustedPermissions(String tag)
+    {
+        return new HashSet<String>(config.getStringList("permissions.defaultUnTrusted"));
+    }
+
+    public int getClaimsPerPower()
+    {
+        return claimsPerPower;
+    }
+
+    public boolean isPermissionsEnabled()
+    {
+        return permissionsEnabled;
     }
 
     public void reload()

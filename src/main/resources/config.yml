@@ -143,7 +143,15 @@ mysql:
     password: ''
     database: ''
 permissions:
+  enabled: false
   auto-group-groupname: true
-  YourClanNameHere:
-  - test.permission
+  clans:
+    YourClanNameHere:
+      - test.permission
+  defaultLeader:
+    - every.leader.will.have.this
+  defaultTrusted:
+    - every.trusted.member.will.have.this
+  defaultUnTrusted:
+    - every.untrusted.member.will.have.this
 worlds:

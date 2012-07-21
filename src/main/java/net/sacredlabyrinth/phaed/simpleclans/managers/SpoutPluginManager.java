@@ -49,17 +49,19 @@ public final class SpoutPluginManager
 
         final Screen screen = sp.getMainScreen();
         final Label info = new GenericLabel(text);
+
         if (color != null) {
             info.setTextColor(color);
         }
+
         info.setAlign(WidgetAnchor.CENTER_CENTER);
         info.setAnchor(WidgetAnchor.CENTER_CENTER);
         info.setScale(size);
-//        info.setX(screen.getWidth() / 2 - 40);
-//        info.setY(screen.getHeight() / 2);
         info.setWidth(30);
         info.setHeight(10);
-        info.animate(WidgetAnim.POS_Y, 1F, (short) duration, (short) 1, false, false).animateStart();
+        info.shiftXPos(-15);
+        info.shiftYPos(-5);
+        info.animate(WidgetAnim.POS_Y, 1.2F, (short) duration, (short) 1, false, false).animateStart();
         screen.attachWidget(plugin, info);
 
         plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
@@ -75,12 +77,12 @@ public final class SpoutPluginManager
 
     public void enterClanRegion(SpoutPlayer sp, String tag)
     {
-        sendInfo(sp, tag, 2.2F, new Color(61, 212, 19), 35L);
+        sendInfo(sp, ChatColor.GRAY + tag, 2.6F, null, 35L);
     }
 
     public void leaveClanRegion(SpoutPlayer sp)
     {
-        sendInfo(sp, ChatColor.DARK_GREEN + "Wilderness", 2.2F, null, 35L);
+        sendInfo(sp, ChatColor.DARK_GREEN + "Wilderness", 2.6F, null, 35L);
     }
 
     private class UpdateLocationInfo implements Runnable

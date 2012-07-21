@@ -7,6 +7,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.atomic.AtomicBoolean;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
@@ -17,6 +19,7 @@ import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.permissions.Permissible;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitScheduler;
 
 /**
@@ -90,6 +93,7 @@ public class AutoUpdate implements Runnable, Listener
             throw new Exception("Plugin can not be null");
         }
         this.plugin = plugin;
+
         av = ymlPrefix + plugin.getDescription().getVersion() + ymlSuffix;
 
         if (bukkitdevSlug == null || bukkitdevSlug.equals("")) {

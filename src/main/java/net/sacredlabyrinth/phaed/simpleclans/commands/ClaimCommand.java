@@ -28,13 +28,11 @@ public class ClaimCommand
         SimpleClans plugin = SimpleClans.getInstance();
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-
-
-        Clan clan = cp.getClan();
-
         if (arg.length == 0) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.claim.add")) {
                 if (cp != null) {
+
+                    Clan clan = cp.getClan();
                     if (clan.isLeader(player)) {
 
                         Location loc = player.getLocation();
@@ -72,7 +70,7 @@ public class ClaimCommand
                         } else {
                             if (clan.isWarring(clanhere)) {
                                 if (plugin.getSettingsManager().isPowerBased()) {
-                                    if (clanhere.getPower() < clanhere.getAllowedClaims()) {
+                                    if (clanhere.getPower() * plugin.getSettingsManager().getClaimsPerPower() < clanhere.getAllowedClaims()) {
                                         if (clanhere.removeClaimedChunk(chunk)) {
                                             clan.addClaimedChunk(chunk);
                                             player.sendMessage("you got the chunk from " + clanhere.getName());
@@ -104,8 +102,10 @@ public class ClaimCommand
                 if (plugin.getPermissionsManager().has(player, "simpleclans.claim.info")) {
 
                     Location loc = player.getLocation();
-
-                    player.sendMessage("Allowed Claims: " + clan.getAllowedClaims());
+                    if (cp != null) {
+                        Clan clan = cp.getClan();
+                        player.sendMessage("Allowed Claims: " + clan.getAllowedClaims());
+                    }
                     for (Clan clans : plugin.getClanManager().getClans()) {
                         if (clans.isClaimed(loc)) {
 
@@ -122,6 +122,7 @@ public class ClaimCommand
             } else if (arg[0].equalsIgnoreCase("waypoint")) {
 
                 if (plugin.getPermissionsManager().has(player, "simpleclans.claim.waypoint")) {
+                    Clan clan = cp.getClan();
                     ChunkLocation chunk = clan.getHomeChunk();
                     int x = chunk.getNormalX();
                     int z = chunk.getNormalZ();
@@ -132,29 +133,34 @@ public class ClaimCommand
             } else if (arg[0].equalsIgnoreCase("sethomeblock") || arg[0].equalsIgnoreCase("sethb")) {
                 if (plugin.getPermissionsManager().has(player, "simpleclans.claim.sethomeblock")) {
 
-                    Location loc = player.getLocation();
-                    ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
+                    if (cp != null) {
+                        Clan clan = cp.getClan();
+                        Location loc = player.getLocation();
+                        ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
 
-                    if (clan.isClaimed(chunk)) {
-                        if (!chunk.equals(clan.getHomeChunk())) {
-                            clan.setHomeChunk(new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true));
-                            plugin.getStorageManager().updateClan(clan);
-                            player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("homeblock.moved"));
+                        if (clan.isClaimed(chunk)) {
+                            if (!chunk.equals(clan.getHomeChunk())) {
+                                clan.setHomeChunk(new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true));
+                                plugin.getStorageManager().updateClan(clan);
+                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("homeblock.moved"));
+                            } else {
+                                player.sendMessage(ChatColor.DARK_RED + plugin.getLang("already.homeblock"));
+                            }
                         } else {
-                            player.sendMessage(ChatColor.DARK_RED + plugin.getLang("already.homeblock"));
+                            player.sendMessage(ChatColor.DARK_RED + plugin.getLang("error.no.claim"));
                         }
                     } else {
-                        player.sendMessage(ChatColor.DARK_RED + plugin.getLang("error.no.claim"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
                     }
 
                 } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                 }
             } else {
-                 player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.claim"), plugin.getSettingsManager().getCommandClan()));
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.claim"), plugin.getSettingsManager().getCommandClan()));
             }
         } else {
-             player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.claim"), plugin.getSettingsManager().getCommandClan()));
+            player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.claim"), plugin.getSettingsManager().getCommandClan()));
         }
     }
 }

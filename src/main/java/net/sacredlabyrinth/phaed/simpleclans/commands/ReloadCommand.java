@@ -40,7 +40,6 @@ public class ReloadCommand
             }
 
             plugin.getStorageManager().importFromDatabase();
-            SimpleClans.getInstance().getPermissionsManager().loadPermissions();
             for (Clan clan : plugin.getClanManager().getClans()) {
                 SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
             }

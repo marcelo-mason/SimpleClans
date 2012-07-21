@@ -83,7 +83,7 @@ public class SimpleClans extends JavaPlugin
         logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
         spoutPluginManager = new SpoutPluginManager(this);
-        permissionsManager = new PermissionsManager();
+        permissionsManager = new PermissionsManager(this);
         requestManager = new RequestManager(this);
         clanManager = new ClanManager(this);
         storageManager = new StorageManager(this);
@@ -107,9 +107,7 @@ public class SimpleClans extends JavaPlugin
         getServer().getPluginManager().registerEvents(entityListener, this);
         getServer().getPluginManager().registerEvents(playerListener, this);
 
-
         spoutPluginManager.processAllPlayers();
-        permissionsManager.loadPermissions();
 
         setupMetrics();
         //setupBetaCommandManager();
@@ -137,7 +135,6 @@ public class SimpleClans extends JavaPlugin
         getStorageManager().saveClaims();
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
-        getPermissionsManager().savePermissions();
     }
 
     public AutoUpdate getAutoUpdater()
