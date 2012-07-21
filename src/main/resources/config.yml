@@ -95,8 +95,10 @@ claiming:
   allowed-blocks: []
   power-based: false
   clan-size-based: true
+  claims-per-power: 2
   power-plus-per-kill: 2
   power-loss-per-death: 2
+  steal-only-when-players-online: true
   max-power: 10
   min-power: -10
   destroy-in-war: false

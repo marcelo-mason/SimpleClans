@@ -70,7 +70,7 @@ public class SCEntityListener implements Listener
                 //removes power
                 double minpower = plugin.getSettingsManager().getPowerLossPerDeath();
                 double min = plugin.getSettingsManager().getMinPower();
-                if ((vcp.getPower() - minpower) > min) {
+                if ((vcp.getPower() - minpower) < min) {
                     vcp.setPower(min);
                 } else {
                     vcp.lossPower(minpower);
@@ -167,14 +167,23 @@ public class SCEntityListener implements Listener
         if (plugin.getSettingsManager().isTamableMobsSharing()) {
             if (event.getRightClicked() instanceof Tameable) {
 
-                Entity entity = event.getRightClicked();
                 Player player = event.getPlayer();
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+                if (cp == null) {
+                    return;
+                }
+
+                Entity entity = event.getRightClicked();
+
                 Tameable tamed = (Tameable) entity;
 
-                if (tamed.isTamed() && ((Wolf) entity).isSitting()) {
-                    if (cp.getClan().isMember((Player) tamed.getOwner())) {
-                        tamed.setOwner(player);
+                if (tamed.isTamed()) {
+                    AnimalTamer owner = tamed.getOwner();
+                    if (owner != null) {
+                        if (cp.getClan().isMember((Player) owner)) {
+                            tamed.setOwner(player);
+                        }
                     }
                 }
             }

@@ -142,6 +142,7 @@ public final class SettingsManager
     private double powerPlusPerKill;
     private double powerLossPerDeath;
     private boolean destroyInWar;
+    private boolean onlyStealOthersOnline;
     private String header = "- SimpleClans Configuration -\nYou have to restart the server, if you want to enable claiming.\nDon't modify the 'worlds' section unless you know what you do!\nAutogrouping was removed! You can define permissions for leaders/trusted/untrusted and clans now directly here!";
 
     /**
@@ -287,6 +288,7 @@ public final class SettingsManager
         powerPlusPerKill = getConfig().getDouble("claiming.power-plus-per-kill");
         powerLossPerDeath = getConfig().getDouble("claiming.power-loss-per-death");
         destroyInWar = getConfig().getBoolean("claiming.destroy-in-war");
+        onlyStealOthersOnline = getConfig().getBoolean("claiming.steal-only-when-players-online");
 
         //Setup the worlds in the config.yml
         ConfigurationSection section;
@@ -318,6 +320,11 @@ public final class SettingsManager
     public boolean isAllowedDestroyInWar()
     {
         return destroyInWar;
+    }
+
+    public boolean isOnlyStealOthersOnline()
+    {
+        return onlyStealOthersOnline;
     }
 
     /**

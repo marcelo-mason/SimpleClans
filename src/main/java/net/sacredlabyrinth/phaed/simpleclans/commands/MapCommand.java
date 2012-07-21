@@ -190,13 +190,16 @@ public class MapCommand
 
         sb.append(ChatColor.GOLD);
         if (index == 0) {
+            sb.append(' ');
             sb.append(colorize(dir == BlockFace.NORTH_WEST, northwest));
             sb.append(colorize(dir == BlockFace.NORTH, north));
             sb.append(colorize(dir == BlockFace.NORTH_EAST, northeast));
         } else if (index == 1) {
+            sb.append(' ');
             sb.append(colorize(dir == BlockFace.WEST, west)).append(middle);
             sb.append(colorize(dir == BlockFace.EAST, east));
         } else if (index == 2) {
+            sb.append(' ');
             sb.append(colorize(dir == BlockFace.SOUTH_WEST, southwest));
             sb.append(colorize(dir == BlockFace.SOUTH, south));
             sb.append(colorize(dir == BlockFace.SOUTH_EAST, southeast));

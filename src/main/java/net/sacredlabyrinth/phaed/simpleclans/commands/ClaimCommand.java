@@ -57,7 +57,7 @@ public class ClaimCommand
                                             }
 
                                             clan.addClaimedChunk(chunk);
-                                            player.sendMessage(ChatColor.GRAY + MessageFormat.format(plugin.getLang("you.claimed"), allowed));
+                                            player.sendMessage(ChatColor.GRAY + MessageFormat.format(plugin.getLang("you.claimed"), allowed - clan.getClaimCount()));
                                             break;
                                         case FAILED:
                                             player.sendMessage(ChatColor.DARK_RED + plugin.getLang("transaction.failed"));
@@ -70,13 +70,20 @@ public class ClaimCommand
                             } else {
                                 if (clan.isWarring(clanhere)) {
                                     if (plugin.getSettingsManager().isPowerBased()) {
-                                        if (clanhere.getPower() * plugin.getSettingsManager().getClaimsPerPower() < clanhere.getAllowedClaims()) {
+                                        if (plugin.getSettingsManager().isOnlyStealOthersOnline() && clanhere.getOnlineMembers().isEmpty() ) {
+                                            player.sendMessage("In the opponent clan in nobody online!");
+                                            return;
+                                        }
+                                        if (clanhere.getClaimCount() > clanhere.getAllowedClaims()) {
                                             if (clanhere.removeClaimedChunk(chunk)) {
                                                 clan.addClaimedChunk(chunk);
+                                                clan.setHomeChunk(chunk);
                                                 player.sendMessage("you got the chunk from " + clanhere.getName());
                                             } else {
                                                 player.sendMessage("home chunk");
                                             }
+                                        } else {
+                                            player.sendMessage("other clan is strong enough");
                                         }
                                     } else {
                                         throw new UnsupportedOperationException("not yet");
@@ -104,7 +111,7 @@ public class ClaimCommand
                     Location loc = player.getLocation();
                     if (cp != null) {
                         Clan clan = cp.getClan();
-                        player.sendMessage("Allowed Claims: " + clan.getAllowedClaims());
+                        player.sendMessage("Allowed Claims: " + (clan.getAllowedClaims() - clan.getClaimCount()));
                     }
                     for (Clan clans : plugin.getClanManager().getClans()) {
                         if (clans.isClaimed(loc)) {
