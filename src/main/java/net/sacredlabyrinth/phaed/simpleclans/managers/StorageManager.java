@@ -5,6 +5,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
+import javax.management.StringValueExp;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
@@ -35,7 +36,11 @@ public final class StorageManager
             plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new SaveThread(), 20L, 6000L);
         }
     }
-    
+
+    /**
+     * AutoSave thread
+     *
+     */
     private class SaveThread implements Runnable
     {
         
@@ -45,7 +50,11 @@ public final class StorageManager
             saveClaims();
         }
     }
-    
+
+    /**
+     * Saves all claims to the db
+     *
+     */
     public void saveClaims()
     {
         for (Clan clan : plugin.getClanManager().getClans()) {
@@ -103,7 +112,7 @@ public final class StorageManager
                 if (!core.existsTable("sc_players")) {
                     SimpleClans.log("Creating table: sc_players");
                     
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20) NOT NULL auto_increment, `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, PRIMARY KEY  (`id`), UNIQUE KEY `uq_sc_players_1` (`name`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20) NOT NULL auto_increment, `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, `power` double(6,2), PRIMARY KEY  (`id`), UNIQUE KEY `uq_sc_players_1` (`name`));";
                     core.execute(query);
                 }
                 
@@ -146,7 +155,7 @@ public final class StorageManager
                 if (!core.existsTable("sc_players")) {
                     SimpleClans.log("Creating table: sc_players");
                     
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20), `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, PRIMARY KEY  (`id`), UNIQUE (`name`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20), `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, `power` double(6,2), PRIMARY KEY  (`id`), UNIQUE (`name`));";
                     core.execute(query);
                 }
                 
@@ -467,6 +476,7 @@ public final class StorageManager
                         long join_date = res.getLong("join_date");
                         String flags = res.getString("flags");
                         String packed_past_clans = Helper.parseColors(res.getString("packed_past_clans"));
+                        double power = res.getDouble("power");
                         
                         if (last_seen == 0) {
                             last_seen = (new Date()).getTime();
@@ -489,6 +499,7 @@ public final class StorageManager
                         cp.setJoinDate(join_date);
                         cp.setPackedPastClans(packed_past_clans);
                         cp.setTrusted(leader || trusted);
+                        cp.setPower(power);
                         
                         if (!tag.isEmpty()) {
                             Clan clan = plugin.getClanManager().getClan(tag);
@@ -606,7 +617,7 @@ public final class StorageManager
     public void updateClanPlayer(ClanPlayer cp)
     {
         cp.updateLastSeen();
-        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) + "', trusted = " + (cp.isTrusted() ? 1 : 0) + ", flags='" + Helper.escapeQuotes(cp.getFlags()) + "' WHERE name = '" + cp.getName() + "';";
+        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) + "', trusted = " + (cp.isTrusted() ? 1 : 0) + ", flags='" + Helper.escapeQuotes(cp.getFlags()) + "'," + Helper.escapeQuotes(String.valueOf(cp.getPower())) + " WHERE name = '" + cp.getName() + "';";
         core.update(query);
     }
 
@@ -866,9 +877,12 @@ public final class StorageManager
         //From 2.2.6.3 to 2.3
         if (!core.existsColumn("sc_clans", "balance")) {
             query = "ALTER TABLE sc_clans ADD COLUMN `balance` double(64,2);";
-            
         }
-        
+
+        //From to 2.4
+        if (!core.existsColumn("sc_players", "power")) {
+            query = "ALTER TABLE sc_players ADD COLUMN `power` double(6,2);";
+        }
         
         if (query != null) {
             core.execute(query);

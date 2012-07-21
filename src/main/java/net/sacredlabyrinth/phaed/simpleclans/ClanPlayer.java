@@ -54,6 +54,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean allSeeingEyeEnabled;
     private Label clanView;
     private PermissionAttachment permAttach = null;
+    private double power;
 
     /**
      *
@@ -118,6 +119,26 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public String getName()
     {
         return name;
+    }
+
+    public double getPower()
+    {
+        return power;
+    }
+
+    public void addPower(double power)
+    {
+        this.power += power;
+    }
+
+    public void lossPower(double power)
+    {
+        this.power -= power;
+    }
+
+    public void setPower(double power)
+    {
+        this.power = power;
     }
 
     public boolean usesSpout()
@@ -220,25 +241,25 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         this.name = name;
     }
 
-    /**
-     * Returns the power of the player
-     *
-     * @return
-     */
-    public int getPower()
-    {
-        int out = (neutralKills + civilianKills + rivalKills) - getDeaths();
-
-        if (out > 10) {
-            out = 10;
-        }
-
-        if (out < -10) {
-            out = -10;
-        }
-
-        return out;
-    }
+//    /**
+//     * Returns the power of the player
+//     *
+//     * @return
+//     */
+//    public int getPower()
+//    {
+//        int out = (neutralKills + civilianKills + rivalKills) - getDeaths();
+//
+//        if (out > 10) {
+//            out = 10;
+//        }
+//
+//        if (out < -10) {
+//            out = -10;
+//        }
+//
+//        return out;
+//    }
 
     /**
      * Whether this player is a leader or not

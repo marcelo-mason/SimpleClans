@@ -37,57 +37,57 @@ public class ClaimCommand
 
                         Location loc = player.getLocation();
 
-                        // if (clan.canClaim()) {
-                        ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
-                        Clan clanhere = plugin.getClanManager().getClanAt(loc);
-                        if (clanhere == null) {
-                            if (clan.isClaimedNear(loc.getWorld(), loc.getBlockX(), loc.getBlockZ())) {
-                                BankResult result = clan.withdraw(50, player);
+                        if (clan.canClaim()) {
+                            ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
+                            Clan clanhere = plugin.getClanManager().getClanAt(loc);
+                            if (clanhere == null) {
+                                if (clan.isClaimedNear(loc.getWorld(), loc.getBlockX(), loc.getBlockZ())) {
+                                    BankResult result = clan.withdraw(50, player);
 
-                                switch (result) {
-                                    case BANK_NOT_ENOUGH_MONEY:
-                                        player.sendMessage(ChatColor.AQUA + plugin.getLang("clan.bank.not.enough.money"));
-                                        break;
-                                    case SUCCESS_WITHDRAW:
-                                        int allowed = clan.getAllowedClaims();
+                                    switch (result) {
+                                        case BANK_NOT_ENOUGH_MONEY:
+                                            player.sendMessage(ChatColor.AQUA + plugin.getLang("clan.bank.not.enough.money"));
+                                            break;
+                                        case SUCCESS_WITHDRAW:
+                                            int allowed = clan.getAllowedClaims();
 
-                                        if (clan.getClaimCount() == 0) {
-                                            clan.setHomeChunk(chunk);
-                                            plugin.getStorageManager().updateClan(clan);
-                                        }
+                                            if (clan.getClaimCount() == 0) {
+                                                clan.setHomeChunk(chunk);
+                                                plugin.getStorageManager().updateClan(clan);
+                                            }
 
-                                        clan.addClaimedChunk(chunk);
-                                        player.sendMessage(ChatColor.GRAY + MessageFormat.format(plugin.getLang("you.claimed"), allowed));
-                                        break;
-                                    case FAILED:
-                                        player.sendMessage(ChatColor.DARK_RED + plugin.getLang("transaction.failed"));
-                                        break;
-                                }
-
-                            } else {
-                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("no.claim.near"));
-                            }
-                        } else {
-                            if (clan.isWarring(clanhere)) {
-                                if (plugin.getSettingsManager().isPowerBased()) {
-                                    if (clanhere.getPower() * plugin.getSettingsManager().getClaimsPerPower() < clanhere.getAllowedClaims()) {
-                                        if (clanhere.removeClaimedChunk(chunk)) {
                                             clan.addClaimedChunk(chunk);
-                                            player.sendMessage("you got the chunk from " + clanhere.getName());
-                                        } else {
-                                            player.sendMessage("home chunk");
+                                            player.sendMessage(ChatColor.GRAY + MessageFormat.format(plugin.getLang("you.claimed"), allowed));
+                                            break;
+                                        case FAILED:
+                                            player.sendMessage(ChatColor.DARK_RED + plugin.getLang("transaction.failed"));
+                                            break;
+                                    }
+
+                                } else {
+                                    player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("no.claim.near"));
+                                }
+                            } else {
+                                if (clan.isWarring(clanhere)) {
+                                    if (plugin.getSettingsManager().isPowerBased()) {
+                                        if (clanhere.getPower() * plugin.getSettingsManager().getClaimsPerPower() < clanhere.getAllowedClaims()) {
+                                            if (clanhere.removeClaimedChunk(chunk)) {
+                                                clan.addClaimedChunk(chunk);
+                                                player.sendMessage("you got the chunk from " + clanhere.getName());
+                                            } else {
+                                                player.sendMessage("home chunk");
+                                            }
                                         }
+                                    } else {
+                                        throw new UnsupportedOperationException("not yet");
                                     }
                                 } else {
-                                    throw new UnsupportedOperationException("not yet");
+                                    player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("already.claimed"));
                                 }
-                            } else {
-                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("already.claimed"));
                             }
+                        } else {
+                            player.sendMessage(ChatColor.DARK_RED + plugin.getLang("no.claims.left"));
                         }
-//                        } else {
-//                            player.sendMessage(ChatColor.DARK_RED + plugin.getLang("no.claims.left"));
-//                        }
                     } else {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
                     }

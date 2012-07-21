@@ -64,75 +64,100 @@ public class SCEntityListener implements Listener
                     }
                 }
             }
-
-            if (attacker != null && victim != null) {
-                ClanPlayer acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
+            if (victim != null) {
                 ClanPlayer vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
 
-                int strifemax = plugin.getSettingsManager().getStrifeLimit();
+                //removes power
+                double minpower = plugin.getSettingsManager().getPowerLossPerDeath();
+                double min = plugin.getSettingsManager().getMinPower();
+                if ((vcp.getPower() - minpower) > min) {
+                    vcp.setPower(min);
+                } else {
+                    vcp.lossPower(minpower);
+                }
 
-                if (plugin.getSettingsManager().isAutoWar()) {
-                    if (acp.getClan() != null && vcp.getClan() != null) {
-                        if (!acp.getClan().equals(vcp.getClan()) && !acp.getClan().isWarring(vcp.getClan()) && !vcp.getClan().isWarring(acp.getClan())) {
-                            plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), 1);
-                            if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= strifemax) {
-                                acp.getClan().addWarringClan(vcp.getClan());
-                                vcp.getClan().addWarringClan(acp.getClan());
-                                acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));
-                                vcp.getClan().addBb(vcp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(vcp.getClan().getName()), acp.getClan().getColorTag()));
-                                plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), -strifemax);
+                if (attacker != null) {
+                    ClanPlayer acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
+
+                    int strifemax = plugin.getSettingsManager().getStrifeLimit();
+
+                    if (plugin.getSettingsManager().isAutoWar()) {
+                        if (acp.getClan() != null && vcp.getClan() != null) {
+                            if (!acp.getClan().equals(vcp.getClan()) && !acp.getClan().isWarring(vcp.getClan()) && !vcp.getClan().isWarring(acp.getClan())) {
+                                plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), 1);
+                                if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= strifemax) {
+                                    acp.getClan().addWarringClan(vcp.getClan());
+                                    vcp.getClan().addWarringClan(acp.getClan());
+                                    acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));
+                                    vcp.getClan().addBb(vcp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(vcp.getClan().getName()), acp.getClan().getColorTag()));
+                                    plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), -strifemax);
+                                }
                             }
                         }
                     }
-                }
 
-                // record attacker kill
+                    // record attacker kill
 
-                // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
-                // if both have verified clans, check for rival or default to neutral
+                    // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
+                    // if both have verified clans, check for rival or default to neutral
 
-                double reward = 0;
-                double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
-                float kdr = acp.getKDR();
+                    double reward = 0;
+                    double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
+                    float kdr = acp.getKDR();
 
-                if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified()) {
-                    acp.addCivilianKill();
-                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
-                } else if (acp.getClan().isRival(vcp.getTag())) {
-                    if (acp.getClan().isWarring(vcp.getClan())) {
-                        reward = (double) kdr * multipier * 4;
+                    if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified()) {
+                        acp.addCivilianKill();
+                        plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
+                    } else if (acp.getClan().isRival(vcp.getTag())) {
+
+                        if (acp.getClan().isWarring(vcp.getClan())) {
+                            reward = (double) kdr * multipier * 4;
+                        } else {
+                            reward = (double) kdr * multipier * 2;
+                        }
+
+                        acp.addRivalKill();
+                        plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
+                    } else if (acp.getClan().isAlly(vcp.getTag())) {
+
+                        reward = (double) kdr * multipier * -1;
+                        acp.addNeutralKill();
+
+                        plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
                     } else {
-                        reward = (double) kdr * multipier * 2;
+                        reward = (double) kdr * multipier;
+                        acp.addNeutralKill();
+                        plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
                     }
-                    acp.addRivalKill();
-                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
-                } else if (acp.getClan().isAlly(vcp.getTag())) {
-                    reward = (double) kdr * multipier * -1;
-                    acp.addNeutralKill();
-                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
-                } else {
-                    reward = (double) kdr * multipier;
-                    acp.addNeutralKill();
-                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
-                }
 
-                if (reward != 0 && plugin.getSettingsManager().isMoneyPerKill()) {
-                    for (ClanPlayer cp : acp.getClan().getOnlineMembers()) {
-                        double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
-                        cp.toPlayer().sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), kdr));
-                        plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
+                    if (reward != 0 && plugin.getSettingsManager().isMoneyPerKill()) {
+                        for (ClanPlayer cp : acp.getClan().getOnlineMembers()) {
+                            double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
+                            cp.toPlayer().sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), kdr));
+                            plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
+                        }
                     }
-                }
 
-                // record death for victim
-                vcp.addDeath();
+                    //adds power
+                    double maxpower = plugin.getSettingsManager().getPowerPlusPerKill();
+                    double max = plugin.getSettingsManager().getMaxPower();
+                    if ((acp.getPower() + maxpower) > max) {
+                        acp.setPower(max);
+                    } else {
+                        acp.addPower(maxpower);
+                    }
+
+                    // record death for victim
+                    vcp.addDeath();
+
+                    plugin.getStorageManager().updateClanPlayer(acp);
+                }
                 plugin.getStorageManager().updateClanPlayer(vcp);
-                plugin.getStorageManager().updateClanPlayer(acp);
             }
         }
     }
 
-    @EventHandler(priority= EventPriority.LOW,ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEntityEvent event)
     {
         if (event.isCancelled()) {
@@ -156,7 +181,7 @@ public class SCEntityListener implements Listener
         }
     }
 
-    @EventHandler(priority= EventPriority.LOW,ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityTarget(EntityTargetLivingEntityEvent event)
     {
         if (plugin.getSettingsManager().isTamableMobsSharing()) {
@@ -173,7 +198,7 @@ public class SCEntityListener implements Listener
         }
     }
 
-    @EventHandler(priority= EventPriority.LOW,ignoreCancelled=true)
+    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event)
     {
         Player attacker = null;

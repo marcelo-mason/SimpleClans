@@ -55,8 +55,7 @@ public class StrifesCommand
                                 chatBlock.addRow("  " + clanTag, ChatColor.AQUA + "" + ordered.get(clanTag));
                             }
 
-                            ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + subColor + " " + plugin.getLang("strifes"
-                                    + "") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                            ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + subColor + " " + plugin.getLang("strifes") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                             ChatBlock.sendBlank(player);
 
                             boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

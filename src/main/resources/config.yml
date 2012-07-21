@@ -95,6 +95,11 @@ claiming:
   allowed-blocks: []
   power-based: false
   clan-size-based: true
+  power-plus-per-kill: 2
+  power-loss-per-death: 2
+  max-power: 10
+  min-power: -10
+  destroy-in-war: false
 clanchat:
     rank.color: e
     tag-based-clan-chat: false

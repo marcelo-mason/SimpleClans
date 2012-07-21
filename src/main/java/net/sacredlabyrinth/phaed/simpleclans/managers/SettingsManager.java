@@ -137,6 +137,11 @@ public final class SettingsManager
     private static Map<String, Integer> worlds = new HashMap<String, Integer>();
     private boolean permissionsEnabled;
     private int claimsPerPower;
+    private double maxPower;
+    private double minPower;
+    private double powerPlusPerKill;
+    private double powerLossPerDeath;
+    private boolean destroyInWar;
     private String header = "- SimpleClans Configuration -\nYou have to restart the server, if you want to enable claiming.\nDon't modify the 'worlds' section unless you know what you do!\nAutogrouping was removed! You can define permissions for leaders/trusted/untrusted and clans now directly here!";
 
     /**
@@ -277,7 +282,13 @@ public final class SettingsManager
         claimingSpoutFeatures = getConfig().getBoolean("claiming.spout-features");
         permissionsEnabled = getConfig().getBoolean("permissions.enabled");
         claimsPerPower = getConfig().getInt("claiming.claims-per-power");
+        maxPower = getConfig().getDouble("claiming.max-power");
+        minPower = getConfig().getDouble("claiming.min-power");
+        powerPlusPerKill = getConfig().getDouble("claiming.power-plus-per-kill");
+        powerLossPerDeath = getConfig().getDouble("claiming.power-loss-per-death");
+        destroyInWar = getConfig().getBoolean("claiming.destroy-in-war");
 
+        //Setup the worlds in the config.yml
         ConfigurationSection section;
 
         if (!config.isConfigurationSection("worlds")) {
@@ -304,21 +315,50 @@ public final class SettingsManager
         save();
     }
 
+    public boolean isAllowedDestroyInWar()
+    {
+        return destroyInWar;
+    }
+
+    /**
+     * Returns the permissions of a clan
+     *
+     * @param tag
+     * @return
+     */
     public Set<String> getClanPermissions(String tag)
     {
         return new HashSet<String>(config.getConfigurationSection("permissions.clans").getStringList(tag));
     }
 
+    /**
+     * Returns the defaut leader permissions
+     *
+     * @param tag
+     * @return
+     */
     public Set<String> getDefaultLeaderPermissions(String tag)
     {
         return new HashSet<String>(config.getStringList("permissions.defaultLeader"));
     }
 
+    /**
+     * Returns the default trusted permissions
+     *
+     * @param tag
+     * @return
+     */
     public Set<String> getDefaultTrustedPermissions(String tag)
     {
         return new HashSet<String>(config.getStringList("permissions.defaultTrusted"));
     }
 
+    /**
+     * Returns the default untrusted permissions
+     *
+     * @param tag
+     * @return
+     */
     public Set<String> getDefaultUnTrustedPermissions(String tag)
     {
         return new HashSet<String>(config.getStringList("permissions.defaultUnTrusted"));
@@ -329,36 +369,70 @@ public final class SettingsManager
         return claimsPerPower;
     }
 
+    /**
+     * Returns weather the permissions system is enabled
+     *
+     * @return
+     */
     public boolean isPermissionsEnabled()
     {
         return permissionsEnabled;
     }
 
+    /**
+     * Reloads the config
+     *
+     */
     public void reload()
     {
         plugin.reloadConfig();
     }
 
+    /**
+     * Saves the config
+     *
+     */
     public void save()
     {
         plugin.saveConfig();
     }
 
+    /**
+     * Returns weather the block is allowed to break
+     *
+     * @param type
+     * @return
+     */
     public boolean isClaimedBlockAllowed(Material type)
     {
         return claimingAllowedBlocks.contains(type.toString());
     }
 
+    /**
+     * Returns weather the spout features for claiming are enabled
+     *
+     * @return
+     */
     public boolean isClaimingSpoutFeatures()
     {
         return claimingSpoutFeatures;
     }
 
+    /**
+     * Returns weather the claiming system is power based
+     *
+     * @return
+     */
     public boolean isPowerBased()
     {
         return powerBased;
     }
 
+    /**
+     * Returns weather the claiming system is clan size based
+     *
+     * @return
+     */
     public boolean isClanSizeBased()
     {
         return clanSizeBased;
@@ -1361,5 +1435,37 @@ public final class SettingsManager
     public boolean isAutoWar()
     {
         return autoWar;
+    }
+
+    /**
+     * @return the maxPower
+     */
+    public double getMaxPower()
+    {
+        return maxPower;
+    }
+
+    /**
+     * @return the minPower
+     */
+    public double getMinPower()
+    {
+        return minPower;
+    }
+
+    /**
+     * @return the powerPlusPerKill
+     */
+    public double getPowerPlusPerKill()
+    {
+        return powerPlusPerKill;
+    }
+
+    /**
+     * @return the powerLossPerKill
+     */
+    public double getPowerLossPerDeath()
+    {
+        return powerLossPerDeath;
     }
 }

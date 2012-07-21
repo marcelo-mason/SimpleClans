@@ -76,6 +76,11 @@ public class SCClaimingListener implements Listener
         if (clanHere != null) {
 
             if (clan != null) {
+
+                if (plugin.getSettingsManager().isAllowedDestroyInWar() && clan.isWarring(clanHere)) {
+                    return;
+                }
+
                 if (clanHere.hasPermission(PermissionType.ALLOW_ALLY_BREAK) && clanHere.isAlly(clan.getTag())) {
                     //System.out.println("ALLOW_ALLY_BREAK");
                     return;
@@ -143,7 +148,9 @@ public class SCClaimingListener implements Listener
         Clan clanHere = plugin.getClanManager().getClanAt(loc);
 
         if (clanHere != null) {
-
+            if (plugin.getSettingsManager().isAllowedDestroyInWar() && clan.isWarring(clanHere)) {
+                return;
+            }
             if (clan != null) {
                 if (clanHere.hasPermission(PermissionType.ALLOW_ALLY_BUILD) && clanHere.isAlly(clan.getTag())) {
                     //System.out.println("ALLOW_ALLY_BUILD");
@@ -215,6 +222,11 @@ public class SCClaimingListener implements Listener
         if (clanHere != null) {
 
             if (clan != null) {
+
+                if (plugin.getSettingsManager().isAllowedDestroyInWar() && clan.isWarring(clanHere)) {
+                    return;
+                }
+
                 if (clanHere.hasPermission(PermissionType.ALLOW_ALLY_INTERACT) && clanHere.isAlly(clan.getTag())) {
                     //System.out.println("ALLOW_ALLY_INTERACT");
                     return;
@@ -297,11 +309,13 @@ public class SCClaimingListener implements Listener
     {
         SpoutPlayer sp = event.getPlayer();
         ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(sp.getName());
-
+        System.out.println(cp);
         if (cp != null) {
             Clan clan = cp.getClan();
+            System.out.println(clan);
             cp.setupClanView(sp);
             if (clan != null) {
+                System.out.println("Waypoint");
                 Location home = clan.getHomeChunkMiddle();
                 double x = home.getX();
                 double z = home.getZ();
