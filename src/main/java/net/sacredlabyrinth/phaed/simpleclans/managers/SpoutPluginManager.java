@@ -26,8 +26,9 @@ public final class SpoutPluginManager
     {
         this.plugin = plugin;
         hasSpout = checkSpout();
-
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateLocationInfo(), 20L, 40L);
+        if (isHasSpout() && plugin.getSettingsManager().isClaimingEnabled()) {
+            plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateLocationInfo(), 20L, 40L);
+        }
     }
 
     /**
@@ -46,33 +47,34 @@ public final class SpoutPluginManager
 
     private void sendInfo(SpoutPlayer sp, String text, float size, Color color, long duration)
     {
+        if (hasSpout) {
+            final Screen screen = sp.getMainScreen();
+            final Label info = new GenericLabel(text);
 
-        final Screen screen = sp.getMainScreen();
-        final Label info = new GenericLabel(text);
-
-        if (color != null) {
-            info.setTextColor(color);
-        }
-
-        info.setAlign(WidgetAnchor.CENTER_CENTER);
-        info.setAnchor(WidgetAnchor.CENTER_CENTER);
-        info.setScale(size);
-        info.setWidth(30);
-        info.setHeight(10);
-        info.shiftXPos(-15);
-        info.shiftYPos(-5);
-        info.animate(WidgetAnim.POS_Y, 1.2F, (short) duration, (short) 1, false, false).animateStart();
-        screen.attachWidget(plugin, info);
-
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                screen.removeWidget(info);
+            if (color != null) {
+                info.setTextColor(color);
             }
-        }, duration);
+
+            info.setAlign(WidgetAnchor.CENTER_CENTER);
+            info.setAnchor(WidgetAnchor.CENTER_CENTER);
+            info.setScale(size);
+            info.setWidth(30);
+            info.setHeight(10);
+            info.shiftXPos(-15);
+            info.shiftYPos(-5);
+            info.animate(WidgetAnim.POS_Y, 1.2F, (short) duration, (short) 1, false, false).animateStart();
+            screen.attachWidget(plugin, info);
+
+            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+            {
+
+                @Override
+                public void run()
+                {
+                    screen.removeWidget(info);
+                }
+            }, duration);
+        }
     }
 
     public void enterClanRegion(SpoutPlayer sp, String tag)
@@ -175,35 +177,35 @@ public final class SpoutPluginManager
         }
     }
 
-    public void showClanPlayers(Player player)
-    {
-        SpoutPlayer sp = getPlayer(player);
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
-        StringBuilder member = new StringBuilder();
-        List<ClanPlayer> members = cp.getClan().getOnlineMembers();
-
-        for (ClanPlayer cps : members) {
-            member.append(cps.getName()).append("\n");
-        }
-
-        Label memberlabel = new GenericLabel(member.toString());
-        memberlabel.setAutoDirty(true);
-        memberlabel.setX(0);
-        memberlabel.setY(0);
-
-        sp.getMainScreen().attachWidget(plugin, memberlabel);
-
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
-        {
-
-            @Override
-            public void run()
-            {
-                throw new UnsupportedOperationException("Not supported yet.");
-            }
-        }, 0L, 2000L);
-    }
+//    public void showClanPlayers(Player player)
+//    {
+//        SpoutPlayer sp = getPlayer(player);
+//        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+//
+//        StringBuilder member = new StringBuilder();
+//        List<ClanPlayer> members = cp.getClan().getOnlineMembers();
+//
+//        for (ClanPlayer cps : members) {
+//            member.append(cps.getName()).append("\n");
+//        }
+//
+//        Label memberlabel = new GenericLabel(member.toString());
+//        memberlabel.setAutoDirty(true);
+//        memberlabel.setX(0);
+//        memberlabel.setY(0);
+//
+//        sp.getMainScreen().attachWidget(plugin, memberlabel);
+//
+//        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+//        {
+//
+//            @Override
+//            public void run()
+//            {
+//                throw new UnsupportedOperationException("Not supported yet.");
+//            }
+//        }, 0L, 2000L);
+//    }
 
     /**
      * Clear a player's cape

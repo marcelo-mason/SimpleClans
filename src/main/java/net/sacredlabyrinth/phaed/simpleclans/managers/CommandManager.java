@@ -105,7 +105,7 @@ public final class CommandManager
         strifesCommand = new StrifesCommand();
 
         if (plugin.getSettingsManager().isClaimingEnabled()) {
-            claimCommand = new ClaimCommand();
+            claimCommand = new ClaimCommand(plugin);
             unclaimCommand = new UnClaimCommand();
             mapCommand = new MapCommand();
         }
