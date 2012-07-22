@@ -37,7 +37,7 @@ public class SCPlayerListener implements Listener
         if (event.isCancelled()) {
             return;
         }
-        
+
         plugin.getAutoUpdater().updateCmd(event);
 
         Player player = event.getPlayer();
@@ -327,7 +327,9 @@ public class SCPlayerListener implements Listener
             return;
         }
 
-        plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
+        if (plugin.hasSpout()) {
+            plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
+        }
     }
 
     @EventHandler

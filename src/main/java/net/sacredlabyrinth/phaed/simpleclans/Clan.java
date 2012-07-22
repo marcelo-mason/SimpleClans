@@ -1214,7 +1214,6 @@ public class Clan implements Serializable, Comparable<Clan>
 
         plugin.getStorageManager().updateClanPlayer(cp);
         plugin.getStorageManager().updateClan(this);
-        plugin.getSpoutPluginManager().processPlayer(cp.getName());
 
         // add clan permission
         plugin.getPermissionsManager().addClanPermissions(cp);
@@ -1224,6 +1223,7 @@ public class Clan implements Serializable, Comparable<Clan>
         plugin.getServer().getPluginManager().callEvent(new SimpleClansPlayerJoinEvent(cp, this));
 
         if (plugin.hasSpout()) {
+            plugin.getSpoutPluginManager().processPlayer(cp.getName());
             plugin.getSpoutPluginManager().setupClaimView(cp);
         }
 
@@ -1258,11 +1258,11 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (plugin.hasSpout()) {
             plugin.getSpoutPluginManager().removeClaimView(cp.toPlayer());
+            plugin.getSpoutPluginManager().processPlayer(cp.getName());
         }
 
         plugin.getStorageManager().updateClanPlayer(cp);
         plugin.getStorageManager().updateClan(this);
-        plugin.getSpoutPluginManager().processPlayer(cp.getName());
 
         plugin.getServer().getPluginManager().callEvent(new SimpleClansPlayerLeaveEvent(cp, this));
 
@@ -1574,7 +1574,9 @@ public class Clan implements Serializable, Comparable<Clan>
                 cp.setLeader(false);
 
                 plugin.getStorageManager().updateClanPlayer(cp);
-                plugin.getSpoutPluginManager().processPlayer(cp.getName());
+                if (plugin.hasSpout()) {
+                    plugin.getSpoutPluginManager().processPlayer(cp.getName());
+                }
             }
         }
 
