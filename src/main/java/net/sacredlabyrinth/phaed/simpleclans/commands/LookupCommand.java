@@ -84,7 +84,9 @@ public class LookupCommand
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("rank.0"), rank));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("status.0"), status));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("kdr.0"), kdr));
-                ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("power.0"), power));
+                if (plugin.getSettingsManager().isClaimingEnabled()) {
+                    ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("power.0"), power));
+                }
                 ChatBlock.sendMessage(player, "  " + subColor + plugin.getLang("kill.totals") + " " + headColor + "[" + plugin.getLang("rival") + ":" + rival + " " + headColor + "" + plugin.getLang("neutral") + ":" + neutral + " " + headColor + "" + plugin.getLang("civilian") + ":" + civilian + headColor + "]");
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("deaths.0"), deaths));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("join.date.0"), joinDate));

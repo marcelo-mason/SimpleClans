@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.beta.Command;
+import net.sacredlabyrinth.phaed.simpleclans.commands.Command;
 import org.bukkit.command.CommandSender;
 
 /**
@@ -55,40 +55,35 @@ public class BetaCommandManager
     {
 
         String[] arguments;
-        if (args.length < 1) {
+
+        //Build the args; if the args length is 0 then build if from the base command
+        if (args.length == 0) {
             arguments = new String[]{command.getName()};
         } else {
             arguments = args;
         }
 
 
+        //Iterate through all arguments from the last to the first argument
         for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {
             String identifier = "";
+            //Build the identifier string
             for (int i = 0; i < argsIncluded; i++) {
                 identifier += " " + arguments[i];
             }
 
+            //trim the last ' '
             identifier = identifier.trim();
             for (Command cmd : commands.values()) {
-                if (cmd.isIdentifier(sender, identifier)) {
+                if (cmd.isIdentifier(identifier)) {
                     String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
 
-                    if (!cmd.isInProgress(sender)) {
-                        if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
-                            displayCommandHelp(cmd, sender);
-                            return true;
-                        } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
-                            displayCommandHelp(cmd, sender);
-                            return true;
-                        }
-                    }
-
-                    String permission = cmd.getPermission();
-                    if (permission != null) {
-                        if (!sender.hasPermission(permission)) {
-                            sender.sendMessage("Insufficient permission.");
-                            return true;
-                        }
+                    if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
+                        displayCommandHelp(cmd, sender);
+                        return true;
+                    } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
+                        displayCommandHelp(cmd, sender);
+                        return true;
                     }
 
                     cmd.execute(sender, identifier, realArgs);
@@ -103,12 +98,6 @@ public class BetaCommandManager
     private void displayCommandHelp(Command cmd, CommandSender sender)
     {
         sender.sendMessage("§cCommand:§e " + cmd.getName());
-        sender.sendMessage("§cDescription:§e " + cmd.getDescription());
         sender.sendMessage("§cUsage:§e " + cmd.getUsage());
-        if (cmd.getNotes() != null) {
-            for (String note : cmd.getNotes()) {
-                sender.sendMessage("§e" + note);
-            }
-        }
     }
 }

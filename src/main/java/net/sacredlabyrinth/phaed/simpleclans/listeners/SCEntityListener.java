@@ -40,6 +40,7 @@ public class SCEntityListener implements Listener
     {
         if (event.getEntity() instanceof Player) {
             Player victim = (Player) event.getEntity();
+            boolean updateVictim = false;
 
             if (plugin.getSettingsManager().isBlacklistedWorld(victim.getLocation().getWorld().getName())) {
                 return;
@@ -68,12 +69,15 @@ public class SCEntityListener implements Listener
                 ClanPlayer vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
 
                 //removes power
-                double minpower = plugin.getSettingsManager().getPowerLossPerDeath();
-                double min = plugin.getSettingsManager().getMinPower();
-                if ((vcp.getPower() - minpower) < min) {
-                    vcp.setPower(min);
-                } else {
-                    vcp.lossPower(minpower);
+                if (plugin.getSettingsManager().isClaimingEnabled()) {
+                    double minpower = plugin.getSettingsManager().getPowerLossPerDeath();
+                    double min = plugin.getSettingsManager().getMinPower();
+                    if ((vcp.getPower() - minpower) < min) {
+                        vcp.setPower(min);
+                    } else {
+                        vcp.lossPower(minpower);
+                    }
+                    updateVictim = true;
                 }
 
                 if (attacker != null) {
@@ -139,20 +143,25 @@ public class SCEntityListener implements Listener
                     }
 
                     //adds power
-                    double maxpower = plugin.getSettingsManager().getPowerPlusPerKill();
-                    double max = plugin.getSettingsManager().getMaxPower();
-                    if ((acp.getPower() + maxpower) > max) {
-                        acp.setPower(max);
-                    } else {
-                        acp.addPower(maxpower);
+                    if (plugin.getSettingsManager().isClaimingEnabled()) {
+                        double maxpower = plugin.getSettingsManager().getPowerPlusPerKill();
+                        double max = plugin.getSettingsManager().getMaxPower();
+                        if ((acp.getPower() + maxpower) > max) {
+                            acp.setPower(max);
+                        } else {
+                            acp.addPower(maxpower);
+                        }
                     }
 
                     // record death for victim
                     vcp.addDeath();
+                    updateVictim = true;
 
                     plugin.getStorageManager().updateClanPlayer(acp);
                 }
-                plugin.getStorageManager().updateClanPlayer(vcp);
+                if (updateVictim) {
+                    plugin.getStorageManager().updateClanPlayer(vcp);
+                }
             }
         }
     }
@@ -160,9 +169,6 @@ public class SCEntityListener implements Listener
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEntityEvent event)
     {
-        if (event.isCancelled()) {
-            return;
-        }
 
         if (plugin.getSettingsManager().isTamableMobsSharing()) {
             if (event.getRightClicked() instanceof Tameable) {

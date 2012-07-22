@@ -1,9 +1,7 @@
-package net.sacredlabyrinth.phaed.simpleclans.beta;
+package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.util.ArrayList;
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.beta.BasicCommand;
-import net.sacredlabyrinth.phaed.simpleclans.beta.Command;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.command.CommandSender;
 
@@ -11,24 +9,23 @@ import org.bukkit.command.CommandSender;
  *
  * @author Max
  */
-public class HelpCommand extends BasicCommand
+public class HelpCommand extends GenericCommand
 {
 
-    private static final int CMDS_PER_PAGE = 4;
+    private static final int CMDS_PER_PAGE = 9;
     private SimpleClans plugin;
 
     public HelpCommand(SimpleClans plugin)
     {
         super("Help");
         this.plugin = plugin;
-        setDescription("Displays the help menu");
-        setUsage("/clan help §8[page#]");
+        setUsage(String.format("/%s help §8[page#]", plugin.getSettingsManager().getCommandClan()));
         setArgumentRange(0, 1);
-        setIdentifiers("clan", "help");
+        setIdentifiers(plugin.getSettingsManager().getCommandClan(), "help");
     }
 
     @Override
-    public boolean execute(CommandSender sender, String identifier, String[] args)
+    public void execute(CommandSender sender, String label, String[] args)
     {
         int page = 0;
         if (args.length != 0) {
@@ -43,11 +40,7 @@ public class HelpCommand extends BasicCommand
 
         // Build list of permitted commands
         for (Command command : sortCommands) {
-            if (command.isShownOnHelpMenu()) {
-                if (command.getPermission() == null || sender.hasPermission(command.getPermission())) {
-                    commands.add(command);
-                }
-            }
+            commands.add(command);
         }
 
         int numPages = commands.size() / CMDS_PER_PAGE;
@@ -58,7 +51,7 @@ public class HelpCommand extends BasicCommand
         if (page >= numPages || page < 0) {
             page = 0;
         }
-        sender.sendMessage("§c-----[ " + "§fDreamZ Help <" + (page + 1) + "/" + numPages + ">§c ]-----");
+        sender.sendMessage("§c-----[ " + plugin.getSettingsManager().getServerName() + " <" + (page + 1) + "/" + numPages + ">§c ]-----");
         int start = page * CMDS_PER_PAGE;
         int end = start + CMDS_PER_PAGE;
         if (end > commands.size()) {
@@ -68,9 +61,5 @@ public class HelpCommand extends BasicCommand
             Command cmd = commands.get(c);
             sender.sendMessage("   §b" + cmd.getUsage());
         }
-
- //       sender.sendMessage("§cFor more info on a particular command, type §f/<command> ?");
-
-        return true;
     }
 }
