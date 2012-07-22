@@ -1,23 +1,24 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.Plugin;
-import static org.getspout.spoutapi.SpoutManager.*;
+import static org.getspout.spoutapi.SpoutManager.getPlayer;
+import static org.getspout.spoutapi.SpoutManager.getSoundManager;
 import org.getspout.spoutapi.gui.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * @author phaed
  */
-public final class SpoutPluginManager
+public class SpoutPluginManager
 {
 
     private SimpleClans plugin;
-    private boolean hasSpout;
+    private Map<String, Label> claimViews = new HashMap<String, Label>();
 
     /**
      *
@@ -25,8 +26,8 @@ public final class SpoutPluginManager
     public SpoutPluginManager(SimpleClans plugin)
     {
         this.plugin = plugin;
-        hasSpout = checkSpout();
-        if (isHasSpout() && plugin.getSettingsManager().isClaimingEnabled()) {
+
+        if (plugin.getSettingsManager().isClaimingEnabled()) {
             plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateLocationInfo(), 20L, 40L);
         }
     }
@@ -36,45 +37,90 @@ public final class SpoutPluginManager
      */
     public void processAllPlayers()
     {
-        if (isHasSpout()) {
-            Player[] onlinePlayers = plugin.getServer().getOnlinePlayers();
 
-            for (Player player : onlinePlayers) {
-                processPlayer(player);
-            }
+        Player[] onlinePlayers = plugin.getServer().getOnlinePlayers();
+
+        for (Player player : onlinePlayers) {
+            processPlayer(player);
+        }
+
+    }
+
+    public final void setupClaimView(ClanPlayer cp)
+    {
+        setupClaimView(getPlayer(cp.toPlayer()));
+    }
+
+    public final void setupClaimView(SpoutPlayer sp)
+    {
+        String name = sp.getName();
+        if (!hasClaimView(name)) {
+            Screen screen = sp.getMainScreen();
+            Label claimView = new GenericLabel("");
+            claimView.setShadow(true).setAlign(WidgetAnchor.TOP_RIGHT);
+            claimView.setWidth(20).setHeight(10).setX(screen.getWidth() - claimView.getWidth() - 5).setY(5).setAutoDirty(true).setDirty(true);
+            claimViews.put(name, claimView);
+            screen.attachWidget(plugin, claimView);
         }
     }
 
-    private void sendInfo(SpoutPlayer sp, String text, float size, Color color, long duration)
+    public void removeClaimView(Player player)
     {
-        if (hasSpout) {
-            final Screen screen = sp.getMainScreen();
-            final Label info = new GenericLabel(text);
+        String name = player.getName();
+        if (hasClaimView(name)) {
 
-            if (color != null) {
-                info.setTextColor(color);
-            }
-
-            info.setAlign(WidgetAnchor.CENTER_CENTER);
-            info.setAnchor(WidgetAnchor.CENTER_CENTER);
-            info.setScale(size);
-            info.setWidth(30);
-            info.setHeight(10);
-            info.shiftXPos(-15);
-            info.shiftYPos(-5);
-            info.animate(WidgetAnim.POS_Y, 1.2F, (short) duration, (short) 1, false, false).animateStart();
-            screen.attachWidget(plugin, info);
-
-            plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
-            {
-
-                @Override
-                public void run()
-                {
-                    screen.removeWidget(info);
-                }
-            }, duration);
+            getPlayer(player).getMainScreen().removeWidget(getClaimView(name));
+            claimViews.remove(name);
         }
+    }
+
+    public void updateClaimView(String player, String text)
+    {
+        Label label = getClaimView(player);
+        if (hasClaimView(player) && !text.equals(label.getText())) {
+            label.setText(text);
+        }
+    }
+
+    public Label getClaimView(String player)
+    {
+        return claimViews.get(player);
+    }
+
+    public boolean hasClaimView(String player)
+    {
+        return claimViews.containsKey(player);
+    }
+
+    public void sendInfo(SpoutPlayer sp, String text, float size, Color color, long duration)
+    {
+        final Screen screen = sp.getMainScreen();
+        final Label info = new GenericLabel(text);
+
+        if (color != null) {
+            info.setTextColor(color);
+        }
+
+        info.setAlign(WidgetAnchor.CENTER_CENTER);
+        info.setAnchor(WidgetAnchor.CENTER_CENTER);
+        info.setScale(size);
+        info.setWidth(30);
+        info.setHeight(10);
+        info.shiftXPos(-15);
+        info.shiftYPos(-5);
+        info.animate(WidgetAnim.POS_Y, 1.2F, (short) duration, (short) 1, false, false).animateStart();
+        screen.attachWidget(plugin, info);
+
+        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+        {
+
+            @Override
+            public void run()
+            {
+                screen.removeWidget(info);
+            }
+        }, duration);
+
     }
 
     public void enterClanRegion(SpoutPlayer sp, String tag)
@@ -96,7 +142,7 @@ public final class SpoutPluginManager
             for (Player player : plugin.getServer().getOnlinePlayers()) {
                 ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-                if (cp == null || !cp.isClanViewSettedUp()) {
+                if (cp == null) {
                     return;
                 }
 
@@ -115,7 +161,7 @@ public final class SpoutPluginManager
                     }
                 }
 
-                cp.updateClanView(sb.toString());
+               updateClaimView(cp.getName(),sb.toString());
             }
         }
     }
@@ -127,12 +173,10 @@ public final class SpoutPluginManager
      */
     public void processPlayer(String playerName)
     {
-        if (isHasSpout()) {
-            Player player = Helper.matchOnePlayer(playerName);
+        Player player = Helper.matchOnePlayer(playerName);
 
-            if (player != null) {
-                processPlayer(player);
-            }
+        if (player != null) {
+            processPlayer(player);
         }
     }
 
@@ -143,35 +187,33 @@ public final class SpoutPluginManager
      */
     public void processPlayer(Player player)
     {
-        if (isHasSpout()) {
-            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-            if (cp != null && cp.getClan().isVerified()) {
-                Clan clan = cp.getClan();
+        if (cp != null && cp.getClan().isVerified()) {
+            Clan clan = cp.getClan();
 
-                SpoutPlayer sp = getPlayer(player);
+            SpoutPlayer sp = getPlayer(player);
 
-                if (plugin.getSettingsManager().isClanCapes()) {
-                    if (!clan.getCapeUrl().isEmpty()) {
-                        try {
-                            sp.setCape(clan.getCapeUrl());
-                        } catch (UnsupportedOperationException ex) {
-                            SimpleClans.debug("Failed at parsing the cape url for clan " + clan.getName() + " (" + ex.getMessage() + ")");
-                        }
-                    } else {
-                        if (plugin.getSettingsManager().getDefaultCapeUrl().toLowerCase().contains(".png")) {
-                            sp.setCape(plugin.getSettingsManager().getDefaultCapeUrl());
-                        }
+            if (plugin.getSettingsManager().isClanCapes()) {
+                if (!clan.getCapeUrl().isEmpty()) {
+                    try {
+                        sp.setCape(clan.getCapeUrl());
+                    } catch (UnsupportedOperationException ex) {
+                        SimpleClans.debug("Failed at parsing the cape url for clan " + clan.getName() + " (" + ex.getMessage() + ")");
+                    }
+                } else {
+                    if (plugin.getSettingsManager().getDefaultCapeUrl().toLowerCase().contains(".png")) {
+                        sp.setCape(plugin.getSettingsManager().getDefaultCapeUrl());
                     }
                 }
+            }
 
-                if (plugin.getSettingsManager().isInGameTags()) {
-                    if (player.isSneaking()) {
-                        sp.setTitle(player.getName());
-                    } else {
-                        String tag = plugin.getSettingsManager().isInGameTagsColored() ? (plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + clan.getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator()) : ChatColor.DARK_GRAY + plugin.getSettingsManager().getTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparator();
-                        sp.setTitle(tag + ChatColor.WHITE + player.getName());
-                    }
+            if (plugin.getSettingsManager().isInGameTags()) {
+                if (player.isSneaking()) {
+                    sp.setTitle(player.getName());
+                } else {
+                    String tag = plugin.getSettingsManager().isInGameTagsColored() ? (plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketLeft() + clan.getColorTag() + plugin.getSettingsManager().getTagBracketColor() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparatorColor() + plugin.getSettingsManager().getTagSeparator()) : ChatColor.DARK_GRAY + plugin.getSettingsManager().getTagBracketLeft() + clan.getTag() + plugin.getSettingsManager().getTagBracketRight() + plugin.getSettingsManager().getTagSeparator();
+                    sp.setTitle(tag + ChatColor.WHITE + player.getName());
                 }
             }
         }
@@ -206,7 +248,6 @@ public final class SpoutPluginManager
 //            }
 //        }, 0L, 2000L);
 //    }
-
     /**
      * Clear a player's cape
      *
@@ -214,13 +255,11 @@ public final class SpoutPluginManager
      */
     public void clearCape(Player player)
     {
-        if (isHasSpout()) {
-            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-            if (cp != null && cp.getClan().isVerified()) {
-                SpoutPlayer sp = getPlayer(player);
-                sp.setCape("");
-            }
+        if (cp != null && cp.getClan().isVerified()) {
+            SpoutPlayer sp = getPlayer(player);
+            sp.setCape("");
         }
     }
 
@@ -231,28 +270,7 @@ public final class SpoutPluginManager
      */
     public void playAlert(Player player)
     {
-        if (isHasSpout()) {
-            SpoutPlayer sp = getPlayerFromId(player.getEntityId());
-            getSoundManager().playCustomSoundEffect(plugin, sp, plugin.getSettingsManager().getAlertUrl(), true);
-        }
-    }
-
-    private boolean checkSpout()
-    {
-        Plugin test = plugin.getServer().getPluginManager().getPlugin("Spout");
-
-        if (test != null) {
-            SimpleClans.log(plugin.getLang("spout.features.enabled"));
-            return true;
-        }
-        return false;
-    }
-
-    /**
-     * @return the hasSpout
-     */
-    public boolean isHasSpout()
-    {
-        return hasSpout;
+        SpoutPlayer sp = getPlayer(player);
+        getSoundManager().playCustomSoundEffect(plugin, sp, plugin.getSettingsManager().getAlertUrl(), true);
     }
 }

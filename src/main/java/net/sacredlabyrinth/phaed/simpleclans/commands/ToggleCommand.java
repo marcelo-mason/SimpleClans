@@ -41,7 +41,9 @@ public class ToggleCommand
                         if (cp.isCapeEnabled()) {
                             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("capeoff"));
                             cp.setCapeEnabled(false);
-                            plugin.getSpoutPluginManager().clearCape(player);
+                            if (plugin.hasSpout()) {
+                                plugin.getSpoutPluginManager().clearCape(player);
+                            }
                         } else {
                             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("capeon"));
                             cp.setCapeEnabled(true);
@@ -132,17 +134,17 @@ public class ToggleCommand
             }
         }
 
-        if (cmd.equalsIgnoreCase("all-seeing-eye") || cmd.equalsIgnoreCase("ase")) {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye-toggle")) {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
-                if (cp != null) {
-                    cp.setAllSeeingEyeEnabled(!cp.isAllSeeingEyeEnabled());
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
-                }
-            }
-        }
+//        if (cmd.equalsIgnoreCase("all-seeing-eye") || cmd.equalsIgnoreCase("ase")) {
+//            if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye-toggle")) {
+//                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+//
+//                if (cp != null) {
+//                    cp.setAllSeeingEyeEnabled(!cp.isAllSeeingEyeEnabled());
+//                } else {
+//                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
+//                }
+//            }
+//        }
 
         if (cmd.equalsIgnoreCase("perms")) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.toggle.claim.perms")) {
@@ -213,7 +215,7 @@ public class ToggleCommand
                                 player.sendMessage(ChatColor.GREEN + types.getName());
                             }
                         }
-                        
+
                         player.sendMessage("Disabled:");
                         for (PermissionType types : PermissionType.values()) {
                             if (!clan.hasPermission(types)) {

@@ -21,6 +21,7 @@ public class HelpCommand extends GenericCommand
         this.plugin = plugin;
         setUsage(String.format("/%s help §8[page#]", plugin.getSettingsManager().getCommandClan()));
         setArgumentRange(0, 1);
+        setMenuName(null);
         setIdentifiers(plugin.getSettingsManager().getCommandClan(), "help");
     }
 

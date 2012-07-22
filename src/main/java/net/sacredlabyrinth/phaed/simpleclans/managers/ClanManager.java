@@ -82,7 +82,9 @@ public final class ClanManager
 
         plugin.getPermissionsManager().updateClanPermissions(clan);
 
-        plugin.getSpoutPluginManager().processPlayer(player.getName());
+        if (plugin.hasSpout()) {
+            plugin.getSpoutPluginManager().processPlayer(player.getName());
+        }
     }
 
     /**
@@ -1146,7 +1148,7 @@ public final class ClanManager
 
         for (Player player : players) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye")) {
-                if (plugin.getClanManager().getAnyClanPlayer(player.getName()) != null && plugin.getClanManager().getAnyClanPlayer(player.getName()).isAllSeeingEyeEnabled()) {
+                if (plugin.getClanManager().getAnyClanPlayer(player.getName()) != null) {
                     boolean alreadySent = false;
 
                     for (ClanPlayer cpp : cps) {

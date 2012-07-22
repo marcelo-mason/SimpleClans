@@ -105,7 +105,7 @@ public final class CommandManager
         strifesCommand = new StrifesCommand();
 
         if (plugin.getSettingsManager().isClaimingEnabled()) {
-            claimCommand = new ClaimCommand(plugin);
+            claimCommand = new ClaimCommand();
             unclaimCommand = new UnClaimCommand();
             mapCommand = new MapCommand();
         }
@@ -137,7 +137,7 @@ public final class CommandManager
                     createCommand.execute(player, subargs);
                 } else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command"))) {
                     listCommand.execute(player, subargs);
-                } else if (subcommand.equalsIgnoreCase("strifes")) {
+                } else if (subcommand.equalsIgnoreCase(plugin.getLang("strifes.command"))) {
                     strifesCommand.execute(player, subargs);
                 } else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command"))) {
                     bankCommand.execute(player, subargs);

@@ -24,6 +24,9 @@ public abstract class GenericCommand implements Command
     private int minArgs;
     private int maxArgs;
     private String[] identifiers;
+    private String menuName;
+    private boolean leaderOnly;
+    private String permission;
 
     public GenericCommand(String name)
     {
@@ -31,9 +34,45 @@ public abstract class GenericCommand implements Command
     }
 
     @Override
+    public void setPermission(String perm)
+    {
+        permission = perm;
+    }
+
+    @Override
+    public String getPermission()
+    {
+        return permission;
+    }
+
+    @Override
+    public boolean isLeaderOnly()
+    {
+        return leaderOnly;
+    }
+
+    @Override
+    public void setLeaderOnly()
+    {
+        leaderOnly = true;
+    }
+
+    @Override
     public String getName()
     {
         return name;
+    }
+
+    @Override
+    public void setMenuName(String name)
+    {
+        this.menuName = name;
+    }
+
+    @Override
+    public String getMenuName()
+    {
+        return menuName;
     }
 
     @Override

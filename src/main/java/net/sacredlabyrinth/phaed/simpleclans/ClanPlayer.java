@@ -10,12 +10,6 @@ import java.util.List;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
-import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.gui.GenericLabel;
-import org.getspout.spoutapi.gui.Label;
-import org.getspout.spoutapi.gui.Screen;
-import org.getspout.spoutapi.gui.WidgetAnchor;
-import org.getspout.spoutapi.player.SpoutPlayer;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
@@ -51,8 +45,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean tagEnabled = true;
     private boolean capeEnabled = true;
     private String rank = "";
-    private boolean allSeeingEyeEnabled;
-    private Label clanView;
     private PermissionAttachment permAttach = null;
     private double power;
 
@@ -141,41 +133,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         this.power = power;
     }
 
-    public boolean usesSpout()
-    {
-        return toSpoutPlayer().isSpoutCraftEnabled();
-    }
-
-    public final void setupClanView(SpoutPlayer sp)
-    {
-        Screen screen = sp.getMainScreen();
-        clanView = new GenericLabel("");
-        clanView.setShadow(true).setAlign(WidgetAnchor.TOP_RIGHT);
-        clanView.setWidth(20).setHeight(10).setX(screen.getWidth() - clanView.getWidth() - 5).setY(5).setAutoDirty(true).setDirty(true);
-
-        screen.attachWidget(plugin, clanView);
-    }
-
-    public void removeClanView()
-    {
-        if (clanView != null) {
-            toSpoutPlayer().getMainScreen().removeWidget(clanView);
-            clanView = null;
-        }
-    }
-
-    public void updateClanView(String text)
-    {
-        if (clanView != null && !text.equals(clanView.getText())) {
-            clanView.setText(text);
-        }
-    }
-
-    public boolean isClanViewSettedUp()
-    {
-        return clanView != null;
-    }
-
     public boolean isOnline()
     {
         return toPlayer() != null;
@@ -209,16 +166,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public void recalculatePermissions()
     {
         toPlayer().recalculatePermissions();
-    }
-
-    /**
-     * Returns the SpoutPlayer
-     *
-     * @return
-     */
-    public SpoutPlayer toSpoutPlayer()
-    {
-        return SpoutManager.getPlayer(toPlayer());
     }
 
     /**
@@ -260,7 +207,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 //
 //        return out;
 //    }
-
     /**
      * Whether this player is a leader or not
      *
@@ -968,22 +914,21 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         this.rank = rank;
     }
 
-    /**
-     * @return The toggle state of all-seeing-eye
-     */
-    public boolean isAllSeeingEyeEnabled()
-    {
-        return allSeeingEyeEnabled;
-    }
-
-    /**
-     * @param allSeeingEyeEnabled True or false
-     */
-    public void setAllSeeingEyeEnabled(boolean allSeeingEyeEnabled)
-    {
-        this.allSeeingEyeEnabled = allSeeingEyeEnabled;
-    }
-
+//    /**
+//     * @return The toggle state of all-seeing-eye
+//     */
+//    public boolean isAllSeeingEyeEnabled()
+//    {
+//        return allSeeingEyeEnabled;
+//    }
+//
+//    /**
+//     * @param allSeeingEyeEnabled True or false
+//     */
+//    public void setAllSeeingEyeEnabled(boolean allSeeingEyeEnabled)
+//    {
+//        this.allSeeingEyeEnabled = allSeeingEyeEnabled;
+//    }
     public enum Channel
     {
 

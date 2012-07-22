@@ -52,23 +52,24 @@ public class MapCommand
         if (cp != null) {
 
             Clan clan = cp.getClan();
+            if (plugin.getPermissionsManager().has(player, "simpleclans.claim.map")) {
+                if (arg.length == 0) {
 
-            if (arg.length == 0) {
-                if (plugin.getPermissionsManager().has(player, "simpleclans.claim.map")) {
                     player.sendMessage(getMap(player.getLocation(), clan));
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
-                }
-            } else if (arg.length == 1) {
-                if (arg[0].equalsIgnoreCase("auto")) {
-                    if (senderThread.toggle(player.getName())) {
-                        player.sendMessage("Auto");
-                    } else {
-                        player.sendMessage("remove");
+
+                } else if (arg.length == 1) {
+                    if (arg[0].equalsIgnoreCase("auto")) {
+                        if (senderThread.toggle(player.getName())) {
+                            player.sendMessage(ChatColor.GRAY + plugin.getLang("map.enable"));
+                        } else {
+                            player.sendMessage(ChatColor.GRAY + plugin.getLang("map.disable"));
+                        }
                     }
+                } else {
+                    player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.map"), plugin.getSettingsManager().getCommandClan()));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.map"), plugin.getSettingsManager().getCommandClan()));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
         } else {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));

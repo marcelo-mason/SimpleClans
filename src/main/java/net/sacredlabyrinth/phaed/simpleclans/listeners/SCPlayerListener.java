@@ -13,6 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
+import org.getspout.spoutapi.SpoutManager;
 
 /**
  * @author phaed
@@ -256,17 +257,14 @@ public class SCPlayerListener implements Listener
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
         if (cp != null) {
-            ChunkLocation chunk = cp.getClan().getHomeChunk();
-            World world = chunk.getNormalWorld();
+            Location loc = cp.getClan().getHomeChunkMiddle();
+            World world = loc.getWorld();
 
             if (!world.equals(player.getWorld())) {
                 return;
             }
 
-            int x = chunk.getNormalX();
-            int z = chunk.getNormalZ();
-
-            cp.toSpoutPlayer().addWaypoint("Homeblock", x, chunk.getNormalWorld().getHighestBlockYAt(x, z), z);
+            SpoutManager.getPlayer(player).addWaypoint("Homeblock", loc.getX(), loc.getY(), loc.getX());
         }
     }
 

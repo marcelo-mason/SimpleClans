@@ -280,14 +280,14 @@ public class SCClaimingListener implements Listener
         if (clanTo != null) {
             if (clanFrom != null) {
                 if (!clanFrom.equals(clanTo)) {
-                    if (sp.isSpoutCraftEnabled()) {
+                    if (plugin.hasSpout() && sp.isSpoutCraftEnabled()) {
                         plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
                     } else {
                         sp.sendMessage(ChatColor.GRAY + clanTo.getTag());
                     }
                 }
             } else {
-                if (sp.isSpoutCraftEnabled()) {
+                if (plugin.hasSpout() && sp.isSpoutCraftEnabled()) {
                     plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
                 } else {
                     sp.sendMessage(ChatColor.GRAY + clanTo.getTag());
@@ -295,7 +295,7 @@ public class SCClaimingListener implements Listener
             }
         } else {
             if (clanFrom != null) {
-                if (sp.isSpoutCraftEnabled()) {
+                if (plugin.hasSpout() && sp.isSpoutCraftEnabled()) {
                     plugin.getSpoutPluginManager().leaveClanRegion(sp);
                 } else {
                     sp.sendMessage(ChatColor.DARK_GREEN + plugin.getLang("wilderness"));
@@ -313,7 +313,7 @@ public class SCClaimingListener implements Listener
         if (cp != null) {
             Clan clan = cp.getClan();
             System.out.println(clan);
-            cp.setupClanView(sp);
+            plugin.getSpoutPluginManager().setupClaimView(sp);
             if (clan != null) {
                 System.out.println("Waypoint");
                 Location home = clan.getHomeChunkMiddle();

@@ -12,6 +12,7 @@ import net.sacredlabyrinth.phaed.simpleclans.listeners.SCClaimingListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
+import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -33,6 +34,7 @@ public class SimpleClans extends JavaPlugin
     private ResourceBundle lang;
     private BetaCommandManager betaCommandManager;
     private AutoUpdate autoUpdate;
+    private boolean spout;
 
     /**
      * @return the logger
@@ -78,11 +80,15 @@ public class SimpleClans extends JavaPlugin
         instance = this;
         settingsManager = new SettingsManager();
 
+        spout = checkSpout();
+
         lang = PropertyResourceBundle.getBundle("languages.lang");
 
-        logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
+        debug(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
-        spoutPluginManager = new SpoutPluginManager(this);
+        if (hasSpout()) {
+            spoutPluginManager = new SpoutPluginManager(this);
+        }
         permissionsManager = new PermissionsManager(this);
         requestManager = new RequestManager(this);
         clanManager = new ClanManager(this);
@@ -96,16 +102,13 @@ public class SimpleClans extends JavaPlugin
             debug(null, ex);
         }
 
-        SCPlayerListener playerListener = new SCPlayerListener(this);
-        SCEntityListener entityListener = new SCEntityListener(this);
-
         if (settingsManager.isClaimingEnabled()) {
             SCClaimingListener claimingListener = new SCClaimingListener(this);
             getServer().getPluginManager().registerEvents(claimingListener, this);
         }
 
-        getServer().getPluginManager().registerEvents(entityListener, this);
-        getServer().getPluginManager().registerEvents(playerListener, this);
+        getServer().getPluginManager().registerEvents(new SCEntityListener(this), this);
+        getServer().getPluginManager().registerEvents(new SCPlayerListener(this), this);
 
         spoutPluginManager.processAllPlayers();
 
@@ -177,6 +180,22 @@ public class SimpleClans extends JavaPlugin
         } catch (IOException e) {
             log(e.getMessage());
         }
+    }
+
+    private boolean checkSpout()
+    {
+        Plugin test = getServer().getPluginManager().getPlugin("Spout");
+
+        if (test != null) {
+            SimpleClans.debug(getLang("spout.features.enabled"));
+            return true;
+        }
+        return false;
+    }
+
+    public boolean hasSpout()
+    {
+        return spout;
     }
 
     /**

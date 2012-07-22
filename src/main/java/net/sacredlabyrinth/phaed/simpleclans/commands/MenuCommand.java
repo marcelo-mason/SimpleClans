@@ -1,12 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import java.text.MessageFormat;
 import java.util.LinkedList;
 import java.util.List;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /**
  * @author phaed
@@ -150,14 +149,14 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.modtag.tag.1.modify.the.clan.s.tag"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, "simpleclans.leader.cape"))
+        if (isVerified && isLeader && plugin.hasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, "simpleclans.leader.cape"))
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.cape.url.1.change.your.clan.s.cape"), clanCommand, ChatColor.WHITE));
         }
 
         String toggles = "";
 
-        if (isVerified && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, " simpleclans.member.cape-toggle"))
+        if (isVerified && plugin.hasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, " simpleclans.member.cape-toggle"))
         {
             toggles += "cape/";
         }
@@ -168,6 +167,11 @@ public class MenuCommand
         }
 
         if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle"))
+        {
+            toggles += "tag/";
+        }
+        
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle"))
         {
             toggles += "tag/";
         }
@@ -221,6 +225,23 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.resign.1.resign.from.the.clan"), clanCommand, ChatColor.WHITE));
         }
+        if (plugin.getPermissionsManager().has(player, "simpleclans.member.strifes"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("usage.menu.strifes"), clanCommand, ChatColor.WHITE));
+        }
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.claim"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("usage.menu.claim"), clanCommand, ChatColor.WHITE));
+        }
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.claim.unclaim"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("usage.menu.unclaim"), clanCommand, ChatColor.WHITE));
+        }
+        if (plugin.getPermissionsManager().has(player, "simpleclans.claim.map"))
+        {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("usage.menu.map"), clanCommand, ChatColor.WHITE));
+        }
+
 
         for (String item : menuItems)
         {
@@ -251,6 +272,7 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.reload.1.reload.configuration"), clanCommand, ChatColor.WHITE));
         }
+        
         if (chatBlock.isEmpty())
         {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));

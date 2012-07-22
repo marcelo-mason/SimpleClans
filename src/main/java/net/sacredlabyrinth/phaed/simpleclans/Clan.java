@@ -1223,8 +1223,8 @@ public class Clan implements Serializable, Comparable<Clan>
 
         plugin.getServer().getPluginManager().callEvent(new SimpleClansPlayerJoinEvent(cp, this));
 
-        if (!cp.isClanViewSettedUp()) {
-            cp.setupClanView(cp.toSpoutPlayer());
+        if (plugin.hasSpout()) {
+            plugin.getSpoutPluginManager().setupClaimView(cp);
         }
 
         Player player = Helper.matchOnePlayer(cp.getName());
@@ -1256,8 +1256,8 @@ public class Clan implements Serializable, Comparable<Clan>
         cp.setJoinDate(0);
         removeMember(playerName);
 
-        if (cp.isClanViewSettedUp()) {
-            cp.removeClanView();
+        if (plugin.hasSpout()) {
+            plugin.getSpoutPluginManager().removeClaimView(cp.toPlayer());
         }
 
         plugin.getStorageManager().updateClanPlayer(cp);
@@ -1715,6 +1715,12 @@ public class Clan implements Serializable, Comparable<Clan>
             json.put("homeChunkZ", homeChunk.getZ());
             json.put("homeChunkWorld", homeChunk.getWorld());
         }
+        if (allowWithdraw) {
+            json.put("withdraw", 1);
+        }
+        if (!allowDeposit) {
+            json.put("deposit", 0);
+        }
         json.put("perms", perms);
         return json.toString();
     }
@@ -1758,6 +1764,14 @@ public class Clan implements Serializable, Comparable<Clan>
                                     permissions.add(Byte.valueOf(perm.toString()));
                                 }
                             }
+                        }
+
+                        if (flag.equals("deposit")) {
+                            allowDeposit = ((Long) flags.get(flag)).intValue() == 0 ? false : true;
+                        }
+
+                        if (flag.equals("withdraw")) {
+                            allowWithdraw = ((Long) flags.get(flag)).intValue() == 0 ? false : true;
                         }
 
                         if (flag.equals("homeX")) {
