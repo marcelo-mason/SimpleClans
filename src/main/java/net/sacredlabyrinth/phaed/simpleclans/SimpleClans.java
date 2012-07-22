@@ -110,7 +110,9 @@ public class SimpleClans extends JavaPlugin
         getServer().getPluginManager().registerEvents(new SCEntityListener(this), this);
         getServer().getPluginManager().registerEvents(new SCPlayerListener(this), this);
 
-        spoutPluginManager.processAllPlayers();
+        if (hasSpout()) {
+            spoutPluginManager.processAllPlayers();
+        }
 
         setupMetrics();
         //setupBetaCommandManager();
