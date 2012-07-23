@@ -29,7 +29,7 @@ public class HomeCommand
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (arg.length == 2 && arg[0].equalsIgnoreCase("set") && plugin.getPermissionsManager().has(player, "simpleclans.mod.home"))
+        if (arg.length == 2 && arg[0].equalsIgnoreCase(plugin.getLang("home.command.set")) && plugin.getPermissionsManager().has(player, "simpleclans.mod.home"))
         {
             if (plugin.getClanManager().purchaseHomeTeleportSet(player))
             {

@@ -939,6 +939,6 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
     public Player toPlayer()
     {
-        return plugin.getServer().getPlayer(this.name);
+        return plugin.getServer().getPlayerExact(this.name);
     }
 }

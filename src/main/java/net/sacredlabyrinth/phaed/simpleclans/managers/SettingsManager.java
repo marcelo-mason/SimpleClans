@@ -121,12 +121,10 @@ public final class SettingsManager
     private boolean compatMode;
     private boolean homebaseSetOnce;
     private int waitSecs;
-    private boolean enableAutoGroups;
     private boolean moneyperkill;
     private double KDRMultipliesPerKill;
     private boolean teleportBlocks;
     private boolean AutoGroupGroupName;
-    private boolean tamableMobsSharing;
     private int strifeLimit;
     private boolean autoWar;
     private boolean claimingEnabled;
@@ -171,7 +169,6 @@ public final class SettingsManager
         debugging = getConfig().getBoolean("settings.show-debug-info");
         mChatIntegration = getConfig().getBoolean("settings.mchat-integration");
         pvpOnlywhileInWar = getConfig().getBoolean("settings.pvp-only-while-at-war");
-        enableAutoGroups = getConfig().getBoolean("settings.enable-auto-groups");
         useColorCodeFromPrefix = getConfig().getBoolean("settings.use-colorcode-from-prefix-for-name");
         bannedPlayers = getConfig().getStringList("settings.banned-players");
         compatMode = getConfig().getBoolean("settings.chat-compatibility-mode");
@@ -273,7 +270,6 @@ public final class SettingsManager
         KDRMultipliesPerKill = getConfig().getDouble("economy.money-per-kill-kdr-multipier");
         teleportBlocks = getConfig().getBoolean("settings.teleport-blocks");
         AutoGroupGroupName = getConfig().getBoolean("permissions.auto-group-groupname");
-        tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         strifeLimit = getConfig().getInt("war.strife-limit");
         autoWar = getConfig().getBoolean("war.auto-war-start");
         claimingEnabled = getConfig().getBoolean("claiming.enabled");
@@ -1298,11 +1294,6 @@ public final class SettingsManager
         this.waitSecs = waitSecs;
     }
 
-    public boolean isEnableAutoGroups()
-    {
-        return enableAutoGroups;
-    }
-
     public boolean isPvpOnlywhileInWar()
     {
         return pvpOnlywhileInWar;
@@ -1418,14 +1409,6 @@ public final class SettingsManager
     public boolean isAutoGroupGroupName()
     {
         return AutoGroupGroupName;
-    }
-
-    /**
-     * @return the tamableMobsSharing
-     */
-    public boolean isTamableMobsSharing()
-    {
-        return tamableMobsSharing;
     }
 
     /**

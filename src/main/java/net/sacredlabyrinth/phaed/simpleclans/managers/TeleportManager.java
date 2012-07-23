@@ -96,7 +96,7 @@ public final class TeleportManager
             }
             catch (Exception ex)
             {
-                Helper.dumpStackTrace();
+                SimpleClans.debug(null, ex);
             }
         }
     }

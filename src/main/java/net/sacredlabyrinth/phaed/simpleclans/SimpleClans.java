@@ -234,6 +234,8 @@ public class SimpleClans extends JavaPlugin
     }
 
     /**
+     * Retruns the SpoutManager of if spout isnt installed null
+     * 
      * @return the spoutManager
      */
     public SpoutPluginManager getSpoutPluginManager()

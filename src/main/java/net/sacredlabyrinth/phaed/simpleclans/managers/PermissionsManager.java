@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 import in.mDev.MiracleM4n.mChatSuite.api.API;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import java.util.Set;
+import java.util.logging.Level;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -41,10 +42,10 @@ public final class PermissionsManager
         this.plugin = plugin;
         detectPreciousStones();
         detectMChat();
-
+        
         try {
             Class.forName("net.milkbowl.vault.permission.Permission");
-
+            
             setupChat();
             setupEconomy();
             setupPermissions();
@@ -53,7 +54,7 @@ public final class PermissionsManager
             //no need to spam everyone who doesnt use vault
         }
     }
-
+    
     public mChatSuite getMChat()
     {
         return mchat;
@@ -85,7 +86,7 @@ public final class PermissionsManager
             }
         }
     }
-
+    
     public void updatePlayerPermissions(ClanPlayer cp)
     {
         cp.removePermissionAttachment();
@@ -105,7 +106,7 @@ public final class PermissionsManager
                 if (clan != null) {
                     String tag = clan.getTag();
                     Set<String> clanPermissions = plugin.getSettingsManager().getClanPermissions(tag);
-
+                    
                     if (clanPermissions == null) {
                         return;
                     }
@@ -117,34 +118,34 @@ public final class PermissionsManager
                     for (String perm : clanPermissions) {
                         cp.addPermission(perm);
                     }
-
+                    
                     if (cp.isLeader()) {
                         Set<String> defaultleaderpermissions = plugin.getSettingsManager().getDefaultLeaderPermissions(tag);
-
+                        
                         for (String perm : defaultleaderpermissions) {
                             cp.addPermission(perm);
                         }
                     }
-
+                    
                     if (cp.isTrusted()) {
                         Set<String> defaultTrustedPermissions = plugin.getSettingsManager().getDefaultTrustedPermissions(tag);
-
+                        
                         for (String perm : defaultTrustedPermissions) {
                             cp.addPermission(perm);
                         }
                     } else if (!cp.isTrusted()) {
                         
                         Set<String> defaultUnTrustedPermissions = plugin.getSettingsManager().getDefaultUnTrustedPermissions(tag);
-
+                        
                         for (String perm : defaultUnTrustedPermissions) {
                             cp.addPermission(perm);
                         }
                     }
-
+                    
                     if (plugin.getSettingsManager().isAutoGroupGroupName()) {
                         cp.addPermission("group." + tag);
                     }
-
+                    
                     cp.recalculatePermissions();
                 }
             }
@@ -249,7 +250,7 @@ public final class PermissionsManager
         if (player == null) {
             return false;
         }
-
+        
         if (permission != null) {
             return permission.has(player, perm);
         } else {
@@ -267,7 +268,7 @@ public final class PermissionsManager
     {
         if (mchat != null) {
             API api = mchat.getAPI();
-
+            
             api.addPlayerVar(player.getName(), "clan", value);
         }
     }
@@ -281,7 +282,7 @@ public final class PermissionsManager
     {
         if (mchat != null) {
             API api = mchat.getAPI();
-
+            
             api.addPlayerVar(player.getName(), "clan", "");
         }
     }
@@ -362,7 +363,6 @@ public final class PermissionsManager
 //            }
 //        }
 //    }
-
     /**
      * Whether a player is allowed in the area
      *
@@ -374,37 +374,44 @@ public final class PermissionsManager
     {
         if (ps != null) {
             Field field = ps.getForceFieldManager().getSourceField(location, FieldFlag.PREVENT_TELEPORT);
-
+            
             if (field != null) {
                 boolean allowed = ps.getForceFieldManager().isApplyToAllowed(field, player.getName());
-
+                
                 if (!allowed || field.hasFlag(FieldFlag.APPLY_TO_ALL)) {
                     return false;
                 }
             }
         }
-
+        
         return true;
     }
-
+    
     private void detectPreciousStones()
     {
         Plugin plug = plugin.getServer().getPluginManager().getPlugin("PreciousStones");
-
+        
         if (plug != null) {
             ps = ((PreciousStones) plug);
         }
     }
-
+    
     private void detectMChat()
     {
         Plugin test = plugin.getServer().getPluginManager().getPlugin("mChatSuite");
-
+        
         if (test != null) {
+            try {
+                int build = Integer.parseInt(test.getDescription().getVersion().substring(7, 10));
+                if (build < 262) {
+                    SimpleClans.debug(Level.WARNING, "Please update mChatSuite to support the integration with it!");
+                }
+            } catch (Exception ex) {
+            }
             mchat = (mChatSuite) test;
         }
     }
-
+    
     private Boolean setupPermissions()
     {
         RegisteredServiceProvider<Permission> permissionProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.permission.Permission.class);
@@ -413,7 +420,7 @@ public final class PermissionsManager
         }
         return (permission != null);
     }
-
+    
     private boolean setupChat()
     {
         RegisteredServiceProvider<Chat> rsp = plugin.getServer().getServicesManager().getRegistration(Chat.class);
@@ -422,21 +429,21 @@ public final class PermissionsManager
         }
         return chat != null;
     }
-
+    
     private Boolean setupEconomy()
     {
         RegisteredServiceProvider<Economy> economyProvider = plugin.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null) {
             economy = economyProvider.getProvider();
         }
-
+        
         return (economy != null);
     }
-
+    
     public String getPrefix(Player p)
     {
         String out = "";
-
+        
         try {
             if (chat != null) {
                 out = chat.getPlayerPrefix(p);
@@ -444,7 +451,7 @@ public final class PermissionsManager
         } catch (Exception ex) {
             // yea vault kinda sucks like that
         }
-
+        
         if (permission != null && chat != null) {
             //try {
             String world = p.getWorld().getName();
@@ -457,16 +464,16 @@ public final class PermissionsManager
                     prefix = "";
                 }
             }
-
+            
             out = prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
             //} catch (Exception e) {
 
             //}
         }
-
+        
         return out;
     }
-
+    
     public String getSuffix(Player p)
     {
         try {
@@ -476,20 +483,20 @@ public final class PermissionsManager
         } catch (Exception ex) {
             // yea vault kinda sucks like that
         }
-
+        
         if (permission != null && chat != null) {
 //            try {
-                String world = p.getWorld().getName();
-                String name = p.getName();
-                String suffix = chat.getPlayerSuffix(world, name);
-                if (suffix == null || suffix.isEmpty()) {
-                    String group = permission.getPrimaryGroup(world, name);
-                    suffix = chat.getPlayerSuffix(world, group);
-                    if (suffix == null) {
-                        suffix = "";
-                    }
+            String world = p.getWorld().getName();
+            String name = p.getName();
+            String suffix = chat.getPlayerSuffix(world, name);
+            if (suffix == null || suffix.isEmpty()) {
+                String group = permission.getPrimaryGroup(world, name);
+                suffix = chat.getPlayerSuffix(world, group);
+                if (suffix == null) {
+                    suffix = "";
                 }
-                return suffix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
+            }
+            return suffix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
 //            } catch (Exception e) {
 //                System.out.println(e.getMessage());
 //                return "";
