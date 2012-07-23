@@ -14,11 +14,12 @@ package net.sacredlabyrinth.phaed.simpleclans.results;
  *
  * @author Max
  */
-public enum ClaimResult
+public enum BankResult
 {
 
-    SUCCESS,
-    ALREADY_OWN,
-    ALREADY_OTHER,
-    NO_CLAIM_NEAR;
+    PLAYER_NOT_ENOUGH_MONEY,
+    BANK_NOT_ENOUGH_MONEY,
+    SUCCESS_WITHDRAW,
+    SUCCESS_DEPOSIT,
+    FAILED;
 }

@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansClanCreateEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -81,6 +82,8 @@ public final class ClanManager
         plugin.getStorageManager().updateClanPlayer(cp);
 
         plugin.getPermissionsManager().updateClanPermissions(clan);
+        
+        plugin.getServer().getPluginManager().callEvent(new SimpleClansClanCreateEvent(cp, clan));
 
         if (plugin.hasSpout()) {
             plugin.getSpoutPluginManager().processPlayer(player.getName());

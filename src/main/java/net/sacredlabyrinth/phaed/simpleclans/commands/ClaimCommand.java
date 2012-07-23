@@ -2,6 +2,8 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansChunkClaimEvent;
+import net.sacredlabyrinth.phaed.simpleclans.results.BankResult;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -40,8 +42,9 @@ public class ClaimCommand
                         if (clan.canClaim()) {
                             ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
                             Clan clanhere = plugin.getClanManager().getClanAt(loc);
-                            if (clanhere == null) {
-                                if (clan.isClaimedNear(loc.getWorld(), loc.getBlockX(), loc.getBlockZ())) {
+                            switch (clan.canClaim(chunk)) {
+                                case SUCCESS:
+
                                     BankResult result = clan.withdraw(50, player);
 
                                     switch (result) {
@@ -49,13 +52,13 @@ public class ClaimCommand
                                             player.sendMessage(ChatColor.AQUA + plugin.getLang("clan.bank.not.enough.money"));
                                             break;
                                         case SUCCESS_WITHDRAW:
-                                            int allowed = clan.getAllowedClaims();
+                                            int allowed = clan.getAllowedClaims() - clan.getClaimCount();
 
                                             if (clan.getClaimCount() == 0) {
                                                 clan.setHomeChunk(chunk);
                                                 plugin.getStorageManager().updateClan(clan);
                                             }
-
+                                            plugin.getServer().getPluginManager().callEvent(new SimpleClansChunkClaimEvent(cp, clan, chunk));
                                             clan.addClaimedChunk(chunk);
                                             player.sendMessage(ChatColor.GRAY + MessageFormat.format(plugin.getLang("you.claimed"), allowed));
                                             break;
@@ -63,27 +66,32 @@ public class ClaimCommand
                                             player.sendMessage(ChatColor.DARK_RED + plugin.getLang("transaction.failed"));
                                             break;
                                     }
-
-                                } else {
-                                    player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("no.claim.near"));
-                                }
-                            } else {
-                                if (clan.isWarring(clanhere)) {
-                                    if (plugin.getSettingsManager().isPowerBased()) {
-                                        if (clanhere.getPower() * plugin.getSettingsManager().getClaimsPerPower() < clanhere.getAllowedClaims()) {
-                                            if (clanhere.removeClaimedChunk(chunk)) {
-                                                clan.addClaimedChunk(chunk);
-                                                player.sendMessage("you got the chunk from " + clanhere.getName());
-                                            } else {
-                                                player.sendMessage("home chunk");
+                                    break;
+                                case ALREADY_OTHER:
+                                    if (clan.isWarring(clanhere)) {
+                                        if (plugin.getSettingsManager().isPowerBased()) {
+                                            if (clanhere.getPower() * plugin.getSettingsManager().getClaimsPerPower() < clanhere.getAllowedClaims()) {
+                                                if (!clanhere.getHomeChunk().equals(chunk)) {
+                                                    clan.addClaimedChunk(chunk);
+                                                    clanhere.removeClaimedChunk(chunk);
+                                                    player.sendMessage("you got the chunk from " + clanhere.getName());
+                                                } else {
+                                                    player.sendMessage("home chunk");
+                                                }
                                             }
+                                        } else {
+                                            throw new UnsupportedOperationException("not yet");
                                         }
                                     } else {
-                                        throw new UnsupportedOperationException("not yet");
+                                        player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("already.claimed"));
                                     }
-                                } else {
+                                    break;
+                                case ALREADY_OWN:
                                     player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("already.claimed"));
-                                }
+                                    break;
+                                case NO_CLAIM_NEAR:
+                                    player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("no.claim.near"));
+                                    break;
                             }
                         } else {
                             player.sendMessage(ChatColor.DARK_RED + plugin.getLang("no.claims.left"));
@@ -101,7 +109,7 @@ public class ClaimCommand
                     Location loc = player.getLocation();
                     if (cp != null) {
                         Clan clan = cp.getClan();
-                        player.sendMessage("Allowed Claims: " + clan.getAllowedClaims());
+                        player.sendMessage("Allowed Claims: " + (clan.getAllowedClaims() - clan.getClaimCount()));
                     }
                     for (Clan clans : plugin.getClanManager().getClans()) {
                         if (clans.isClaimed(loc)) {

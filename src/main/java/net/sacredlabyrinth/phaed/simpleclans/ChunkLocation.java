@@ -10,8 +10,6 @@
  */
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -26,7 +24,7 @@ public class ChunkLocation implements Cloneable
     private int x;
     private int z;
     private String world;
-    private boolean changed = false;
+    //private boolean changed = false;
 
     public ChunkLocation()
     {
@@ -44,15 +42,15 @@ public class ChunkLocation implements Cloneable
         }
     }
 
-    public boolean isChanged()
-    {
-        return changed;
-    }
-
-    public void setChanged(boolean changed)
-    {
-        this.changed = changed;
-    }
+//    public boolean isChanged()
+//    {
+//        return changed;
+//    }
+//
+//    public void setChanged(boolean changed)
+//    {
+//        this.changed = changed;
+//    }
 
     public int getX()
     {

@@ -1,7 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
 import java.util.Iterator;
-import net.sacredlabyrinth.phaed.simpleclans.ChunkLocation;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -229,7 +228,9 @@ public class SCPlayerListener implements Listener
 
                 plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
-                plugin.getSpoutPluginManager().processPlayer(player.getName());
+                if (plugin.hasSpout()) {
+                    plugin.getSpoutPluginManager().processPlayer(player.getName());
+                }
                 plugin.getPermissionsManager().setupPlayerPermissions(cp);
 
                 if (plugin.getSettingsManager().isBbShowOnLogin()) {
@@ -243,9 +244,9 @@ public class SCPlayerListener implements Listener
 
                 ClanPlayer anyCp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-                if (anyCp != null) {
-                    plugin.getPermissionsManager().addClanPermissions(anyCp);
-                }
+//                if (anyCp != null) {
+//                    plugin.getPermissionsManager().addClanPermissions(anyCp);
+//                }
             }
         }, 1);
     }
@@ -317,9 +318,19 @@ public class SCPlayerListener implements Listener
     }
 
     @EventHandler
+    public void onPlayerToggleSneak(PlayerToggleSneakEvent event)
+    {
+        if (!plugin.hasSpout()) {
+            return;
+        }
+
+        plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
+    }
+
+    @EventHandler(priority = EventPriority.MONITOR, ignoreCancelled = true)
     public void onPlayerTeleport(PlayerTeleportEvent event)
     {
-        if (event.isCancelled()) {
+        if (!plugin.hasSpout()) {
             return;
         }
 
@@ -327,14 +338,6 @@ public class SCPlayerListener implements Listener
             return;
         }
 
-        if (plugin.hasSpout()) {
-            plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
-        }
-    }
-
-    @EventHandler
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent event)
-    {
         plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
     }
 }

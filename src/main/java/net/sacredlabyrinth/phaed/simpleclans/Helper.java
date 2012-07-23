@@ -1,17 +1,16 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Player;
-
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Player;
 import org.getspout.spoutapi.Spout;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
@@ -319,12 +318,12 @@ public class Helper
      * @param values
      * @return
      */
-    public static List<String> fromArray(String... values)
+    public static Collection<String> fromArray(String... values)
     {
-        List<String> results = new ArrayList<String>();
-        Collections.addAll(results, values);
-        results.remove("");
-        return results;
+//        List<String> results = new ArrayList<String>();
+//        Collections.addAll(results, values);
+//        results.remove("");
+        return Arrays.asList(values);
     }
 
     /**
@@ -360,7 +359,7 @@ public class Helper
      * @param list
      * @return
      */
-    public static String[] toArray(List<String> list)
+    public static String[] toArray(Collection<String> list)
     {
         return list.toArray(new String[list.size()]);
     }
@@ -373,7 +372,7 @@ public class Helper
      */
     public static String[] removeFirst(String[] args)
     {
-        List<String> out = fromArray(args);
+        List<String> out = new ArrayList<String>(fromArray(args));
 
         if (!out.isEmpty()) {
             out.remove(0);
@@ -389,13 +388,13 @@ public class Helper
      */
     public static String toMessage(String[] args)
     {
-        String out = "";
+        StringBuilder sb = new StringBuilder();
 
         for (String arg : args) {
-            out += arg + " ";
+            sb.append(arg).append(' ');
         }
 
-        return out.trim();
+        return sb.toString().trim();
     }
 
     /**
@@ -407,13 +406,14 @@ public class Helper
      */
     public static String toMessage(String[] args, String sep)
     {
-        String out = "";
+        StringBuilder sb = new StringBuilder();
 
         for (String arg : args) {
-            out += arg + ", ";
+            sb.append(arg).append(' ');
         }
 
-        return stripTrailing(out, ", ");
+
+        return stripTrailing(sb.toString(), ", ");
     }
 
     /**
@@ -423,15 +423,15 @@ public class Helper
      * @param sep
      * @return
      */
-    public static String toMessage(List<String> args, String sep)
+    public static String toMessage(Collection<String> args, String sep)
     {
-        String out = "";
+        StringBuilder sb = new StringBuilder();
 
         for (String arg : args) {
-            out += arg + sep;
+            sb.append(arg).append(' ');
         }
 
-        return stripTrailing(out, sep);
+        return stripTrailing(sb.toString(), sep);
     }
 
     /**
@@ -660,6 +660,7 @@ public class Helper
         Collections.sort(list, new Comparator()
         {
 
+            @Override
             public int compare(Object o1, Object o2)
             {
                 return ((Comparable) ((Map.Entry) (o2)).getValue()).compareTo(((Map.Entry) (o1)).getValue());

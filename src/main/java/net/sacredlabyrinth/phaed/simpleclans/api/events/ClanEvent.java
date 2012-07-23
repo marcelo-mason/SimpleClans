@@ -8,17 +8,28 @@
  * California, 94105, USA.
  * 
  */
-package net.sacredlabyrinth.phaed.simpleclans.results;
+package net.sacredlabyrinth.phaed.simpleclans.api.events;
+
+import net.sacredlabyrinth.phaed.simpleclans.Clan;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 
 /**
  *
  * @author Max
  */
-public enum ClaimResult
+class ClanEvent extends ClanPlayerEvent
 {
 
-    SUCCESS,
-    ALREADY_OWN,
-    ALREADY_OTHER,
-    NO_CLAIM_NEAR;
+    private Clan clan;
+
+    public ClanEvent(ClanPlayer cp, Clan clan)
+    {
+        super(cp);
+        this.clan = clan;
+    }
+
+    public Clan getClan()
+    {
+        return clan;
+    }
 }

@@ -10,39 +10,19 @@
  */
 package net.sacredlabyrinth.phaed.simpleclans.api.events;
 
+import net.sacredlabyrinth.phaed.simpleclans.ChunkLocation;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import org.bukkit.event.HandlerList;
 
 /**
  *
  * @author Max
  */
-public class SimpleClansPlayerLeaveEvent extends SimpleClansClanPlayerEvent
+public class SimpleClansChunkUnclaimEvent extends ChunkEvent
 {
 
-    private static final HandlerList handlers = new HandlerList();
-    private Clan clan;
-
-    public SimpleClansPlayerLeaveEvent(ClanPlayer who, Clan clan)
+    public SimpleClansChunkUnclaimEvent(ClanPlayer cp, Clan clan, ChunkLocation chunk)
     {
-        super(who);
-        this.clan = clan;
-    }
-
-    public Clan getClan()
-    {
-        return clan;
-    }
-
-    @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
-        return handlers;
+        super(cp, clan, chunk);
     }
 }

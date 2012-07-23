@@ -8,18 +8,17 @@
  * California, 94105, USA.
  * 
  */
-package net.sacredlabyrinth.phaed.simpleclans;
+package net.sacredlabyrinth.phaed.simpleclans.results;
 
 /**
  *
  * @author Max
  */
-public enum BankResult
+public enum UnClaimResult
 {
 
-    PLAYER_NOT_ENOUGH_MONEY,
-    BANK_NOT_ENOUGH_MONEY,
-    SUCCESS_WITHDRAW,
-    SUCCESS_DEPOSIT,
-    FAILED;
+    SUCCESS,
+    NO_CLAIM,
+    FAILED_NEAR,
+    FAILED_HOMEBLOCK;
 }

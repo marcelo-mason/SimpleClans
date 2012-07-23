@@ -167,53 +167,6 @@ public class SCEntityListener implements Listener
     }
 
     @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onPlayerInteract(PlayerInteractEntityEvent event)
-    {
-
-        if (plugin.getSettingsManager().isTamableMobsSharing()) {
-            if (event.getRightClicked() instanceof Tameable) {
-
-                Player player = event.getPlayer();
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
-                if (cp == null) {
-                    return;
-                }
-
-                Entity entity = event.getRightClicked();
-
-                Tameable tamed = (Tameable) entity;
-
-                if (tamed.isTamed()) {
-                    AnimalTamer owner = tamed.getOwner();
-                    if (owner != null) {
-                        if (cp.getClan().isMember((Player) owner)) {
-                            tamed.setOwner(player);
-                        }
-                    }
-                }
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
-    public void onEntityTarget(EntityTargetLivingEntityEvent event)
-    {
-        if (plugin.getSettingsManager().isTamableMobsSharing()) {
-            if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Player) {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer((Player) event.getTarget());
-                Tameable wolf = (Tameable) event.getEntity();
-                if (wolf.isTamed()) {
-                    if (cp.getClan().isMember((Player) wolf.getOwner())) {
-                        // cancels the event if the attacker is one out of his clan
-                        event.setCancelled(true);
-                    }
-                }
-            }
-        }
-    }
-
-    @EventHandler(priority = EventPriority.LOW, ignoreCancelled = true)
     public void onEntityDamage(EntityDamageEvent event)
     {
         Player attacker = null;
@@ -226,20 +179,6 @@ public class SCEntityListener implements Listener
             if (sub.getEntity() instanceof Player && sub.getDamager() instanceof Player) {
                 attacker = (Player) sub.getDamager();
                 victim = (Player) sub.getEntity();
-            }
-
-            if (plugin.getSettingsManager().isTamableMobsSharing()) {
-                if (sub.getEntity() instanceof Wolf && sub.getDamager() instanceof Player) {
-                    attacker = (Player) sub.getDamager();
-                    Wolf wolf = (Wolf) sub.getEntity();
-                    ClanPlayer cp = plugin.getClanManager().getClanPlayer(attacker);
-                    if (wolf.isTamed()) {
-                        if (cp.getClan().isMember((Player) wolf.getOwner())) {
-                            // Sets the wolf to friendly if the attacker is one out of his clan
-                            wolf.setAngry(false);
-                        }
-                    }
-                }
             }
 
             if (sub.getEntity() instanceof Player && sub.getDamager() instanceof Arrow) {

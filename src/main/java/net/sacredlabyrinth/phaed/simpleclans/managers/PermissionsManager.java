@@ -2,8 +2,6 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import in.mDev.MiracleM4n.mChatSuite.api.API;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Set;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
@@ -288,82 +286,82 @@ public final class PermissionsManager
         }
     }
 
-    /**
-     * Gives the player permissions linked to a clan
-     *
-     * @param cp
-     */
-    public void addClanPermissions(ClanPlayer cp)
-    {
-        if (!plugin.getSettingsManager().isEnableAutoGroups()) {
-            return;
-        }
-
-        if (permission != null) {
-            if (cp != null && cp.toPlayer() != null) {
-                if (cp.getClan() != null) {
-                    if (!permission.playerInGroup(cp.toPlayer(), "Clan" + cp.getTag())) {
-                        permission.playerAddGroup(cp.toPlayer(), "Clan" + cp.getTag());
-                    }
-
-                    if (cp.isLeader()) {
-                        if (!permission.playerInGroup(cp.toPlayer(), "SCLeader")) {
-                            permission.playerAddGroup(cp.toPlayer(), "SCLeader");
-                        }
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                        return;
-                    }
-
-                    if (cp.isTrusted()) {
-                        if (!permission.playerInGroup(cp.toPlayer(), "SCTrusted")) {
-                            permission.playerAddGroup(cp.toPlayer(), "SCTrusted");
-                        }
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
-                        return;
-                    }
-
-                    if (!cp.isTrusted() && !cp.isLeader()) {
-                        if (!permission.playerInGroup(cp.toPlayer(), "SCUntrusted")) {
-                            permission.playerAddGroup(cp.toPlayer(), "SCUntrusted");
-                        }
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
-                    }
-                } else {
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
-                }
-            } else {
-                permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
-            }
-        }
-    }
-
-    /**
-     * Removes permissions linked to a clan from the player
-     *
-     * @param cp
-     */
-    public void removeClanPermissions(ClanPlayer cp)
-    {
-        if (!plugin.getSettingsManager().isEnableAutoGroups()) {
-            return;
-        }
-
-        if (permission != null) {
-            if (cp.toPlayer() != null) {
-                permission.playerRemoveGroup(cp.toPlayer(), "Clan" + cp.getTag());
-                permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
-            }
-        }
-    }
+//    /**
+//     * Gives the player permissions linked to a clan
+//     *
+//     * @param cp
+//     */
+//    public void addClanPermissions(ClanPlayer cp)
+//    {
+//        if (!plugin.getSettingsManager().isEnableAutoGroups()) {
+//            return;
+//        }
+//
+//        if (permission != null) {
+//            if (cp != null && cp.toPlayer() != null) {
+//                if (cp.getClan() != null) {
+//                    if (!permission.playerInGroup(cp.toPlayer(), "Clan" + cp.getTag())) {
+//                        permission.playerAddGroup(cp.toPlayer(), "Clan" + cp.getTag());
+//                    }
+//
+//                    if (cp.isLeader()) {
+//                        if (!permission.playerInGroup(cp.toPlayer(), "SCLeader")) {
+//                            permission.playerAddGroup(cp.toPlayer(), "SCLeader");
+//                        }
+//                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+//                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+//                        return;
+//                    }
+//
+//                    if (cp.isTrusted()) {
+//                        if (!permission.playerInGroup(cp.toPlayer(), "SCTrusted")) {
+//                            permission.playerAddGroup(cp.toPlayer(), "SCTrusted");
+//                        }
+//                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+//                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+//                        return;
+//                    }
+//
+//                    if (!cp.isTrusted() && !cp.isLeader()) {
+//                        if (!permission.playerInGroup(cp.toPlayer(), "SCUntrusted")) {
+//                            permission.playerAddGroup(cp.toPlayer(), "SCUntrusted");
+//                        }
+//                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+//                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+//                    }
+//                } else {
+//                    permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+//                    permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+//                    permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+//                }
+//            } else {
+//                permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+//                permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+//                permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+//            }
+//        }
+//    }
+//
+//    /**
+//     * Removes permissions linked to a clan from the player
+//     *
+//     * @param cp
+//     */
+//    public void removeClanPermissions(ClanPlayer cp)
+//    {
+//        if (!plugin.getSettingsManager().isEnableAutoGroups()) {
+//            return;
+//        }
+//
+//        if (permission != null) {
+//            if (cp.toPlayer() != null) {
+//                permission.playerRemoveGroup(cp.toPlayer(), "Clan" + cp.getTag());
+//                permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
+//                permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+//                permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+//            }
+//        }
+//    }
 
     /**
      * Whether a player is allowed in the area
@@ -480,7 +478,7 @@ public final class PermissionsManager
         }
 
         if (permission != null && chat != null) {
-            try {
+//            try {
                 String world = p.getWorld().getName();
                 String name = p.getName();
                 String suffix = chat.getPlayerSuffix(world, name);
@@ -492,10 +490,10 @@ public final class PermissionsManager
                     }
                 }
                 return suffix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
-            } catch (Exception e) {
-                System.out.println(e.getMessage());
-                return "";
-            }
+//            } catch (Exception e) {
+//                System.out.println(e.getMessage());
+//                return "";
+//            }
         }
         return "";
     }

@@ -10,6 +10,7 @@
  */
 package net.sacredlabyrinth.phaed.simpleclans.api.events;
 
+import net.sacredlabyrinth.phaed.simpleclans.ChunkLocation;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 
@@ -17,11 +18,11 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
  *
  * @author Max
  */
-public class SimpleClansClanCreateEvent extends ClanEvent
+public class SimpleClansChunkClaimEvent extends ChunkEvent
 {
-
-    public SimpleClansClanCreateEvent(ClanPlayer cp, Clan clan)
+    
+    public SimpleClansChunkClaimEvent(ClanPlayer cp, Clan clan, ChunkLocation chunk)
     {
-        super(cp, clan);
+        super(cp, clan, chunk);
     }
 }

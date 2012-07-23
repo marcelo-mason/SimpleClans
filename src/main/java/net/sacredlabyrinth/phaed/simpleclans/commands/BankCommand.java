@@ -1,5 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
+import net.sacredlabyrinth.phaed.simpleclans.results.BankResult;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;

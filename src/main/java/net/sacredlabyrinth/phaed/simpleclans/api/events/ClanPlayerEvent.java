@@ -18,13 +18,13 @@ import org.bukkit.event.HandlerList;
  *
  * @author Max
  */
-public class SimpleClansClanPlayerEvent extends Event
+class ClanPlayerEvent extends Event
 {
 
     private static final HandlerList handlers = new HandlerList();
     private ClanPlayer cp;
 
-    public SimpleClansClanPlayerEvent(ClanPlayer cp)
+    public ClanPlayerEvent(ClanPlayer cp)
     {
         this.cp = cp;
     }

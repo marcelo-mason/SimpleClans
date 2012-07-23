@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import net.sacredlabyrinth.phaed.simpleclans.beta.BetaCommandManager;
 import java.io.IOException;
 import java.text.MessageFormat;
 import java.util.PropertyResourceBundle;
@@ -8,11 +7,13 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
+import net.sacredlabyrinth.phaed.simpleclans.beta.BetaCommandManager;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCClaimingListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
 import org.bukkit.plugin.Plugin;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 /**
@@ -86,6 +87,7 @@ public class SimpleClans extends JavaPlugin
 
         debug(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
+
         if (hasSpout()) {
             spoutPluginManager = new SpoutPluginManager(this);
         }
@@ -102,13 +104,15 @@ public class SimpleClans extends JavaPlugin
             debug(null, ex);
         }
 
+        PluginManager pm = getServer().getPluginManager();
+
         if (settingsManager.isClaimingEnabled()) {
             SCClaimingListener claimingListener = new SCClaimingListener(this);
-            getServer().getPluginManager().registerEvents(claimingListener, this);
+            pm.registerEvents(claimingListener, this);
         }
 
-        getServer().getPluginManager().registerEvents(new SCEntityListener(this), this);
-        getServer().getPluginManager().registerEvents(new SCPlayerListener(this), this);
+        pm.registerEvents(new SCEntityListener(this), this);
+        pm.registerEvents(new SCPlayerListener(this), this);
 
         if (hasSpout()) {
             spoutPluginManager.processAllPlayers();
@@ -186,10 +190,10 @@ public class SimpleClans extends JavaPlugin
 
     private boolean checkSpout()
     {
-        Plugin test = getServer().getPluginManager().getPlugin("Spout");
+        Plugin spoutpl = getServer().getPluginManager().getPlugin("Spout");
 
-        if (test != null) {
-            SimpleClans.debug(getLang("spout.features.enabled"));
+        if (spoutpl != null) {
+            SimpleClans.debug(String.format("Hooked Spout %s", spoutpl.getDescription().getVersion()));
             return true;
         }
         return false;

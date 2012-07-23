@@ -10,39 +10,27 @@
  */
 package net.sacredlabyrinth.phaed.simpleclans.api.events;
 
+import net.sacredlabyrinth.phaed.simpleclans.ChunkLocation;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import org.bukkit.event.HandlerList;
 
 /**
  *
  * @author Max
  */
-public class SimpleClansPlayerJoinEvent extends SimpleClansClanPlayerEvent
+class ChunkEvent extends ClanEvent
 {
 
-    private static final HandlerList handlers = new HandlerList();
-    private Clan clan;
+    private ChunkLocation chunk;
 
-    public SimpleClansPlayerJoinEvent(ClanPlayer cp, Clan clan)
+    public ChunkEvent(ClanPlayer cp, Clan clan, ChunkLocation chunk)
     {
-        super(cp);
-        this.clan = clan;
+        super(cp, clan);
+        this.chunk = chunk;
     }
 
-    public Clan getClan()
+    public ChunkLocation getChunk()
     {
-        return clan;
-    }
-
-    @Override
-    public HandlerList getHandlers()
-    {
-        return handlers;
-    }
-
-    public static HandlerList getHandlerList()
-    {
-        return handlers;
+        return chunk;
     }
 }

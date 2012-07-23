@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -36,7 +35,7 @@ public class MapCommand
     {
         plugin = SimpleClans.getInstance();
         senderThread = new MapSenderThread();
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, senderThread, 20L, 60L);
+        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, senderThread, 20L, 40L);
     }
 
     /**
