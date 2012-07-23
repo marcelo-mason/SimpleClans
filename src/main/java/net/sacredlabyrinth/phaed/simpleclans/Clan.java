@@ -4,7 +4,6 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
-import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansChunkClaimEvent;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansJoinEvent;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansLeaveEvent;
 import net.sacredlabyrinth.phaed.simpleclans.results.BankResult;
@@ -47,10 +46,10 @@ public class Clan implements Serializable, Comparable<Clan>
     private boolean allowWithdraw = false;
     private boolean allowDeposit = true;
     private Set<ChunkLocation> claimed = new HashSet<ChunkLocation>();
-//    private boolean claimedChanged;
     private ChunkLocation homeChunk = null;
-    //private Set<PermissionType> permissions = new HashSet(EnumSet.noneOf(PermissionType.class));
     private Set<Byte> permissions = new HashSet<Byte>();
+    private Location rallyPoint;
+    private long rallySetTime;
 
     /**
      *
@@ -1068,6 +1067,25 @@ public class Clan implements Serializable, Comparable<Clan>
         }
 
         return ((float) totalWeightedKills) / ((float) totalDeaths);
+    }
+
+    /**
+     * Sets a temp rally point
+     *
+     * @param rallyPoint
+     */
+    public void setRallyPoint(Location rallyPoint)
+    {
+        this.rallyPoint = rallyPoint;
+    }
+
+    /**
+     * Updates the date when you set the rally point
+     *
+     */
+    public void updateRallyDate()
+    {
+        this.rallySetTime = System.currentTimeMillis();
     }
 
     /**

@@ -34,13 +34,13 @@ public final class TeleportManager
      *
      * @param player
      * @param dest
-     * @param clanName
+     * @param msg
      */
-    public void addPlayer(Player player, Location dest, String clanName)
+    public void addPlayer(Player player, Location dest, String msg)
     {
         int secs = plugin.getSettingsManager().getWaitSecs();
 
-        waitingPlayers.put(player.getName(), new TeleportState(player, dest, clanName));
+        waitingPlayers.put(player.getName(), new TeleportState(player, dest, msg));
 
         if (secs > 0)
         {
@@ -147,7 +147,7 @@ public final class TeleportManager
 
                                 player.teleport(new Location(loc.getWorld(), loc.getBlockX() + .5, loc.getBlockY(), loc.getBlockZ() + .5));
 
-                                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("now.at.homebase"), state.getClanName()));
+                                ChatBlock.sendMessage(player, state.getMessage());
                             }
                             else
                             {
