@@ -4,7 +4,6 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 /**
@@ -12,7 +11,7 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
  */
 public class MySQLCore implements DBCore
 {
-    private Logger log;
+
     private Connection connection;
     private String host;
     private String username;
@@ -31,25 +30,19 @@ public class MySQLCore implements DBCore
         this.host = host;
         this.username = username;
         this.password = password;
-        this.log = SimpleClans.getLog();
 
         initialize();
     }
 
     private void initialize()
     {
-        try
-        {
+        try {
             Class.forName("com.mysql.jdbc.Driver");
             connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database, username, password);
-        }
-        catch (ClassNotFoundException e)
-        {
-            log.severe("ClassNotFoundException! " + e.getMessage());
-        }
-        catch (SQLException e)
-        {
-            log.severe("SQLException! " + e.getMessage());
+        } catch (ClassNotFoundException e) {
+            SimpleClans.debug("ClassNotFoundException! " + e.getMessage());
+        } catch (SQLException e) {
+            SimpleClans.debug("SQLException! " + e.getMessage());
         }
     }
 
@@ -59,15 +52,11 @@ public class MySQLCore implements DBCore
     @Override
     public Connection getConnection()
     {
-        try
-        {
-            if (connection == null || connection.isClosed())
-            {
+        try {
+            if (connection == null || connection.isClosed()) {
                 initialize();
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             initialize();
         }
 
@@ -89,16 +78,12 @@ public class MySQLCore implements DBCore
     @Override
     public void close()
     {
-        try
-        {
-            if (connection != null)
-            {
+        try {
+            if (connection != null) {
                 connection.close();
             }
-        }
-        catch (Exception e)
-        {
-            log.severe("Failed to close database connection! " + e.getMessage());
+        } catch (Exception e) {
+            SimpleClans.debug("Failed to close database connection! " + e.getMessage());
         }
     }
 
@@ -111,14 +96,11 @@ public class MySQLCore implements DBCore
     @Override
     public ResultSet select(String query)
     {
-        try
-        {
+        try {
             return getConnection().createStatement().executeQuery(query);
-        }
-        catch (SQLException ex)
-        {
-            log.severe("Error at SQL Query: " + ex.getMessage());
-            log.severe("Query: " + query);
+        } catch (SQLException ex) {
+            SimpleClans.debug("Error at SQL Query: " + ex.getMessage());
+            SimpleClans.debug("Query: " + query);
         }
 
         return null;
@@ -132,16 +114,12 @@ public class MySQLCore implements DBCore
     @Override
     public void insert(String query)
     {
-        try
-        {
+        try {
             getConnection().createStatement().executeUpdate(query);
-        }
-        catch (SQLException ex)
-        {
-            if (!ex.toString().contains("not return ResultSet"))
-            {
-                log.severe("Error at SQL INSERT Query: " + ex);
-                log.severe("Query: " + query);
+        } catch (SQLException ex) {
+            if (!ex.toString().contains("not return ResultSet")) {
+                SimpleClans.debug("Error at SQL INSERT Query: " + ex);
+                SimpleClans.debug("Query: " + query);
             }
         }
     }
@@ -154,16 +132,12 @@ public class MySQLCore implements DBCore
     @Override
     public void update(String query)
     {
-        try
-        {
+        try {
             getConnection().createStatement().executeUpdate(query);
-        }
-        catch (SQLException ex)
-        {
-            if (!ex.toString().contains("not return ResultSet"))
-            {
-                log.severe("Error at SQL UPDATE Query: " + ex);
-                log.severe("Query: " + query);
+        } catch (SQLException ex) {
+            if (!ex.toString().contains("not return ResultSet")) {
+                SimpleClans.debug("Error at SQL UPDATE Query: " + ex);
+                SimpleClans.debug("Query: " + query);
             }
         }
     }
@@ -176,16 +150,12 @@ public class MySQLCore implements DBCore
     @Override
     public void delete(String query)
     {
-        try
-        {
+        try {
             getConnection().createStatement().executeUpdate(query);
-        }
-        catch (SQLException ex)
-        {
-            if (!ex.toString().contains("not return ResultSet"))
-            {
-                log.severe("Error at SQL DELETE Query: " + ex);
-                log.severe("Query: " + query);
+        } catch (SQLException ex) {
+            if (!ex.toString().contains("not return ResultSet")) {
+                SimpleClans.debug("Error at SQL DELETE Query: " + ex);
+                SimpleClans.debug("Query: " + query);
             }
         }
     }
@@ -199,15 +169,12 @@ public class MySQLCore implements DBCore
     @Override
     public Boolean execute(String query)
     {
-        try
-        {
+        try {
             getConnection().createStatement().execute(query);
             return true;
-        }
-        catch (SQLException ex)
-        {
-            log.severe(ex.getMessage());
-            log.severe("Query: " + query);
+        } catch (SQLException ex) {
+            SimpleClans.debug(ex.getMessage());
+            SimpleClans.debug("Query: " + query);
             return false;
         }
     }
@@ -221,18 +188,15 @@ public class MySQLCore implements DBCore
     @Override
     public Boolean existsTable(String table)
     {
-        try
-        {
+        try {
             ResultSet tables = getConnection().getMetaData().getTables(null, null, table, null);
             return tables.next();
-        }
-        catch (SQLException e)
-        {
-            log.severe("Failed to check if table '" + table + "' exists: " + e.getMessage());
+        } catch (SQLException e) {
+            SimpleClans.debug("Failed to check if table '" + table + "' exists: " + e.getMessage());
             return false;
         }
     }
-    
+
     /**
      * Check whether a colum exists
      *
@@ -242,14 +206,11 @@ public class MySQLCore implements DBCore
     @Override
     public Boolean existsColumn(String tabell, String colum)
     {
-        try
-        {
+        try {
             ResultSet colums = getConnection().getMetaData().getColumns(null, null, tabell, colum);
             return colums.next();
-        }
-        catch (SQLException e)
-        {
-            SimpleClans.getLog().severe("Failed to check if colum '" + colum + "' exists: " + e.getMessage());
+        } catch (SQLException e) {
+            SimpleClans.debug("Failed to check if colum '" + colum + "' exists: " + e.getMessage(), e);
             return false;
         }
     }

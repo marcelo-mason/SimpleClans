@@ -23,7 +23,7 @@ public class SimpleClans extends JavaPlugin
 {
 
     private static SimpleClans instance;
-    private static final Logger logger = Logger.getLogger("Minecraft");
+    private static Logger logger;
     private ClanManager clanManager;
     private RequestManager requestManager;
     private StorageManager storageManager;
@@ -40,18 +40,17 @@ public class SimpleClans extends JavaPlugin
     /**
      * @return the logger
      */
-    public static Logger getLog()
-    {
-        return logger;
-    }
-
-    /**
-     * @return the logger
-     */
     public static void debug(String msg)
     {
         if (getInstance().getSettingsManager().isDebugging()) {
             logger.log(Level.INFO, msg);
+        }
+    }
+
+    public static void debug(Level level, String msg)
+    {
+        if (getInstance().getSettingsManager().isDebugging()) {
+            logger.log(level, msg);
         }
     }
 
@@ -78,6 +77,7 @@ public class SimpleClans extends JavaPlugin
     public void onEnable()
     {
         long start = System.currentTimeMillis();
+        logger = getLogger();
         instance = this;
         settingsManager = new SettingsManager();
 

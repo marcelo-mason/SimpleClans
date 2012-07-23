@@ -82,7 +82,7 @@ public final class ClanManager
         plugin.getStorageManager().updateClanPlayer(cp);
 
         plugin.getPermissionsManager().updateClanPermissions(clan);
-        
+
         plugin.getServer().getPluginManager().callEvent(new SimpleClansClanCreateEvent(cp, clan));
 
         if (plugin.hasSpout()) {
@@ -424,13 +424,12 @@ public final class ClanManager
         ClanPlayer cp = getAnyClanPlayer(player.getName());
 
         if (cp != null) {
-            cp.updateLastSeen();
+
             plugin.getStorageManager().updateClanPlayer(cp);
 
             Clan clan = cp.getClan();
 
             if (clan != null) {
-                clan.updateLastUsed();
                 plugin.getStorageManager().updateClan(clan);
             }
         }

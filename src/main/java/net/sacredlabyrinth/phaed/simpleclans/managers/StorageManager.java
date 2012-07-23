@@ -133,6 +133,8 @@ public final class StorageManager
                 SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("mysql.connection.failed"));
             }
         } else {
+            
+            SimpleClans.debug(Level.WARNING, "Using MySQL is highly recommended! (250x faster)");
             core = new SQLiteCore(plugin.getDataFolder().getPath());
 
             if (core.checkConnection()) {
@@ -320,8 +322,7 @@ public final class StorageManager
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -388,8 +389,7 @@ public final class StorageManager
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -415,8 +415,8 @@ public final class StorageManager
             }
 
         } catch (SQLException ex) {
-            SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-            SimpleClans.getLog().log(Level.SEVERE, null, ex);
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+
         }
 
         if (query != null) {
@@ -433,8 +433,7 @@ public final class StorageManager
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
         return 0;
@@ -512,8 +511,7 @@ public final class StorageManager
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -558,8 +556,7 @@ public final class StorageManager
                 core.execute(query);
             }
         } catch (SQLException ex) {
-            SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-            SimpleClans.getLog().log(Level.SEVERE, null, ex);
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
         }
     }
 
@@ -574,6 +571,18 @@ public final class StorageManager
         String query = "UPDATE `sc_clans` SET verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getCapeUrl())) + "', balance = '" + clan.getBalance() + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
         core.update(query);
     }
+//    
+//    public void updateLastUsedClan(Clan clan) {
+//        clan.updateLastUsed();
+//        String query = "UPDATE `sc_clans` SET last_used = '" + clan.getLastUsed() + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
+//        core.update(query);
+//    }
+//    
+//    public void updateLastSeenClanPlayer(ClanPlayer cp) {
+//        cp.updateLastSeen();
+//        String query = "UPDATE `sc_players` SET last_seen = '" + cp.getLastSeen() + "' WHERE name = '" + cp.getName() + "';";
+//        core.update(query);
+//    }
 
     /**
      * Delete a clan from the database
@@ -673,14 +682,11 @@ public final class StorageManager
                         int kills = res.getInt("kills");
                         out.put(victim, kills);
                     } catch (Exception ex) {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
+                        SimpleClans.debug(ex.getMessage(), ex);
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -708,14 +714,11 @@ public final class StorageManager
                         int kills = res.getInt("kills");
                         out.put(attacker + " " + victim, kills);
                     } catch (Exception ex) {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
+                        SimpleClans.debug(ex.getMessage(), ex);
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -742,14 +745,11 @@ public final class StorageManager
                         int kills = res.getInt("kills");
                         out.put(victimTag, kills);
                     } catch (Exception ex) {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
+                        SimpleClans.debug(ex.getMessage(), ex);
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -776,14 +776,11 @@ public final class StorageManager
                         int kills = res.getInt("kills");
                         out.put(victimTag, kills);
                     } catch (Exception ex) {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
+                        SimpleClans.debug(ex.getMessage(), ex);
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -810,14 +807,11 @@ public final class StorageManager
                         int kills = res.getInt("kills");
                         out.put(attacker, kills);
                     } catch (Exception ex) {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
+                        SimpleClans.debug(ex.getMessage(), ex);
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 
@@ -844,14 +838,13 @@ public final class StorageManager
                         int kills = res.getInt("kills");
                         out.put(victim, kills);
                     } catch (Exception ex) {
-                        SimpleClans.getLog().info(ex.getMessage());
+                        SimpleClans.debug(ex.getMessage(), ex);
 
 
                     }
                 }
             } catch (SQLException ex) {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
             }
         }
 

@@ -225,8 +225,10 @@ public class SCPlayerListener implements Listener
             public void run()
             {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
+//                long s1 = System.currentTimeMillis();
                 plugin.getClanManager().updateLastSeen(player);
+//                long e1 = System.currentTimeMillis();
+//                long s2 = System.currentTimeMillis();
                 plugin.getClanManager().updateDisplayName(player);
                 if (plugin.hasSpout()) {
                     plugin.getSpoutPluginManager().processPlayer(player.getName());
@@ -241,8 +243,10 @@ public class SCPlayerListener implements Listener
                         }
                     }
                 }
-
-                ClanPlayer anyCp = plugin.getClanManager().getAnyClanPlayer(player.getName());
+//                long e2 = System.currentTimeMillis();
+//                System.out.println(e1 - s1);
+//                System.out.println(e2 - s2);
+                //ClanPlayer anyCp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
 //                if (anyCp != null) {
 //                    plugin.getPermissionsManager().addClanPermissions(anyCp);
@@ -305,16 +309,6 @@ public class SCPlayerListener implements Listener
         plugin.getPermissionsManager().removeClanPlayerPermissions(cp);
         plugin.getClanManager().updateLastSeen(player);
         plugin.getRequestManager().endPendingRequest(player.getName());
-    }
-
-    @EventHandler
-    public void onPlayerKick(PlayerKickEvent event)
-    {
-        if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName())) {
-            return;
-        }
-
-        plugin.getClanManager().updateLastSeen(event.getPlayer());
     }
 
     @EventHandler
