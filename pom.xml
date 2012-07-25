@@ -49,11 +49,11 @@
                         <manifestEntries>
                             <Implementation-Title>${project.name}</Implementation-Title>
                             <Implementation-Version>${describe}</Implementation-Version>
-                            <Implementation-Vendor>TropicalDreamZ</Implementation-Vendor>
+                            <Implementation-Vendor>SacredLabyrinth/TropicalDreamZ</Implementation-Vendor>
                             
                             <Specification-Title>${project.name}</Specification-Title>
                             <Specification-Version>${version.number}</Specification-Version>
-                            <Specification-Vendor>SacredLabyrinth</Specification-Vendor>
+                            <Specification-Vendor>SacredLabyrinth/TropicalDreamZ</Specification-Vendor>
                             <Sealed>true</Sealed>
                         </manifestEntries>
                         <manifestSections>
@@ -123,12 +123,6 @@
             <version>dev-SNAPSHOT</version>
             <scope>system</scope>
             <systemPath>${project.basedir}/lib/LWC.jar</systemPath>
-        </dependency>
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.10</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <!-- Repositories -->
