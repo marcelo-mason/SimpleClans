@@ -141,6 +141,10 @@ public final class SettingsManager
     private double powerLossPerDeath;
     private boolean destroyInWar;
     private boolean onlyStealOthersOnline;
+    private boolean rallyTeleportPurchase;
+    private double rallyTeleportPrice;
+    private boolean rallyTeleportSetPurchase;
+    private double rallyTeleportSetPrice;
     private String header = "- SimpleClans Configuration -\nYou have to restart the server, if you want to enable claiming.\nDon't modify the 'worlds' section unless you know what you do!\nAutogrouping was removed! You can define permissions for leaders/trusted/untrusted and clans now directly here!";
 
     /**
@@ -285,6 +289,10 @@ public final class SettingsManager
         powerLossPerDeath = getConfig().getDouble("claiming.power-loss-per-death");
         destroyInWar = getConfig().getBoolean("claiming.destroy-in-war");
         onlyStealOthersOnline = getConfig().getBoolean("claiming.steal-only-when-players-online");
+        rallyTeleportPurchase = getConfig().getBoolean("economy.purchase-rally-point-teleport");
+        rallyTeleportPrice = getConfig().getDouble("economy.rally-point-teleport-price");
+        rallyTeleportSetPurchase = getConfig().getBoolean("economy.purchase-rally-point-set-teleport");
+        rallyTeleportSetPrice = getConfig().getDouble("economy.rally-point-teleport-set-price");
 
         //Setup the worlds in the config.yml
         ConfigurationSection section;
@@ -1457,5 +1465,37 @@ public final class SettingsManager
     public double getPowerLossPerDeath()
     {
         return powerLossPerDeath;
+    }
+
+    /**
+     * @return the rallyTeleportPurchase
+     */
+    public boolean isRallyTeleportPurchase()
+    {
+        return rallyTeleportPurchase;
+    }
+
+    /**
+     * @return the rallyTeleportPrice
+     */
+    public double getRallyTeleportPrice()
+    {
+        return rallyTeleportPrice;
+    }
+
+    /**
+     * @return the rallyTeleportSetPurchase
+     */
+    public boolean isRallyTeleportSetPurchase()
+    {
+        return rallyTeleportSetPurchase;
+    }
+
+    /**
+     * @return the rallyTeleportSetPrice
+     */
+    public double getRallyTeleportSetPrice()
+    {
+        return rallyTeleportSetPrice;
     }
 }

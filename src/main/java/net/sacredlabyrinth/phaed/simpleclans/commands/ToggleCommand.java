@@ -1,34 +1,59 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
+import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
  * @author phaed
  */
-public class ToggleCommand
+public class ToggleCommand extends GenericPlayerCommand
 {
 
-    public ToggleCommand()
+    private SimpleClans plugin;
+
+    public ToggleCommand(SimpleClans plugin)
     {
+        super("Command");
+        this.plugin = plugin;
+        setArgumentRange(1, 2);
+        setUsages(String.format(plugin.getLang("usage.toggle"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("toggle.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        StringBuilder toggles = new StringBuilder();
 
-        if (arg.length == 0) {
-            return;
+        if (cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
+            toggles.append("tag/");
+        }
+        if (cp.getClan().isVerified()) {
+            if (plugin.hasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(sender, "simpleclans.member.cape-toggle")) {
+                toggles.append("cape/");
+            }
+            if (cp.isTrusted()) {
+                if (plugin.getPermissionsManager().has(sender, "simpleclans.member.bb-toggle")) {
+                    toggles.append("bb/");
+                }
+                if (plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
+                    toggles.append("tag/");
+                }
+            }
         }
 
-        String cmd = arg[0];
+        return toggles.length() == 0 ? null : MessageFormat.format(plugin.getLang("0.toggle.command"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE, Helper.stripTrailing(toggles.toString(), "/"));
+    }
+
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
+
+        String cmd = args[0];
 
         if (cmd.equalsIgnoreCase("cape")) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.member.cape-toggle")) {
@@ -135,7 +160,7 @@ public class ToggleCommand
         }
 
 //        if (cmd.equalsIgnoreCase("all-seeing-eye") || cmd.equalsIgnoreCase("ase")) {
-//            if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye-toggle")) {
+//            if (plugin.getPermissionsManager().has(sender, "simpleclans.admin.all-seeing-eye-toggle")) {
 //                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 //
 //                if (cp != null) {
@@ -153,7 +178,7 @@ public class ToggleCommand
                 if (cp != null) {
                     Clan clan = cp.getClan();
                     if (cp.isLeader()) {
-                        if (arg[1].equalsIgnoreCase("show")) {
+                        if (args[1].equalsIgnoreCase("show")) {
                             player.sendMessage("Enabled:");
                             for (PermissionType types : PermissionType.values()) {
                                 if (clan.hasPermission(types)) {
@@ -171,7 +196,7 @@ public class ToggleCommand
                         }
 
                         for (PermissionType type : PermissionType.values()) {
-                            if (arg[1].equalsIgnoreCase(type.getName())) {
+                            if (args[1].equalsIgnoreCase(type.getName())) {
                                 if (clan.toggle(type)) {
                                     player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle." + type.getName() + ".true"));
                                 } else {
@@ -182,56 +207,56 @@ public class ToggleCommand
                         }
 
                         player.sendMessage(ChatColor.DARK_RED + plugin.getLang("toggle.not.exist"));
-//                        if (arg[1].equalsIgnoreCase("allybreak")) {
+//                        if (args[1].equalsIgnoreCase("allybreak")) {
 //                            if (clan.toggle(PermissionType.ALLOW_ALLY_BREAK)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.ally.break.true"));
 //                            } else {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.ally.break.false"));
 //                            }
 //                            plugin.getStorageManager().updateClan(clan);
-//                        } else if (arg[1].equalsIgnoreCase("allybuild")) {
+//                        } else if (args[1].equalsIgnoreCase("allybuild")) {
 //                            if (clan.toggle(PermissionType.ALLOW_ALLY_BUILD)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.ally.build.true"));
 //                            } else {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.ally.build.false"));
 //                            }
 //                            plugin.getStorageManager().updateClan(clan);
-//                        } else if (arg[1].equalsIgnoreCase("outsiderbreak")) {
+//                        } else if (args[1].equalsIgnoreCase("outsiderbreak")) {
 //                            if (clan.toggle(PermissionType.ALLOW_OUTSIDER_BREAK)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.outsider.break.true"));
 //                            } else {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.outsider.break.false"));
 //                            }
 //                            plugin.getStorageManager().updateClan(clan);
-//                        } else if (arg[1].equalsIgnoreCase("outsiderbuild")) {
+//                        } else if (args[1].equalsIgnoreCase("outsiderbuild")) {
 //                            if (clan.toggle(PermissionType.ALLOW_OUTSIDER_BUILD)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.outsider.build.true"));
 //                            } else {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.outsider.build.false"));
 //                            }
 //                            plugin.getStorageManager().updateClan(clan);
-//                        } else if (arg[1].equalsIgnoreCase("unverifiedbuild")) {
+//                        } else if (args[1].equalsIgnoreCase("unverifiedbuild")) {
 //                            if (clan.toggle(PermissionType.ALLOW_UNVERIFIED_BUILD)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.unverified.build.true"));
 //                            } else {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.unverified.build.false"));
 //                            }
 //                            plugin.getStorageManager().updateClan(clan);
-//                        } else if (arg[1].equalsIgnoreCase("unverifiedbreak")) {
+//                        } else if (args[1].equalsIgnoreCase("unverifiedbreak")) {
 //                            if (clan.toggle(PermissionType.ALLOW_UNVERIFIED_BREAK)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.unverified.break.true"));
 //                            } else {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.unverified.break.false"));
 //                            }
 //                            plugin.getStorageManager().updateClan(clan);
-//                        } else if (arg[1].equalsIgnoreCase("memberbuild")) {
+//                        } else if (args[1].equalsIgnoreCase("memberbuild")) {
 //                            if (clan.toggle(PermissionType.DENY_MEMBER_BUILD)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.member.build.false"));
 //                            } else {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.member.build.true"));
 //                            }
 //                            plugin.getStorageManager().updateClan(clan);
-//                        } else if (arg[1].equalsIgnoreCase("memberbreak")) {
+//                        } else if (args[1].equalsIgnoreCase("memberbreak")) {
 //                            if (clan.toggle(PermissionType.DENY_MEMBER_BREAK)) {
 //                                player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("toggle.member.break.false"));
 //                            } else {

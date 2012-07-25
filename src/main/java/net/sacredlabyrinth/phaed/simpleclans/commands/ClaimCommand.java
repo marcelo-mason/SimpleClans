@@ -3,34 +3,48 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansChunkClaimEvent;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
 import net.sacredlabyrinth.phaed.simpleclans.results.BankResult;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
  *
  * @author phaed
  */
-public class ClaimCommand
+public class ClaimCommand extends GenericPlayerCommand
 {
 
-    public ClaimCommand()
+    private SimpleClans plugin;
+
+    public ClaimCommand(SimpleClans plugin)
     {
+        super("Claim");
+        this.plugin = plugin;
+        setArgumentRange(0, 1);
+        setUsages(String.format(plugin.getLang("usage.cape"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("cape.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        if (cp != null) {
+            if (cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.claim")) {
+                return MessageFormat.format(plugin.getLang("usage.menu.claim"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
         if (plugin.getPermissionsManager().has(player, "simpleclans.claim")) {
-            if (arg.length == 0) {
+            if (args.length == 0) {
 
                 if (cp != null) {
 
@@ -103,8 +117,8 @@ public class ClaimCommand
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                 }
 
-            } else if (arg.length == 1) {
-                if (arg[0].equalsIgnoreCase("info")) {
+            } else if (args.length == 1) {
+                if (args[0].equalsIgnoreCase("info")) {
 
                     Location loc = player.getLocation();
                     if (cp != null) {
@@ -122,7 +136,7 @@ public class ClaimCommand
                     player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("error.no.claim"));
 
                     //only temp
-                } else if (arg[0].equalsIgnoreCase("sethomeblock") || arg[0].equalsIgnoreCase("sethb")) {
+                } else if (args[0].equalsIgnoreCase("sethomeblock") || args[0].equalsIgnoreCase("sethb")) {
                     if (plugin.getPermissionsManager().has(player, "simpleclans.claim.sethomeblock")) {
 
                         if (cp != null) {
@@ -152,10 +166,8 @@ public class ClaimCommand
                     player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.claim"), plugin.getSettingsManager().getCommandClan()));
                 }
             } else {
-                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.claim"), plugin.getSettingsManager().getCommandClan()));
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

@@ -8,10 +8,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
 import net.sacredlabyrinth.phaed.simpleclans.beta.BetaCommandManager;
+import net.sacredlabyrinth.phaed.simpleclans.beta.HelpCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.*;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCClaimingListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -74,6 +78,13 @@ public class SimpleClans extends JavaPlugin
     }
 
     @Override
+    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
+    {
+        betaCommandManager.executeAll(null, sender, command.getName(), label, args);
+        return true;
+    }
+
+    @Override
     public void onEnable()
     {
         long start = System.currentTimeMillis();
@@ -95,7 +106,7 @@ public class SimpleClans extends JavaPlugin
         requestManager = new RequestManager(this);
         clanManager = new ClanManager(this);
         storageManager = new StorageManager(this);
-        commandManager = new CommandManager();
+        commandManager = new CommandManager(this);
         teleportManager = new TeleportManager(this);
 
         try {
@@ -114,25 +125,34 @@ public class SimpleClans extends JavaPlugin
         pm.registerEvents(new SCEntityListener(this), this);
         pm.registerEvents(new SCPlayerListener(this), this);
 
-        if (hasSpout()) {
-            spoutPluginManager.processAllPlayers();
-        }
+//        if (hasSpout()) {
+//            spoutPluginManager.processAllPlayers();
+//        }
 
         setupMetrics();
-        //setupBetaCommandManager();
+        setupBetaCommandManager();
 
         long end = System.currentTimeMillis();
 
         debug("Enabling took " + (end - start) + "ms.");
     }
 
-//    private void setupBetaCommandManager()
-//    {
-//        betaCommandManager = new BetaCommandManager();
-//        betaCommandManager.addCommand(new ResetCommand(this));
-//        betaCommandManager.addCommand(new HelpCommand(this));
-//    }
-//
+    private void setupBetaCommandManager()
+    {
+        betaCommandManager = new BetaCommandManager(this);
+        betaCommandManager.addCommand(new ListCommand(this));
+        betaCommandManager.addCommand(new CreateCommand(this));
+        betaCommandManager.addCommand(new VerifyCommand(this));
+        betaCommandManager.addCommand(new CapeCommand(this));
+        betaCommandManager.addCommand(new AllyCommand(this));
+        betaCommandManager.addCommand(new BanCommand(this));
+        betaCommandManager.addCommand(new LookupCommand(this));
+        betaCommandManager.addCommand(new BankCommand(this));
+        betaCommandManager.addCommand(new HelpCommand(this));
+        betaCommandManager.addCommand(new AlliancesCommand(this));
+        betaCommandManager.addCommand(new GlobalffCommand(this));
+    }
+
 //    @Override
 //    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
 //    {
@@ -235,7 +255,7 @@ public class SimpleClans extends JavaPlugin
 
     /**
      * Retruns the SpoutManager of if spout isnt installed null
-     * 
+     *
      * @return the spoutManager
      */
     public SpoutPluginManager getSpoutPluginManager()

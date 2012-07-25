@@ -8,9 +8,11 @@
  * California, 94105, USA.
  * 
  */
-package net.sacredlabyrinth.phaed.simpleclans.commands;
+package net.sacredlabyrinth.phaed.simpleclans.beta;
 
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -20,41 +22,14 @@ public abstract class GenericCommand implements Command
 {
 
     private String name;
-    private String usage;
     private int minArgs;
     private int maxArgs;
     private String[] identifiers;
-    private String menuName;
-    private boolean leaderOnly;
-    private String permission;
+    private String[] usage;
 
     public GenericCommand(String name)
     {
         this.name = name;
-    }
-
-    @Override
-    public void setPermission(String perm)
-    {
-        permission = perm;
-    }
-
-    @Override
-    public String getPermission()
-    {
-        return permission;
-    }
-
-    @Override
-    public boolean isLeaderOnly()
-    {
-        return leaderOnly;
-    }
-
-    @Override
-    public void setLeaderOnly()
-    {
-        leaderOnly = true;
     }
 
     @Override
@@ -64,22 +39,7 @@ public abstract class GenericCommand implements Command
     }
 
     @Override
-    public void setMenuName(String name)
-    {
-        this.menuName = name;
-    }
-
-    @Override
-    public String getMenuName()
-    {
-        return menuName;
-    }
-
-    @Override
-    public abstract void execute(CommandSender sender, String label, String[] args);
-
-    @Override
-    public void setUsage(String text)
+    public void setUsages(String... text)
     {
         this.usage = text;
     }
@@ -102,7 +62,10 @@ public abstract class GenericCommand implements Command
     }
 
     @Override
-    public String getUsage()
+    public abstract String getMenu(ClanPlayer cp, CommandSender sender);
+
+    @Override
+    public String[] getUsages()
     {
         return usage;
     }
@@ -110,13 +73,13 @@ public abstract class GenericCommand implements Command
     @Override
     public int getMaxArguments()
     {
-        return minArgs;
+        return maxArgs;
     }
 
     @Override
     public int getMinArguments()
     {
-        return maxArgs;
+        return minArgs;
     }
 
     @Override

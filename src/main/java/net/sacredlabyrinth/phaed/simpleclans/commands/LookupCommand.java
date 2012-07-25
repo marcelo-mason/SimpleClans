@@ -1,47 +1,63 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author phaed
  */
-public class LookupCommand
+public class LookupCommand extends GenericPlayerCommand
 {
 
-    public LookupCommand()
+    private SimpleClans plugin;
+
+    public LookupCommand(SimpleClans plugin)
     {
+        super("Lookup");
+        this.plugin = plugin;
+        setArgumentRange(0, 1);
+        setUsages(String.format(plugin.getLang("usage.lookup"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("lookup.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        String out = "";
+        if (plugin.getPermissionsManager().has(sender, "simpleclans.member.lookup")) {
+            out = MessageFormat.format(plugin.getLang("0.lookup.1.lookup.your.info"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+        }
+        if (plugin.getPermissionsManager().has(sender, "simpleclans.anyone.lookup")) {
+            out += MessageFormat.format(plugin.getLang("0.lookup.player.1.lookup.a.player.s.info"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+        }
+        return out.isEmpty() ? null : out;
+    }
+
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
+
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
         NumberFormat formatter = new DecimalFormat("#.#");
 
         String playerName = null;
 
-        if (arg.length == 0) {
+        if (args.length == 0) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.member.lookup")) {
                 playerName = player.getName();
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        } else if (arg.length == 1) {
+        } else if (args.length == 1) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.lookup")) {
-                playerName = arg[0];
+                playerName = args[0];
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
@@ -50,35 +66,35 @@ public class LookupCommand
         }
 
         if (playerName != null) {
-            ClanPlayer targetCp = plugin.getClanManager().getAnyClanPlayer(playerName);
+            ClanPlayer targsetCp = plugin.getClanManager().getAnyClanPlayer(playerName);
             ClanPlayer myCp = plugin.getClanManager().getClanPlayer(player.getName());
             Clan myClan = myCp == null ? null : myCp.getClan();
 
-            if (targetCp != null) {
-                Clan targetClan = targetCp.getClan();
+            if (targsetCp != null) {
+                Clan targsetClan = targsetCp.getClan();
 
                 ChatBlock.sendBlank(player);
-                ChatBlock.saySingle(player, MessageFormat.format(plugin.getLang("s.player.info"), plugin.getSettingsManager().getPageClanNameColor() + targetCp.getName() + subColor) + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                ChatBlock.saySingle(player, MessageFormat.format(plugin.getLang("s.player.info"), plugin.getSettingsManager().getPageClanNameColor() + targsetCp.getName() + subColor) + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                 ChatBlock.sendBlank(player);
 
                 String clanName = ChatColor.WHITE + plugin.getLang("none");
 
-                if (targetClan != null) {
-                    clanName = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + targetClan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getPageClanNameColor() + targetClan.getName();
+                if (targsetClan != null) {
+                    clanName = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + targsetClan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getPageClanNameColor() + targsetClan.getName();
                 }
 
-                String status = targetClan == null ? ChatColor.WHITE + plugin.getLang("free.agent") : (targetCp.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() + plugin.getLang("leader") : (targetCp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang("trusted") : plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang("untrusted")));
-                String rank = ChatColor.WHITE + "" + Helper.parseColors(targetCp.getRank());
-                String joinDate = ChatColor.WHITE + "" + targetCp.getJoinDateString();
-                String lastSeen = ChatColor.WHITE + "" + targetCp.getLastSeenString();
-                String inactive = ChatColor.WHITE + "" + targetCp.getInactiveDays() + subColor + "/" + ChatColor.WHITE + plugin.getSettingsManager().getPurgePlayers() + " days";
-                String rival = ChatColor.WHITE + "" + targetCp.getRivalKills();
-                String neutral = ChatColor.WHITE + "" + targetCp.getNeutralKills();
-                String civilian = ChatColor.WHITE + "" + targetCp.getCivilianKills();
-                String deaths = ChatColor.WHITE + "" + targetCp.getDeaths();
-                String kdr = ChatColor.YELLOW + "" + formatter.format(targetCp.getKDR());
-                String power = ChatColor.YELLOW + "" + formatter.format(targetCp.getPower());
-                String pastClans = ChatColor.WHITE + "" + targetCp.getPastClansString(headColor + ", ");
+                String status = targsetClan == null ? ChatColor.WHITE + plugin.getLang("free.agent") : (targsetCp.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() + plugin.getLang("leader") : (targsetCp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang("trusted") : plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang("untrusted")));
+                String rank = ChatColor.WHITE + "" + Helper.parseColors(targsetCp.getRank());
+                String joinDate = ChatColor.WHITE + "" + targsetCp.getJoinDateString();
+                String lastSeen = ChatColor.WHITE + "" + targsetCp.getLastSeenString();
+                String inactive = ChatColor.WHITE + "" + targsetCp.getInactiveDays() + subColor + "/" + ChatColor.WHITE + plugin.getSettingsManager().getPurgePlayers() + " days";
+                String rival = ChatColor.WHITE + "" + targsetCp.getRivalKills();
+                String neutral = ChatColor.WHITE + "" + targsetCp.getNeutralKills();
+                String civilian = ChatColor.WHITE + "" + targsetCp.getCivilianKills();
+                String deaths = ChatColor.WHITE + "" + targsetCp.getDeaths();
+                String kdr = ChatColor.YELLOW + "" + formatter.format(targsetCp.getKDR());
+                String power = ChatColor.YELLOW + "" + formatter.format(targsetCp.getPower());
+                String pastClans = ChatColor.WHITE + "" + targsetCp.getPastClansString(headColor + ", ");
 
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("clan.0"), clanName));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("rank.0"), rank));
@@ -94,13 +110,13 @@ public class LookupCommand
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("past.clans.0"), pastClans));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("inactive.0"), inactive));
 
-                if (arg.length == 1 && targetClan != null) {
-                    if (!targetCp.equals(myCp)) {
+                if (args.length == 1 && targsetClan != null) {
+                    if (!targsetCp.equals(myCp)) {
                         String killType = ChatColor.GRAY + plugin.getLang("neutral");
 
-                        if (targetClan == null) {
+                        if (targsetClan == null) {
                             killType = ChatColor.DARK_GRAY + plugin.getLang("civilian");
-                        } else if (myClan != null && myClan.isRival(targetClan.getTag())) {
+                        } else if (myClan != null && myClan.isRival(targsetClan.getTag())) {
                             killType = ChatColor.WHITE + plugin.getLang("rival");
                         }
 
@@ -112,7 +128,7 @@ public class LookupCommand
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.data.found"));
 
-                if (arg.length == 1 && myClan != null) {
+                if (args.length == 1 && myClan != null) {
                     ChatBlock.sendBlank(player);
                     ChatBlock.sendMessage(player, MessageFormat.format(plugin.getLang("kill.type.civilian"), ChatColor.DARK_GRAY));
                 }

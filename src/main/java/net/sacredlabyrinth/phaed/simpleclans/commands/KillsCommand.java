@@ -1,49 +1,64 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
+import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
-public class KillsCommand
+public class KillsCommand extends GenericPlayerCommand
 {
-    public KillsCommand()
-    {
 
+    private SimpleClans plugin;
+
+    public KillsCommand(SimpleClans plugin)
+    {
+        super("Kills");
+        this.plugin = plugin;
+        setArgumentRange(0, 0);
+        setUsages(String.format(plugin.getLang(""), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("Command.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        if (cp != null) {
+            if (cp.isTrusted() && cp.getClan().isVerified()) {
+                String out = "";
+                if (plugin.getPermissionsManager().has(sender, "simpleclans.member.kills")) {
+                    out = MessageFormat.format(plugin.getLang("0.kills"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+                }
+                if (plugin.getPermissionsManager().has(sender, "simpleclans.member.kills")) {
+                    out += ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.killsplayer"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+                }
+                return out.isEmpty() ? null : out;
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.member.kills"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.member.kills")) {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-            if (cp != null)
-            {
+            if (cp != null) {
                 Clan clan = cp.getClan();
 
-                if (clan.isVerified())
-                {
-                    if (cp.isTrusted())
-                    {
+                if (clan.isVerified()) {
+                    if (cp.isTrusted()) {
                         String polledPlayerName = player.getName();
 
-                        if (arg.length == 1)
-                        {
-                            polledPlayerName = arg[0];
+                        if (args.length == 1) {
+                            polledPlayerName = args[0];
                         }
 
                         ChatBlock chatBlock = new ChatBlock();
@@ -55,16 +70,14 @@ public class KillsCommand
 
                         HashMap<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getKillsPerPlayer(polledPlayerName);
 
-                        if (killsPerPlayerUnordered.isEmpty())
-                        {
+                        if (killsPerPlayerUnordered.isEmpty()) {
                             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nokillsfound"));
                             return;
                         }
 
-                         Map<String, Integer> killsPerPlayer = Helper.sortByValue(killsPerPlayerUnordered);
+                        Map<String, Integer> killsPerPlayer = Helper.sortByValue(killsPerPlayerUnordered);
 
-                        for (String playerName : killsPerPlayer.keySet())
-                        {
+                        for (String playerName : killsPerPlayer.keySet()) {
                             int count = killsPerPlayer.get(playerName);
 
                             chatBlock.addRow("  " + playerName, ChatColor.AQUA + "" + count);
@@ -75,32 +88,23 @@ public class KillsCommand
 
                         boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
 
-                        if (more)
-                        {
+                        if (more) {
                             plugin.getStorageManager().addChatBlock(player, chatBlock);
                             ChatBlock.sendBlank(player);
                             ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
                         }
 
                         ChatBlock.sendBlank(player);
-                    }
-                    else
-                    {
+                    } else {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
                     }
-                }
-                else
-                {
+                } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
                 }
-            }
-            else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
             }
-        }
-        else
-        {
+        } else {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }

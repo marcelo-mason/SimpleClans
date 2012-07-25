@@ -187,4 +187,4 @@ permissions:
       simpleclans.leader.home-regroup: true
       simpleclans.leader.setrank: true
 commands:
-  clan:
+  simpleclans:

@@ -29,7 +29,7 @@ public class ResetCommand
 
         if (arg.length == 1) {
             if (arg[0].equalsIgnoreCase("allkdr")) {
-                if (plugin.getPermissionsManager().has(player, "simpleclans.admin.resetkdr")) {
+                if (plugin.getPermissionsManager().has(sender, "simpleclans.admin.resetkdr")) {
                     plugin.getClanManager().resetKDRs();
                     player.sendMessage(ChatColor.GRAY + plugin.getLang("allkdr.reset"));
                 }
@@ -38,7 +38,7 @@ public class ResetCommand
             }
         } else if (arg.length == 2) {
             if (arg[0].equalsIgnoreCase("kdr")) {
-                if (plugin.getPermissionsManager().has(player, "simpleclans.admin.resetkdr")) {
+                if (plugin.getPermissionsManager().has(sender, "simpleclans.admin.resetkdr")) {
                     Player otherPlayer = plugin.getServer().getPlayer(arg[1]);
                     ClanPlayer cp;
 

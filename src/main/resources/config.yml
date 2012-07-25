@@ -64,6 +64,10 @@ economy:
     purchase-home-teleport-set: false
     money-per-kill: false
     money-per-kill-kdr-multipier: 10
+    purchase-rally-point-teleport: true
+    rally-point-teleport-price: 20
+    purchase-rally-point-set-teleport: true
+    rally-point-teleport-set-price: 30
 kill-weights:
     rival: 2.0
     civilian: 0.0

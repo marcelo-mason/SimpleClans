@@ -7,33 +7,51 @@ import org.bukkit.entity.Player;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
+import org.bukkit.command.CommandSender;
 
 /**
  * @author phaed
  */
-public class ProfileCommand
+public class ProfileCommand extends GenericPlayerCommand
 {
 
-    public ProfileCommand()
+    private SimpleClans plugin;
+
+    public ProfileCommand(SimpleClans plugin)
     {
+        super("Profile");
+        this.plugin = plugin;
+        setArgumentRange(0, 1);
+        setUsages(String.format(plugin.getLang("usage.profile"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("profile.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        String out = "";
+        if (cp != null) {
+            if (cp.getClan().isVerified() && plugin.getPermissionsManager().has(sender, "simpleclans.member.profile")) {
+                out = MessageFormat.format(plugin.getLang("0.profile.1.view.your.clan.s.profile"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            }
+        }
+        if (plugin.getPermissionsManager().has(sender, "simpleclans.anyone.profile")) {
+            out += MessageFormat.format(plugin.getLang("0.profile.tag.1.view.a.clan.s.profile"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+        }
+        return out.isEmpty() ? null : out;
+    }
+
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
         NumberFormat formatter = new DecimalFormat("#.#");
 
         Clan clan = null;
 
-        if (arg.length == 0) {
+        if (args.length == 0) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.member.profile")) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
@@ -49,9 +67,9 @@ public class ProfileCommand
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        } else if (arg.length == 1) {
+        } else if (args.length == 1) {
             if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.profile")) {
-                clan = plugin.getClanManager().getClan(arg[0]);
+                clan = plugin.getClanManager().getClan(args[0]);
 
                 if (clan == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clan.matched"));

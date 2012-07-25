@@ -214,9 +214,9 @@ public class AutoUpdate implements Runnable, Listener
 	  while(!lock.compareAndSet(false, true))
 		continue; //TODO: This blocks the main thread...
 	  this.config = config;
-	  if(!config.isSet("AutoUpdate"))
-		config.set("AutoUpdate", true);
-	  checkState(config.getBoolean("AutoUpdate"), true);
+	  if(!config.isSet("settings.auto-update"))
+		config.set("settings.auto-update", true);
+	  checkState(config.getBoolean("settings.auto-update"), true);
 	  lock.set(false);
 	}
 	catch(Throwable t)

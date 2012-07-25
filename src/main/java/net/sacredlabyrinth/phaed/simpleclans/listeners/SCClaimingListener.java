@@ -342,26 +342,4 @@ public class SCClaimingListener implements Listener
             }
         }
     }
-
-    @EventHandler
-    public void onSpoutCraftCreate(SpoutCraftEnableEvent event)
-    {
-        SpoutPlayer sp = event.getPlayer();
-        ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(sp.getName());
-        System.out.println(cp);
-        if (cp != null) {
-            Clan clan = cp.getClan();
-            System.out.println(clan);
-            plugin.getSpoutPluginManager().setupClaimView(sp);
-            if (clan != null) {
-                System.out.println("Waypoint");
-                Location home = clan.getHomeChunkMiddle();
-                double x = home.getX();
-                double z = home.getZ();
-                double y = home.getY();
-
-                sp.addWaypoint("Homeblock", x, y, z);
-            }
-        }
-    }
 }

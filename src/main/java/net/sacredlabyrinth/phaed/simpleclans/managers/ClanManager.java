@@ -981,7 +981,59 @@ public final class ClanManager
 
         return true;
     }
+    /**
+     * Purchase Rally-point Teleport
+     *
+     * @param player
+     * @return
+     */
+    public boolean purchaseRallyPointTeleport(Player player)
+    {
+        if (!plugin.getSettingsManager().isRallyTeleportPurchase()) {
+            return true;
+        }
 
+        double price = plugin.getSettingsManager().getRallyTeleportPrice();
+
+        if (plugin.getPermissionsManager().hasEconomy()) {
+            if (plugin.getPermissionsManager().playerHasMoney(player, price)) {
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+            } else {
+                player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Purchase Rally-point Teleport Set
+     *
+     * @param player
+     * @return
+     */
+    public boolean purchaseRallyPointTeleportSet(Player player)
+    {
+        if (!plugin.getSettingsManager().isRallyTeleportSetPurchase()) {
+            return true;
+        }
+
+        double price = plugin.getSettingsManager().getRallyTeleportSetPrice();
+
+        if (plugin.getPermissionsManager().hasEconomy()) {
+            if (plugin.getPermissionsManager().playerHasMoney(player, price)) {
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+            } else {
+                player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                return false;
+            }
+        }
+
+        return true;
+    }
     /**
      * Purchase Home Teleport
      *

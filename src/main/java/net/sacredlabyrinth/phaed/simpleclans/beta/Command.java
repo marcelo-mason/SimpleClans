@@ -8,9 +8,11 @@
  * California, 94105, USA.
  * 
  */
-package net.sacredlabyrinth.phaed.simpleclans.commands;
+package net.sacredlabyrinth.phaed.simpleclans.beta;
 
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -19,29 +21,50 @@ import org.bukkit.command.CommandSender;
 public interface Command
 {
 
-    public void execute(CommandSender sender, String label, String[] args);
+    //public void execute(org.bukkit.command.CommandSender sender, String label, String[] args);
+    //public void execute(org.bukkit.entity.Player player, String label, String[] args);
 
     public String getName();
 
-    public boolean isLeaderOnly();
+//    public boolean isNoClanCommand();
+//
+//    public void setNoClanCommand();
+//
+//    public boolean isLeaderCommand();
+//
+//    public void setLeaderCommand();
+//
+//    public boolean isTrustedCommand();
+//
+//    public void setTrustedCommand();
+//
+//    public boolean isSpoutCommand();
+//
+//    public void setSpoutCommand();
+//
+//    public boolean isVerifiedCommand();
+//
+//    public void setVerifiedCommand();
+//
+//    public boolean isNonVerifiedCommand();
+//
+//    public void setNonVerifiedCommand();
 
-    public void setLeaderOnly();
+//    public boolean hasPermission(org.bukkit.command.CommandSender sender);
+//
+//    public void setPermissions(String... perm);
 
-    public String getPermission();
-
-    public void setPermission(String perm);
-
-    public void setMenuName(String name);
-
-    public String getMenuName();
-
-    public String getUsage();
+    public String[] getUsages();
 
     public void setIdentifiers(String... identifiers);
 
     public boolean isIdentifier(String cmd);
 
-    public void setUsage(String text);
+    public void setUsages(String... text);
+
+//    public void setMenu(String... text);
+
+    public String getMenu(ClanPlayer cp, CommandSender sender);
 
     public int getMaxArguments();
 

@@ -48,7 +48,7 @@ public class Clan implements Serializable, Comparable<Clan>
     private Set<ChunkLocation> claimed = new HashSet<ChunkLocation>();
     private ChunkLocation homeChunk = null;
     private Set<Byte> permissions = new HashSet<Byte>();
-    private Location rallyPoint;
+    private Location rallyPoint = null;
     private long rallySetTime;
 
     /**
@@ -1077,6 +1077,24 @@ public class Clan implements Serializable, Comparable<Clan>
     public void setRallyPoint(Location rallyPoint)
     {
         this.rallyPoint = rallyPoint;
+    }
+
+    /**
+     * Returns the last setted rally point or null if it is not setted or it is
+     * expired
+     *
+     * @return
+     */
+    public Location getRallyPoint()
+    {
+        long time = System.currentTimeMillis();
+
+        if (rallySetTime < time - 300000L) {
+            rallyPoint = null;
+            return null;
+        } else {
+            return rallyPoint;
+        }
     }
 
     /**

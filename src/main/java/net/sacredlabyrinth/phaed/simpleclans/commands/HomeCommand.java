@@ -1,40 +1,59 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
-
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Random;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  * @author phaed
  */
-public class HomeCommand
+public class HomeCommand extends GenericPlayerCommand
 {
 
-    public HomeCommand()
+    private SimpleClans plugin;
+
+    public HomeCommand(SimpleClans plugin)
     {
+        super("Home");
+        this.plugin = plugin;
+        setArgumentRange(0, 2);
+        setUsages(String.format(plugin.getLang("usage.home"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("home.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        if (cp != null) {
+            boolean isVerified = cp.getClan().isVerified();
+            String out = "";
+            if (isVerified && plugin.getPermissionsManager().has(sender, "simpleclans.member.home")) {
+                out = MessageFormat.format(plugin.getLang("home-menu"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            }
+            if (isVerified && cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.leader.home-set")) {
+                out += MessageFormat.format(plugin.getLang("home-set-menu"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            }
+            return out.isEmpty() ? null : out;
+        }
+        return null;
+    }
 
-        if (arg.length == 2 && arg[0].equalsIgnoreCase(plugin.getLang("home.command.set")) && plugin.getPermissionsManager().has(player, "simpleclans.mod.home")) {
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
+
+        if (args.length == 2 && args[0].equalsIgnoreCase(plugin.getLang("home.command.set")) && plugin.getPermissionsManager().has(player, "simpleclans.mod.home")) {
             if (plugin.getClanManager().purchaseHomeTeleportSet(player)) {
                 Location loc = player.getLocation();
 
-                Clan clan = plugin.getClanManager().getClan(arg[1]);
+                Clan clan = plugin.getClanManager().getClan(args[1]);
 
                 if (clan != null) {
                     clan.setHomeLocation(loc);
@@ -53,7 +72,7 @@ public class HomeCommand
 
             if (clan.isVerified()) {
                 if (cp.isTrusted()) {
-                    if (arg.length == 0) {
+                    if (args.length == 0) {
                         if (plugin.getPermissionsManager().has(player, "simpleclans.member.home")) {
                             if (plugin.getClanManager().purchaseHomeTeleport(player)) {
                                 Location loc = clan.getHomeLocation();
@@ -69,7 +88,7 @@ public class HomeCommand
                             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                         }
                     } else {
-                        String ttag = arg[0];
+                        String ttag = args[0];
 
                         if (ttag.equalsIgnoreCase("set")) {
                             Location loc = player.getLocation();

@@ -6,15 +6,18 @@ import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.bukkit.event.EventHandler;
+import org.bukkit.event.Listener;
 import static org.getspout.spoutapi.SpoutManager.getPlayer;
 import static org.getspout.spoutapi.SpoutManager.getSoundManager;
+import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.gui.*;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * @author phaed
  */
-public class SpoutPluginManager
+public class SpoutPluginManager implements Listener
 {
 
     private SimpleClans plugin;
@@ -26,9 +29,35 @@ public class SpoutPluginManager
     public SpoutPluginManager(SimpleClans plugin)
     {
         this.plugin = plugin;
-
+        if (plugin.getSettingsManager().isClaimingEnabled()) {
+            plugin.getServer().getPluginManager().registerEvents(this, plugin);
+        }
         if (plugin.getSettingsManager().isClaimingEnabled()) {
             plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new UpdateLocationInfo(), 20L, 40L);
+        }
+    }
+
+    @EventHandler
+    public void onSpoutCraftCreate(SpoutCraftEnableEvent event)
+    {
+        if (plugin.getSettingsManager().isClaimingEnabled()) {
+            SpoutPlayer sp = event.getPlayer();
+            ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(sp.getName());
+            System.out.println(cp);
+            if (cp != null) {
+                Clan clan = cp.getClan();
+                System.out.println(clan);
+                plugin.getSpoutPluginManager().setupClaimView(sp);
+                if (clan != null) {
+                    System.out.println("Waypoint");
+                    Location home = clan.getHomeChunkMiddle();
+                    double x = home.getX();
+                    double z = home.getZ();
+                    double y = home.getY();
+
+                    sp.addWaypoint("Homeblock", x, y, z);
+                }
+            }
         }
     }
 
@@ -161,7 +190,7 @@ public class SpoutPluginManager
                     }
                 }
 
-               updateClaimView(cp.getName(),sb.toString());
+                updateClaimView(cp.getName(), sb.toString());
             }
         }
     }

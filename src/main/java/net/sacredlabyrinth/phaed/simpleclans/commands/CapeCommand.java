@@ -5,26 +5,40 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
+import org.bukkit.command.CommandSender;
 
 /**
  * @author phaed
  */
-public class CapeCommand
+public class CapeCommand extends GenericPlayerCommand
 {
 
-    public CapeCommand()
+    private SimpleClans plugin;
+
+    public CapeCommand(SimpleClans plugin)
     {
+        super("Cape");
+        this.plugin = plugin;
+        setArgumentRange(1, 1);
+        setUsages(String.format(plugin.getLang("usage.cape"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("cape.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        if (cp != null) {
+            if (cp.getClan().isVerified() && cp.isLeader() && plugin.hasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(sender, "simpleclans.leader.cape")) {
+                return MessageFormat.format(plugin.getLang("0.cape.url.1.change.your.clan.s.cape"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
 
         if (plugin.getPermissionsManager().has(player, "simpleclans.leader.cape")) {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
@@ -34,8 +48,8 @@ public class CapeCommand
 
                 if (clan.isVerified()) {
                     if (clan.isLeader(player)) {
-                        if (arg.length == 1) {
-                            String url = arg[0];
+                        if (args.length == 1) {
+                            String url = args[0];
 
                             if (url.substring(url.length() - 4, url.length()).equalsIgnoreCase(".png") && url.length() > 5 && url.length() < 255) {
                                 if (Helper.testURL(url)) {

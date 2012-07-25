@@ -4,25 +4,39 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-public class StrifesCommand
+public class StrifesCommand extends GenericPlayerCommand
 {
 
-    public StrifesCommand()
+    private SimpleClans plugin;
+
+    public StrifesCommand(SimpleClans plugin)
     {
+        super("Command");
+        this.plugin = plugin;
+        setArgumentRange(0, 0);
+        setUsages(String.format(plugin.getLang("usage.strifes"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("strifes.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        if (cp != null) {
+            if (plugin.getPermissionsManager().has(sender, "simpleclans.member.strifes")) {
+                return MessageFormat.format(plugin.getLang("usage.menu.strifes"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            }
+        }
+        return null;
+    }
+
+    @Override
+    public void execute(Player player, String label, String[] args)
+    {
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
 
@@ -34,41 +48,41 @@ public class StrifesCommand
 
                 if (clan.isVerified()) {
                     if (cp.isTrusted()) {
-                        if (arg.length == 0) {
-                            ChatBlock chatBlock = new ChatBlock();
 
-                            chatBlock.setFlexibility(true, false);
-                            chatBlock.setAlignment("l", "c");
+                        ChatBlock chatBlock = new ChatBlock();
 
-                            chatBlock.addRow("  " + headColor + plugin.getLang("clan"), plugin.getLang("strifes"));
-                            Map<String, Integer> unordered = new HashMap<String, Integer>();
+                        chatBlock.setFlexibility(true, false);
+                        chatBlock.setAlignment("l", "c");
 
-                            for (Clan clans : plugin.getClanManager().getClans()) {
-                                if (plugin.getStorageManager().retrieveStrifes(clan, clans) != 0) {
-                                    unordered.put(clans.getTag(), plugin.getStorageManager().retrieveStrifes(clan, clans));
-                                }
+                        chatBlock.addRow("  " + headColor + plugin.getLang("clan"), plugin.getLang("strifes"));
+                        Map<String, Integer> unordered = new HashMap<String, Integer>();
+
+                        for (Clan clans : plugin.getClanManager().getClans()) {
+                            if (plugin.getStorageManager().retrieveStrifes(clan, clans) != 0) {
+                                unordered.put(clans.getTag(), plugin.getStorageManager().retrieveStrifes(clan, clans));
                             }
-
-                            Map<String, Integer> ordered = Helper.sortByValue(unordered);
-
-                            for (String clanTag : ordered.keySet()) {
-                                chatBlock.addRow("  " + clanTag, ChatColor.AQUA + "" + ordered.get(clanTag));
-                            }
-
-                            ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + subColor + " " + plugin.getLang("strifes") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
-                            ChatBlock.sendBlank(player);
-
-                            boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
-
-                            if (more) {
-                                plugin.getStorageManager().addChatBlock(player, chatBlock);
-                                ChatBlock.sendBlank(player);
-                                ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
-                            }
-
-                            ChatBlock.sendBlank(player);
-
                         }
+
+                        Map<String, Integer> ordered = Helper.sortByValue(unordered);
+
+                        for (String clanTag : ordered.keySet()) {
+                            chatBlock.addRow("  " + clanTag, ChatColor.AQUA + "" + ordered.get(clanTag));
+                        }
+
+                        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + subColor + " " + plugin.getLang("strifes") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                        ChatBlock.sendBlank(player);
+
+                        boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+
+                        if (more) {
+                            plugin.getStorageManager().addChatBlock(player, chatBlock);
+                            ChatBlock.sendBlank(player);
+                            ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                        }
+
+                        ChatBlock.sendBlank(player);
+
+
                     } else {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
                     }

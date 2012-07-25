@@ -14,8 +14,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.commands.Command;
+import java.util.logging.Level;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 
 /**
  *
@@ -25,9 +27,11 @@ public class BetaCommandManager
 {
 
     private LinkedHashMap<String, Command> commands;
+    private SimpleClans plugin;
 
-    public BetaCommandManager()
+    public BetaCommandManager(SimpleClans plugin)
     {
+        this.plugin = plugin;
         commands = new LinkedHashMap<String, Command>();
     }
 
@@ -51,18 +55,23 @@ public class BetaCommandManager
         return new ArrayList<Command>(commands.values());
     }
 
-    public boolean executeAll(final CommandSender sender, org.bukkit.command.Command command, String label, String[] args)
+    public boolean executeAll(final Player player, final CommandSender sender, String command, String label, String[] args)
     {
-
+        long end;
+        long start = System.currentTimeMillis();
         String[] arguments;
 
         //Build the args; if the args length is 0 then build if from the base command
         if (args.length == 0) {
-            arguments = new String[]{command.getName()};
+            arguments = new String[]{command};
         } else {
             arguments = args;
         }
-
+//        ClanPlayer cp = null;
+//
+//        if (sender instanceof Player) {
+//            cp = plugin.getClanManager().getClanPlayer(sender.getName());
+//        }
 
         //Iterate through all arguments from the last to the first argument
         for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {
@@ -79,14 +88,35 @@ public class BetaCommandManager
                     String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
 
                     if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
-                        displayCommandHelp(cmd, sender);
+                        displayCommandHelp(cmd, sender, player);
+                        end = System.currentTimeMillis();
+                        System.out.println(end - start);
                         return true;
                     } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
-                        displayCommandHelp(cmd, sender);
+                        displayCommandHelp(cmd, sender, player);
+                        end = System.currentTimeMillis();
+                        System.out.println(end - start);
                         return true;
                     }
 
-                    cmd.execute(sender, identifier, realArgs);
+
+                    if (cmd instanceof GenericConsoleCommand) {
+                        if (sender != null) {
+                            ((GenericConsoleCommand) cmd).execute(sender, label, realArgs);
+                        } else {
+                            ((GenericConsoleCommand) cmd).execute((CommandSender) player, label, realArgs);
+                        }
+                    } else if (cmd instanceof GenericPlayerCommand) {
+                        if (player != null) {
+                            ((GenericPlayerCommand) cmd).execute(player, label, realArgs);
+                        } else {
+                            SimpleClans.debug(Level.WARNING, "Failed at parsing the command :(");
+                        }
+                    } else {
+                        SimpleClans.debug(Level.WARNING, "Failed at parsing the command :(");
+                    }
+                    end = System.currentTimeMillis();
+                    System.out.println(end - start);
                     return true;
                 }
             }
@@ -95,9 +125,26 @@ public class BetaCommandManager
         return true;
     }
 
-    private void displayCommandHelp(Command cmd, CommandSender sender)
+    private void displayCommandHelp(Command cmd, CommandSender sender, Player player)
     {
-        sender.sendMessage("§cCommand:§e " + cmd.getName());
-        sender.sendMessage("§cUsage:§e " + cmd.getUsage());
+        if (player == null) {
+            sender.sendMessage("§cCommand:§e " + cmd.getName());
+            String[] usages = cmd.getUsages();
+            StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
+
+            for (int i = 1; i < usages.length; i++) {
+                sb.append("           ").append(usages[i]).append("\n");
+            }
+            sender.sendMessage(sb.toString());
+        } else if (sender == null) {
+            player.sendMessage("§cCommand:§e " + cmd.getName());
+            String[] usages = cmd.getUsages();
+            StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
+
+            for (int i = 1; i < usages.length; i++) {
+                sb.append("           ").append(usages[i]).append("\n");
+            }
+            player.sendMessage(sb.toString());
+        }
     }
 }

@@ -1,36 +1,46 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.io.FileNotFoundException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.beta.GenericConsoleCommand;
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 /**
  *
  * @author phaed
  */
-public class ReloadCommand
+public class ReloadCommand extends GenericConsoleCommand
 {
 
-    public ReloadCommand()
+    private SimpleClans plugin;
+
+    public ReloadCommand(SimpleClans plugin)
     {
+        super("Reload");
+        this.plugin = plugin;
+        setArgumentRange(0, 0);
+        setUsages(String.format(plugin.getLang("usage.reload"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("reload.command"));
     }
 
-    /**
-     * Execute the command
-     *
-     * @param player
-     * @param arg
-     */
-    public void execute(Player player, String[] arg)
+    @Override
+    public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        SimpleClans plugin = SimpleClans.getInstance();
+        if (plugin.getPermissionsManager().has(sender, "simpleclans.admin.reload")) {
+            return MessageFormat.format(plugin.getLang("0.reload.1.reload.configuration"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+        }
+        return null;
+    }
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.admin.reload")) {
+    @Override
+    public void execute(CommandSender sender, String label, String[] args)
+    {
+        if (sender.hasPermission("simpleclans.admin.reload")) {
+            long start = System.currentTimeMillis();
             plugin.getSettingsManager().reload();
 
             try {
@@ -41,11 +51,12 @@ public class ReloadCommand
 
             plugin.getStorageManager().importFromDatabase();
             for (Clan clan : plugin.getClanManager().getClans()) {
-                SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
+                plugin.getPermissionsManager().updateClanPermissions(clan);
             }
-            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("configuration.reloaded"));
+            long end = System.currentTimeMillis();
+            sender.sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("configuration.reloaded"), end - start));
         } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + "Think you're slick don't ya");
+            sender.sendMessage(ChatColor.RED + "Think you're slick don't ya");
         }
     }
 }
