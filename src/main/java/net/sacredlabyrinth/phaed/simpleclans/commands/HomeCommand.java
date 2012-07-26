@@ -24,7 +24,7 @@ public class HomeCommand extends GenericPlayerCommand
         super("Home");
         this.plugin = plugin;
         setArgumentRange(0, 2);
-        setUsages(String.format(plugin.getLang("usage.home"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.home"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("home.command"));
     }
 
@@ -38,7 +38,7 @@ public class HomeCommand extends GenericPlayerCommand
                 out = MessageFormat.format(plugin.getLang("home-menu"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
             }
             if (isVerified && cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.leader.home-set")) {
-                out += MessageFormat.format(plugin.getLang("home-set-menu"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+                out += "\n   §b" +MessageFormat.format(plugin.getLang("home-set-menu"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
             }
             return out.isEmpty() ? null : out;
         }

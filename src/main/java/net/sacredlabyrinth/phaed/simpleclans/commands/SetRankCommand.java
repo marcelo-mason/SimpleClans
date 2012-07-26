@@ -17,7 +17,7 @@ public class SetRankCommand extends GenericPlayerCommand
         super("SetRank");
         this.plugin = plugin;
         setArgumentRange(1, 50);
-        setUsages(String.format(plugin.getLang("usage.setrank"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.setrank"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("setrank.command"));
     }
 

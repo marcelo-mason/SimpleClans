@@ -22,7 +22,7 @@ public class LookupCommand extends GenericPlayerCommand
         super("Lookup");
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.lookup"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.lookup"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("lookup.command"));
     }
 
@@ -34,7 +34,7 @@ public class LookupCommand extends GenericPlayerCommand
             out = MessageFormat.format(plugin.getLang("0.lookup.1.lookup.your.info"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
         }
         if (plugin.getPermissionsManager().has(sender, "simpleclans.anyone.lookup")) {
-            out += MessageFormat.format(plugin.getLang("0.lookup.player.1.lookup.a.player.s.info"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            out += "\n   §b" + MessageFormat.format(plugin.getLang("0.lookup.player.1.lookup.a.player.s.info"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
         }
         return out.isEmpty() ? null : out;
     }

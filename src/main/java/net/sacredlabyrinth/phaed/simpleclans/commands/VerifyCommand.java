@@ -22,8 +22,8 @@ public class VerifyCommand extends GenericPlayerCommand
     {
         super("Verify");
         this.plugin = plugin;
-        setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.verify"), plugin.getSettingsManager().getCommandClan()));
+        setArgumentRange(0, 0);
+        setUsages(MessageFormat.format(plugin.getLang("usage.verify"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("verify.command"));
     }
 
@@ -49,31 +49,13 @@ public class VerifyCommand extends GenericPlayerCommand
         boolean isBuyer = isNonVerified && plugin.getSettingsManager().isRequireVerification() && plugin.getSettingsManager().isePurchaseVerification();
 
         if (isBuyer) {
-            if (args.length == 0) {
-                if (plugin.getClanManager().purchaseVerification(player)) {
-                    clan.verifyClan();
-                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
-                }
+            if (plugin.getClanManager().purchaseVerification(player)) {
+                clan.verifyClan();
+                clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
+            } else {
+                player.sendMessage(ChatColor.AQUA + plugin.getLang("not.sufficient.money"));
             }
-        } else if (plugin.getPermissionsManager().has(player, "simpleclans.mod.verify")) {
-            if (args.length == 1) {
-                Clan cclan = plugin.getClanManager().getClan(args[0]);
-
-                if (cclan != null) {
-                    if (!cclan.isVerified()) {
-                        cclan.verifyClan();
-                        cclan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), cclan.getName()));
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.is.already.verified"));
-                    }
-                } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.does.not.exist"));
-                }
-            }
-        } else {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
         }
     }
 }

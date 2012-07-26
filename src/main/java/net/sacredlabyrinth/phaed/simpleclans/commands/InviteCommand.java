@@ -21,7 +21,7 @@ public class InviteCommand extends GenericPlayerCommand
         super("Invite");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.invite"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.invite"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("invite.command"));
     }
 

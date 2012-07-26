@@ -23,7 +23,7 @@ public class ReloadCommand extends GenericConsoleCommand
         super("Reload");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.reload"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.reload"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("reload.command"));
     }
 
@@ -31,7 +31,7 @@ public class ReloadCommand extends GenericConsoleCommand
     public String getMenu(ClanPlayer cp, CommandSender sender)
     {
         if (plugin.getPermissionsManager().has(sender, "simpleclans.admin.reload")) {
-            return MessageFormat.format(plugin.getLang("0.reload.1.reload.configuration"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            return ChatColor.DARK_RED + MessageFormat.format(plugin.getLang("0.reload.1.reload.configuration"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
         }
         return null;
     }

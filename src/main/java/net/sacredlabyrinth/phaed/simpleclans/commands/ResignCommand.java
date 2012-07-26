@@ -21,7 +21,7 @@ public class ResignCommand extends GenericPlayerCommand
         super("Resign");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.resign"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.resign"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("resign.command"));
     }
 

@@ -20,7 +20,7 @@ public class RivalCommand extends GenericPlayerCommand
         super("Rival");
         this.plugin = plugin;
         setArgumentRange(2, 2);
-        setUsages(String.format(plugin.getLang("usage.rival"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.rival"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("rival.command"));
     }
 

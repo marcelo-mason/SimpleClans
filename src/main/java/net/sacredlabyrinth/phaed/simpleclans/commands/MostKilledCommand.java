@@ -19,7 +19,7 @@ public class MostKilledCommand extends GenericPlayerCommand
         super("MostKilled");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.mostkilled"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.mostkilled"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("mostkilled.command"));
     }
 
@@ -28,7 +28,7 @@ public class MostKilledCommand extends GenericPlayerCommand
     {
         if (cp != null) {
             if (cp.isTrusted() && cp.getClan().isVerified() && plugin.getPermissionsManager().has(sender, "simpleclans.mod.mostkilled")) {
-                return MessageFormat.format(plugin.getLang("0.mostkilled"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+                return ChatColor.DARK_RED + MessageFormat.format(plugin.getLang("0.mostkilled"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
             }
         }
         return null;

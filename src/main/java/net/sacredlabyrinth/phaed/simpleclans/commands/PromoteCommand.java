@@ -20,7 +20,7 @@ public class PromoteCommand extends GenericPlayerCommand
         super("Promote");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.promote"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.promote"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("promote.command"));
     }
 

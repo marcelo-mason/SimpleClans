@@ -23,7 +23,7 @@ public class UnClaimCommand extends GenericPlayerCommand
         super("UnClaim");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.unclaim"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.unclaim"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("unclaim.command"));
     }
 

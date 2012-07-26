@@ -140,24 +140,51 @@ public class SimpleClans extends JavaPlugin
     private void setupBetaCommandManager()
     {
         betaCommandManager = new BetaCommandManager(this);
-        betaCommandManager.addCommand(new ListCommand(this));
         betaCommandManager.addCommand(new CreateCommand(this));
         betaCommandManager.addCommand(new VerifyCommand(this));
-        betaCommandManager.addCommand(new CapeCommand(this));
-        betaCommandManager.addCommand(new AllyCommand(this));
-        betaCommandManager.addCommand(new BanCommand(this));
+        betaCommandManager.addCommand(new ListCommand(this));
+        betaCommandManager.addCommand(new ProfileCommand(this));
         betaCommandManager.addCommand(new LookupCommand(this));
-        betaCommandManager.addCommand(new BankCommand(this));
-        betaCommandManager.addCommand(new HelpCommand(this));
+        betaCommandManager.addCommand(new LeaderboardCommand(this));
         betaCommandManager.addCommand(new AlliancesCommand(this));
+        betaCommandManager.addCommand(new RivalriesCommand(this));
+        betaCommandManager.addCommand(new RosterCommand(this));
+        betaCommandManager.addCommand(new VitalsCommand(this));
+        betaCommandManager.addCommand(new CoordsCommand(this));
+        betaCommandManager.addCommand(new StatsCommand(this));
+        betaCommandManager.addCommand(new KillsCommand(this));
+        betaCommandManager.addCommand(new AllyCommand(this));
+        betaCommandManager.addCommand(new RivalCommand(this));
+        betaCommandManager.addCommand(new HomeCommand(this));
+        betaCommandManager.addCommand(new WarCommand(this));
+        if (settingsManager.isClaimingEnabled()) {
+            betaCommandManager.addCommand(new ClaimCommand(this));
+            betaCommandManager.addCommand(new MapCommand(this));
+            betaCommandManager.addCommand(new UnClaimCommand(this));
+        }
+        betaCommandManager.addCommand(new BbCommand(this));
+        betaCommandManager.addCommand(new ModtagCommand(this));
+        betaCommandManager.addCommand(new ToggleCommand(this));
+        betaCommandManager.addCommand(new InviteCommand(this));
+        betaCommandManager.addCommand(new KickCommand(this));
+        betaCommandManager.addCommand(new SetRankCommand(this));
+        betaCommandManager.addCommand(new TrustCommand(this));
+        betaCommandManager.addCommand(new UntrustCommand(this));
+        betaCommandManager.addCommand(new PromoteCommand(this));
+        betaCommandManager.addCommand(new DemoteCommand(this));
+        betaCommandManager.addCommand(new ClanffCommand(this));
+        betaCommandManager.addCommand(new FfCommand(this));
+        betaCommandManager.addCommand(new ResignCommand(this));
+        betaCommandManager.addCommand(new DisbandCommand(this));
+        betaCommandManager.addCommand(new VerifyModCommand(this));
+        betaCommandManager.addCommand(new MostKilledCommand(this));
+        betaCommandManager.addCommand(new DisbandCommand(this));
+        betaCommandManager.addCommand(new BanCommand(this));
         betaCommandManager.addCommand(new GlobalffCommand(this));
+        betaCommandManager.addCommand(new ReloadCommand(this));
+        betaCommandManager.addCommand(new HelpCommand(this));
     }
 
-//    @Override
-//    public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
-//    {
-//        return betaCommandManager.executeAll(sender, command, label, args);
-//    }
     @Override
     public void onDisable()
     {

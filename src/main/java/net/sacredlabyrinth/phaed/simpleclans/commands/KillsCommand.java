@@ -19,8 +19,8 @@ public class KillsCommand extends GenericPlayerCommand
         super("Kills");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang(""), plugin.getSettingsManager().getCommandClan()));
-        setIdentifiers(plugin.getLang("Command.command"));
+        setUsages(MessageFormat.format(plugin.getLang("usage.kills"), plugin.getSettingsManager().getCommandClan()));
+        setIdentifiers(plugin.getLang("kills.command"));
     }
 
     @Override
@@ -33,7 +33,7 @@ public class KillsCommand extends GenericPlayerCommand
                     out = MessageFormat.format(plugin.getLang("0.kills"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
                 }
                 if (plugin.getPermissionsManager().has(sender, "simpleclans.member.kills")) {
-                    out += ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.killsplayer"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+                    out += "\n   §b" + MessageFormat.format(plugin.getLang("0.killsplayer"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
                 }
                 return out.isEmpty() ? null : out;
             }

@@ -134,7 +134,7 @@ public final class StorageManager
                 SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("mysql.connection.failed"));
             }
         } else {
-            
+
             SimpleClans.debug(Level.WARNING, "Using MySQL is highly recommended! (250x faster)");
             core = new SQLiteCore(plugin.getDataFolder().getPath());
 
@@ -382,7 +382,9 @@ public final class StorageManager
                         clan.setFounded(founded);
                         clan.setLastUsed(last_used);
                         clan.setBalance(balance);
-                        clan.setClaimedChunks(retrieveClaims(tag));
+                        if (plugin.getSettingsManager().isClaimingEnabled()) {
+                            clan.setClaimedChunks(retrieveClaims(tag));
+                        }
 
                         out.add(clan);
                     } catch (Exception ex) {

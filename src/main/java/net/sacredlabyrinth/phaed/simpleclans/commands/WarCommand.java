@@ -21,7 +21,7 @@ public class WarCommand extends GenericPlayerCommand
         super("War");
         this.plugin = plugin;
         setArgumentRange(2, 2);
-        setUsages(String.format(plugin.getLang("usage.war"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.war"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("war.command"));
     }
 

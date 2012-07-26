@@ -23,7 +23,7 @@ public class StatsCommand extends GenericPlayerCommand
         super("Stats");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.stats"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.stats"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("stats.command"));
     }
 

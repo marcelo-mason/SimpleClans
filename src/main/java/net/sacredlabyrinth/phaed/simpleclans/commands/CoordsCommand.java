@@ -25,7 +25,7 @@ public class CoordsCommand extends GenericPlayerCommand
         super("Coords");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.coords"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.coords"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("coords.command"));
     }
 

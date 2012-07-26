@@ -21,7 +21,7 @@ public class KickCommand extends GenericPlayerCommand
         super("Kick");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.kick"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.kick"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("kick.command"));
     }
 

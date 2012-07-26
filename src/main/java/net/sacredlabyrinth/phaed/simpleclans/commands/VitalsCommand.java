@@ -22,7 +22,7 @@ public class VitalsCommand extends GenericPlayerCommand
         super("Vitals");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.vitals"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.vitals"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("vitals.command"));
     }
 

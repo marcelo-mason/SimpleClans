@@ -21,7 +21,7 @@ public class TrustCommand extends GenericPlayerCommand
         super("Trust");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.trust"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.trust"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("trust.command"));
     }
 

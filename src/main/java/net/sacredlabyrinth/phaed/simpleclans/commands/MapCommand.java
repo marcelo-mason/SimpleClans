@@ -38,7 +38,7 @@ public class MapCommand extends GenericPlayerCommand
         super("Map");
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.map"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.map"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("map.command"));
     }
 

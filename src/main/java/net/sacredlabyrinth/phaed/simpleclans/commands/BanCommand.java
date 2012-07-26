@@ -32,7 +32,7 @@ public class BanCommand extends GenericPlayerCommand
     public String getMenu(ClanPlayer cp, CommandSender sender)
     {
         if (plugin.getPermissionsManager().has(sender, "simpleclans.mod.ban")) {
-            return MessageFormat.format(plugin.getLang("0.ban.unban.player.1.ban.unban.a.player"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            return ChatColor.DARK_RED + MessageFormat.format(plugin.getLang("0.ban.unban.player.1.ban.unban.a.player"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
         }
         return null;
     }

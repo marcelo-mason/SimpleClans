@@ -20,33 +20,36 @@ public class ToggleCommand extends GenericPlayerCommand
         super("Command");
         this.plugin = plugin;
         setArgumentRange(1, 2);
-        setUsages(String.format(plugin.getLang("usage.toggle"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.toggle"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("toggle.command"));
     }
 
     @Override
     public String getMenu(ClanPlayer cp, CommandSender sender)
     {
-        StringBuilder toggles = new StringBuilder();
+        if (cp != null) {
+            StringBuilder toggles = new StringBuilder();
 
-        if (cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
-            toggles.append("tag/");
-        }
-        if (cp.getClan().isVerified()) {
-            if (plugin.hasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(sender, "simpleclans.member.cape-toggle")) {
-                toggles.append("cape/");
+            if (cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
+                toggles.append("tag/");
             }
-            if (cp.isTrusted()) {
-                if (plugin.getPermissionsManager().has(sender, "simpleclans.member.bb-toggle")) {
-                    toggles.append("bb/");
+            if (cp.getClan().isVerified()) {
+                if (plugin.hasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(sender, "simpleclans.member.cape-toggle")) {
+                    toggles.append("cape/");
                 }
-                if (plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
-                    toggles.append("tag/");
+                if (cp.isTrusted()) {
+                    if (plugin.getPermissionsManager().has(sender, "simpleclans.member.bb-toggle")) {
+                        toggles.append("bb/");
+                    }
+                    if (plugin.getPermissionsManager().has(sender, "simpleclans.member.tag-toggle")) {
+                        toggles.append("tag/");
+                    }
                 }
             }
+            return toggles.length() == 0 ? null : MessageFormat.format(plugin.getLang("0.toggle.command"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE, Helper.stripTrailing(toggles.toString(), "/"));
         }
 
-        return toggles.length() == 0 ? null : MessageFormat.format(plugin.getLang("0.toggle.command"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE, Helper.stripTrailing(toggles.toString(), "/"));
+        return null;
     }
 
     @Override

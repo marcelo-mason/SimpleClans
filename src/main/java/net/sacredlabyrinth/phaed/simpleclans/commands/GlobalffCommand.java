@@ -21,7 +21,7 @@ public class GlobalffCommand extends GenericConsoleCommand
         super("Globalff");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.globalff"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.globalff"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("globalff.command"));
     }
 
@@ -29,7 +29,7 @@ public class GlobalffCommand extends GenericConsoleCommand
     public String getMenu(ClanPlayer cp, CommandSender sender)
     {
         if (plugin.getPermissionsManager().has(sender, "simpleclans.mod.globalff")) {
-            return MessageFormat.format(plugin.getLang("0.globalff.allow.auto.1.set.global.friendly.fire"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            return ChatColor.DARK_RED + MessageFormat.format(plugin.getLang("0.globalff.allow.auto.1.set.global.friendly.fire"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
         }
         return null;
     }

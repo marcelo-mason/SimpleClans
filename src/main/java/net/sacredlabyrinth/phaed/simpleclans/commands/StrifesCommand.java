@@ -19,7 +19,7 @@ public class StrifesCommand extends GenericPlayerCommand
         super("Command");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.strifes"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.strifes"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("strifes.command"));
     }
 

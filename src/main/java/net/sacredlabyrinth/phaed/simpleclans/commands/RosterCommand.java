@@ -21,7 +21,7 @@ public class RosterCommand extends GenericPlayerCommand
         super("Roster");
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.roster"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.roster"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("roster.command"));
     }
 

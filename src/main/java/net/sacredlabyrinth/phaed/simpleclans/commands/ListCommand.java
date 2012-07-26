@@ -22,7 +22,7 @@ public class ListCommand extends GenericConsoleCommand
         super("List");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.list"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.list"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("list.command"));
     }
 

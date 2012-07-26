@@ -21,7 +21,7 @@ public class DemoteCommand extends GenericPlayerCommand
         super("Demote");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.emote"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.demote"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("demote.command"));
     }
 

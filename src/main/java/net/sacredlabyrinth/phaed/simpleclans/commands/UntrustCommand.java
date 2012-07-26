@@ -21,7 +21,7 @@ public class UntrustCommand extends GenericPlayerCommand
         super("Untrust");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.untrust"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.untrust"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("untrust.command"));
     }
 

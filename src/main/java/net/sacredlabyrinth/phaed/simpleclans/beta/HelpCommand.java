@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 public class HelpCommand extends GenericConsoleCommand
 {
 
-    private static final int CMDS_PER_PAGE = 9;
+    private static final int CMDS_PER_PAGE = 12;
     private SimpleClans plugin;
 
     public HelpCommand(SimpleClans plugin)
@@ -24,7 +24,7 @@ public class HelpCommand extends GenericConsoleCommand
         this.plugin = plugin;
         setUsages(String.format("/%s help §8[page#]", plugin.getSettingsManager().getCommandClan()));
         setArgumentRange(0, 1);
-        setIdentifiers(plugin.getSettingsManager().getCommandClan(), "help");
+        setIdentifiers("simpleclans", plugin.getSettingsManager().getCommandClan(), "help");
     }
 
     @Override
@@ -48,8 +48,15 @@ public class HelpCommand extends GenericConsoleCommand
 
         // Build list of permitted commands
         for (Command command : sortCommands) {
-            commands.add(command);
-
+            if (command.getMenu(cp, sender) != null) {
+                if (sender instanceof Player) {
+                    commands.add(command);
+                } else {
+                    if (command instanceof GenericConsoleCommand) {
+                        commands.add(command);
+                    }
+                }
+            }
         }
 
         int numPages = commands.size() / CMDS_PER_PAGE;
@@ -71,9 +78,9 @@ public class HelpCommand extends GenericConsoleCommand
             Command cmd = commands.get(c);
 
             String commandMenu = cmd.getMenu(cp, sender);
-            if (commandMenu != null) {
-                menu.append("   §b").append(commandMenu).append("\n");
-            }
+
+            menu.append("   §b").append(commandMenu).append("\n");
+
 
 //            String[] commandMenu = cmd.getMenu();
 //            if (commandMenu != null) {

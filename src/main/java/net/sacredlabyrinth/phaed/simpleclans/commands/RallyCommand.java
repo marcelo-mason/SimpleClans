@@ -23,7 +23,7 @@ public class RallyCommand extends GenericPlayerCommand
         super("Rally");
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.rally"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.rally"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("rally.command"));
     }
 

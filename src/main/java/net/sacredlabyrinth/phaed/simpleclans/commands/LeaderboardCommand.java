@@ -26,7 +26,7 @@ public class LeaderboardCommand extends GenericPlayerCommand
         super("Leaderboard");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.leaderboard"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.leaderboard"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("leaderboard.command"));
     }
 

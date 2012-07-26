@@ -22,7 +22,7 @@ public class FfCommand extends GenericPlayerCommand
         super("FfCommand");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.ff"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.ff"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("ff.command"));
     }
 

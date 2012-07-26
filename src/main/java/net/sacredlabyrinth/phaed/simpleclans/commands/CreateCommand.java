@@ -84,6 +84,8 @@ public class CreateCommand extends GenericPlayerCommand
                                                                 ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("get.your.clan.verified.to.access.advanced.features"));
                                                             }
                                                         }
+                                                    } else {
+                                                        player.sendMessage(ChatColor.AQUA + plugin.getLang("not.sufficient.money"));
                                                     }
                                                 } else {
                                                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.with.this.tag.already.exists"));

@@ -20,7 +20,7 @@ public class RivalriesCommand extends GenericConsoleCommand
         super("Rivalries");
         this.plugin = plugin;
         setArgumentRange(0, 0);
-        setUsages(String.format(plugin.getLang("usage.rivalries"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.rivalries"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("rivalries.command"));
     }
 

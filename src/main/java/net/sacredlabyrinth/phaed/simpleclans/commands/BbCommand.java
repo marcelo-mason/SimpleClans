@@ -31,7 +31,7 @@ public class BbCommand extends GenericPlayerCommand
             if (cp.getClan().isVerified()) {
                 String display = null;
                 if (plugin.getPermissionsManager().has(sender, "simpleclans.member.bb")) {
-                    display = MessageFormat.format(plugin.getLang("0.bb.1.display.bulletin.board"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE) + "\n";
+                    display = MessageFormat.format(plugin.getLang("0.bb.1.display.bulletin.board"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE) + "\n   §b";
                 }
                 if (plugin.getPermissionsManager().has(sender, "simpleclans.member.bb-add")) {
                     display += MessageFormat.format(plugin.getLang("0.bb.msg.1.add.a.message.to.the.bulletin.board"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);

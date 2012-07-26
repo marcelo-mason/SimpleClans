@@ -1,7 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import org.bukkit.ChatColor;
-
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -9,6 +7,7 @@ import java.util.List;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.util.ChatPaginator;
 
@@ -269,15 +268,15 @@ public class ChatBlock
 
             // concatenate final strings
 
-            String finalString = "";
+            StringBuilder finalString = new StringBuilder();
 
             for (String measured : measuredCols) {
-                finalString += measured;
+                finalString.append(measured);
             }
 
             // crop and print out
 
-            String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString, lineLength);
+            String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString.toString(), lineLength);
 
             if (color.length() > 0) {
                 msg = color + msg;
@@ -450,11 +449,12 @@ public class ChatBlock
             return msg;
         }
 
+        StringBuilder msgSB = new StringBuilder();
         while (msgLength(msg) < length) {
-            msg += " ";
+            msgSB.append(' ');
         }
 
-        return msg;
+        return msgSB.toString();
     }
 
     /**

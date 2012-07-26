@@ -21,7 +21,7 @@ public class ModtagCommand extends GenericPlayerCommand
         super("Modtag");
         this.plugin = plugin;
         setArgumentRange(1, 1);
-        setUsages(String.format(plugin.getLang("usage.modtag"), plugin.getSettingsManager().getCommandClan()), ChatColor.RED + plugin.getLang("example.clan.modtag.4kfo.4l"));
+        setUsages(MessageFormat.format(plugin.getLang("usage.modtag"), plugin.getSettingsManager().getCommandClan()), ChatColor.RED + plugin.getLang("example.clan.modtag.4kfo.4l"));
         setIdentifiers(plugin.getLang("modtag.command"));
     }
 

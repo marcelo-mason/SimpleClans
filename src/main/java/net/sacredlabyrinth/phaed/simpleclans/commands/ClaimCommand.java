@@ -24,7 +24,7 @@ public class ClaimCommand extends GenericPlayerCommand
         super("Claim");
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.cape"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.cape"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("cape.command"));
     }
 

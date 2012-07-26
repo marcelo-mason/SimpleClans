@@ -23,7 +23,7 @@ public class DisbandCommand extends GenericPlayerCommand
         super("Disband");
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.disband"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.disband"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("disband.command"));
     }
 
@@ -32,7 +32,7 @@ public class DisbandCommand extends GenericPlayerCommand
     {
         if (cp != null) {
             if (cp.isLeader() && plugin.getPermissionsManager().has(sender, "simpleclans.leader.disband")) {
-                return MessageFormat.format(plugin.getLang("0.disband.1.disband.your.clan"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+                return ChatColor.DARK_RED + MessageFormat.format(plugin.getLang("0.disband.1.disband.your.clan"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
             }
         }
         return null;

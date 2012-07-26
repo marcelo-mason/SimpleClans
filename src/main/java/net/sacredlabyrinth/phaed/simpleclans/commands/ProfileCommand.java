@@ -23,7 +23,7 @@ public class ProfileCommand extends GenericPlayerCommand
         super("Profile");
         this.plugin = plugin;
         setArgumentRange(0, 1);
-        setUsages(String.format(plugin.getLang("usage.profile"), plugin.getSettingsManager().getCommandClan()));
+        setUsages(MessageFormat.format(plugin.getLang("usage.profile"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("profile.command"));
     }
 
@@ -37,7 +37,7 @@ public class ProfileCommand extends GenericPlayerCommand
             }
         }
         if (plugin.getPermissionsManager().has(sender, "simpleclans.anyone.profile")) {
-            out += MessageFormat.format(plugin.getLang("0.profile.tag.1.view.a.clan.s.profile"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            out += "\n   §b" + MessageFormat.format(plugin.getLang("0.profile.tag.1.view.a.clan.s.profile"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
         }
         return out.isEmpty() ? null : out;
     }
