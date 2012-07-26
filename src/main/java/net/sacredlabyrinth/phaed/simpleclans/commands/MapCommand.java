@@ -118,10 +118,7 @@ public class MapCommand extends GenericPlayerCommand
         return null;
     }
 
-    public static String getMap(Location loc, Clan playerClan)
-    {
-
-        SimpleClans plugin = SimpleClans.getInstance();
+    public String getMap(Location loc, Clan playerClan){
 
         int x = loc.getBlockX();
         int z = loc.getBlockZ();
@@ -130,9 +127,11 @@ public class MapCommand extends GenericPlayerCommand
 
         ArrayList<String> out = new ArrayList<String>();
         StringBuilder finalMap = new StringBuilder();
+        
+        Clan clanHere = plugin.getClanManager().getClanAt(loc);
 
         //header above the map
-        String header = ChatColor.GOLD + " __________________[ " + playerChunk.getX() + " " + playerChunk.getZ() + " " + (playerClan != null ? playerClan.getName() : "") + " ]__________________ \n";
+        String header = ChatColor.GOLD + " __________________[ " + playerChunk.getX() + " " + playerChunk.getZ() + " " + (clanHere != null ? clanHere.getName() : "") + " ]__________________ \n";
 
         out.add(ChatColor.GOLD + header + ChatColor.GRAY);
 

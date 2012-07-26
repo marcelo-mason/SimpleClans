@@ -146,13 +146,16 @@ public class Clan implements Serializable, Comparable<Clan>
 
     public Location getHomeChunkMiddle()
     {
-        int cx = homeChunk.getX();
-        int cz = homeChunk.getZ();
-        int x = cx << 4 + 8;
-        int z = cz << 4 + 8;
-        World world = homeChunk.getNormalWorld();
+        if (homeChunk != null) {
+            int cx = homeChunk.getX();
+            int cz = homeChunk.getZ();
+            int x = cx << 4 + 8;
+            int z = cz << 4 + 8;
+            World world = homeChunk.getNormalWorld();
 
-        return new Location(world, x, world.getHighestBlockYAt(x, z), z);
+            return new Location(world, x, world.getHighestBlockYAt(x, z), z);
+        }
+        return null;
     }
 
     public boolean isClaimed(Location loc)

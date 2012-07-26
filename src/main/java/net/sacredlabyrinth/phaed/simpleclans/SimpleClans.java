@@ -153,6 +153,7 @@ public class SimpleClans extends JavaPlugin
         betaCommandManager.addCommand(new CoordsCommand(this));
         betaCommandManager.addCommand(new StatsCommand(this));
         betaCommandManager.addCommand(new KillsCommand(this));
+        betaCommandManager.addCommand(new BankCommand(this));
         betaCommandManager.addCommand(new AllyCommand(this));
         betaCommandManager.addCommand(new RivalCommand(this));
         betaCommandManager.addCommand(new HomeCommand(this));

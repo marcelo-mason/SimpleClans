@@ -16,6 +16,7 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.logging.Level;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -121,6 +122,7 @@ public class BetaCommandManager
                 }
             }
         }
+        (sender == null ? player : sender).sendMessage(ChatColor.DARK_RED + "Command not found!");
 
         return true;
     }

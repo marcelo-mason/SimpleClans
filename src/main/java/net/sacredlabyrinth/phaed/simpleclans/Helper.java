@@ -288,14 +288,14 @@ public class Helper
     }
 
     /**
-     * Converts string array to ArrayList<String>, remove empty strings
+     * Converts string array to List<String>, remove empty strings
      *
      * @param values
      * @return
      */
     public static List fromArray(String... values)
     {
-        List<String> out = Arrays.asList(values);
+        List<String> out = new ArrayList<String>(Arrays.asList(values));
         out.remove("");
         return out;
     }
@@ -386,7 +386,7 @@ public class Helper
         StringBuilder sb = new StringBuilder();
 
         for (String arg : args) {
-            sb.append(arg).append(' ');
+            sb.append(arg).append(' ').append(", ");
         }
 
 
@@ -405,7 +405,7 @@ public class Helper
         StringBuilder sb = new StringBuilder();
 
         for (String arg : args) {
-            sb.append(arg).append(' ');
+            sb.append(arg).append(' ').append(sep);
         }
 
         return stripTrailing(sb.toString(), sep);
