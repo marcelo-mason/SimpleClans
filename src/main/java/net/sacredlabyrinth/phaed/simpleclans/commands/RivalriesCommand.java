@@ -3,7 +3,6 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 import java.text.MessageFormat;
 import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.beta.GenericConsoleCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 

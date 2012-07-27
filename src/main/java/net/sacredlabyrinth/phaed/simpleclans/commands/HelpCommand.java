@@ -1,4 +1,4 @@
-package net.sacredlabyrinth.phaed.simpleclans.beta;
+package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.text.MessageFormat;
 import java.util.ArrayList;
@@ -38,7 +38,7 @@ public class HelpCommand extends GenericConsoleCommand
             }
         }
 
-        List<Command> sortCommands = plugin.getBetaCommandManager().getCommands();
+        List<Command> sortCommands = plugin.getCommandManager().getCommands();
         List<Command> commands = new ArrayList<Command>();
 
         ClanPlayer cp = null;

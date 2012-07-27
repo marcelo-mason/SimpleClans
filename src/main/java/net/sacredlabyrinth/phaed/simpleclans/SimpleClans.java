@@ -7,8 +7,6 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
-import net.sacredlabyrinth.phaed.simpleclans.beta.BetaCommandManager;
-import net.sacredlabyrinth.phaed.simpleclans.beta.HelpCommand;
 import net.sacredlabyrinth.phaed.simpleclans.commands.*;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCClaimingListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
@@ -37,7 +35,6 @@ public class SimpleClans extends JavaPlugin
     private CommandManager commandManager;
     private TeleportManager teleportManager;
     private ResourceBundle lang;
-    private BetaCommandManager betaCommandManager;
     private AutoUpdate autoUpdate;
     private boolean spout;
 
@@ -80,7 +77,7 @@ public class SimpleClans extends JavaPlugin
     @Override
     public boolean onCommand(CommandSender sender, Command command, String label, String[] args)
     {
-        betaCommandManager.executeAll(null, sender, command.getName(), label, args);
+        commandManager.executeAll(null, sender, command.getName(), label, args);
         return true;
     }
 
@@ -139,52 +136,52 @@ public class SimpleClans extends JavaPlugin
 
     private void setupBetaCommandManager()
     {
-        betaCommandManager = new BetaCommandManager(this);
-        betaCommandManager.addCommand(new CreateCommand(this));
-        betaCommandManager.addCommand(new VerifyCommand(this));
-        betaCommandManager.addCommand(new ListCommand(this));
-        betaCommandManager.addCommand(new ProfileCommand(this));
-        betaCommandManager.addCommand(new LookupCommand(this));
-        betaCommandManager.addCommand(new LeaderboardCommand(this));
-        betaCommandManager.addCommand(new AlliancesCommand(this));
-        betaCommandManager.addCommand(new RivalriesCommand(this));
-        betaCommandManager.addCommand(new RosterCommand(this));
-        betaCommandManager.addCommand(new VitalsCommand(this));
-        betaCommandManager.addCommand(new CoordsCommand(this));
-        betaCommandManager.addCommand(new StatsCommand(this));
-        betaCommandManager.addCommand(new StrifesCommand(this));
-        betaCommandManager.addCommand(new KillsCommand(this));
-        betaCommandManager.addCommand(new BankCommand(this));
-        betaCommandManager.addCommand(new AllyCommand(this));
-        betaCommandManager.addCommand(new RivalCommand(this));
-        betaCommandManager.addCommand(new HomeCommand(this));
-        betaCommandManager.addCommand(new WarCommand(this));
+        commandManager = new CommandManager(this);
+        commandManager.addCommand(new CreateCommand(this));
+        commandManager.addCommand(new VerifyCommand(this));
+        commandManager.addCommand(new ListCommand(this));
+        commandManager.addCommand(new ProfileCommand(this));
+        commandManager.addCommand(new LookupCommand(this));
+        commandManager.addCommand(new LeaderboardCommand(this));
+        commandManager.addCommand(new AlliancesCommand(this));
+        commandManager.addCommand(new RivalriesCommand(this));
+        commandManager.addCommand(new RosterCommand(this));
+        commandManager.addCommand(new VitalsCommand(this));
+        commandManager.addCommand(new CoordsCommand(this));
+        commandManager.addCommand(new StatsCommand(this));
+        commandManager.addCommand(new StrifesCommand(this));
+        commandManager.addCommand(new KillsCommand(this));
+        commandManager.addCommand(new BankCommand(this));
+        commandManager.addCommand(new AllyCommand(this));
+        commandManager.addCommand(new RivalCommand(this));
+        commandManager.addCommand(new HomeCommand(this));
+        commandManager.addCommand(new WarCommand(this));
         if (settingsManager.isClaimingEnabled()) {
-            betaCommandManager.addCommand(new ClaimCommand(this));
-            betaCommandManager.addCommand(new MapCommand(this));
-            betaCommandManager.addCommand(new UnClaimCommand(this));
+            commandManager.addCommand(new ClaimCommand(this));
+            commandManager.addCommand(new MapCommand(this));
+            commandManager.addCommand(new UnClaimCommand(this));
         }
-        betaCommandManager.addCommand(new BbCommand(this));
-        betaCommandManager.addCommand(new ModtagCommand(this));
-        betaCommandManager.addCommand(new ToggleCommand(this));
-        betaCommandManager.addCommand(new InviteCommand(this));
-        betaCommandManager.addCommand(new KickCommand(this));
-        betaCommandManager.addCommand(new SetRankCommand(this));
-        betaCommandManager.addCommand(new TrustCommand(this));
-        betaCommandManager.addCommand(new UntrustCommand(this));
-        betaCommandManager.addCommand(new PromoteCommand(this));
-        betaCommandManager.addCommand(new DemoteCommand(this));
-        betaCommandManager.addCommand(new ClanffCommand(this));
-        betaCommandManager.addCommand(new FfCommand(this));
-        betaCommandManager.addCommand(new ResignCommand(this));
-        betaCommandManager.addCommand(new DisbandCommand(this));
-        betaCommandManager.addCommand(new VerifyModCommand(this));
-        betaCommandManager.addCommand(new MostKilledCommand(this));
-        betaCommandManager.addCommand(new DisbandCommand(this));
-        betaCommandManager.addCommand(new BanCommand(this));
-        betaCommandManager.addCommand(new GlobalffCommand(this));
-        betaCommandManager.addCommand(new ReloadCommand(this));
-        betaCommandManager.addCommand(new HelpCommand(this));
+        commandManager.addCommand(new BbCommand(this));
+        commandManager.addCommand(new ModtagCommand(this));
+        commandManager.addCommand(new ToggleCommand(this));
+        commandManager.addCommand(new InviteCommand(this));
+        commandManager.addCommand(new KickCommand(this));
+        commandManager.addCommand(new SetRankCommand(this));
+        commandManager.addCommand(new TrustCommand(this));
+        commandManager.addCommand(new UntrustCommand(this));
+        commandManager.addCommand(new PromoteCommand(this));
+        commandManager.addCommand(new DemoteCommand(this));
+        commandManager.addCommand(new ClanffCommand(this));
+        commandManager.addCommand(new FfCommand(this));
+        commandManager.addCommand(new ResignCommand(this));
+        commandManager.addCommand(new DisbandCommand(this));
+        commandManager.addCommand(new VerifyModCommand(this));
+        commandManager.addCommand(new MostKilledCommand(this));
+        commandManager.addCommand(new DisbandCommand(this));
+        commandManager.addCommand(new BanCommand(this));
+        commandManager.addCommand(new GlobalffCommand(this));
+        commandManager.addCommand(new ReloadCommand(this));
+        commandManager.addCommand(new HelpCommand(this));
     }
 
     @Override
@@ -275,11 +272,6 @@ public class SimpleClans extends JavaPlugin
     public StorageManager getStorageManager()
     {
         return storageManager;
-    }
-
-    public BetaCommandManager getBetaCommandManager()
-    {
-        return betaCommandManager;
     }
 
     /**

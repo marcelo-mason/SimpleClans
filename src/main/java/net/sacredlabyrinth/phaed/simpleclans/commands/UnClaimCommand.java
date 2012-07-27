@@ -3,7 +3,6 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansChunkUnclaimEvent;
-import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
@@ -41,7 +40,7 @@ public class UnClaimCommand extends GenericPlayerCommand
     {
 
         if (plugin.getPermissionsManager().has(player, "simpleclans.admin.claim.unclaim")) {
-            ClanPlayer cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
+            ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
             Location loc = player.getLocation();
 
             ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
@@ -50,10 +49,10 @@ public class UnClaimCommand extends GenericPlayerCommand
                 switch (clan.unclaim(chunk)) {
                     case FAILED_HOMEBLOCK:
                         player.sendMessage(ChatColor.DARK_RED + plugin.getLang("remove.homeblock"));
-                    case FAILED_NEAR:
-                        player.sendMessage(ChatColor.DARK_RED + "not near");
+                        break;
                     case NO_CLAIM:
                         player.sendMessage(ChatColor.DARK_RED + plugin.getLang("error.no.claim"));
+                        break;
                     case SUCCESS:
                         clan.removeClaimedChunk(chunk);
                         plugin.getServer().getPluginManager().callEvent(new SimpleClansChunkUnclaimEvent(cp, clan, chunk));

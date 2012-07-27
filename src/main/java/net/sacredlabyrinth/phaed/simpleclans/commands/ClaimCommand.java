@@ -3,7 +3,6 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansChunkClaimEvent;
-import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
 import net.sacredlabyrinth.phaed.simpleclans.results.BankResult;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

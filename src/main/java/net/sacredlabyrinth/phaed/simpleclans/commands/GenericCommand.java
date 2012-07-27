@@ -8,7 +8,7 @@
  * California, 94105, USA.
  * 
  */
-package net.sacredlabyrinth.phaed.simpleclans.beta;
+package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import org.bukkit.command.CommandSender;

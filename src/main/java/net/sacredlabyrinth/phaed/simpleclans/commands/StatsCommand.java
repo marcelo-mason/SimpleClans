@@ -5,7 +5,6 @@ import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.beta.GenericPlayerCommand;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
