@@ -80,6 +80,7 @@ public class ListCommand extends GenericConsoleCommand
                     rank++;
                 }
 
+
                 boolean more = chatBlock.sendBlock(sender, plugin.getSettingsManager().getPageSize());
 
                 if (more) {

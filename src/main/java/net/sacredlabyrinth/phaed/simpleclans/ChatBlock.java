@@ -116,9 +116,9 @@ public class ChatBlock
      * @param player
      * @return
      */
-    public boolean sendBlock(CommandSender player)
+    public boolean sendBlock(CommandSender sender)
     {
-        return sendBlock(player, null, 0);
+        return sendBlock(sender, null, 0);
     }
 
     /**
@@ -127,9 +127,9 @@ public class ChatBlock
      * @param prefix
      * @return
      */
-    public boolean sendBlock(CommandSender player, String prefix)
+    public boolean sendBlock(CommandSender sender, String prefix)
     {
-        return sendBlock(player, prefix, 0);
+        return sendBlock(sender, prefix, 0);
     }
 
     /**
@@ -138,9 +138,9 @@ public class ChatBlock
      * @param amount
      * @return
      */
-    public boolean sendBlock(CommandSender player, int amount)
+    public boolean sendBlock(CommandSender sender, int amount)
     {
-        return sendBlock(player, null, amount);
+        return sendBlock(sender, null, amount);
     }
 
     /**
@@ -150,9 +150,9 @@ public class ChatBlock
      * @param amount
      * @return
      */
-    boolean sendBlock(CommandSender player, String prefix, int amount)
+    boolean sendBlock(CommandSender sender, String prefix, int amount)
     {
-        if (player == null) {
+        if (sender == null) {
             return false;
         }
 
@@ -268,15 +268,15 @@ public class ChatBlock
 
             // concatenate final strings
 
-            StringBuilder finalString = new StringBuilder();
+            String finalString = "";
 
             for (String measured : measuredCols) {
-                finalString.append(measured);
+                finalString += measured;
             }
 
             // crop and print out
 
-            String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString.toString(), lineLength);
+            String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString, lineLength);
 
             if (color.length() > 0) {
                 msg = color + msg;
@@ -284,10 +284,10 @@ public class ChatBlock
 
             if (msg.length() > 255) {
                 for (String s : ChatPaginator.wordWrap(msg, lineLength)) {
-                    player.sendMessage(s);
+                    sender.sendMessage(s);
                 }
             } else {
-                player.sendMessage(msg);
+                sender.sendMessage(msg);
             }
 
             prefix_used = true;
@@ -449,12 +449,11 @@ public class ChatBlock
             return msg;
         }
 
-        StringBuilder msgSB = new StringBuilder();
         while (msgLength(msg) < length) {
-            msgSB.append(' ');
+            msg += " ";
         }
 
-        return msgSB.toString();
+        return msg;
     }
 
     /**

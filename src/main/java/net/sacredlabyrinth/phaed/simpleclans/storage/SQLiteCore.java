@@ -1,10 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.storage;
 
 import java.io.File;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 /**
@@ -77,6 +74,17 @@ public class SQLiteCore implements DBCore
     public Boolean checkConnection()
     {
         return getConnection() != null;
+    }
+
+    @Override
+    public PreparedStatement prepareStatement(String statement)
+    {
+        try {
+            return connection.prepareStatement(statement);
+        } catch (SQLException ex) {
+            SimpleClans.debug("Error at creating the statement: " + statement + "(" + ex.getMessage() + ")");
+        }
+        return null;
     }
 
     /**

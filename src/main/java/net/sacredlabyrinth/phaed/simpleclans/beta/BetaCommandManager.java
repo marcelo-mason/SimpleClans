@@ -68,11 +68,6 @@ public class BetaCommandManager
         } else {
             arguments = args;
         }
-//        ClanPlayer cp = null;
-//
-//        if (sender instanceof Player) {
-//            cp = plugin.getClanManager().getClanPlayer(sender.getName());
-//        }
 
         //Iterate through all arguments from the last to the first argument
         for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {

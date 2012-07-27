@@ -1,5 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -22,6 +23,11 @@ public final class StorageManager
     private SimpleClans plugin;
     private DBCore core;
     private HashMap<String, ChatBlock> chatBlocks = new HashMap<String, ChatBlock>();
+    private PreparedStatement deleteClan, deleteClaim, deleteClanPlayer, deleteKills, deleteClaims,
+            updateClan, updateClanPlayer,
+            retrieveTotalDeathsPerPlayer, retrieveTotalKillsPerPlayer, retrieveTotalKillsPerClan,
+            retrieveTotalDeathsPerClan, retrieveMostKilled, retrieveKillsPerPlayer, retrieveStrifes,
+            insertClan, insertClanPlayer, insertClaim, insertKill;
 
     /**
      *
@@ -37,19 +43,6 @@ public final class StorageManager
 //        }
     }
 
-//    /**
-//     * AutoSave thread
-//     *
-//     */
-//    private class SaveThread implements Runnable
-//    {
-//        
-//        @Override
-//        public void run()
-//        {
-//            saveClaims();
-//        }
-//    }
     /**
      * Saves all claims to the db
      *
@@ -180,6 +173,33 @@ public final class StorageManager
                 SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("sqlite.connection.failed"));
             }
         }
+        prepareStatements();
+    }
+
+    public void prepareStatements()
+    {
+        deleteClan = core.prepareStatement("DELETE FROM `sc_clans` WHERE tag = ?;");
+        deleteClaim = core.prepareStatement("DELETE FROM `sc_claims` WHERE clan = ? AND location = ?;");
+        deleteClanPlayer = core.prepareStatement("DELETE FROM `sc_players` WHERE name = ?");
+        deleteKills = core.prepareStatement("DELETE FROM `sc_kills` WHERE `attacker` = ?");
+        deleteClaims = core.prepareStatement("DELETE FROM `sc_claims` WHERE clan = ?;");
+        updateClan = core.prepareStatement("UPDATE `sc_clans` SET verified = ?, tag = ?, color_tag = ?, name = ?, friendly_fire = ?, founded = ?, last_used = ?, packed_allies = ?, packed_rivals = ?, packed_bb = ?, cape_url = ?, balance = ?, flags = ? WHERE tag = ?;");
+        updateClanPlayer = core.prepareStatement("UPDATE `sc_players` SET leader = ?, tag = ? , friendly_fire = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, last_seen = ?, packed_past_clans = ?, trusted = ?, flags = ?, power = ? WHERE name = ?;");
+        insertClan = core.prepareStatement("INSERT INTO `sc_clans` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`, `balance`) VALUES ( ?, ?, ?, ?, ?, ?, 0, '', '', '', '', '', 0);");
+        insertClanPlayer = core.prepareStatement("INSERT INTO `sc_players` (  `name`, `leader`, `tag`, `friendly_fire`, `neutral_kills`, `rival_kills`, `civilian_kills`, `deaths`, `last_seen`, `join_date`, `packed_past_clans`, `flags`) VALUES ( ? , 0, '', ?, 0, 0, 0, 0, ?, ?, '', '');");
+        retrieveTotalDeathsPerPlayer = core.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;");
+        retrieveTotalKillsPerPlayer = core.prepareStatement("SELECT attacker, count(attacker) AS kills FROM `sc_kills` GROUP BY attacker ORDER BY 2 DESC;");
+        retrieveTotalKillsPerClan = core.prepareStatement("SELECT attacker_tag, count(attacker_tag) AS kills FROM `sc_kills` GROUP BY attacker_tag ORDER BY 2 DESC;");
+        retrieveTotalDeathsPerClan = core.prepareStatement("SELECT victim_tag, count(victim_tag) AS kills FROM `sc_kills` GROUP BY victim_tag ORDER BY 2 DESC;");
+        retrieveMostKilled = core.prepareStatement("SELECT attacker, victim, count(victim) AS kills FROM `sc_kills` GROUP BY attacker, victim ORDER BY 3 DESC;");
+        retrieveKillsPerPlayer = core.prepareStatement("SELECT victim, count(victim) AS kills FROM `sc_kills` WHERE attacker = ? GROUP BY victim ORDER BY count(victim) DESC;");
+        if (core instanceof MySQLCore) {
+            insertClaim = core.prepareStatement("INSERT INTO sc_claims (location,clan) VALUES ( ?, ?) ON DUPLICATE KEY UPDATE location = ?, clan = ?;");
+        } else {
+            insertClaim = core.prepareStatement("INSERT OR IGNORE INTO sc_claims (location,clan) VALUES (?, ?); UPDATE sc_claims SET location = ?, clan = ? WHERE location LIKE ?;");
+        }
+        insertKill = core.prepareStatement("INSERT INTO `sc_kills` (  `attacker`, `attacker_tag`, `victim`, `victim_tag`, `kill_type`) VALUES ( ?, ?, ?, ?, ?);");
+        retrieveStrifes = core.prepareStatement("SELECT COUNT(*) FROM `sc_kills` WHERE (`attacker_tag` = ? AND `victim_tag` = ?) OR (`victim_tag` = ? AND `attacker_tag` = ?);");
     }
 
     /**
@@ -274,23 +294,36 @@ public final class StorageManager
 
     public void deleteClaim(ChunkLocation chunk, Clan clan)
     {
-        String query = "DELETE FROM `sc_claims` WHERE clan = '" + clan.getTag() + "' AND location = '" + chunk.toLocationString() + "';";
-
-        core.delete(query);
+        try {
+            deleteClaim.setString(1, clan.getTag());
+            deleteClaim.setString(2, chunk.toLocationString());
+            deleteClaim.executeUpdate();
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+        }
     }
 
     public void insertClaim(ChunkLocation chunk, Clan clan)
     {
-        String query;
         String loc = chunk.toLocationString();
         String ownerClan = clan.getTag();
-        if (core instanceof MySQLCore) {
-            query = "INSERT INTO sc_claims (location,clan) VALUES ('" + loc + "','" + ownerClan + "') ON DUPLICATE KEY UPDATE location = '" + loc + "', clan = '" + ownerClan + "';";
-        } else {
-            query = "INSERT OR IGNORE INTO sc_claims (location,clan) VALUES ('" + loc + "','" + ownerClan + "'); UPDATE sc_claims SET location = '" + loc + "', clan = '" + ownerClan + "' WHERE location LIKE '" + loc + "';";
+        try {
+            if (core instanceof MySQLCore) {
+                insertClaim.setString(1, loc);
+                insertClaim.setString(2, ownerClan);
+                insertClaim.setString(3, loc);
+                insertClaim.setString(4, ownerClan);
+            } else {
+                insertClaim.setString(1, loc);
+                insertClaim.setString(2, ownerClan);
+                insertClaim.setString(3, loc);
+                insertClaim.setString(4, ownerClan);
+                insertClaim.setString(5, loc);
+            }
+            insertClaim.executeUpdate();
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
         }
-
-        core.execute(query);
     }
 
     /**
@@ -399,49 +432,48 @@ public final class StorageManager
         return out;
     }
 
-    /**
-     * Retrieves the strifes relative to another clan
-     *
-     * @param attackerclan
-     * @param victimclan
-     * @return
-     */
-    public Integer retrieveStrifes(Clan attackerclan, Clan victimclan)
-    {
-        String query = null;
-        ResultSet res = null;
-        try {
-            if (Helper.existsEntry(core, "sc_strifes", "clan", attackerclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", victimclan.getTag())) {
-                query = "SELECT `strifes` FROM `sc_strifes` WHERE `clan` = '" + attackerclan.getTag() + "' AND `opponent_clan` = '" + victimclan.getTag() + "';";
-            } else if (Helper.existsEntry(core, "sc_strifes", "clan", victimclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", attackerclan.getTag())) {
-                query = "SELECT `strifes` FROM `sc_strifes` WHERE `clan` = '" + victimclan.getTag() + "' AND `opponent_clan` = '" + attackerclan.getTag() + "';";
-            }
-
-        } catch (SQLException ex) {
-            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
-
-        }
-
-        if (query != null) {
-            res = core.select(query);
-        }
-
-        if (res != null) {
-            try {
-                while (res.next()) {
-                    try {
-                        return res.getInt("strifes");
-                    } catch (Exception ex) {
-                        SimpleClans.debug(null, ex);
-                    }
-                }
-            } catch (SQLException ex) {
-                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
-            }
-        }
-        return 0;
-    }
-
+//    /**
+//     * Retrieves the strifes relative to another clan
+//     *
+//     * @param attackerclan
+//     * @param victimclan
+//     * @return
+//     */
+//    public Integer retrieveStrifes(Clan attackerclan, Clan victimclan)
+//    {
+//        String query = null;
+//        ResultSet res = null;
+//        try {
+//            if (Helper.existsEntry(core, "sc_strifes", "clan", attackerclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", victimclan.getTag())) {
+//                query = "SELECT `strifes` FROM `sc_strifes` WHERE `clan` = '" + attackerclan.getTag() + "' AND `opponent_clan` = '" + victimclan.getTag() + "';";
+//            } else if (Helper.existsEntry(core, "sc_strifes", "clan", victimclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", attackerclan.getTag())) {
+//                query = "SELECT `strifes` FROM `sc_strifes` WHERE `clan` = '" + victimclan.getTag() + "' AND `opponent_clan` = '" + attackerclan.getTag() + "';";
+//            }
+//
+//        } catch (SQLException ex) {
+//            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+//
+//        }
+//
+//        if (query != null) {
+//            res = core.select(query);
+//        }
+//
+//        if (res != null) {
+//            try {
+//                while (res.next()) {
+//                    try {
+//                        return res.getInt("strifes");
+//                    } catch (Exception ex) {
+//                        SimpleClans.debug(null, ex);
+//                    }
+//                }
+//            } catch (SQLException ex) {
+//                SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+//            }
+//        }
+//        return 0;
+//    }
     /**
      * Retrieves all clan players from the database
      *
@@ -528,36 +560,18 @@ public final class StorageManager
      */
     public void insertClan(Clan clan)
     {
-        String query = "INSERT INTO `sc_clans` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`, `balance`) ";
-        String values = "VALUES ( " + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "', '" + Helper.escapeQuotes(clan.getFlags()) + "','" + Helper.escapeQuotes(String.valueOf(clan.getBalance())) + "');";
-        core.insert(query + values);
-    }
-
-    /**
-     * Insert a strife to a clan
-     *
-     * @param attackerclan
-     * @param victimclan
-     */
-    public void addStrife(Clan attackerclan, Clan victimclan, int amount)
-    {
         try {
-            String query = null;
+            insertClaim.setInt(1, (clan.isVerified() ? 1 : 0));
+            insertClaim.setString(2, clan.getTag());
+            insertClaim.setString(3, clan.getColorTag());
+            insertClaim.setString(4, clan.getName());
+            insertClaim.setInt(5, (clan.isFriendlyFire() ? 1 : 0));
+            insertClaim.setLong(6, clan.getFounded());
+            insertClaim.setString(7, null);
+            insertClaim.setString(8, null);
+            insertClaim.setString(9, null);
 
-            if (!Helper.existsEntry(core, "sc_strifes", "clan", attackerclan.getTag()) && !Helper.existsEntry(core, "sc_strifes", "opponent_clan", victimclan.getTag())) {
-                query = "INSERT INTO  `sc_strifes` (`clan` ,`opponent_clan` ,`strifes`)VALUES ('" + attackerclan.getTag() + "',  '" + victimclan.getTag() + "',  '" + 1 + "');";
-            } else if (!Helper.existsEntry(core, "sc_strifes", "clan", victimclan.getTag()) && !Helper.existsEntry(core, "sc_strifes", "opponent_clan", attackerclan.getTag())) {
-                query = "INSERT INTO  `sc_strifes` (`clan` ,`opponent_clan` ,`strifes`)VALUES ('" + victimclan.getTag() + "',  '" + attackerclan.getTag() + "',  '" + 1 + "');";
-            }
-            if (Helper.existsEntry(core, "sc_strifes", "clan", attackerclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", victimclan.getTag())) {
-                query = "UPDATE `sc_strifes` SET strifes = " + (retrieveStrifes(attackerclan, victimclan) + amount) + " WHERE `clan` = '" + attackerclan.getTag() + "' AND `opponent_clan` = '" + victimclan.getTag() + "';";
-            } else if (Helper.existsEntry(core, "sc_strifes", "clan", victimclan.getTag()) && Helper.existsEntry(core, "sc_strifes", "opponent_clan", attackerclan.getTag())) {
-                query = "UPDATE `sc_strifes` SET strifes = " + (retrieveStrifes(attackerclan, victimclan) + amount) + " WHERE `clan` = '" + victimclan.getTag() + "' AND `opponent_clan` = '" + attackerclan.getTag() + "';";
-            }
-
-            if (query != null) {
-                core.execute(query);
-            }
+            insertClaim.executeUpdate();
         } catch (SQLException ex) {
             SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
         }
@@ -571,21 +585,26 @@ public final class StorageManager
     public void updateClan(Clan clan)
     {
         clan.updateLastUsed();
-        String query = "UPDATE `sc_clans` SET verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getCapeUrl())) + "', balance = '" + clan.getBalance() + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
-        core.update(query);
+        try {
+            updateClan.setInt(1, (clan.isVerified() ? 1 : 0));
+            updateClan.setString(2, clan.getTag());
+            updateClan.setString(3, clan.getColorTag());
+            updateClan.setString(4, clan.getName());
+            updateClan.setInt(5, (clan.isFriendlyFire() ? 1 : 0));
+            updateClan.setLong(6, clan.getFounded());
+            updateClan.setLong(7, clan.getLastUsed());
+            updateClan.setString(8, clan.getPackedAllies());
+            updateClan.setString(9, clan.getPackedRivals());
+            updateClan.setString(10, clan.getPackedBb());
+            updateClan.setString(11, clan.getCapeUrl());
+            updateClan.setDouble(12, clan.getBalance());
+            updateClan.setString(13, clan.getFlags());
+            updateClan.setString(14, clan.getTag());
+            updateClan.executeUpdate();
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+        }
     }
-//    
-//    public void updateLastUsedClan(Clan clan) {
-//        clan.updateLastUsed();
-//        String query = "UPDATE `sc_clans` SET last_used = '" + clan.getLastUsed() + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
-//        core.update(query);
-//    }
-//    
-//    public void updateLastSeenClanPlayer(ClanPlayer cp) {
-//        cp.updateLastSeen();
-//        String query = "UPDATE `sc_players` SET last_seen = '" + cp.getLastSeen() + "' WHERE name = '" + cp.getName() + "';";
-//        core.update(query);
-//    }
 
     /**
      * Delete a clan from the database
@@ -594,12 +613,14 @@ public final class StorageManager
      */
     public void deleteClan(Clan clan)
     {
-        String query = "DELETE FROM `sc_clans` WHERE tag = '" + clan.getTag() + "';";
-        String strifes = "DELETE FROM `sc_strifes` WHERE clan = '" + clan.getTag() + "' AND opponent_clan = '" + clan.getTag() + "';";
-        String claims = "DELETE FROM `sc_claims` WHERE clan = '" + clan.getTag() + "';";
-        core.delete(query);
-        core.delete(strifes);
-        core.delete(claims);
+        try {
+            deleteClan.setString(1, clan.getTag());
+            deleteClan.executeUpdate();
+            deleteClaims.setString(1, clan.getTag());
+            deleteClaims.executeUpdate();
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+        }
     }
 
     /**
@@ -621,9 +642,25 @@ public final class StorageManager
      */
     public void updateClanPlayer(ClanPlayer cp)
     {
-        cp.updateLastSeen();
-        String query = "UPDATE `sc_players` SET leader = " + (cp.isLeader() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(cp.getTag()) + "' , friendly_fire = " + (cp.isFriendlyFire() ? 1 : 0) + ", neutral_kills = " + cp.getNeutralKills() + ", rival_kills = " + cp.getRivalKills() + ", civilian_kills = " + cp.getCivilianKills() + ", deaths = " + cp.getDeaths() + ", last_seen = '" + cp.getLastSeen() + "', packed_past_clans = '" + Helper.escapeQuotes(cp.getPackedPastClans()) + "', trusted = " + (cp.isTrusted() ? 1 : 0) + ", flags='" + Helper.escapeQuotes(cp.getFlags()) + "', power = " + Helper.escapeQuotes(String.valueOf(cp.getPower())) + " WHERE name = '" + cp.getName() + "';";
-        core.update(query);
+        try {
+            cp.updateLastSeen();
+            updateClanPlayer.setInt(1, (cp.isLeader() ? 1 : 0));
+            updateClanPlayer.setString(2, cp.getTag());
+            updateClanPlayer.setInt(3, (cp.isFriendlyFire() ? 1 : 0));
+            updateClanPlayer.setInt(4, cp.getNeutralKills());
+            updateClanPlayer.setInt(5,  cp.getRivalKills());
+            updateClanPlayer.setInt(6, cp.getCivilianKills());
+            updateClanPlayer.setInt(7, cp.getDeaths());
+            updateClanPlayer.setLong(8, cp.getLastSeen());
+            updateClanPlayer.setString(9, cp.getPackedPastClans());
+            updateClanPlayer.setInt(10, (cp.isTrusted() ? 1 : 0));
+            updateClanPlayer.setString(11, cp.getFlags());
+            updateClanPlayer.setDouble(12, cp.getPower());
+            updateClanPlayer.setString(13,cp.getName());
+            updateClanPlayer.executeUpdate();
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+        }
     }
 
     /**
@@ -633,8 +670,13 @@ public final class StorageManager
      */
     public void deleteClanPlayer(ClanPlayer cp)
     {
-        String query = "DELETE FROM `sc_players` WHERE name = '" + cp.getName() + "';";
-        core.delete(query);
+
+        try {
+            deleteClanPlayer.setString(1, cp.getName());
+            deleteClanPlayer.executeUpdate();
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+        }
 
         deleteKills(cp.getName());
     }
@@ -852,6 +894,21 @@ public final class StorageManager
         }
 
         return out;
+    }
+
+    public int getStrifes(Clan clan, Clan opponenClan)
+    {
+        try {
+            retrieveStrifes.setString(1, clan.getTag());
+            retrieveStrifes.setString(2, opponenClan.getTag());
+            ResultSet res = retrieveStrifes.executeQuery();
+            res.last();
+            int rowCount = res.getRow();
+            return rowCount;
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+        }
+        return 0;
     }
 
     /**
