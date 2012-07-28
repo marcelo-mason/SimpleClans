@@ -93,7 +93,7 @@ public class ClaimCommand extends GenericPlayerCommand
                                                 }
                                             }
                                         } else {
-                                            throw new UnsupportedOperationException("not yet");
+                                            player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("already.claimed"));
                                         }
                                     } else {
                                         player.sendMessage(ChatColor.DARK_GRAY + plugin.getLang("already.claimed"));

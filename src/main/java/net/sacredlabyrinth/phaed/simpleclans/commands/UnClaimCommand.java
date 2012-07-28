@@ -60,6 +60,7 @@ public class UnClaimCommand extends GenericPlayerCommand
                         break;
                 }
             } else {
+                player.sendMessage(ChatColor.DARK_RED + plugin.getLang("error.no.claim"));
             }
         } else {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));

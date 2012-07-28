@@ -1,7 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
@@ -15,7 +14,7 @@ public class StrifesCommand extends GenericPlayerCommand
 
     public StrifesCommand(SimpleClans plugin)
     {
-        super("Command");
+        super("Strifes");
         this.plugin = plugin;
         setArgumentRange(0, 0);
         setUsages(MessageFormat.format(plugin.getLang("usage.strifes"), plugin.getSettingsManager().getCommandClan()));
@@ -54,14 +53,7 @@ public class StrifesCommand extends GenericPlayerCommand
                         chatBlock.setAlignment("l", "c");
 
                         chatBlock.addRow("  " + headColor + plugin.getLang("clan"), plugin.getLang("strifes"));
-                        Map<String, Integer> unordered = new HashMap<String, Integer>();
-
-                        for (Clan clans : plugin.getClanManager().getClans()) {
-                            int strifes = plugin.getStorageManager().getStrifes(clan, clans);
-                            if (strifes != 0) {
-                                unordered.put(clans.getTag(), strifes);
-                            }
-                        }
+                        Map<String, Integer> unordered = plugin.getStorageManager().getStrifesOfClan(clan.getTag());
 
                         Map<String, Integer> ordered = Helper.sortByValue(unordered);
 

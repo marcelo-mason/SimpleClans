@@ -275,14 +275,10 @@ public class Clan implements Serializable, Comparable<Clan>
         Clan clanHere = plugin.getClanManager().getClanAt(chunk);
 
         if (clanHere != null) {
-            if (!chunk.equals(homeChunk)) {
-                if (isClaimedNear(chunk, chunk)) {
-                    return UnClaimResult.SUCCESS;
-                } else {
-                    return UnClaimResult.FAILED_NEAR;
-                }
-            } else {
+            if (chunk.equals(homeChunk)) {
                 return UnClaimResult.FAILED_HOMEBLOCK;
+            } else {
+                return UnClaimResult.SUCCESS;
             }
         } else {
             return UnClaimResult.NO_CLAIM;

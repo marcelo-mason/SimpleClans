@@ -83,7 +83,7 @@ public class VitalsCommand extends GenericPlayerCommand
                             }
                         }
 
-                        chatBlock.addRow(" -- Allies -- ", "", "", "", "", "");
+                        chatBlock.addRow(ChatColor.GRAY + " -- Allies -- ", "", "", "", "", "");
 
                         Set<ClanPlayer> allAllyMembers = clan.getAllAllyMembers();
 

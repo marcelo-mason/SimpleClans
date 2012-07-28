@@ -27,7 +27,7 @@ public final class StorageManager
             updateClan, updateClanPlayer,
             retrieveTotalDeathsPerPlayer, retrieveTotalKillsPerPlayer, retrieveTotalKillsPerClan,
             retrieveTotalDeathsPerClan, retrieveMostKilled, retrieveKillsPerPlayer, retrieveStrifes,
-            insertClan, insertClanPlayer, insertClaim, insertKill;
+            retrieveClanStrifes, insertClan, insertClanPlayer, insertClaim, insertKill;
 
     /**
      *
@@ -201,6 +201,7 @@ public final class StorageManager
         insertKill = core.prepareStatement("INSERT INTO `sc_kills` (  `attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `kill_type`) VALUES ( ?, ?, ?, ?, ?, ?);");
         //insertStrife = core.prepareStatement("INSERT INTO `sc_strifes` (  `attacker_clan`, `victim_clan`) VALUES ( ?, ?);");
         retrieveStrifes = core.prepareStatement("SELECT * FROM `sc_kills` WHERE ((`attacker_tag` = ? AND `victim_tag` = ?) OR (`victim_tag` = ? AND `attacker_tag` = ?)) AND `war` = 0;");
+        retrieveClanStrifes = core.prepareStatement("SELECT * FROM `sc_kills` WHERE (`attacker_tag` = ? OR `victim_tag` = ?) AND `war` = 0;");
     }
 
     /**
@@ -902,6 +903,41 @@ public final class StorageManager
         return out;
     }
 
+    public HashMap<String, Integer> getStrifesOfClan(String clan)
+    {
+        HashMap<String, Integer> out = new HashMap<String, Integer>();
+        try {
+            retrieveClanStrifes.setString(1, clan);
+            retrieveClanStrifes.setString(2, clan);
+            ResultSet res = retrieveClanStrifes.executeQuery();
+
+            if (res != null) {
+
+                while (res.next()) {
+                    try {
+
+                        String attacker = res.getString("attacker_tag");
+                        String victim = res.getString("victim_tag");
+                        if (!clan.equals(attacker)) {
+                            Integer strifes = out.get(attacker);
+                            out.put(attacker, (strifes == null ? 0 : strifes) + 1);
+                        }
+                        if (!clan.equals(victim)) {
+                            Integer strifes = out.get(victim);
+                            out.put(victim, (strifes == null ? 0 : strifes) + 1);
+                        }
+                    } catch (Exception ex) {
+                        SimpleClans.debug(ex.getMessage(), ex);
+                    }
+                }
+            }
+        } catch (SQLException ex) {
+            SimpleClans.debug(String.format("An Error occurred: %s", ex.getErrorCode()), ex);
+        }
+
+        return out;
+    }
+
     public int getStrifes(Clan clan, Clan opponenClan)
     {
         try {
@@ -918,7 +954,6 @@ public final class StorageManager
         }
         return 0;
     }
-
 
     /**
      * Updates the database to the latest version

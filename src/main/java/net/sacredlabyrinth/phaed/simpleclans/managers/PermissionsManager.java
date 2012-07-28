@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import in.mDev.MiracleM4n.mChatSuite.api.API;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
+import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
 import net.milkbowl.vault.chat.Chat;
@@ -9,7 +10,10 @@ import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.Phaed.PreciousStones.FieldFlag;
 import net.sacredlabyrinth.Phaed.PreciousStones.PreciousStones;
+import net.sacredlabyrinth.Phaed.PreciousStones.ResultsFilter;
+import net.sacredlabyrinth.Phaed.PreciousStones.vectors.ChunkVec;
 import net.sacredlabyrinth.Phaed.PreciousStones.vectors.Field;
+import net.sacredlabyrinth.phaed.simpleclans.ChunkLocation;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -308,6 +312,19 @@ public final class PermissionsManager
         }
     }
 
+    public boolean isAreaAlreadyProtected(ChunkLocation chunk)
+    {
+        if (ps != null) {
+            List<Field> fields = ps.getForceFieldManager().getSourceFieldsInChunk(new ChunkVec(chunk.getNormalX(), chunk.getNormalZ(), chunk.getWorld()), FieldFlag.ALL, new ResultsFilter[0]);
+            if (fields != null) {
+                if (!fields.isEmpty()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
     /**
      * Whether a player is allowed in the area
      *
@@ -318,13 +335,15 @@ public final class PermissionsManager
     public boolean teleportAllowed(Player player, Location location)
     {
         if (ps != null) {
-            Field field = ps.getForceFieldManager().getSourceField(location, FieldFlag.PREVENT_TELEPORT);
+            List<Field> fields = ps.getForceFieldManager().getSourceFields(location, FieldFlag.PREVENT_TELEPORT);
 
-            if (field != null) {
-                boolean allowed = ps.getForceFieldManager().isApplyToAllowed(field, player.getName());
+            if (fields != null && !fields.isEmpty()) {
+                for (Field field : fields) {
+                    boolean allowed = ps.getForceFieldManager().isApplyToAllowed(field, player.getName());
 
-                if (!allowed || field.hasFlag(FieldFlag.APPLY_TO_ALL)) {
-                    return false;
+                    if (!allowed || field.hasFlag(FieldFlag.APPLY_TO_ALL)) {
+                        return false;
+                    }
                 }
             }
         }
