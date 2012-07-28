@@ -26,7 +26,6 @@ import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerMoveEvent;
 import org.getspout.spoutapi.SpoutManager;
-import org.getspout.spoutapi.event.spout.SpoutCraftEnableEvent;
 import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
@@ -307,7 +306,7 @@ public class SCClaimingListener implements Listener
     {
         Location from = event.getFrom();
         Location to = event.getTo();
-        SpoutPlayer sp = SpoutManager.getPlayer(event.getPlayer());
+        Player player = event.getPlayer();
 
         if (from.equals(to)) {
             return;
@@ -319,25 +318,41 @@ public class SCClaimingListener implements Listener
         if (clanTo != null) {
             if (clanFrom != null) {
                 if (!clanFrom.equals(clanTo)) {
-                    if (plugin.hasSpout() && sp.isSpoutCraftEnabled()) {
-                        plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
+                    if (plugin.hasSpout()) {
+                        SpoutPlayer sp = SpoutManager.getPlayer(player);
+                        if (sp.isSpoutCraftEnabled()) {
+                            plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
+                        } else {
+                            player.sendMessage(ChatColor.GRAY + clanTo.getTag());
+                        }
                     } else {
-                        sp.sendMessage(ChatColor.GRAY + clanTo.getTag());
+                        player.sendMessage(ChatColor.GRAY + clanTo.getTag());
                     }
                 }
             } else {
-                if (plugin.hasSpout() && sp.isSpoutCraftEnabled()) {
-                    plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
+                if (plugin.hasSpout()) {
+                    SpoutPlayer sp = SpoutManager.getPlayer(player);
+                    if (sp.isSpoutCraftEnabled()) {
+
+                        plugin.getSpoutPluginManager().enterClanRegion(sp, clanTo.getTag());
+                    } else {
+                        player.sendMessage(ChatColor.GRAY + clanTo.getTag());
+                    }
                 } else {
-                    sp.sendMessage(ChatColor.GRAY + clanTo.getTag());
+                    player.sendMessage(ChatColor.GRAY + clanTo.getTag());
                 }
             }
         } else {
             if (clanFrom != null) {
-                if (plugin.hasSpout() && sp.isSpoutCraftEnabled()) {
-                    plugin.getSpoutPluginManager().leaveClanRegion(sp);
-                } else {
-                    sp.sendMessage(ChatColor.DARK_GREEN + plugin.getLang("wilderness"));
+                if (plugin.hasSpout()) {
+                    SpoutPlayer sp = SpoutManager.getPlayer(player);
+                    if (sp.isSpoutCraftEnabled()) {
+
+
+                        plugin.getSpoutPluginManager().leaveClanRegion(sp);
+                    } else {
+                        player.sendMessage(ChatColor.DARK_GREEN + plugin.getLang("wilderness"));
+                    }
                 }
             }
         }

@@ -320,6 +320,8 @@ public final class PermissionsManager
                 if (!fields.isEmpty()) {
                     return true;
                 }
+            } else {
+                return true;
             }
         }
         return false;
