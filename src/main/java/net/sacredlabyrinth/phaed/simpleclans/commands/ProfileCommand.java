@@ -36,7 +36,10 @@ public class ProfileCommand extends GenericPlayerCommand
             }
         }
         if (plugin.getPermissionsManager().has(sender, "simpleclans.anyone.profile")) {
-            out += "\n   §b" + MessageFormat.format(plugin.getLang("0.profile.tag.1.view.a.clan.s.profile"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+            if (!out.isEmpty()) {
+                out += "\n   §b";
+            }
+            out += MessageFormat.format(plugin.getLang("0.profile.tag.1.view.a.clan.s.profile"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
         }
         return out.isEmpty() ? null : out;
     }

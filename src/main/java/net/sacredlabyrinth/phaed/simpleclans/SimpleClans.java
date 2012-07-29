@@ -14,6 +14,7 @@ import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -36,11 +37,9 @@ public class SimpleClans extends JavaPlugin
     private TeleportManager teleportManager;
     private ResourceBundle lang;
     private AutoUpdate autoUpdate;
+    private static ConsoleCommandSender log;
     private boolean spout;
 
-    /**
-     * @return the logger
-     */
     public static void debug(String msg)
     {
         if (getInstance().getSettingsManager().isDebugging()) {
@@ -68,9 +67,9 @@ public class SimpleClans extends JavaPlugin
     public static void log(String msg, Object... arg)
     {
         if (arg == null || arg.length == 0) {
-            logger.log(Level.INFO, msg);
+            log.sendMessage(msg);
         } else {
-            logger.log(Level.INFO, new StringBuilder().append(MessageFormat.format(msg, arg)).toString());
+            log.sendMessage(MessageFormat.format(msg, arg));
         }
     }
 
@@ -86,6 +85,7 @@ public class SimpleClans extends JavaPlugin
     {
         long start = System.currentTimeMillis();
         logger = getLogger();
+        log = getServer().getConsoleSender();
         instance = this;
         settingsManager = new SettingsManager();
 

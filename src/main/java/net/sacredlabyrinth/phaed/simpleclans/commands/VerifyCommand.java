@@ -45,16 +45,24 @@ public class VerifyCommand extends GenericPlayerCommand
         Clan clan = cp == null ? null : cp.getClan();
 
         boolean isNonVerified = clan != null && !clan.isVerified();
-        boolean isBuyer = isNonVerified && plugin.getSettingsManager().isRequireVerification() && plugin.getSettingsManager().isePurchaseVerification();
+        boolean isBuy = plugin.getSettingsManager().isePurchaseVerification();
 
-        if (isBuyer) {
-            if (plugin.getClanManager().purchaseVerification(player)) {
+        if (plugin.getSettingsManager().isRequireVerification()) {
+            if (isNonVerified) {
+                if (isBuy) {
+                    if (!plugin.getClanManager().purchaseVerification(player)) {
+                        player.sendMessage(ChatColor.AQUA + plugin.getLang("not.sufficient.money"));
+                        return;
+                    }
+                }
                 clan.verifyClan();
                 clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
                 ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
             } else {
-                player.sendMessage(ChatColor.AQUA + plugin.getLang("not.sufficient.money"));
+                player.sendMessage(ChatColor.GRAY + plugin.getLang("your.clan.is.already.verified"));
             }
+        } else {
+            player.sendMessage(ChatColor.GRAY + plugin.getLang("you.dont.need.to.verify"));
         }
     }
 }
