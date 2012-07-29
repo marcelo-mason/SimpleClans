@@ -520,46 +520,15 @@ public class AutoUpdate implements Runnable, Listener
 	  String[] sts = sw.toString().replace("\r", "").split("\n");
 	  String[] out;
 	  if(expected)
-		out = new String[sts.length+31];
+		out = new String[sts.length+1];
 	  else
-		out = new String[sts.length+33];
-	  out[0] = prefix;
-	  out[1] = prefix+"Internal error!";
-	  out[2] = prefix+"If this bug hasn't been reported please open a ticket at http://forums.bukkit.org/threads/autoupdate-update-your-plugins.84421/";
-	  out[3] = prefix+"Include the following into your bug report:";
-	  out[4] = prefix+"          ======= SNIP HERE =======";
-	  int i = 5;
-	  for(; i-5 < sts.length; i++)
-		out[i] = prefix+sts[i-5];
-	  out[++i] = prefix+"          ======= DUMP =======";
-	  out[++i] = prefix+"version        : "+version;
-	  out[++i] = prefix+"delay          : "+delay;
-	  out[++i] = prefix+"ymlPrefix      : "+ymlPrefix;
-	  out[++i] = prefix+"ymlSuffix      : "+ymlSuffix;
-	  out[++i] = prefix+"bukkitdevPrefix: "+bukkitdevPrefix;
-	  out[++i] = prefix+"bukkitdevSuffix: "+bukkitdevSuffix;
-	  out[++i] = prefix+"bukkitdevSlug  : "+bukkitdevSlug;
-	  out[++i] = prefix+"COLOR_INFO     : "+COLOR_INFO.name();
-	  out[++i] = prefix+"COLO_OK        : "+COLOR_OK.name();
-	  out[++i] = prefix+"COLOR_ERROR    : "+COLOR_ERROR.name();
-	  out[++i] = prefix+"bukget         : "+bukget;
-	  out[++i] = prefix+"bukgetFallback : "+bukgetFallback;
-	  out[++i] = prefix+"pid            : "+pid;
-	  out[++i] = prefix+"av             : "+av;
-	  out[++i] = prefix+"config         : "+config;
-	  out[++i] = prefix+"lock           : "+lock.get();
-	  out[++i] = prefix+"needUpdate     : "+needUpdate;
-	  out[++i] = prefix+"updatePending  : "+updatePending;
-	  out[++i] = prefix+"UpdateUrl      : "+updateURL;
-	  out[++i] = prefix+"updateVersion  : "+updateVersion;
-	  out[++i] = prefix+"pluginURL      : "+pluginURL;
-	  out[++i] = prefix+"type           : "+type;
-	  out[++i] = prefix+"          ======= SNIP HERE =======";
-	  out[++i] = prefix;
+		out = new String[sts.length+3];
+	 
+          out[0] = "AutoUpdater failed to connect!";
 	  if(!expected)
 	  {
-		out[++i] = prefix+"DISABLING UPDATER!";
-		out[++i] = prefix;
+		out[1] = prefix+"DISABLING UPDATER!";
+		out[2] = prefix;
 	  }
 	  bs.scheduleSyncDelayedTask(plugin, new SyncMessageDelayer(null, out));
 	}
