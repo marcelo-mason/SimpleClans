@@ -225,10 +225,7 @@ public class SCPlayerListener implements Listener
             public void run()
             {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-//                long s1 = System.currentTimeMillis();
                 plugin.getClanManager().updateLastSeen(player);
-//                long e1 = System.currentTimeMillis();
-//                long s2 = System.currentTimeMillis();
                 plugin.getClanManager().updateDisplayName(player);
                 if (plugin.hasSpout()) {
                     plugin.getSpoutPluginManager().processPlayer(player.getName());
@@ -243,14 +240,6 @@ public class SCPlayerListener implements Listener
                         }
                     }
                 }
-//                long e2 = System.currentTimeMillis();
-//                System.out.println(e1 - s1);
-//                System.out.println(e2 - s2);
-                //ClanPlayer anyCp = plugin.getClanManager().getAnyClanPlayer(player.getName());
-
-//                if (anyCp != null) {
-//                    plugin.getPermissionsManager().addClanPermissions(anyCp);
-//                }
             }
         }, 1);
     }
@@ -263,6 +252,10 @@ public class SCPlayerListener implements Listener
 
         if (cp != null) {
             Location loc = cp.getClan().getHomeChunkMiddle();
+            if (loc == null) {
+                return;
+            }
+
             World world = loc.getWorld();
 
             if (!world.equals(player.getWorld())) {
