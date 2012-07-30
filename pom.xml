@@ -10,6 +10,7 @@
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <mcVersion>1.2.5</mcVersion>
+        <project.build.number>UNKNOWN</project.build.number>
     </properties>
     
     <!-- Source code -->
@@ -24,16 +25,29 @@
         <system>jenkins</system>
         <url>http://jenkins.thebigdigmc.info/job/${project.name}</url>
     </ciManagement>
-
+    
+    <profiles>
+        <profile>
+            <id>jenkins</id>
+            <activation>
+                <property>
+                    <name>env.BUILD_NUMBER</name>
+                </property>
+            </activation>
+            <properties>
+                <project.build.number>${env.BUILD_NUMBER}</project.build.number>
+            </properties>
+        </profile>
+    </profiles>
+    
     <build>
-        
         <defaultGoal>clean install</defaultGoal>
         
 	<!-- Resources -->
         <resources>
             <resource>
                 <targetPath>.</targetPath>
-                <filtering>false</filtering>
+                <filtering>true</filtering>
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>plugin.yml</include>
@@ -85,36 +99,12 @@
                     <replacements>
                         <replacement>
                             <token>maven-version-number</token>
-                            <value>${project.version}_b${buildNumber}</value>
+                            <value>${project.version}-b${project.build.number}</value>
                         </replacement>
                     </replacements>
                 </configuration>
             </plugin>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>buildnumber-maven-plugin</artifactId>
-                <version>1.1</version>
-                <executions>
-                    <execution>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>create</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <doCheck>true</doCheck>
-                    <doUpdate>false</doUpdate>
-                    <format>{0,number}</format>
-                    <items>
-                        <item>buildNumber0</item>
-                    </items>
-                </configuration>
-            </plugin>
         </plugins>
-        <finalName>
-            ${project.artifactId}-${project.version}_b${buildNumber}
-        </finalName>
     </build>
     
     <!-- Dependencies -->
