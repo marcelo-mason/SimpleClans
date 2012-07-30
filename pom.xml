@@ -7,18 +7,33 @@
     <name>SimpleClans</name>
     <url>http://dev.bukkit.org/server-mods/simpleclans/</url>
     
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <mcVersion>1.2.5</mcVersion>
+    </properties>
+    
+    <!-- Source code -->
     <scm>
         <connection>scm:git:git://github.com/SacredCoding/SimpleClans.git</connection>
         <developerConnection>scm:git:git@github.com:SacredCoding/SimpleClans.git</developerConnection>
         <url>https://github.com/SacredCoding/SimpleClans</url>
     </scm>
 
+    <!-- Continuous integration -->
+    <ciManagement>
+        <system>jenkins</system>
+        <url>http://jenkins.thebigdigmc.info/job/${project.name}</url>
+    </ciManagement>
+
     <build>
-		<!-- Resources -->
+        
+        <defaultGoal>clean install</defaultGoal>
+        
+	<!-- Resources -->
         <resources>
             <resource>
                 <targetPath>.</targetPath>
-                <filtering>true</filtering>
+                <filtering>false</filtering>
                 <directory>${basedir}/src/main/resources</directory>
                 <includes>
                     <include>plugin.yml</include>
@@ -28,7 +43,7 @@
             </resource>
         </resources>
 		
-		<!-- Plugins -->
+	<!-- Plugins -->
         <plugins>        
             <!-- Compilation plugin -->
             <plugin>
@@ -44,33 +59,35 @@
                 </configuration>
             </plugin>
             
-			<!-- JAR creation plugin -->
+            <!-- JAR creation plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
                 <version>2.3.2</version>				
                 <configuration>
-                    <outputDirectory>${basedir}/out/</outputDirectory>
-                    <archive>
-                        <manifestEntries>
-                            <Implementation-Title>${project.name}</Implementation-Title>
-                            <Implementation-Version>${describe}</Implementation-Version>
-                            <Implementation-Vendor>SacredLabyrinth/TropicalDreamZ</Implementation-Vendor>
-                            
-                            <Specification-Title>${project.name}</Specification-Title>
-                            <Specification-Version>${version.number}</Specification-Version>
-                            <Specification-Vendor>SacredLabyrinth/TropicalDreamZ</Specification-Vendor>
-                            <Sealed>true</Sealed>
-                        </manifestEntries>
-                        <manifestSections>
-                            <manifestSection>
-                                <name>net/sacredlabyrinth/phaed/simpleclans/</name>
-                                <manifestEntries>
-                                    <Sealed>true</Sealed>
-                                </manifestEntries>
-                            </manifestSection>
-                        </manifestSections>
-                    </archive>
+              <!--      <outputDirectory>${basedir}/out/</outputDirectory> -->
+                </configuration>
+            </plugin>
+            <plugin>
+                <groupId>com.google.code.maven-replacer-plugin</groupId>
+                <artifactId>maven-replacer-plugin</artifactId>
+                <version>1.3.8</version>
+                <executions>
+                    <execution>
+                        <phase>prepare-package</phase>
+                        <goals>
+                            <goal>replace</goal>
+                        </goals>
+                    </execution>
+                </executions>
+                <configuration>
+                    <file>target/classes/plugin.yml</file>
+                    <replacements>
+                        <replacement>
+                            <token>maven-version-number</token>
+                            <value>${project.version}_b${buildNumber}</value>
+                        </replacement>
+                    </replacements>
                 </configuration>
             </plugin>
             <plugin>
@@ -87,11 +104,19 @@
                 </executions>
                 <configuration>
                     <doCheck>true</doCheck>
-                    <doUpdate>true</doUpdate>
+                    <doUpdate>false</doUpdate>
+                    <format>{0,number}</format>
+                    <items>
+                        <item>buildNumber0</item>
+                    </items>
                 </configuration>
             </plugin>
         </plugins>
+        <finalName>
+            ${project.artifactId}-${project.version}_b${buildNumber}
+        </finalName>
     </build>
+    
     <!-- Dependencies -->
     <dependencies>
         <dependency>
@@ -148,6 +173,7 @@
             <systemPath>${project.basedir}/lib/LWC.jar</systemPath>
         </dependency>
     </dependencies>
+    
     <!-- Repositories -->
     <repositories>
         <repository>
@@ -163,8 +189,4 @@
             <url>http://repo.spout.org</url>
         </repository>
     </repositories>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    </properties>
 </project>

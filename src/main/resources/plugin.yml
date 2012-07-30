@@ -1,6 +1,6 @@
 name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
-version: ${project.version}
+version: maven-version-number
 softdepend: [Spout, VanishNoPacket, Permissions, PermissionsBukkit, Vault, PermissionsEx, PreciousStones, mChat, mChatSuite]
 permissions:
   simpleclans.admin.permissions:
