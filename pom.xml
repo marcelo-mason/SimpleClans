@@ -43,7 +43,7 @@
     <build>
         
         <finalName>
-            ${project.artifactId}-${project.version}.${buildNumber}
+            ${project.artifactId}-${project.version}${project.build.number}
         </finalName>
         
         <defaultGoal>clean install</defaultGoal>

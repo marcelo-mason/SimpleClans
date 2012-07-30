@@ -271,6 +271,9 @@ public class AutoUpdate implements Runnable, Listener
 		  pluginURL = jo.getString("bukkitdev_link");
 		  jo = ja.getJSONObject(0);
 		  nv = bukkitdevPrefix+jo.getString("name")+bukkitdevSuffix;
+                  if (av.contains("UNKNOWN") || av.substring(9).contains("b")) {
+                      return;
+                  }
 		  if(av.equals(nv) || (updateVersion != null && updateVersion.equals(nv)))
 		  {
 			lock.set(false);
