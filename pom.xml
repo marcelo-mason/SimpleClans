@@ -41,6 +41,11 @@
     </profiles>
     
     <build>
+        
+        <finalName>
+            ${project.artifactId}-${project.version}.${buildNumber}
+        </finalName>
+        
         <defaultGoal>clean install</defaultGoal>
         
 	<!-- Resources -->
