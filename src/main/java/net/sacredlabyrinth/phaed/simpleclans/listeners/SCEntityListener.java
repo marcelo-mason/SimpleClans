@@ -228,14 +228,14 @@ public class SCEntityListener implements Listener
             if (vclan != null) {
                 if (aclan != null) {
                     // personal ff enabled, allow damage
-
-                    if (vcp.isFriendlyFire()) {
+                    //skip if globalff is on
+                    if (plugin.getSettingsManager().isGlobalff() || vcp.isFriendlyFire()) {
                         return;
                     }
 
                     // clan ff enabled, allow damage
 
-                    if (vclan.isFriendlyFire()) {
+                    if (plugin.getSettingsManager().isGlobalff() || vclan.isFriendlyFire()) {
                         return;
                     }
 
