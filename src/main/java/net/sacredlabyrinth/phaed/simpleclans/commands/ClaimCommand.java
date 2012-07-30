@@ -58,7 +58,7 @@ public class ClaimCommand extends GenericPlayerCommand
                             switch (clan.canClaim(chunk)) {
                                 case SUCCESS:
 
-                                    BankResult result = clan.withdraw(50, player);
+                                    BankResult result = clan.withdraw(plugin.getSettingsManager().getClaimPrize(), player);
 
                                     switch (result) {
                                         case BANK_NOT_ENOUGH_MONEY:

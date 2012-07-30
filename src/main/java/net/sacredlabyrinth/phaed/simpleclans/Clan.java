@@ -4,6 +4,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansBankBalanceChangeEvent;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansJoinEvent;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansLeaveEvent;
 import net.sacredlabyrinth.phaed.simpleclans.results.BankResult;
@@ -306,7 +307,11 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (plugin.getPermissionsManager().playerHasMoney(player, amount)) {
             if (plugin.getPermissionsManager().playerChargeMoney(player, amount)) {
-                setBalance(getBalance() + amount);
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                double before = getBalance();
+                double after = before + amount;
+                setBalance(after);
+                plugin.getServer().getPluginManager().callEvent(new SimpleClansBankBalanceChangeEvent(cp, this, before, after));
                 plugin.getStorageManager().updateClan(this);
                 return BankResult.SUCCESS_DEPOSIT;
             } else {
@@ -327,7 +332,11 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (getBalance() >= amount) {
             if (plugin.getPermissionsManager().playerGrantMoney(player, amount)) {
-                setBalance(getBalance() - amount);
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                double before = getBalance();
+                double after = before - amount;
+                setBalance(after);
+                plugin.getServer().getPluginManager().callEvent(new SimpleClansBankBalanceChangeEvent(cp, this, before, after));
                 plugin.getStorageManager().updateClan(this);
 
                 return BankResult.SUCCESS_WITHDRAW;

@@ -104,6 +104,7 @@ claiming:
   steal-only-when-players-online: true
   max-power: 10
   min-power: -10
+  claim-prize: 50.0
   destroy-in-war: false
 clanchat:
     rank.color: e
