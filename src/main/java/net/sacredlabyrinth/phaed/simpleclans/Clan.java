@@ -395,28 +395,23 @@ public class Clan implements Serializable, Comparable<Clan>
      * @param amount
      * @param player
      */
-    public BankResult deposit(double amount, Player player)
+    public BankResult deposit(double amount, ClanPlayer cp)
     {
-        if (plugin.getPermissionsManager().playerHasMoney(player, amount)) {
-            if (plugin.getPermissionsManager().playerChargeMoney(player, amount)) {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-                depositDirect(amount, cp);
-                return BankResult.SUCCESS_DEPOSIT;
+        if (allowDeposit || cp.isLeader()) {
+            Player player = cp.toPlayer();
+            if (plugin.getPermissionsManager().playerHasMoney(player, amount)) {
+                if (plugin.getPermissionsManager().playerChargeMoney(player, amount)) {
+                    depositDirect(amount, cp);
+                    return BankResult.SUCCESS_DEPOSIT;
+                } else {
+                    return BankResult.PLAYER_NOT_ENOUGH_MONEY;
+                }
             } else {
                 return BankResult.PLAYER_NOT_ENOUGH_MONEY;
             }
         } else {
-            return BankResult.PLAYER_NOT_ENOUGH_MONEY;
+            return BankResult.DEPOSIT_NOT_ALLOWED;
         }
-    }
-
-    /**
-     * @see Clan#deposit(double, org.bukkit.entity.Player)
-     *
-     */
-    public BankResult deposit(double amount, ClanPlayer player)
-    {
-        return deposit(amount, player.toPlayer());
     }
 
     /**
@@ -425,30 +420,29 @@ public class Clan implements Serializable, Comparable<Clan>
      * @param amount
      * @param player
      */
-    public BankResult withdraw(double amount, Player player)
+    public BankResult withdraw(double amount, ClanPlayer cp)
     {
-        if (getBalance() >= amount) {
-            if (plugin.getPermissionsManager().playerGrantMoney(player, amount)) {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-                withdrawDirect(amount, cp);
-                return BankResult.SUCCESS_WITHDRAW;
+        if (allowWithdraw || cp.isLeader()) {
+            if (getBalance() >= amount) {
+
+                Player player = cp.toPlayer();
+
+                if (plugin.getPermissionsManager().playerGrantMoney(player, amount)) {
+
+                    withdrawDirect(amount, cp);
+
+                    return BankResult.SUCCESS_WITHDRAW;
+                } else {
+                    return BankResult.FAILED;
+                }
+
             } else {
-                return BankResult.FAILED;
+                return BankResult.BANK_NOT_ENOUGH_MONEY;
             }
-
         } else {
-            return BankResult.BANK_NOT_ENOUGH_MONEY;
+            return BankResult.WITHDRAW_NOT_ALLOWED;
         }
-    }
-
-    /**
-     * @see Clan#withdraw(double, org.bukkit.entity.Player)
-     *
-     */
-    public BankResult withdraw(double amount, ClanPlayer player)
-    {
-        return withdraw(amount, player.toPlayer());
     }
 
     /**

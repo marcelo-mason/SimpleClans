@@ -72,10 +72,10 @@ public class BankCommand extends GenericPlayerCommand
                                     if (cp.getClan().isLeader(player) || clan.isAllowDeposit()) {
                                         if (args[1].equalsIgnoreCase("all")) {
                                             amount = plmoney;
-                                            result = clan.deposit(plmoney, player);
+                                            result = clan.deposit(plmoney, cp);
                                         } else {
                                             amount = money;
-                                            result = clan.deposit(money, player);
+                                            result = clan.deposit(money, cp);
                                         }
                                     } else {
                                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
@@ -84,10 +84,10 @@ public class BankCommand extends GenericPlayerCommand
                                     if (cp.getClan().isLeader(player) || clan.isAllowWithdraw()) {
                                         if (args[1].equalsIgnoreCase("all")) {
                                             amount = clanbalance;
-                                            result = clan.withdraw(clanbalance, player);
+                                            result = clan.withdraw(clanbalance, cp);
                                         } else {
                                             amount = money;
-                                            result = clan.withdraw(money, player);
+                                            result = clan.withdraw(money, cp);
                                         }
                                     } else {
                                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
@@ -117,7 +117,6 @@ public class BankCommand extends GenericPlayerCommand
                                             player.sendMessage(ChatColor.DARK_RED + plugin.getLang("transaction.failed"));
                                             break;
                                     }
-
                                 }
                             }
                         } else {
