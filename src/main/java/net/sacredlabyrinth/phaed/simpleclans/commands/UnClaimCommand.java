@@ -46,7 +46,7 @@ public class UnClaimCommand extends GenericPlayerCommand
             ChunkLocation chunk = new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true);
             Clan clan = plugin.getClanManager().getClanAt(chunk);
             if (clan != null) {
-                switch (clan.unclaim(chunk)) {
+                switch (clan.canUnclaim(chunk)) {
                     case FAILED_HOMEBLOCK:
                         player.sendMessage(ChatColor.DARK_RED + plugin.getLang("remove.homeblock"));
                         break;

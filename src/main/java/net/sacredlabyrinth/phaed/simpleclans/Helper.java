@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import com.sun.media.sound.HsbParser;
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
@@ -10,7 +9,6 @@ import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
-import org.bukkit.Server;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;

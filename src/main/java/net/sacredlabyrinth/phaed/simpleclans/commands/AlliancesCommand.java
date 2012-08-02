@@ -56,7 +56,7 @@ public class AlliancesCommand extends GenericConsoleCommand
                     continue;
                 }
 
-                chatBlock.addRow("  " + ChatColor.AQUA + clan.getName(), clan.getAllyString(ChatColor.DARK_GRAY + ", "));
+                chatBlock.addRow("  " + ChatColor.AQUA + clan.getTag(), clan.getAllyString(ChatColor.DARK_GRAY + ", "));
             }
 
             boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

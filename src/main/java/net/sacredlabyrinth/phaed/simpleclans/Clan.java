@@ -19,6 +19,8 @@ import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
 
 /**
+ * Represents a clan
+ *
  * @author phaed
  */
 public class Clan implements Serializable, Comparable<Clan>
@@ -52,9 +54,6 @@ public class Clan implements Serializable, Comparable<Clan>
     private Location rallyPoint = null;
     private long rallySetTime;
 
-    /**
-     *
-     */
     public Clan(SimpleClans plugin)
     {
         this.plugin = plugin;
@@ -62,11 +61,6 @@ public class Clan implements Serializable, Comparable<Clan>
         this.tag = "";
     }
 
-    /**
-     * @param tag
-     * @param name
-     * @param verified
-     */
     public Clan(SimpleClans plugin, String tag, String name, boolean verified)
     {
         this.plugin = plugin;
@@ -112,16 +106,31 @@ public class Clan implements Serializable, Comparable<Clan>
         return tag;
     }
 
+    /**
+     * Checks if a clan has a permission
+     *
+     * @param type
+     */
     public boolean hasPermission(PermissionType type)
     {
         return permissions.contains(type.getId());
     }
 
+    /**
+     * Removes a claiming-permission to the clan
+     *
+     * @param type
+     */
     public void removePermission(PermissionType type)
     {
         permissions.remove(type.getId());
     }
 
+    /**
+     * Adds a claiming-permission to the clan
+     *
+     * @param type
+     */
     public void addPermission(PermissionType type)
     {
         permissions.add(type.getId());
@@ -145,6 +154,11 @@ public class Clan implements Serializable, Comparable<Clan>
         }
     }
 
+    /**
+     * Returns the middle of the homechunk or null if there is no homechunk
+     *
+     * @return
+     */
     public Location getHomeChunkMiddle()
     {
         if (homeChunk != null) {
@@ -159,34 +173,60 @@ public class Clan implements Serializable, Comparable<Clan>
         return null;
     }
 
+    /**
+     * Checks if the location is claimed
+     *
+     * @param loc
+     * @return
+     */
     public boolean isClaimed(Location loc)
     {
         return claimed.contains(new ChunkLocation(loc.getWorld().getName(), loc.getBlockX(), loc.getBlockZ(), true));
     }
 
+    /**
+     * Checks if the location is claimed
+     *
+     * @param world
+     * @param x
+     * @param z
+     * @return
+     */
     public boolean isClaimed(World world, int x, int z)
     {
         return claimed.contains(new ChunkLocation(world.getName(), x, z, true));
     }
 
+    /**
+     * Checks if the chunk is claimed from this clan
+     *
+     * @param chunk
+     * @return
+     */
     public boolean isClaimed(ChunkLocation chunk)
     {
         return claimed.contains(chunk);
     }
 
+    /**
+     * Checks if the clan can claim another chunk
+     *
+     * @return
+     */
     public boolean canClaim()
     {
         return getClaimedChunks().size() < getAllowedClaims();
     }
 
+    /**
+     * Returns the amount of allowed claims
+     *
+     * @return
+     */
     public int getAllowedClaims()
     {
         if (plugin.getSettingsManager().isClanSizeBased()) {
             int clanSize = getSize();
-//
-//            if (clanSize == 1) {
-//                return 0;
-//            }
 
             int claimsseBasedOnMembers = 0;
 
@@ -201,11 +241,24 @@ public class Clan implements Serializable, Comparable<Clan>
         return 0;
     }
 
+    /**
+     * Checks if a claimed chunk is near
+     *
+     * @param chunk
+     * @return
+     */
     public boolean isClaimedNear(ChunkLocation chunk)
     {
         return isClaimedNear(chunk, null);
     }
 
+    /**
+     * Checks if a claimed chunk is near
+     *
+     * @param checkChunk
+     * @param excluded
+     * @return
+     */
     public boolean isClaimedNear(ChunkLocation checkChunk, ChunkLocation excluded)
     {
         String world = checkChunk.getWorld();
@@ -236,22 +289,43 @@ public class Clan implements Serializable, Comparable<Clan>
         return false;
     }
 
+    /**
+     * Sets the home chunk
+     *
+     * @param chunk
+     */
     public void setHomeChunk(ChunkLocation chunk)
     {
         homeChunk = chunk;
     }
 
+    /**
+     * Returns you to your home chunk
+     *
+     * @return
+     */
     public ChunkLocation getHomeChunk()
     {
         return homeChunk;
     }
 
+    /**
+     * Adds a chunk to the clan
+     *
+     * @param chunk
+     */
     public void addClaimedChunk(ChunkLocation chunk)
     {
         plugin.getStorageManager().insertClaim(chunk, this);
         claimed.add(chunk);
     }
 
+    /**
+     * Checks if a clan can claim the location
+     *
+     * @param chunk
+     * @return
+     */
     public ClaimResult canClaim(ChunkLocation chunk)
     {
         Clan clanHere = plugin.getClanManager().getClanAt(chunk);
@@ -271,7 +345,13 @@ public class Clan implements Serializable, Comparable<Clan>
         }
     }
 
-    public UnClaimResult unclaim(ChunkLocation chunk)
+    /**
+     * Checks if the chunk can be unclaimed
+     *
+     * @param chunk
+     * @return
+     */
+    public UnClaimResult canUnclaim(ChunkLocation chunk)
     {
         Clan clanHere = plugin.getClanManager().getClanAt(chunk);
 
@@ -286,19 +366,31 @@ public class Clan implements Serializable, Comparable<Clan>
         }
     }
 
+    /**
+     * Removes a claimed chunk from this clan
+     *
+     * @param chunk
+     *
+     */
     public void removeClaimedChunk(ChunkLocation chunk)
     {
         plugin.getStorageManager().deleteClaim(chunk, this);
         claimed.remove(chunk);
     }
 
+    /**
+     * Returns a set of claimed chunks
+     *
+     * @return
+     */
     public Set<ChunkLocation> getClaimedChunks()
     {
         return claimed;
     }
 
     /**
-     * deposits money to the clan
+     * Deposits money to the clan and removes the withdraws the money from the
+     * player
      *
      * @param amount
      * @param player
@@ -308,11 +400,7 @@ public class Clan implements Serializable, Comparable<Clan>
         if (plugin.getPermissionsManager().playerHasMoney(player, amount)) {
             if (plugin.getPermissionsManager().playerChargeMoney(player, amount)) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-                double before = getBalance();
-                double after = before + amount;
-                setBalance(after);
-                plugin.getServer().getPluginManager().callEvent(new SimpleClansBankBalanceChangeEvent(cp, this, before, after));
-                plugin.getStorageManager().updateClan(this);
+                depositDirect(amount, cp);
                 return BankResult.SUCCESS_DEPOSIT;
             } else {
                 return BankResult.PLAYER_NOT_ENOUGH_MONEY;
@@ -323,7 +411,16 @@ public class Clan implements Serializable, Comparable<Clan>
     }
 
     /**
-     * withdraws money from the clan
+     * @see Clan#deposit(double, org.bukkit.entity.Player)
+     *
+     */
+    public BankResult deposit(double amount, ClanPlayer player)
+    {
+        return deposit(amount, player.toPlayer());
+    }
+
+    /**
+     * Withdraws money from the clan and adds it to the players inventory
      *
      * @param amount
      * @param player
@@ -333,12 +430,8 @@ public class Clan implements Serializable, Comparable<Clan>
         if (getBalance() >= amount) {
             if (plugin.getPermissionsManager().playerGrantMoney(player, amount)) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-                double before = getBalance();
-                double after = before - amount;
-                setBalance(after);
-                plugin.getServer().getPluginManager().callEvent(new SimpleClansBankBalanceChangeEvent(cp, this, before, after));
-                plugin.getStorageManager().updateClan(this);
 
+                withdrawDirect(amount, cp);
                 return BankResult.SUCCESS_WITHDRAW;
             } else {
                 return BankResult.FAILED;
@@ -347,6 +440,62 @@ public class Clan implements Serializable, Comparable<Clan>
         } else {
             return BankResult.BANK_NOT_ENOUGH_MONEY;
         }
+    }
+
+    /**
+     * @see Clan#withdraw(double, org.bukkit.entity.Player)
+     *
+     */
+    public BankResult withdraw(double amount, ClanPlayer player)
+    {
+        return withdraw(amount, player.toPlayer());
+    }
+
+    /**
+     * Deposits money direct
+     *
+     * @param amount
+     * @param player Optional
+     * @return
+     */
+    public BankResult depositDirect(double amount, ClanPlayer cp)
+    {
+        double after = getBalance() + amount;
+
+        plugin.getServer().getPluginManager().callEvent(new SimpleClansBankBalanceChangeEvent(cp, this, balance, after));
+
+        if (cp != null) {
+            addBb(MessageFormat.format(plugin.getLang("bb.player.clan.deposi"), cp.getName(), amount));
+        } else {
+            addBb(MessageFormat.format(plugin.getLang("bb.clan.deposit"), amount));
+        }
+        setBalance(after);
+        plugin.getStorageManager().updateClan(this);
+        return BankResult.SUCCESS_DEPOSIT;
+    }
+
+    /**
+     * Withdraws money from the clan
+     *
+     * @param amount
+     * @param player Optional
+     * @return
+     */
+    public BankResult withdrawDirect(double amount, ClanPlayer cp)
+    {
+        double test = getBalance() - amount;
+        if (test > 0) {
+            plugin.getServer().getPluginManager().callEvent(new SimpleClansBankBalanceChangeEvent(cp, this, balance, test));
+            if (cp != null) {
+                addBb(MessageFormat.format(plugin.getLang("bb.player.clan.withdraw"), cp.getName(), amount));
+            } else {
+                addBb(MessageFormat.format(plugin.getLang("bb.clan.withdraw"), amount));
+            }
+            setBalance(test);
+            plugin.getStorageManager().updateClan(this);
+            return BankResult.SUCCESS_WITHDRAW;
+        }
+        return BankResult.BANK_NOT_ENOUGH_MONEY;
     }
 
     /**
