@@ -530,7 +530,7 @@ public class AutoUpdate implements Runnable, Listener {
 		    List<String> lines = new ArrayList<String>();
 			String prefix = "  ";
 
-			lines.add(String.format("[%] [AutoUpdate]:", plugin.getName()));
+			lines.add(String.format("[%s] [AutoUpdate]:", plugin.getName()));
 			lines.add("Internal error!");
 			lines.add("");
 			lines.add("If this bug hasn't been reported please open a ticket at " + SUPPORT_URL);
