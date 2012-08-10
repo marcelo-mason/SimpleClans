@@ -977,12 +977,12 @@ public final class StorageManager
         }
         //To 2.4
         if (!core.existsColumn("sc_kills", "war")) {
-            query = "ALTER TABLE sc_players ADD COLUMN `war` tinyint(1) default 0;";
+            query = "ALTER TABLE sc_kills ADD COLUMN `war` tinyint(1) default 0;";
             core.execute(query);
         }
 
         if (!core.existsColumn("sc_kills", "date")) {
-            query = "ALTER TABLE sc_players ADD COLUMN `date` timestamp default CURRENT_TIMESTAMP;";
+            query = "ALTER TABLE sc_kills ADD COLUMN `date` timestamp default CURRENT_TIMESTAMP;";
             core.execute(query);
         }
     }
