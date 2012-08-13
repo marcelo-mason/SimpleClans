@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="Maven: com.griefcraft:LWC:dev-SNAPSHOT">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/lib/LWC.jar!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>
