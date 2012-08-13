@@ -367,13 +367,6 @@ public final class PermissionsManager
         Plugin test = plugin.getServer().getPluginManager().getPlugin("mChatSuite");
 
         if (test != null) {
-            try {
-                int build = Integer.parseInt(test.getDescription().getVersion().substring(7, 10));
-                if (build < 262) {
-                    SimpleClans.debug(Level.WARNING, "Please update mChatSuite to support the integration with it!");
-                }
-            } catch (Exception ex) {
-            }
             mchat = (mChatSuite) test;
         }
     }

@@ -59,7 +59,7 @@ public final class StorageManager
     /**
      * Retrieve a player's pending chat lines
      *
-     * @param player
+     * @param sender
      * @return
      */
     public ChatBlock getChatBlock(CommandSender sender)
@@ -70,7 +70,7 @@ public final class StorageManager
     /**
      * Store pending chat lines for a player
      *
-     * @param player
+     * @param sender
      * @param cb
      */
     public void addChatBlock(CommandSender sender, ChatBlock cb)
@@ -985,5 +985,17 @@ public final class StorageManager
             query = "ALTER TABLE sc_kills ADD COLUMN `date` timestamp default CURRENT_TIMESTAMP;";
             core.execute(query);
         }
+
+        //fail fixes
+        if (core.existsColumn("sc_players", "war")) {
+            query = "ALTER TABLE sc_players DROP COLUMN `war`;";
+            core.execute(query);
+        }
+
+        if (core.existsColumn("sc_players", "date")) {
+            query = "ALTER TABLE sc_players DROP COLUMN `date`;";
+            core.execute(query);
+        }
+
     }
 }

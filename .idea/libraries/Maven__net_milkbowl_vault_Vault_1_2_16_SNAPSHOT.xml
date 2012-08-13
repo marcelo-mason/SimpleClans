@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: net.milkbowl.vault:Vault:1.2.16-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/milkbowl/vault/Vault/1.2.16-SNAPSHOT/Vault-1.2.16-SNAPSHOT.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/net/milkbowl/vault/Vault/1.2.16-SNAPSHOT/Vault-1.2.16-SNAPSHOT-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/net/milkbowl/vault/Vault/1.2.16-SNAPSHOT/Vault-1.2.16-SNAPSHOT-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>

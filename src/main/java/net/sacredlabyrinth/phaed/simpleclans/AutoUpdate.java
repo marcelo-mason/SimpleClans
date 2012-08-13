@@ -303,7 +303,7 @@ public class AutoUpdate implements Runnable, Listener
                     jo = (JSONObject)ja.get(0);
                     nv = bukkitdevPrefix+jo.get("name")+bukkitdevSuffix;
 
-                    if (av.contains("UNKNOWN") || av.substring(9).contains("b")) {
+                    if (av.contains("b")) {
                         return;
                     }
 
