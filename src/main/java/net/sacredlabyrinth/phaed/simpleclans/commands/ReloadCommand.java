@@ -49,9 +49,11 @@ public class ReloadCommand extends GenericConsoleCommand
             }
 
             plugin.getStorageManager().importFromDatabase();
+
             for (Clan clan : plugin.getClanManager().getClans()) {
                 plugin.getPermissionsManager().updateClanPermissions(clan);
             }
+
             long end = System.currentTimeMillis();
             sender.sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("configuration.reloaded"), end - start));
         } else {

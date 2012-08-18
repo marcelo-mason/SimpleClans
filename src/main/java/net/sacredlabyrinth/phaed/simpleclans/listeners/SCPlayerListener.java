@@ -49,7 +49,7 @@ public class SCPlayerListener implements Listener
             return;
         }
 
-        if (event.getMessage().length() == 0) {
+        if (event.getMessage().isEmpty()) {
             return;
         }
 
@@ -131,10 +131,6 @@ public class SCPlayerListener implements Listener
     public void onPlayerChat(AsyncPlayerChatEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName())) {
-            return;
-        }
-
-        if (event.getPlayer() == null) {
             return;
         }
 

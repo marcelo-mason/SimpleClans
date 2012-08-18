@@ -1770,6 +1770,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 cp.setLeader(false);
 
                 plugin.getStorageManager().updateClanPlayer(cp);
+
                 if (plugin.hasSpout()) {
                     plugin.getSpoutPluginManager().processPlayer(cp.getName());
                 }
@@ -1805,7 +1806,7 @@ public class Clan implements Serializable, Comparable<Clan>
                 plugin.getClanManager().removeClan(thisOne.getTag());
                 plugin.getStorageManager().deleteClan(thisOne);
             }
-        }, 1);
+        });
     }
 
     /**
