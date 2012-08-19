@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
+
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.api.events.SimpleClansClanCreateEvent;
 import org.bukkit.ChatColor;
@@ -16,8 +17,7 @@ import org.bukkit.inventory.PlayerInventory;
 /**
  * @author phaed
  */
-public final class ClanManager
-{
+public final class ClanManager {
 
     private SimpleClans plugin;
     private HashMap<String, Clan> clans = new HashMap<String, Clan>();
@@ -145,7 +145,6 @@ public final class ClanManager
 
     /**
      * Resets the kdr of all players (!Warning! clears all deaths/kills)
-     *
      */
     public void resetKDRs()
     {
@@ -843,8 +842,7 @@ public final class ClanManager
      */
     public void sortClansByKDR(List<Clan> clans)
     {
-        Collections.sort(clans, new Comparator<Clan>()
-        {
+        Collections.sort(clans, new Comparator<Clan>() {
 
             @Override
             public int compare(Clan c1, Clan c2)
@@ -865,8 +863,7 @@ public final class ClanManager
      */
     public void sortClanPlayersByHealth(List<ClanPlayer> players)
     {
-        Collections.sort(players, new Comparator<ClanPlayer>()
-        {
+        Collections.sort(players, new Comparator<ClanPlayer>() {
 
             @Override
             public int compare(ClanPlayer c1, ClanPlayer c2)
@@ -892,8 +889,7 @@ public final class ClanManager
      */
     public void sortClanPlayersByKDR(List<ClanPlayer> cps)
     {
-        Collections.sort(cps, new Comparator<ClanPlayer>()
-        {
+        Collections.sort(cps, new Comparator<ClanPlayer>() {
 
             @Override
             public int compare(ClanPlayer c1, ClanPlayer c2)
@@ -914,8 +910,7 @@ public final class ClanManager
      */
     public void sortClanPlayersByLastSeen(List<ClanPlayer> cps)
     {
-        Collections.sort(cps, new Comparator<ClanPlayer>()
-        {
+        Collections.sort(cps, new Comparator<ClanPlayer>() {
 
             @Override
             public int compare(ClanPlayer c1, ClanPlayer c2)
@@ -981,6 +976,7 @@ public final class ClanManager
 
         return true;
     }
+
     /**
      * Purchase Rally-point Teleport
      *
@@ -1034,6 +1030,7 @@ public final class ClanManager
 
         return true;
     }
+
     /**
      * Purchase Home Teleport
      *
@@ -1170,7 +1167,7 @@ public final class ClanManager
             plugin.getStorageManager().updateClanPlayer(cp);
             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left clan chat");
         } else {
-            String code = "" + ChatColor.RED + ChatColor.WHITE + ChatColor.RED + ChatColor.BLACK;
+            String code = ChatColor.RED.toString() + ChatColor.WHITE + ChatColor.RED + ChatColor.BLACK;
             String tag;
 
             if (cp.getRank() != null && !cp.getRank().isEmpty()) {
