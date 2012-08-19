@@ -222,8 +222,8 @@ public class AutoUpdate implements Runnable, Listener
             throw new FileNotFoundException("Config can not be null");
         try
         {
-            while(!lock.compareAndSet(false, true))
-                continue; //TODO: This blocks the main thread...
+            //while(!lock.compareAndSet(false, true))
+            //    continue; //TODO: This blocks the main thread...
             this.config = config;
             if(!config.isSet("AutoUpdate"))
                 config.set("AutoUpdate", true);
