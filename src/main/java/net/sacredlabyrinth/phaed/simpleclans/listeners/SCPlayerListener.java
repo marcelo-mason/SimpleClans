@@ -140,10 +140,11 @@ public class SCPlayerListener implements Listener
         if (cp != null) {
             if (cp.getChannel().equals(ClanPlayer.Channel.CLAN)) {
                 plugin.getClanManager().processClanChat(event.getPlayer(), message);
+                event.setCancelled(true);
             } else if (cp.getChannel().equals(ClanPlayer.Channel.ALLY)) {
                 plugin.getClanManager().processAllyChat(event.getPlayer(), message);
+                event.setCancelled(true);
             }
-            event.setCancelled(true);
         }
 
         if (!plugin.getPermissionsManager().has(event.getPlayer(), "simpleclans.mod.nohide")) {
