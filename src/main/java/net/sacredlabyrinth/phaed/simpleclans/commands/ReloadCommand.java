@@ -40,24 +40,22 @@ public class ReloadCommand extends GenericConsoleCommand
     {
         if (sender.hasPermission("simpleclans.admin.reload")) {
             long start = System.currentTimeMillis();
-            System.out.println("1");
+
             plugin.getSettingsManager().reload();
-            System.out.println("2");
+
             try {
                 plugin.getAutoUpdater().resetConfig();
             } catch (FileNotFoundException ex) {
                 SimpleClans.debug(null, ex);
             }
-            System.out.println("3");
 
             plugin.getStorageManager().importFromDatabase();
-            System.out.println("4");
+
 
             for (Clan clan : plugin.getClanManager().getClans()) {
                 plugin.getPermissionsManager().updateClanPermissions(clan);
             }
 
-            System.out.println("5");
 
             long end = System.currentTimeMillis();
             sender.sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("configuration.reloaded"), end - start));

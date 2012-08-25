@@ -2,9 +2,11 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import in.mDev.MiracleM4n.mChatSuite.api.API;
 import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
+
 import java.util.List;
 import java.util.Set;
 import java.util.logging.Level;
+
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -26,8 +28,7 @@ import org.bukkit.plugin.RegisteredServiceProvider;
 /**
  * @author phaed
  */
-public final class PermissionsManager
-{
+public final class PermissionsManager {
 
     /**
      *
@@ -247,7 +248,7 @@ public final class PermissionsManager
      * Check if a player has permissions
      *
      * @param player the player
-     * @param perm the permission
+     * @param perm   the permission
      * @return whether he has the permission
      */
     public boolean has(Player player, String perm)
@@ -266,8 +267,8 @@ public final class PermissionsManager
     /**
      * Check if a commandsender has permissions
      *
-     * @param player the player
-     * @param perm the permission
+     * @param sender the player
+     * @param perm   the permission
      * @return whether he has the permission
      */
     public boolean has(CommandSender sender, String perm)
@@ -401,66 +402,94 @@ public final class PermissionsManager
 
     public String getPrefix(Player p)
     {
-        String out = "";
+        String out;
 
         try {
-            if (chat != null) {
-                out = chat.getPlayerPrefix(p);
-            }
-        } catch (Exception ex) {
-            // yea vault kinda sucks like that
-        }
+            out = chat.getPlayerPrefix(p);
 
-        if (permission != null && chat != null) {
-            //try {
-            String world = p.getWorld().getName();
-            String name = p.getName();
-            String prefix = chat.getPlayerPrefix(name, world);
-            if (prefix == null || prefix.isEmpty()) {
-                String group = permission.getPrimaryGroup(world, name);
-                prefix = chat.getGroupPrefix(world, group);
-                if (prefix == null) {
-                    prefix = "";
-                }
+            if (out == null) {
+                return "";
             }
 
-            out = prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
-            //} catch (Exception e) {
-
-            //}
+            return out;
+        } catch (Exception e) {
+            SimpleClans.debug(Level.SEVERE, "Failed to get prefix! (Problem with Vault/mChatSuite!)");
+            return "";
         }
 
-        return out;
+//        try {
+//            if (chat != null) {
+//                out = chat.getPlayerPrefix(p);
+//            }
+//        } catch (Exception ex) {
+//            // yea vault kinda sucks like that
+//        }
+//
+//        if (permission != null && chat != null) {
+//            //try {
+//            String world = p.getWorld().getName();
+//            String name = p.getName();
+//            String prefix = chat.getPlayerPrefix(name, world);
+//            if (prefix == null || prefix.isEmpty()) {
+//                String group = permission.getPrimaryGroup(world, name);
+//                prefix = chat.getGroupPrefix(world, group);
+//                if (prefix == null) {
+//                    prefix = "";
+//                }
+//            }
+//
+//            out = prefix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
+//            //} catch (Exception e) {
+//
+//            //}
+//        }
+
+//        return out;
     }
 
     public String getSuffix(Player p)
     {
+        String out;
+
         try {
-            if (chat != null) {
-                return chat.getPlayerSuffix(p);
+            out = chat.getPlayerSuffix(p);
+
+            if (out == null) {
+                return "";
             }
-        } catch (Exception ex) {
-            // yea vault kinda sucks like that
+
+            return out;
+        } catch (Exception e) {
+            SimpleClans.debug(Level.SEVERE, "Failed to get suffix! (Problem with Vault/mChatSuite!)");
+            return "";
         }
 
-        if (permission != null && chat != null) {
-//            try {
-            String world = p.getWorld().getName();
-            String name = p.getName();
-            String suffix = chat.getPlayerSuffix(world, name);
-            if (suffix == null || suffix.isEmpty()) {
-                String group = permission.getPrimaryGroup(world, name);
-                suffix = chat.getPlayerSuffix(world, group);
-                if (suffix == null) {
-                    suffix = "";
-                }
-            }
-            return suffix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
-//            } catch (Exception e) {
-//                System.out.println(e.getMessage());
-//                return "";
+//        try {
+//            if (chat != null) {
+//                return chat.getPlayerSuffix(p);
 //            }
-        }
-        return "";
+//        } catch (Exception ex) {
+//            // yea vault kinda sucks like that
+//        }
+//
+//        if (permission != null && chat != null) {
+////            try {
+//            String world = p.getWorld().getName();
+//            String name = p.getName();
+//            String suffix = chat.getPlayerSuffix(world, name);
+//            if (suffix == null || suffix.isEmpty()) {
+//                String group = permission.getPrimaryGroup(world, name);
+//                suffix = chat.getPlayerSuffix(world, group);
+//                if (suffix == null) {
+//                    suffix = "";
+//                }
+//            }
+//            return suffix.replace("&", "\u00a7").replace(String.valueOf((char) 194), "");
+////            } catch (Exception e) {
+////                System.out.println(e.getMessage());
+////                return "";
+////            }
+//        }
+//        return "";
     }
 }

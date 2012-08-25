@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import java.util.*;
+
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Material;
@@ -11,8 +12,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 /**
  * @author phaed
  */
-public final class SettingsManager
-{
+public final class SettingsManager {
 
     private SimpleClans plugin;
     private String clanChatRankColor;
@@ -158,14 +158,33 @@ public final class SettingsManager
         load();
     }
 
+    public void init()
+    {
+        config.options().header(header);
+        config.options().copyHeader(true);
+        config.options().copyDefaults(true);
+        load();
+        save();
+    }
+
+
+    /**
+     * Reloads the config
+     */
+    public void reload()
+    {
+        System.out.println(config.getBoolean("settings.display-chat-tags"));
+        plugin.reloadConfig();
+        config = plugin.getConfig();
+        System.out.println(config.getBoolean("settings.display-chat-tags"));
+        load();
+    }
+
     /**
      * Load the configuration
      */
     public void load()
     {
-        config.options().header(header);
-        config.options().copyHeader(true);
-        config.options().copyDefaults(true);
 
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
@@ -318,8 +337,6 @@ public final class SettingsManager
             }
             worlds.put(name, section.getInt(name));
         }
-
-        save();
     }
 
     public boolean isAllowedDestroyInWar()
@@ -397,17 +414,7 @@ public final class SettingsManager
     }
 
     /**
-     * Reloads the config
-     *
-     */
-    public void reload()
-    {
-        plugin.reloadConfig();
-    }
-
-    /**
      * Saves the config
-     *
      */
     public void save()
     {

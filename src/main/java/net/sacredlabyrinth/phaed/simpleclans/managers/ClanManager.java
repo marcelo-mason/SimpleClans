@@ -369,9 +369,7 @@ public final class ClanManager {
         }
 
         if (plugin.getSettingsManager().isChatTags()) {
-            String prefix = plugin.getPermissionsManager().getPrefix(player);
-            String suffix = plugin.getPermissionsManager().getSuffix(player);
-            String lastColor = plugin.getSettingsManager().isUseColorCodeFromPrefix() ? Helper.getLastColorCode(prefix) : ChatColor.WHITE + "";
+            String lastColor = plugin.getSettingsManager().isUseColorCodeFromPrefix() ? Helper.getLastColorCode(plugin.getPermissionsManager().getPrefix(player)) : ChatColor.WHITE.toString();
             String fullName = player.getName();
 
             ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
@@ -858,7 +856,7 @@ public final class ClanManager {
     /**
      * Sort clan players by Health. (Goes up from 0 health)
      *
-     * @param clans
+     * @param players
      * @return
      */
     public void sortClanPlayersByHealth(List<ClanPlayer> players)

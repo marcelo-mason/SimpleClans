@@ -205,7 +205,9 @@ public class SQLiteCore implements DBCore
     {
         try {
             ResultSet tables = getConnection().getMetaData().getTables(null, null, table, null);
-            return tables.next();
+            boolean empty = tables.next();
+            tables.close();
+            return empty;
         } catch (SQLException e) {
             SimpleClans.debug("Failed to check if table '" + table + "' exists: " + e.getMessage());
             return false;
@@ -215,17 +217,20 @@ public class SQLiteCore implements DBCore
     /**
      * Check whether a Column exists
      *
-     * @param colum
+     * @param table
+     * @param column
      * @return
      */
     @Override
-    public Boolean existsColumn(String tabell, String colum)
+    public Boolean existsColumn(String table, String column)
     {
         try {
-            ResultSet colums = getConnection().getMetaData().getColumns(null, null, tabell, colum);
-            return colums.next();
+            ResultSet columns = getConnection().getMetaData().getColumns(null, null, table, column);
+            boolean empty = columns.next();
+            columns.close();
+            return empty;
         } catch (SQLException e) {
-            SimpleClans.debug("Failed to check if colum '" + colum + "' exists: " + e.getMessage(), e);
+            SimpleClans.debug("Failed to check if colum '" + table + "' exists: " + e.getMessage(), e);
             return false;
         }
     }

@@ -51,8 +51,6 @@ public final class CommandManager
 
     public boolean executeAll(final Player player, final CommandSender sender, String command, String label, String[] args)
     {
-        long end;
-        long start = System.currentTimeMillis();
         String[] arguments;
 
         //Build the args; if the args length is 0 then build if from the base command
@@ -78,13 +76,9 @@ public final class CommandManager
 
                     if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
                         displayCommandHelp(cmd, sender, player);
-                        end = System.currentTimeMillis();
-                        System.out.println(end - start);
                         return true;
                     } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
                         displayCommandHelp(cmd, sender, player);
-                        end = System.currentTimeMillis();
-                        System.out.println(end - start);
                         return true;
                     }
 
@@ -104,8 +98,7 @@ public final class CommandManager
                     } else {
                         SimpleClans.debug(Level.WARNING, "Failed at parsing the command :(");
                     }
-                    end = System.currentTimeMillis();
-                    System.out.println(end - start);
+
                     return true;
                 }
             }
@@ -157,7 +150,7 @@ public final class CommandManager
             executeAll(player, null, "clan", "clan", args);
 
         } catch (Exception ex) {
-            SimpleClans.debug(MessageFormat.format(plugin.getLang("simpleclans.command.failure"), ex));
+            SimpleClans.debug(plugin.getLang("simpleclans.command.failure"), ex);
 
         }
     }

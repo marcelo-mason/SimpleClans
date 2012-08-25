@@ -6,6 +6,7 @@ import java.sql.SQLException;
 import java.text.MessageFormat;
 import java.util.*;
 import java.util.logging.Level;
+
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
@@ -17,8 +18,7 @@ import org.bukkit.entity.Player;
 /**
  * @author phaed
  */
-public final class StorageManager
-{
+public final class StorageManager {
 
     private SimpleClans plugin;
     private DBCore core;
@@ -36,8 +36,10 @@ public final class StorageManager
     {
         this.plugin = plugin;
         initiateDB();
+        prepareStatements();
         updateDatabase();
         importFromDatabase();
+
 //        if (plugin.getSettingsManager().isClaimingEnabled()) {
 //            plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new SaveThread(), 20L, 6000L);
 //        }
@@ -45,7 +47,6 @@ public final class StorageManager
 
     /**
      * Saves all claims to the db
-     *
      */
     public void saveClaims()
     {
@@ -173,15 +174,14 @@ public final class StorageManager
                 SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("sqlite.connection.failed"));
             }
         }
-        prepareStatements();
     }
 
     public void prepareStatements()
     {
         deleteClan = core.prepareStatement("DELETE FROM `sc_clans` WHERE tag = ?;");
         deleteClaim = core.prepareStatement("DELETE FROM `sc_claims` WHERE clan = ? AND location = ?;");
-        deleteClanPlayer = core.prepareStatement("DELETE FROM `sc_players` WHERE name = ?");
-        deleteKills = core.prepareStatement("DELETE FROM `sc_kills` WHERE `attacker` = ?");
+        deleteClanPlayer = core.prepareStatement("DELETE FROM `sc_players` WHERE name = ?;");
+        deleteKills = core.prepareStatement("DELETE FROM `sc_kills` WHERE `attacker` = ?;");
         deleteClaims = core.prepareStatement("DELETE FROM `sc_claims` WHERE clan = ?;");
         updateClan = core.prepareStatement("UPDATE `sc_clans` SET verified = ?, tag = ?, color_tag = ?, name = ?, friendly_fire = ?, founded = ?, last_used = ?, packed_allies = ?, packed_rivals = ?, packed_bb = ?, cape_url = ?, balance = ?, flags = ? WHERE tag = ?;");
         updateClanPlayer = core.prepareStatement("UPDATE `sc_players` SET leader = ?, tag = ? , friendly_fire = ?, neutral_kills = ?, rival_kills = ?, civilian_kills = ?, deaths = ?, last_seen = ?, packed_past_clans = ?, trusted = ?, flags = ?, power = ? WHERE name = ?;");
@@ -198,7 +198,7 @@ public final class StorageManager
         } else {
             insertClaim = core.prepareStatement("INSERT OR IGNORE INTO sc_claims (location,clan) VALUES (?, ?); UPDATE sc_claims SET location = ?, clan = ? WHERE location LIKE ?;");
         }
-        insertKill = core.prepareStatement("INSERT INTO `sc_kills` (  `attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `kill_type`) VALUES ( ?, ?, ?, ?, ?, ?);");
+        insertKill = core.prepareStatement("INSERT INTO `sc_kills` (  `attacker`, `attacker_tag`, `victim`, `victim_tag`, `war`, `kill_type`, `date`) VALUES ( ?, ?, ?, ?, ?, ?, CURRENT_TIMESTAMP);");
         //insertStrife = core.prepareStatement("INSERT INTO `sc_strifes` (  `attacker_clan`, `victim_clan`) VALUES ( ?, ?);");
         retrieveStrifes = core.prepareStatement("SELECT * FROM `sc_kills` WHERE ((`attacker_tag` = ? AND `victim_tag` = ?) OR (`victim_tag` = ? AND `attacker_tag` = ?)) AND `war` = 0;");
         retrieveClanStrifes = core.prepareStatement("SELECT * FROM `sc_kills` WHERE (`attacker_tag` = ? OR `victim_tag` = ?) AND `war` = 0;");
@@ -671,6 +671,7 @@ public final class StorageManager
 ////        core.insert(query
 ////                + values);
 //    }
+
     /**
      * Insert a kill into the database
      *
@@ -982,20 +983,85 @@ public final class StorageManager
         }
 
         if (!core.existsColumn("sc_kills", "date")) {
-            query = "ALTER TABLE sc_kills ADD COLUMN `date` timestamp default CURRENT_TIMESTAMP;";
+            query = "ALTER TABLE sc_kills ADD COLUMN `date` timestamp;";
             core.execute(query);
         }
+
+        if (core.existsColumn("sc_clans", "claims")) {
+            if (core instanceof MySQLCore) {
+                query = "ALTER TABLE sc_clans DROP COLUMN claims";
+                core.execute(query);
+            } else {
+                query = "CREATE TABLE IF NOT EXISTS `sc_clans_tmp` ( `id` bigint(20), `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, `balance` double(64,2) default 0.0,  PRIMARY KEY  (`id`), UNIQUE (`tag`));";
+                core.execute(query);
+
+                for (Clan clan : retrieveClans()) {
+
+                    try {
+                        query = "INSERT INTO `sc_clans_tmp` (  `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`, `balance`) VALUES (  " + (clan.isVerified() ? 1 : 0) + ", " + clan.getTag() + ", " + clan.getColorTag() + ", " + clan.getName() + ", " + (clan.isFriendlyFire() ? 1 : 0) + ", " + clan.getFounded() + ", 0, '', '', '', '', '', 0);";
+                        core.getConnection().createStatement().execute(query);
+                    } catch (SQLException e) {
+                        SimpleClans.debug(null, e);
+                        return;
+                    }
+                }
+
+
+                try {
+
+                    String old = "ALTER TABLE sc_clans RENAME TO sc_clans_backup;";
+                    core.execute(old);
+                    String rename = "ALTER TABLE sc_clans_tmp RENAME TO sc_clans;";
+                    core.getConnection().createStatement().executeUpdate(rename);
+                } catch (SQLException e) {
+                    SimpleClans.debug(null, e);
+                }
+            }
+        }
+
+
+        boolean existsWar = core.existsColumn("sc_players", "war");
+        boolean existsDate = core.existsColumn("sc_players", "date");
 
         //fail fixes
-        if (core.existsColumn("sc_players", "war")) {
-            query = "ALTER TABLE sc_players DROP COLUMN `war`;";
-            core.execute(query);
-        }
+        if (existsDate || existsWar) {
+            if (core instanceof MySQLCore) {
+                if (existsWar) {
+                    query = "ALTER TABLE sc_players DROP COLUMN `war`;";
+                    core.execute(query);
+                }
 
-        if (core.existsColumn("sc_players", "date")) {
-            query = "ALTER TABLE sc_players DROP COLUMN `date`;";
-            core.execute(query);
-        }
+                if (existsDate) {
+                    query = "ALTER TABLE sc_players DROP COLUMN `date`;";
+                    core.execute(query);
+                }
+            } else {
+                query = "CREATE TABLE IF NOT EXISTS `sc_players_tmp` ( `id` bigint(20), `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, `power` double(6,2) default 0.0, PRIMARY KEY  (`id`), UNIQUE (`name`));";
+                core.execute(query);
 
+                for (ClanPlayer cp : retrieveClanPlayers()) {
+
+                    try {
+                        query = "INSERT INTO `sc_players_tmp` (  `name`, `leader`, `tag`, `friendly_fire`, `neutral_kills`, `rival_kills`, `civilian_kills`, `deaths`, `last_seen`, `join_date`, `packed_past_clans`, `flags`) VALUES ( '" + cp.getName() + "' , 0, '', 0, 0, 0, 0, 0, " + cp.getLastSeen() + ", " + cp.getJoinDate() + ", '', '');";
+
+                        core.getConnection().createStatement().execute(query);
+                    } catch (SQLException e) {
+                        SimpleClans.debug(null, e);
+                        return;
+                    }
+                }
+
+
+                try {
+                    String old = "ALTER TABLE sc_players RENAME TO sc_players_backup;";
+                    core.execute(old);
+                    String rename = "ALTER TABLE sc_players_tmp RENAME TO sc_players;";
+                    core.getConnection().createStatement().executeUpdate(rename);
+                } catch (SQLException e) {
+                    SimpleClans.debug(null, e);
+                }
+            }
+
+        }
     }
 }

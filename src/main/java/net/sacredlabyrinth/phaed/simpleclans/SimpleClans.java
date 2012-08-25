@@ -6,6 +6,7 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
 import net.sacredlabyrinth.phaed.simpleclans.Metrics.Graph;
 import net.sacredlabyrinth.phaed.simpleclans.commands.*;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCClaimingListener;
@@ -15,6 +16,7 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.*;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -22,8 +24,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 /**
  * @author Phaed
  */
-public class SimpleClans extends JavaPlugin
-{
+public class SimpleClans extends JavaPlugin {
 
     private static SimpleClans instance;
     private static Logger logger;
@@ -95,10 +96,10 @@ public class SimpleClans extends JavaPlugin
 
         debug(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
-
         if (hasSpout()) {
             spoutPluginManager = new SpoutPluginManager(this);
         }
+
         permissionsManager = new PermissionsManager(this);
         requestManager = new RequestManager(this);
         clanManager = new ClanManager(this);
@@ -128,6 +129,11 @@ public class SimpleClans extends JavaPlugin
 
         setupMetrics();
         setupBetaCommandManager();
+
+        //Update display names when the server reloads
+        for (Player p : getServer().getOnlinePlayers()) {
+            getClanManager().updateDisplayName(p);
+        }
 
         long end = System.currentTimeMillis();
 
@@ -204,8 +210,7 @@ public class SimpleClans extends JavaPlugin
             Graph clanGraph = metrics.createGraph("Clan Graph");
             Graph clanPlayerGraph = metrics.createGraph("Clan-Player Graph");
 
-            clanGraph.addPlotter(new Metrics.Plotter("Total created clans")
-            {
+            clanGraph.addPlotter(new Metrics.Plotter("Total created clans") {
 
                 @Override
                 public int getValue()
@@ -214,8 +219,7 @@ public class SimpleClans extends JavaPlugin
                 }
             });
 
-            clanPlayerGraph.addPlotter(new Metrics.Plotter("Total clan players")
-            {
+            clanPlayerGraph.addPlotter(new Metrics.Plotter("Total clan players") {
 
                 @Override
                 public int getValue()
