@@ -188,6 +188,7 @@ public class SimpleClans extends JavaPlugin {
         commandManager.addCommand(new GlobalffCommand(this));
         commandManager.addCommand(new ReloadCommand(this));
         commandManager.addCommand(new HelpCommand(this));
+        commandManager.addCommand(new WarAdminCommand(this));
     }
 
     @Override
