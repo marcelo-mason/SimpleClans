@@ -146,8 +146,9 @@ public final class CommandManager
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
                 return;
             }
+            String clanCommand = plugin.getSettingsManager().getCommandClan();
 
-            executeAll(player, null, "clan", "clan", args);
+            executeAll(player, null, clanCommand, clanCommand, args);
 
         } catch (Exception ex) {
             SimpleClans.debug(plugin.getLang("simpleclans.command.failure"), ex);
