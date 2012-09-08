@@ -920,7 +920,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void setPackedBb(String packedBb)
     {
-        this.bb = new ArrayList<String>(Helper.fromArray(packedBb.split("[|]")));
+        this.bb = new ArrayList<String>(Helper.fromArray(packedBb.split("\\s*(\\||$)")));
     }
 
     /**
@@ -940,7 +940,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void setPackedAllies(String packedAllies)
     {
-        this.allies = new HashSet<String>(Helper.fromArray(packedAllies.split("[|]")));
+        this.allies = new HashSet<String>(Helper.fromArray(packedAllies.split("\\s*(\\||$)")));
     }
 
     /**
@@ -960,7 +960,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void setPackedRivals(String packedRivals)
     {
-        this.rivals = new HashSet<String>(Helper.fromArray(packedRivals.split("[|]")));
+        this.rivals = new HashSet<String>(Helper.fromArray(packedRivals.split("\\s*(\\||$)")));
     }
 
     /**
