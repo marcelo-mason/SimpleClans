@@ -22,7 +22,7 @@ public class ClanffCommand extends GenericPlayerCommand
     {
         super("Clanff");
         this.plugin = plugin;
-        setArgumentRange(0, 0);
+        setArgumentRange(1, 1);
         setUsages(MessageFormat.format(plugin.getLang("usage.clanff"), plugin.getSettingsManager().getCommandClan()));
         setIdentifiers(plugin.getLang("clanff.command"));
     }
