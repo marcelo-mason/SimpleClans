@@ -459,7 +459,7 @@ public class Clan implements Serializable, Comparable<Clan>
         plugin.getServer().getPluginManager().callEvent(new SimpleClansBankBalanceChangeEvent(cp, this, balance, after));
 
         if (cp != null) {
-            addBb(MessageFormat.format(plugin.getLang("bb.player.clan.deposi"), cp.getName(), amount));
+            addBb(MessageFormat.format(plugin.getLang("bb.player.clan.deposit"), cp.getName(), amount));
         } else {
             addBb(MessageFormat.format(plugin.getLang("bb.clan.deposit"), amount));
         }
