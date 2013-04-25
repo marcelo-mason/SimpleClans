@@ -1,9 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -15,6 +11,11 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
+import java.text.MessageFormat;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.List;
+
 public final class TeleportManager
 {
     private SimpleClans plugin;
@@ -23,9 +24,9 @@ public final class TeleportManager
     /**
      *
      */
-    public TeleportManager(SimpleClans plugin)
+    public TeleportManager()
     {
-        this.plugin = plugin;
+        plugin = SimpleClans.getInstance();
         startCounter();
     }
 
@@ -34,13 +35,13 @@ public final class TeleportManager
      *
      * @param player
      * @param dest
-     * @param msg
+     * @param clanName
      */
-    public void addPlayer(Player player, Location dest, String msg)
+    public void addPlayer(Player player, Location dest, String clanName)
     {
-        int secs = plugin.getSettingsManager().getWaitSecs();
+        int secs = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
 
-        waitingPlayers.put(player.getName(), new TeleportState(player, dest, msg));
+        waitingPlayers.put(player.getName(), new TeleportState(player, dest, clanName));
 
         if (secs > 0)
         {
@@ -96,7 +97,7 @@ public final class TeleportManager
             }
             catch (Exception ex)
             {
-                SimpleClans.debug(null, ex);
+                Helper.dumpStackTrace();
             }
         }
     }
@@ -105,7 +106,6 @@ public final class TeleportManager
     {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
-            @Override
             public void run()
             {
                 for (Iterator iter = waitingPlayers.values().iterator(); iter.hasNext(); )
@@ -147,7 +147,7 @@ public final class TeleportManager
 
                                 player.teleport(new Location(loc.getWorld(), loc.getBlockX() + .5, loc.getBlockY(), loc.getBlockZ() + .5));
 
-                                ChatBlock.sendMessage(player, state.getMessage());
+                                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("now.at.homebase"), state.getClanName()));
                             }
                             else
                             {

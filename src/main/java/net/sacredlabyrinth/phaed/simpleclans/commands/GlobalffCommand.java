@@ -1,59 +1,67 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import java.text.MessageFormat;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.text.MessageFormat;
 
 /**
  * @author phaed
  */
-public class GlobalffCommand extends GenericConsoleCommand
+public class GlobalffCommand
 {
-
-    private SimpleClans plugin;
-
-    public GlobalffCommand(SimpleClans plugin)
+    public GlobalffCommand()
     {
-        super("Globalff");
-        this.plugin = plugin;
-        setArgumentRange(1, 1);
-        setUsages(MessageFormat.format(plugin.getLang("usage.globalff"), plugin.getSettingsManager().getCommandClan()));
-        setIdentifiers(plugin.getLang("globalff.command"));
     }
 
-    @Override
-    public String getMenu(ClanPlayer cp, CommandSender sender)
+    /**
+     * Execute the command
+     *
+     * @param player
+     * @param arg
+     */
+    public void execute(Player player, String[] arg)
     {
-        if (plugin.getPermissionsManager().has(sender, "simpleclans.mod.globalff")) {
-            return ChatColor.DARK_RED + MessageFormat.format(plugin.getLang("0.globalff.allow.auto.1.set.global.friendly.fire"), plugin.getSettingsManager().getCommandClan(), ChatColor.WHITE);
+        SimpleClans plugin = SimpleClans.getInstance();
+
+        if (arg.length == 1)
+        {
+            String action = arg[0];
+
+            if (action.equalsIgnoreCase(plugin.getLang("allow")))
+            {
+                if (plugin.getSettingsManager().isGlobalff())
+                {
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("global.friendly.fire.is.already.being.allowed"));
+                }
+                else
+                {
+                    plugin.getSettingsManager().setGlobalff(true);
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("global.friendly.fire.is.set.to.allowed"));
+                }
+            }
+            else if (action.equalsIgnoreCase(plugin.getLang("auto")))
+            {
+                if (!plugin.getSettingsManager().isGlobalff())
+                {
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("global.friendy.fire.is.already.being.managed.by.each.clan"));
+                }
+                else
+                {
+                    plugin.getSettingsManager().setGlobalff(false);
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("global.friendy.fire.is.now.managed.by.each.clan"));
+                }
+            }
+            else
+            {
+                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.globalff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
+            }
         }
-        return null;
-    }
-
-    @Override
-    public void execute(CommandSender sender, String label, String[] args)
-    {
-        String action = args[0];
-
-        if (action.equalsIgnoreCase(plugin.getLang("allow"))) {
-            if (plugin.getSettingsManager().isGlobalff()) {
-                sender.sendMessage(ChatColor.AQUA + plugin.getLang("global.friendly.fire.is.already.being.allowed"));
-            } else {
-                plugin.getSettingsManager().setGlobalff(true);
-                sender.sendMessage(ChatColor.AQUA + plugin.getLang("global.friendly.fire.is.set.to.allowed"));
-            }
-        } else if (action.equalsIgnoreCase(plugin.getLang("auto"))) {
-            if (!plugin.getSettingsManager().isGlobalff()) {
-                sender.sendMessage(ChatColor.AQUA + plugin.getLang("global.friendy.fire.is.already.being.managed.by.each.clan"));
-            } else {
-                plugin.getSettingsManager().setGlobalff(false);
-                sender.sendMessage(ChatColor.AQUA + plugin.getLang("global.friendy.fire.is.now.managed.by.each.clan"));
-            }
-        } else {
-            sender.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("usage.globalff"), plugin.getSettingsManager().getCommandClan()));
+        else
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.ff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
         }
     }
 }

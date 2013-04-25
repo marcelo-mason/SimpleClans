@@ -9,15 +9,15 @@ public class TeleportState
     private Location playerLocation;
     private Location destination;
     private int counter;
-    private String msg;
+    private String clanName;
     private boolean processing;
 
-    public TeleportState(Player player, Location dest, String msg)
+    public TeleportState(Player player, Location dest, String clanName)
     {
         this.destination = dest;
         this.playerLocation = player.getLocation();
         this.playerName = player.getName();
-        this.msg = msg;
+        this.clanName = clanName;
         this.counter = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
     }
 
@@ -67,9 +67,9 @@ public class TeleportState
         this.counter = counter;
     }
 
-    public String getMessage()
+    public String getClanName()
     {
-        return msg;
+        return clanName;
     }
 
     public Location getDestination()

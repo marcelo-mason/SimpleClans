@@ -1,7 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.storage;
 
 import java.sql.Connection;
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 /**
@@ -63,13 +62,6 @@ public interface DBCore
      * @return
      */
     public Boolean existsTable(String table);
-    
-    /**
-     * Returns a prepared statement
-     * @param query
-     * @return
-     */
-    public PreparedStatement prepareStatement(String statement);
     
     /**
      * Check whether a colum exists

@@ -1,26 +1,25 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.util.*;
-
+import java.io.File;
+import java.io.IOException;
+import java.util.Collections;
+import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * @author phaed
  */
-public final class SettingsManager {
-
-    private SimpleClans plugin;
+public final class SettingsManager
+{
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
     private boolean teleportOnSpawn;
     private boolean dropOnHome;
     private boolean keepOnHome;
     private boolean debugging;
+    private SimpleClans plugin;
     private boolean mChatIntegration;
     private boolean pvpOnlywhileInWar;
     private boolean useColorCodeFromPrefix;
@@ -117,37 +116,20 @@ public final class SettingsManager {
     private String username;
     private String password;
     private boolean safeCivilians;
+    private File main;
     private FileConfiguration config;
     private boolean compatMode;
     private boolean homebaseSetOnce;
     private int waitSecs;
+    private boolean enableAutoGroups;
     private boolean moneyperkill;
     private double KDRMultipliesPerKill;
     private boolean teleportBlocks;
     private boolean AutoGroupGroupName;
+    private boolean tamableMobsSharing;
     private int strifeLimit;
     private boolean autoWar;
-    private boolean claimingEnabled;
-    private boolean powerBased;
-    private boolean clanSizeBased;
-    private List<String> claimingAllowedBlocks;
-    private boolean claimingSpoutFeatures;
-    private static Map<String, Integer> worlds = new HashMap<String, Integer>();
-    private boolean permissionsEnabled;
-    private int claimsPerPower;
-    private double maxPower;
-    private double minPower;
-    private double powerPlusPerKill;
-    private double powerLossPerDeath;
-    private boolean destroyInWar;
-    private boolean onlyStealOthersOnline;
-    private boolean rallyTeleportPurchase;
-    private double rallyTeleportPrice;
-    private boolean rallyTeleportSetPurchase;
-    private double rallyTeleportSetPrice;
-    private double claimPrize;
-    private String header = "- SimpleClans Configuration -\nYou have to restart the server, if you want to enable claiming.\nDon't modify the 'worlds' section unless you know what you do!\nAutogrouping was removed! You can define permissions for leaders/trusted/untrusted and clans now directly here!";
-
+    
     /**
      *
      */
@@ -155,36 +137,34 @@ public final class SettingsManager {
     {
         plugin = SimpleClans.getInstance();
         config = plugin.getConfig();
-        load();
-    }
-
-    public void init()
-    {
-        config.options().header(header);
-        config.options().copyHeader(true);
-        config.options().copyDefaults(true);
-        load();
-        save();
-    }
-
-
-    /**
-     * Reloads the config
-     */
-    public void reload()
-    {
-        System.out.println(config.getBoolean("settings.display-chat-tags"));
-        plugin.reloadConfig();
-        config = plugin.getConfig();
-        System.out.println(config.getBoolean("settings.display-chat-tags"));
+        main = new File(plugin.getDataFolder() + File.separator + "config.yml");
         load();
     }
 
     /**
      * Load the configuration
      */
+    @SuppressWarnings("unchecked")
     public void load()
     {
+        boolean exists = (main).exists();
+
+        if (exists)
+        {
+            try
+            {
+                getConfig().options().copyDefaults(true);
+                getConfig().load(main);
+            }
+            catch (Exception e)
+            {
+                e.printStackTrace();
+            }
+        }
+        else
+        {
+            getConfig().options().copyDefaults(true);
+        }
 
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
@@ -193,6 +173,7 @@ public final class SettingsManager {
         debugging = getConfig().getBoolean("settings.show-debug-info");
         mChatIntegration = getConfig().getBoolean("settings.mchat-integration");
         pvpOnlywhileInWar = getConfig().getBoolean("settings.pvp-only-while-at-war");
+        enableAutoGroups = getConfig().getBoolean("settings.enable-auto-groups");
         useColorCodeFromPrefix = getConfig().getBoolean("settings.use-colorcode-from-prefix-for-name");
         bannedPlayers = getConfig().getStringList("settings.banned-players");
         compatMode = getConfig().getBoolean("settings.chat-compatibility-mode");
@@ -294,172 +275,23 @@ public final class SettingsManager {
         KDRMultipliesPerKill = getConfig().getDouble("economy.money-per-kill-kdr-multipier");
         teleportBlocks = getConfig().getBoolean("settings.teleport-blocks");
         AutoGroupGroupName = getConfig().getBoolean("permissions.auto-group-groupname");
+        tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         strifeLimit = getConfig().getInt("war.strife-limit");
         autoWar = getConfig().getBoolean("war.auto-war-start");
-        claimingEnabled = getConfig().getBoolean("claiming.enabled");
-        powerBased = getConfig().getBoolean("claiming.power-based");
-        clanSizeBased = getConfig().getBoolean("claiming.clan-size-based");
-        claimingAllowedBlocks = getConfig().getStringList("claiming.allowed-blocks");
-        claimingSpoutFeatures = getConfig().getBoolean("claiming.spout-features");
-        permissionsEnabled = getConfig().getBoolean("permissions.enabled");
-        claimsPerPower = getConfig().getInt("claiming.claims-per-power");
-        maxPower = getConfig().getDouble("claiming.max-power");
-        minPower = getConfig().getDouble("claiming.min-power");
-        powerPlusPerKill = getConfig().getDouble("claiming.power-plus-per-kill");
-        powerLossPerDeath = getConfig().getDouble("claiming.power-loss-per-death");
-        destroyInWar = getConfig().getBoolean("claiming.destroy-in-war");
-        onlyStealOthersOnline = getConfig().getBoolean("claiming.steal-only-when-players-online");
-        rallyTeleportPurchase = getConfig().getBoolean("economy.purchase-rally-point-teleport");
-        rallyTeleportPrice = getConfig().getDouble("economy.rally-point-teleport-price");
-        rallyTeleportSetPurchase = getConfig().getBoolean("economy.purchase-rally-point-set-teleport");
-        rallyTeleportSetPrice = getConfig().getDouble("economy.rally-point-teleport-set-price");
-        claimPrize = getConfig().getDouble("claiming.claim-prize");
-        //Setup the worlds in the config.yml
-        ConfigurationSection section;
-
-        if (!config.isConfigurationSection("worlds")) {
-            getConfig().createSection("worlds");
-        }
-
-        section = config.getConfigurationSection("worlds");
-
-        int highest = 0;
-
-        for (String i : section.getKeys(false)) {
-            highest = section.getInt(i) + 1;
-        }
-
-        for (World world : plugin.getServer().getWorlds()) {
-            String name = world.getName();
-            if (!section.isInt(name)) {
-                section.set(name, highest);
-                highest++;
-            }
-            worlds.put(name, section.getInt(name));
-        }
+        
+        save();
     }
 
-    public boolean isAllowedDestroyInWar()
-    {
-        return destroyInWar;
-    }
-
-    public boolean isOnlyStealOthersOnline()
-    {
-        return onlyStealOthersOnline;
-    }
-
-    public double getClaimPrize()
-    {
-        return claimPrize;
-    }
-
-    /**
-     * Returns the permissions of a clan
-     *
-     * @param tag
-     * @return
-     */
-    public Set<String> getClanPermissions(String tag)
-    {
-        return new HashSet<String>(config.getConfigurationSection("permissions.clans").getStringList(tag));
-    }
-
-    /**
-     * Returns the defaut leader permissions
-     *
-     * @param tag
-     * @return
-     */
-    public Set<String> getDefaultLeaderPermissions(String tag)
-    {
-        return new HashSet<String>(config.getStringList("permissions.defaultLeader"));
-    }
-
-    /**
-     * Returns the default trusted permissions
-     *
-     * @param tag
-     * @return
-     */
-    public Set<String> getDefaultTrustedPermissions(String tag)
-    {
-        return new HashSet<String>(config.getStringList("permissions.defaultTrusted"));
-    }
-
-    /**
-     * Returns the default untrusted permissions
-     *
-     * @param tag
-     * @return
-     */
-    public Set<String> getDefaultUnTrustedPermissions(String tag)
-    {
-        return new HashSet<String>(config.getStringList("permissions.defaultUnTrusted"));
-    }
-
-    public int getClaimsPerPower()
-    {
-        return claimsPerPower;
-    }
-
-    /**
-     * Returns weather the permissions system is enabled
-     *
-     * @return
-     */
-    public boolean isPermissionsEnabled()
-    {
-        return permissionsEnabled;
-    }
-
-    /**
-     * Saves the config
-     */
     public void save()
     {
-        plugin.saveConfig();
-    }
-
-    /**
-     * Returns weather the block is allowed to break
-     *
-     * @param type
-     * @return
-     */
-    public boolean isClaimedBlockAllowed(Material type)
-    {
-        return claimingAllowedBlocks.contains(type.toString());
-    }
-
-    /**
-     * Returns weather the spout features for claiming are enabled
-     *
-     * @return
-     */
-    public boolean isClaimingSpoutFeatures()
-    {
-        return claimingSpoutFeatures;
-    }
-
-    /**
-     * Returns weather the claiming system is power based
-     *
-     * @return
-     */
-    public boolean isPowerBased()
-    {
-        return powerBased;
-    }
-
-    /**
-     * Returns weather the claiming system is clan size based
-     *
-     * @return
-     */
-    public boolean isClanSizeBased()
-    {
-        return clanSizeBased;
+        try
+        {
+            getConfig().save(main);
+        }
+        catch (IOException e)
+        {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -473,6 +305,7 @@ public final class SettingsManager {
         return itemsList.contains(typeId);
     }
 
+
     /**
      * Check whether a worlds is blacklisted
      *
@@ -481,8 +314,10 @@ public final class SettingsManager {
      */
     public boolean isBlacklistedWorld(String world)
     {
-        for (Object w : blacklistedWorlds) {
-            if (((String) w).equalsIgnoreCase(world)) {
+        for (Object w : blacklistedWorlds)
+        {
+            if (((String) w).equalsIgnoreCase(world))
+            {
                 return true;
             }
         }
@@ -498,8 +333,10 @@ public final class SettingsManager {
      */
     public boolean isDisallowedWord(String word)
     {
-        for (Object w : disallowedWords) {
-            if (((String) w).equalsIgnoreCase(word)) {
+        for (Object w : disallowedWords)
+        {
+            if (((String) w).equalsIgnoreCase(word))
+            {
                 return true;
             }
         }
@@ -516,33 +353,15 @@ public final class SettingsManager {
      */
     public boolean hasDisallowedColor(String str)
     {
-        for (Object c : getDisallowedColors()) {
-            if (str.contains("&" + c)) {
+        for (Object c : getDisallowedColors())
+        {
+            if (str.contains("&" + c))
+            {
                 return true;
             }
         }
 
         return false;
-    }
-
-    public boolean isClaimingEnabled()
-    {
-        return claimingEnabled;
-    }
-
-    public static int getWorldNumber(String world)
-    {
-        return worlds.get(world);
-    }
-
-    public static String getWorldByNumber(int i)
-    {
-        for (String world : worlds.keySet()) {
-            if (worlds.get(world) == i) {
-                return world;
-            }
-        }
-        return null;
     }
 
     /**
@@ -552,7 +371,8 @@ public final class SettingsManager {
     {
         String out = "";
 
-        for (Object c : getDisallowedColors()) {
+        for (Object c : getDisallowedColors())
+        {
             out += c + ", ";
         }
 
@@ -567,8 +387,10 @@ public final class SettingsManager {
      */
     public boolean isUnrivable(String tag)
     {
-        for (Object t : getunRivableClans()) {
-            if (((String) t).equalsIgnoreCase(tag)) {
+        for (Object t : getunRivableClans())
+        {
+            if (((String) t).equalsIgnoreCase(tag))
+            {
                 return true;
             }
         }
@@ -584,8 +406,10 @@ public final class SettingsManager {
      */
     public boolean isBanned(String playerName)
     {
-        for (Object pl : getBannedPlayers()) {
-            if (((String) pl).equalsIgnoreCase(playerName)) {
+        for (Object pl : getBannedPlayers())
+        {
+            if (((String) pl).equalsIgnoreCase(playerName))
+            {
                 return true;
             }
         }
@@ -600,7 +424,8 @@ public final class SettingsManager {
      */
     public void addBanned(String playerName)
     {
-        if (!bannedPlayers.contains(playerName)) {
+        if (!bannedPlayers.contains(playerName))
+        {
             getBannedPlayers().add(playerName);
         }
 
@@ -614,7 +439,8 @@ public final class SettingsManager {
      */
     public void removeBanned(String playerName)
     {
-        if (getBannedPlayers().contains(playerName)) {
+        if (getBannedPlayers().contains(playerName))
+        {
             getBannedPlayers().remove(playerName);
         }
 
@@ -922,11 +748,13 @@ public final class SettingsManager {
      */
     public String getTagSeparator()
     {
-        if (tagSeparator.equals(" .")) {
+        if (tagSeparator.equals(" ."))
+        {
             return ".";
         }
 
-        if (tagSeparator == null) {
+        if (tagSeparator == null)
+        {
             return "";
         }
 
@@ -1315,6 +1143,11 @@ public final class SettingsManager {
         this.waitSecs = waitSecs;
     }
 
+    public boolean isEnableAutoGroups()
+    {
+        return enableAutoGroups;
+    }
+
     public boolean isPvpOnlywhileInWar()
     {
         return pvpOnlywhileInWar;
@@ -1363,152 +1196,84 @@ public final class SettingsManager {
     /**
      * @return the ePurchaseHomeTeleport
      */
-    public boolean isePurchaseHomeTeleport()
-    {
+    public boolean isePurchaseHomeTeleport() {
         return ePurchaseHomeTeleport;
     }
 
     /**
      * @return the HomeTeleportPrice
      */
-    public double getHomeTeleportPrice()
-    {
+    public double getHomeTeleportPrice() {
         return eHomeTeleportPrice;
     }
 
     /**
      * @return the ePurchaseHomeTeleportSet
      */
-    public boolean isePurchaseHomeTeleportSet()
-    {
+    public boolean isePurchaseHomeTeleportSet() {
         return ePurchaseHomeTeleportSet;
     }
 
     /**
      * @return the HomeTeleportPriceSet
      */
-    public double getHomeTeleportPriceSet()
-    {
+    public double getHomeTeleportPriceSet() {
         return eHomeTeleportPriceSet;
     }
 
     /**
      * @return the config
      */
-    public FileConfiguration getConfig()
-    {
+    public FileConfiguration getConfig() {
         return config;
     }
 
     /**
      * @return the moneyperkill
      */
-    public boolean isMoneyPerKill()
-    {
+    public boolean isMoneyPerKill() {
         return moneyperkill;
     }
 
     /**
      * @return the KDRMultipliesPerKill
      */
-    public double getKDRMultipliesPerKill()
-    {
+    public double getKDRMultipliesPerKill() {
         return KDRMultipliesPerKill;
     }
 
     /**
      * @return the teleportBlocks
      */
-    public boolean isTeleportBlocks()
-    {
+    public boolean isTeleportBlocks() {
         return teleportBlocks;
     }
 
     /**
      * @return the AutoGroupGroupName
      */
-    public boolean isAutoGroupGroupName()
-    {
+    public boolean isAutoGroupGroupName() {
         return AutoGroupGroupName;
+    }
+
+    /**
+     * @return the tamableMobsSharing
+     */
+    public boolean isTamableMobsSharing() {
+        return tamableMobsSharing;
     }
 
     /**
      * @return the strifeLimit
      */
-    public int getStrifeLimit()
-    {
+    public int getStrifeLimit() {
         return strifeLimit;
     }
 
     /**
      * @return the autoWar
      */
-    public boolean isAutoWar()
-    {
+    public boolean isAutoWar() {
         return autoWar;
-    }
-
-    /**
-     * @return the maxPower
-     */
-    public double getMaxPower()
-    {
-        return maxPower;
-    }
-
-    /**
-     * @return the minPower
-     */
-    public double getMinPower()
-    {
-        return minPower;
-    }
-
-    /**
-     * @return the powerPlusPerKill
-     */
-    public double getPowerPlusPerKill()
-    {
-        return powerPlusPerKill;
-    }
-
-    /**
-     * @return the powerLossPerKill
-     */
-    public double getPowerLossPerDeath()
-    {
-        return powerLossPerDeath;
-    }
-
-    /**
-     * @return the rallyTeleportPurchase
-     */
-    public boolean isRallyTeleportPurchase()
-    {
-        return rallyTeleportPurchase;
-    }
-
-    /**
-     * @return the rallyTeleportPrice
-     */
-    public double getRallyTeleportPrice()
-    {
-        return rallyTeleportPrice;
-    }
-
-    /**
-     * @return the rallyTeleportSetPurchase
-     */
-    public boolean isRallyTeleportSetPurchase()
-    {
-        return rallyTeleportSetPurchase;
-    }
-
-    /**
-     * @return the rallyTeleportSetPrice
-     */
-    public double getRallyTeleportSetPrice()
-    {
-        return rallyTeleportSetPrice;
     }
 }

@@ -1,19 +1,15 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+
 import java.io.IOException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.getspout.spoutapi.Spout;
-import org.getspout.spoutapi.player.SpoutPlayer;
 
 /**
  * @author phaed
@@ -26,7 +22,8 @@ public class Helper
      */
     public static void dumpStackTrace()
     {
-        for (StackTraceElement el : Thread.currentThread().getStackTrace()) {
+        for (StackTraceElement el : Thread.currentThread().getStackTrace())
+        {
             SimpleClans.debug(el.toString());
         }
     }
@@ -39,24 +36,14 @@ public class Helper
      */
     public static Player matchOnePlayer(String playername)
     {
-        List<Player> players = Bukkit.matchPlayer(playername);
+        List<Player> players = SimpleClans.getInstance().getServer().matchPlayer(playername);
 
-        if (players.size() == 1) {
+        if (players.size() == 1)
+        {
             return players.get(0);
         }
 
         return null;
-    }
-
-    /**
-     * Convert color hex values with ampersand to special character
-     *
-     * @param msg
-     * @return
-     */
-    public static String parseColors(String msg)
-    {
-        return msg.replace("&", "\u00a7");
     }
 
     /**
@@ -67,25 +54,14 @@ public class Helper
      */
     public static String getColorName(String playerName)
     {
-        List<Player> players = Bukkit.matchPlayer(playerName);
+        List<Player> players = SimpleClans.getInstance().getServer().matchPlayer(playerName);
 
-        if (players.size() == 1) {
+        if (players.size() == 1)
+        {
             return SimpleClans.getInstance().getPermissionsManager().getPrefix(players.get(0)) + players.get(0).getDisplayName() + SimpleClans.getInstance().getPermissionsManager().getSuffix(players.get(0));
         }
 
         return playerName;
-    }
-
-    public static void setTitle(Entity entity, String title)
-    {
-        if (entity instanceof LivingEntity) {
-            Spout.getServer().setTitle((LivingEntity) entity, title);
-        }
-    }
-
-    public static void setTitle(LivingEntity entity, SpoutPlayer player, String title)
-    {
-        player.setTitleFor(player, title);
     }
 
     /**
@@ -107,10 +83,12 @@ public class Helper
      */
     public static boolean isByte(String input)
     {
-        try {
+        try
+        {
             Byte.parseByte(input);
             return true;
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             return false;
         }
     }
@@ -138,10 +116,12 @@ public class Helper
      */
     public static boolean isShort(String input)
     {
-        try {
+        try
+        {
             Short.parseShort(input);
             return true;
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             return false;
         }
     }
@@ -154,10 +134,12 @@ public class Helper
      */
     public static boolean isInteger(String input)
     {
-        try {
+        try
+        {
             Integer.parseInt(input);
             return true;
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             return false;
         }
     }
@@ -170,10 +152,12 @@ public class Helper
      */
     public static boolean isFloat(String input)
     {
-        try {
+        try
+        {
             Float.parseFloat(input);
             return true;
-        } catch (Exception ex) {
+        } catch (Exception ex)
+        {
             return false;
         }
     }
@@ -209,15 +193,17 @@ public class Helper
      */
     public static String removeChar(String s, char c)
     {
-        StringBuilder r = new StringBuilder();
+        String r = "";
 
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != c) {
-                r.append(s.charAt(i));
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s.charAt(i) != c)
+            {
+                r += s.charAt(i);
             }
         }
 
-        return r.toString();
+        return r;
     }
 
     /**
@@ -229,16 +215,18 @@ public class Helper
      */
     public static String removeFirstChar(String s, char c)
     {
-        StringBuilder r = new StringBuilder();
+        String r = "";
 
-        for (int i = 0; i < s.length(); i++) {
-            if (s.charAt(i) != c) {
-                r.append(s.charAt(i));
+        for (int i = 0; i < s.length(); i++)
+        {
+            if (s.charAt(i) != c)
+            {
+                r += s.charAt(i);
                 break;
             }
         }
 
-        return r.toString();
+        return r;
     }
 
     /**
@@ -249,7 +237,8 @@ public class Helper
      */
     public static String capitalize(String content)
     {
-        if (content.length() < 2) {
+        if (content.length() < 2)
+        {
             return content;
         }
 
@@ -278,7 +267,8 @@ public class Helper
      */
     public static String toColor(String hexValue)
     {
-        if (hexValue == null) {
+        if (hexValue == null)
+        {
             return "";
         }
 
@@ -286,16 +276,17 @@ public class Helper
     }
 
     /**
-     * Converts string array to List<String>, remove empty strings
+     * Converts string array to ArrayList<String>, remove empty strings
      *
      * @param values
      * @return
      */
-    public static List fromArray(String... values)
+    public static List<String> fromArray(String... values)
     {
-        List<String> out = new ArrayList<String>(Arrays.asList(values));
-        out.remove("");
-        return out;
+        List<String> results = new ArrayList<String>();
+        Collections.addAll(results, values);
+        results.remove("");
+        return results;
     }
 
     /**
@@ -304,22 +295,12 @@ public class Helper
      * @param values
      * @return
      */
-    public static HashSet fromArray2(String... values)
+    public static HashSet<String> fromArray2(String... values)
     {
-        HashSet<String> out = new HashSet<String>(Arrays.asList(values));
-        out.remove("");
-        return out;
-    }
-
-    /**
-     * Converts any array to a Collection
-     *
-     * @param values
-     * @return
-     */
-    public static <T> Collection<T> convertArray(T... values)
-    {
-        return Arrays.asList(values);
+        HashSet<String> results = new HashSet<String>();
+        Collections.addAll(results, values);
+        results.remove("");
+        return results;
     }
 
     /**
@@ -328,9 +309,11 @@ public class Helper
      * @param values
      * @return
      */
-    public static Set<Player> fromPlayerArray(Player... values)
+    public static List<Player> fromPlayerArray(Player... values)
     {
-        return new HashSet<Player>(Arrays.asList(values));
+        List<Player> results = new ArrayList<Player>();
+        Collections.addAll(results, values);
+        return results;
     }
 
     /**
@@ -339,7 +322,7 @@ public class Helper
      * @param list
      * @return
      */
-    public static String[] toArray(Collection<String> list)
+    public static String[] toArray(List<String> list)
     {
         return list.toArray(new String[list.size()]);
     }
@@ -350,9 +333,15 @@ public class Helper
      * @param args
      * @return
      */
-    public static <T>T[] removeFirst(T[] args)
+    public static String[] removeFirst(String[] args)
     {
-        return Arrays.copyOfRange(args, 1, args.length);
+        List<String> out = fromArray(args);
+
+        if (!out.isEmpty())
+        {
+            out.remove(0);
+        }
+        return toArray(out);
     }
 
     /**
@@ -363,13 +352,14 @@ public class Helper
      */
     public static String toMessage(String[] args)
     {
-        StringBuilder sb = new StringBuilder();
+        String out = "";
 
-        for (String arg : args) {
-            sb.append(arg).append(' ');
+        for (String arg : args)
+        {
+            out += arg + " ";
         }
 
-        return sb.toString().trim();
+        return out.trim();
     }
 
     /**
@@ -381,14 +371,14 @@ public class Helper
      */
     public static String toMessage(String[] args, String sep)
     {
-        StringBuilder sb = new StringBuilder();
+        String out = "";
 
-        for (String arg : args) {
-            sb.append(arg).append(' ').append(", ");
+        for (String arg : args)
+        {
+            out += arg + ", ";
         }
 
-
-        return stripTrailing(sb.toString(), ", ");
+        return stripTrailing(out, ", ");
     }
 
     /**
@@ -398,15 +388,27 @@ public class Helper
      * @param sep
      * @return
      */
-    public static String toMessage(Collection<String> args, String sep)
+    public static String toMessage(List<String> args, String sep)
     {
-        StringBuilder sb = new StringBuilder();
+        String out = "";
 
-        for (String arg : args) {
-            sb.append(arg).append(' ').append(sep);
+        for (String arg : args)
+        {
+            out += arg + sep;
         }
 
-        return stripTrailing(sb.toString(), sep);
+        return stripTrailing(out, sep);
+    }
+
+    /**
+     * Convert color hex values with ampersand to special character
+     *
+     * @param msg
+     * @return
+     */
+    public static String parseColors(String msg)
+    {
+        return msg.replace("&", "\u00a7");
     }
 
     /**
@@ -433,18 +435,21 @@ public class Helper
     {
         msg = msg.replaceAll(String.valueOf((char) 194), "").trim();
 
-        if (msg.length() < 2) {
+        if (msg.length() < 2)
+        {
             return "";
         }
 
         String one = msg.substring(msg.length() - 2, msg.length() - 1);
         String two = msg.substring(msg.length() - 1);
 
-        if (one.equals("\u00a7")) {
+        if (one.equals("\u00a7"))
+        {
             return one + two;
         }
 
-        if (one.equals("&")) {
+        if (one.equals("&"))
+        {
             return Helper.toColor(two);
         }
 
@@ -472,7 +477,8 @@ public class Helper
      */
     public static String stripTrailing(String msg, String sep)
     {
-        if (msg.length() < sep.length()) {
+        if (msg.length() < sep.length())
+        {
             return msg;
         }
 
@@ -480,11 +486,13 @@ public class Helper
         String first = msg.substring(0, sep.length());
         String last = msg.substring(msg.length() - sep.length(), msg.length());
 
-        if (first.equals(sep)) {
+        if (first.equals(sep))
+        {
             out = msg.substring(sep.length());
         }
 
-        if (last.equals(sep)) {
+        if (last.equals(sep))
+        {
             out = msg.substring(0, msg.length() - sep.length());
         }
 
@@ -499,12 +507,13 @@ public class Helper
      */
     public static String generatePageSeparator(String sep)
     {
-        StringBuilder out = new StringBuilder();
+        String out = "";
 
-        for (int i = 0; i < 320; i++) {
-            out.append(sep);
+        for (int i = 0; i < 320; i++)
+        {
+            out += sep;
         }
-        return out.toString();
+        return out;
     }
 
     /**
@@ -515,7 +524,17 @@ public class Helper
      */
     public static boolean isOnline(String playerName)
     {
-        return Bukkit.getPlayerExact(playerName) != null;
+        Player[] online = SimpleClans.getInstance().getServer().getOnlinePlayers();
+
+        for (Player o : online)
+        {
+            if (o.getName().equalsIgnoreCase(playerName))
+            {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     /**
@@ -528,8 +547,10 @@ public class Helper
     {
         List<ClanPlayer> out = new ArrayList<ClanPlayer>();
 
-        for (ClanPlayer cp : in) {
-            if (Bukkit.getPlayer(cp.getName()) != null) {
+        for (ClanPlayer cp : in)
+        {
+            if (SimpleClans.getInstance().getServer().getPlayer(cp.getName()) != null)
+            {
                 out.add(cp);
             }
         }
@@ -545,15 +566,18 @@ public class Helper
      */
     public static boolean testURL(String strUrl)
     {
-        try {
+        try
+        {
             URL url = new URL(strUrl);
             HttpURLConnection urlConn = (HttpURLConnection) url.openConnection();
             urlConn.connect();
 
-            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK) {
+            if (urlConn.getResponseCode() != HttpURLConnection.HTTP_OK)
+            {
                 return false;
             }
-        } catch (IOException e) {
+        } catch (IOException e)
+        {
             return false;
         }
 
@@ -568,7 +592,8 @@ public class Helper
      */
     public static String escapeQuotes(String str)
     {
-        if (str == null) {
+        if (str == null)
+        {
             return "";
         }
         return str.replace("'", "''");
@@ -594,7 +619,8 @@ public class Helper
      */
     public static boolean isSameBlock(Location loc, Location loc2)
     {
-        if (loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ()) {
+        if (loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ())
+        {
             return true;
         }
         return false;
@@ -610,7 +636,8 @@ public class Helper
      */
     public static boolean isSameLocation(Location loc, Location loc2)
     {
-        if (loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ()) {
+        if (loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ())
+        {
             return true;
         }
         return false;
@@ -627,7 +654,6 @@ public class Helper
         Collections.sort(list, new Comparator()
         {
 
-            @Override
             public int compare(Object o1, Object o2)
             {
                 return ((Comparable) ((Map.Entry) (o2)).getValue()).compareTo(((Map.Entry) (o1)).getValue());
@@ -635,23 +661,24 @@ public class Helper
         });
 
         Map result = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext();) {
+        for (Iterator it = list.iterator(); it.hasNext();)
+        {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());
         }
         return result;
     }
 
-    /**
-     * Checks if the player is Vanished
-     *
-     * @return
-     */
     public static boolean isVanished(Player player)
     {
-        if (player != null && player.hasMetadata("vanished")) {
-            if (!player.getMetadata("vanished").isEmpty()) {
-                return player.getMetadata("vanished").get(0).asBoolean();
+        if (player != null)
+        {
+            if (player.hasMetadata("vanished"))
+            {
+                if (!player.getMetadata("vanished").isEmpty())
+                {
+                    return player.getMetadata("vanished").get(0).asBoolean();
+                }
             }
         }
         return false;

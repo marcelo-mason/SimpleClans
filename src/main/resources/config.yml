@@ -11,6 +11,7 @@ tag:
         color: '8'
         char: ' .'
 settings:
+    tameable-mobs-sharing: false
     teleport-blocks: false
     teleport-home-on-spawn: false
     drop-items-on-clan-home: false
@@ -48,8 +49,8 @@ commands:
     more: more
     ally: ally
     clan: clan
-    accept: saccept
-    deny: sdeny
+    accept: accept
+    deny: deny
     global: global
 economy:
     creation-price: 100.0
@@ -64,10 +65,6 @@ economy:
     purchase-home-teleport-set: false
     money-per-kill: false
     money-per-kill-kdr-multipier: 10
-    purchase-rally-point-teleport: true
-    rally-point-teleport-price: 20
-    purchase-rally-point-set-teleport: true
-    rally-point-teleport-set-price: 30
 kill-weights:
     rival: 2.0
     civilian: 0.0
@@ -92,20 +89,6 @@ page:
     leader-color: '4'
     separator: '-'
     size: 13
-claiming:
-  enabled: false
-  spout-features: false
-  allowed-blocks: []
-  power-based: false
-  clan-size-based: true
-  claims-per-power: 2
-  power-plus-per-kill: 2
-  power-loss-per-death: 2
-  steal-only-when-players-online: true
-  max-power: 10
-  min-power: -10
-  claim-prize: 50.0
-  destroy-in-war: false
 clanchat:
     rank.color: e
     tag-based-clan-chat: false
@@ -154,15 +137,6 @@ mysql:
     password: ''
     database: ''
 permissions:
-  enabled: false
   auto-group-groupname: true
-  clans:
-    YourClanNameHere:
-      - test.permission
-  defaultLeader:
-    - every.leader.will.have.this
-  defaultTrusted:
-    - every.trusted.member.will.have.this
-  defaultUnTrusted:
-    - every.untrusted.member.will.have.this
-worlds:
+  YourClanNameHere:
+  - test.permission

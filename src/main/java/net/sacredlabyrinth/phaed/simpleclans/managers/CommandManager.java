@@ -1,134 +1,103 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.LinkedHashMap;
-import java.util.List;
-import java.util.logging.Level;
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.commands.Command;
-import net.sacredlabyrinth.phaed.simpleclans.commands.GenericConsoleCommand;
-import net.sacredlabyrinth.phaed.simpleclans.commands.GenericPlayerCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.*;
 import org.bukkit.ChatColor;
-import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import java.text.MessageFormat;
 
 /**
  * @author phaed
  */
 public final class CommandManager
 {
-
     private SimpleClans plugin;
-    private LinkedHashMap<String, Command> commands;
+    private CreateCommand createCommand;
+    private ListCommand listCommand;
+    private ProfileCommand profileCommand;
+    private RosterCommand rosterCommand;
+    private LookupCommand lookupCommand;
+    private LeaderboardCommand leaderboardCommand;
+    private AlliancesCommand alliancesCommand;
+    private RivalriesCommand rivalriesCommand;
+    private VitalsCommand vitalsCommand;
+    private CoordsCommand coordsCommand;
+    private StatsCommand statsCommand;
+    private AllyCommand allyCommand;
+    private RivalCommand rivalCommand;
+    private BbCommand bbCommand;
+    private ModtagCommand modtagCommand;
+    private ToggleCommand toggleCommand;
+    private InviteCommand inviteCommand;
+    private KickCommand kickCommand;
+    private TrustCommand trustCommand;
+    private UntrustCommand untrustCommand;
+    private PromoteCommand promoteCommand;
+    private CapeCommand capeCommand;
+    private DemoteCommand demoteCommand;
+    private ClanffCommand clanffCommand;
+    private FfCommand ffCommand;
+    private ResignCommand resignCommand;
+    private DisbandCommand disbandCommand;
+    private VerifyCommand verifyCommand;
+    private BanCommand banCommand;
+    private UnbanCommand unbanCommand;
+    private ReloadCommand reloadCommand;
+    private GlobalffCommand globalffCommand;
+    private MenuCommand menuCommand;
+    private WarCommand warCommand;
+    private HomeCommand homeCommand;
+    private KillsCommand killsCommand;
+    private MostKilledCommand mostKilledCommand;
+    private SetRankCommand setRankCommand;
+    private BankCommand bankCommand;
 
-    public CommandManager(SimpleClans plugin)
+    /**
+     *
+     */
+    public CommandManager()
     {
-        this.plugin = plugin;
-        commands = new LinkedHashMap<String, Command>();
-    }
-
-    public void addCommand(Command command)
-    {
-        commands.put(command.getName().toLowerCase(), command);
-    }
-
-    public void removeCommand(String command)
-    {
-        commands.remove(command);
-    }
-
-    public Command getCommand(String name)
-    {
-        return commands.get(name.toLowerCase());
-    }
-
-    public List<Command> getCommands()
-    {
-        return new ArrayList<Command>(commands.values());
-    }
-
-    public boolean executeAll(final Player player, final CommandSender sender, String command, String label, String[] args)
-    {
-        String[] arguments;
-
-        //Build the args; if the args length is 0 then build if from the base command
-        if (args.length == 0) {
-            arguments = new String[]{command};
-        } else {
-            arguments = args;
-        }
-
-        //Iterate through all arguments from the last to the first argument
-        for (int argsIncluded = arguments.length; argsIncluded >= 0; argsIncluded--) {
-            String identifier = "";
-            //Build the identifier string
-            for (int i = 0; i < argsIncluded; i++) {
-                identifier += " " + arguments[i];
-            }
-
-            //trim the last ' '
-            identifier = identifier.trim();
-            for (Command cmd : commands.values()) {
-                if (cmd.isIdentifier(identifier)) {
-                    String[] realArgs = Arrays.copyOfRange(arguments, argsIncluded, arguments.length);
-
-                    if (realArgs.length < cmd.getMinArguments() || realArgs.length > cmd.getMaxArguments()) {
-                        displayCommandHelp(cmd, sender, player);
-                        return true;
-                    } else if (realArgs.length > 0 && realArgs[0].equals("?")) {
-                        displayCommandHelp(cmd, sender, player);
-                        return true;
-                    }
-
-
-                    if (cmd instanceof GenericConsoleCommand) {
-                        if (sender != null) {
-                            ((GenericConsoleCommand) cmd).execute(sender, label, realArgs);
-                        } else {
-                            ((GenericConsoleCommand) cmd).execute((CommandSender) player, label, realArgs);
-                        }
-                    } else if (cmd instanceof GenericPlayerCommand) {
-                        if (player != null) {
-                            ((GenericPlayerCommand) cmd).execute(player, label, realArgs);
-                        } else {
-                            SimpleClans.debug(Level.WARNING, "Failed at parsing the command :(");
-                        }
-                    } else {
-                        SimpleClans.debug(Level.WARNING, "Failed at parsing the command :(");
-                    }
-
-                    return true;
-                }
-            }
-        }
-        (sender == null ? player : sender).sendMessage(ChatColor.DARK_RED + "Command not found!");
-
-        return true;
-    }
-
-    private void displayCommandHelp(Command cmd, CommandSender sender, Player player)
-    {
-        if (player == null) {
-            sender.sendMessage("§cCommand:§e " + cmd.getName());
-            String[] usages = cmd.getUsages();
-            StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
-
-            for (int i = 1; i < usages.length; i++) {
-                sb.append("           ").append(usages[i]).append("\n");
-            }
-            sender.sendMessage(sb.toString());
-        } else if (sender == null) {
-            player.sendMessage("§cCommand:§e " + cmd.getName());
-            String[] usages = cmd.getUsages();
-            StringBuilder sb = new StringBuilder("§cUsage:§e ").append(usages[0]).append("\n");
-
-            for (int i = 1; i < usages.length; i++) {
-                sb.append("           ").append(usages[i]).append("\n");
-            }
-            player.sendMessage(sb.toString());
-        }
+        plugin = SimpleClans.getInstance();
+        menuCommand = new MenuCommand();
+        createCommand = new CreateCommand();
+        listCommand = new ListCommand();
+        profileCommand = new ProfileCommand();
+        rosterCommand = new RosterCommand();
+        lookupCommand = new LookupCommand();
+        leaderboardCommand = new LeaderboardCommand();
+        alliancesCommand = new AlliancesCommand();
+        rivalriesCommand = new RivalriesCommand();
+        vitalsCommand = new VitalsCommand();
+        coordsCommand = new CoordsCommand();
+        statsCommand = new StatsCommand();
+        allyCommand = new AllyCommand();
+        rivalCommand = new RivalCommand();
+        bbCommand = new BbCommand();
+        modtagCommand = new ModtagCommand();
+        toggleCommand = new ToggleCommand();
+        inviteCommand = new InviteCommand();
+        kickCommand = new KickCommand();
+        trustCommand = new TrustCommand();
+        untrustCommand = new UntrustCommand();
+        promoteCommand = new PromoteCommand();
+        capeCommand = new CapeCommand();
+        demoteCommand = new DemoteCommand();
+        clanffCommand = new ClanffCommand();
+        ffCommand = new FfCommand();
+        resignCommand = new ResignCommand();
+        disbandCommand = new DisbandCommand();
+        verifyCommand = new VerifyCommand();
+        banCommand = new BanCommand();
+        unbanCommand = new UnbanCommand();
+        reloadCommand = new ReloadCommand();
+        globalffCommand = new GlobalffCommand();
+        warCommand = new WarCommand();
+        homeCommand = new HomeCommand();
+        killsCommand = new KillsCommand();
+        mostKilledCommand = new MostKilledCommand();
+        setRankCommand = new SetRankCommand();
+        bankCommand = new BankCommand();
     }
 
     /**
@@ -137,22 +106,193 @@ public final class CommandManager
      */
     public void processClan(Player player, String[] args)
     {
-        try {
-            if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName())) {
+        try
+        {
+            if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
+            {
                 return;
             }
 
-            if (plugin.getSettingsManager().isBanned(player.getName())) {
+            if (plugin.getSettingsManager().isBanned(player.getName()))
+            {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
                 return;
             }
-            String clanCommand = plugin.getSettingsManager().getCommandClan();
 
-            executeAll(player, null, clanCommand, clanCommand, args);
+            if (args.length == 0)
+            {
+                menuCommand.execute(player);
+            }
+            else
+            {
+                String subcommand = args[0];
+                String[] subargs = Helper.removeFirst(args);
 
-        } catch (Exception ex) {
-            SimpleClans.debug(plugin.getLang("simpleclans.command.failure"), ex);
-
+                if (subcommand.equalsIgnoreCase(plugin.getLang("create.command")))
+                {
+                    createCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")))
+                {
+                    listCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command")))
+                {
+                    bankCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("profile.command")))
+                {
+                    profileCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("roster.command")))
+                {
+                    rosterCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("lookup.command")))
+                {
+                    lookupCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("home.command")))
+                {
+                    homeCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("leaderboard.command")))
+                {
+                    leaderboardCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("alliances.command")))
+                {
+                    alliancesCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("rivalries.command")))
+                {
+                    rivalriesCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("vitals.command")))
+                {
+                    vitalsCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("coords.command")))
+                {
+                    coordsCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("stats.command")))
+                {
+                    statsCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("ally.command")))
+                {
+                    allyCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("rival.command")))
+                {
+                    rivalCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("bb.command")))
+                {
+                    bbCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("modtag.command")))
+                {
+                    modtagCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("toggle.command")))
+                {
+                    toggleCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("cape.command")))
+                {
+                    capeCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("invite.command")))
+                {
+                    inviteCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("kick.command")))
+                {
+                    kickCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("trust.command")))
+                {
+                    trustCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("untrust.command")))
+                {
+                    untrustCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("promote.command")))
+                {
+                    promoteCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("demote.command")))
+                {
+                    demoteCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("clanff.command")))
+                {
+                    clanffCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("ff.command")))
+                {
+                    ffCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("resign.command")))
+                {
+                    resignCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("disband.command")))
+                {
+                    disbandCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("verify.command")))
+                {
+                    verifyCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("ban.command")))
+                {
+                    banCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("unban.command")))
+                {
+                    unbanCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("reload.command")))
+                {
+                    reloadCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("globalff.command")))
+                {
+                    globalffCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("war.command")))
+                {
+                    warCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("kills.command")))
+                {
+                    killsCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("mostkilled.command")))
+                {
+                    mostKilledCommand.execute(player, subargs);
+                }
+                else if (subcommand.equalsIgnoreCase(plugin.getLang("setrank.command")))
+                {
+                    setRankCommand.execute(player, subargs);
+                }
+                else
+                {
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            SimpleClans.log(ChatColor.RED + MessageFormat.format(plugin.getLang("simpleclans.command.failure"), ex.getMessage()));
+            for (StackTraceElement el : ex.getStackTrace())
+            {
+                System.out.print(el.toString());
+            }
         }
     }
 
@@ -163,35 +303,51 @@ public final class CommandManager
      */
     public void processAccept(Player player)
     {
-        if (plugin.getSettingsManager().isBanned(player.getName())) {
+        if (plugin.getSettingsManager().isBanned(player.getName()))
+        {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
             return;
         }
 
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-        if (cp != null) {
+        if (cp != null)
+        {
             Clan clan = cp.getClan();
 
-            if (clan.isLeader(player)) {
-                if (plugin.getRequestManager().hasRequest(clan.getTag())) {
-                    if (cp.getVote() == null) {
+            if (clan.isLeader(player))
+            {
+                if (plugin.getRequestManager().hasRequest(clan.getTag()))
+                {
+                    if (cp.getVote() == null)
+                    {
                         plugin.getRequestManager().accept(cp);
                         clan.leaderAnnounce(ChatColor.GREEN + MessageFormat.format(plugin.getLang("voted.to.accept"), Helper.capitalize(player.getName())));
-                    } else {
+                    }
+                    else
+                    {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.have.already.voted"));
                     }
-                } else {
+                }
+                else
+                {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.accept"));
                 }
-            } else {
+            }
+            else
+            {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
             }
-        } else {
-            if (plugin.getRequestManager().hasRequest(player.getName().toLowerCase())) {
+        }
+        else
+        {
+            if (plugin.getRequestManager().hasRequest(player.getName().toLowerCase()))
+            {
                 cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
                 plugin.getRequestManager().accept(cp);
-            } else {
+            }
+            else
+            {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.accept"));
             }
         }
@@ -204,35 +360,51 @@ public final class CommandManager
      */
     public void processDeny(Player player)
     {
-        if (plugin.getSettingsManager().isBanned(player.getName())) {
+        if (plugin.getSettingsManager().isBanned(player.getName()))
+        {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
             return;
         }
 
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-        if (cp != null) {
+        if (cp != null)
+        {
             Clan clan = cp.getClan();
 
-            if (clan.isLeader(player)) {
-                if (plugin.getRequestManager().hasRequest(clan.getTag())) {
-                    if (cp.getVote() == null) {
+            if (clan.isLeader(player))
+            {
+                if (plugin.getRequestManager().hasRequest(clan.getTag()))
+                {
+                    if (cp.getVote() == null)
+                    {
                         plugin.getRequestManager().deny(cp);
                         clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("has.voted.to.deny"), Helper.capitalize(player.getName())));
-                    } else {
+                    }
+                    else
+                    {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.have.already.voted"));
                     }
-                } else {
+                }
+                else
+                {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.deny"));
                 }
-            } else {
+            }
+            else
+            {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
             }
-        } else {
-            if (plugin.getRequestManager().hasRequest(player.getName().toLowerCase())) {
+        }
+        else
+        {
+            if (plugin.getRequestManager().hasRequest(player.getName().toLowerCase()))
+            {
                 cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
                 plugin.getRequestManager().deny(cp);
-            } else {
+            }
+            else
+            {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.deny"));
             }
         }
@@ -245,22 +417,27 @@ public final class CommandManager
      */
     public void processMore(Player player)
     {
-        if (plugin.getSettingsManager().isBanned(player.getName())) {
+        if (plugin.getSettingsManager().isBanned(player.getName()))
+        {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
             return;
         }
 
         ChatBlock chatBlock = plugin.getStorageManager().getChatBlock(player);
 
-        if (chatBlock != null && chatBlock.size() > 0) {
+        if (chatBlock != null && chatBlock.size() > 0)
+        {
             chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
 
-            if (chatBlock.size() > 0) {
+            if (chatBlock.size() > 0)
+            {
                 ChatBlock.sendBlank(player);
                 ChatBlock.sendMessage(player, plugin.getSettingsManager().getPageHeadingsColor() + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
             }
             ChatBlock.sendBlank(player);
-        } else {
+        }
+        else
+        {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.more.to.see"));
         }
     }
