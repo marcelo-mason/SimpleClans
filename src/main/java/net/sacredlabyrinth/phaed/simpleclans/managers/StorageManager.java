@@ -1,5 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
+import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.MessageFormat;
@@ -8,13 +15,6 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Level;
-import java.util.logging.Logger;
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
-import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
-import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 /**
  * @author phaed
@@ -104,7 +104,7 @@ public final class StorageManager
                 }
             } else
             {
-                SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("mysql.connection.failed"));
+                SimpleClans.getInstance().getServer().getConsoleSender().sendMessage("[SimpleClans] " + ChatColor.RED + plugin.getLang("mysql.connection.failed"));
             }
         } else
         {
@@ -146,7 +146,7 @@ public final class StorageManager
                 }
             } else
             {
-                SimpleClans.log("[SimpleClans] " + ChatColor.RED + plugin.getLang("sqlite.connection.failed"));
+                SimpleClans.getInstance().getServer().getConsoleSender().sendMessage("[SimpleClans] " + ChatColor.RED + plugin.getLang("sqlite.connection.failed"));
             }
         }
     }

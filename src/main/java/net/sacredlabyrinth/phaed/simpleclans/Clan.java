@@ -1,9 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import java.io.Serializable;
-import java.sql.Timestamp;
-import java.text.MessageFormat;
-import java.util.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
@@ -11,6 +7,11 @@ import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.JSONValue;
+
+import java.io.Serializable;
+import java.sql.Timestamp;
+import java.text.MessageFormat;
+import java.util.*;
 
 /**
  * @author phaed
@@ -351,7 +352,6 @@ public class Clan implements Serializable, Comparable<Clan> {
     /**
      * Clears the bulletin board
      *
-     * @param msg
      */
     public void clearBb() {
         bb.clear();
@@ -1142,7 +1142,7 @@ public class Clan implements Serializable, Comparable<Clan> {
             }
         }
 
-        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang("clan.announce") + ChatColor.AQUA + "] " + ChatColor.AQUA + "[" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
+        SimpleClans.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang("clan.announce") + ChatColor.AQUA + "] " + ChatColor.AQUA + "[" + Helper.getColorName(playerName) + ChatColor.WHITE + "] " + message);
     }
 
     /**
@@ -1162,7 +1162,7 @@ public class Clan implements Serializable, Comparable<Clan> {
                 ChatBlock.sendMessage(pl, message);
             }
         }
-        SimpleClans.log(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang("leader.announce") + ChatColor.AQUA + "] " + ChatColor.WHITE + message);
+        SimpleClans.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.AQUA + "[" + SimpleClans.getInstance().getLang("leader.announce") + ChatColor.AQUA + "] " + ChatColor.WHITE + message);
     }
 
     /**

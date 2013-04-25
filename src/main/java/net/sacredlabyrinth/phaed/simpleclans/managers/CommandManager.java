@@ -288,7 +288,7 @@ public final class CommandManager
         }
         catch (Exception ex)
         {
-            SimpleClans.log(ChatColor.RED + MessageFormat.format(plugin.getLang("simpleclans.command.failure"), ex.getMessage()));
+            SimpleClans.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("simpleclans.command.failure"), ex.getMessage()));
             for (StackTraceElement el : ex.getStackTrace())
             {
                 System.out.print(el.toString());
