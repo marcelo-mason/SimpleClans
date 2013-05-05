@@ -5,6 +5,7 @@ import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.sql.ResultSet;
@@ -54,7 +55,7 @@ public final class StorageManager
      * @param player
      * @param cb
      */
-    public void addChatBlock(Player player, ChatBlock cb)
+    public void addChatBlock(CommandSender player, ChatBlock cb)
     {
         chatBlocks.put(player.getName(), cb);
     }

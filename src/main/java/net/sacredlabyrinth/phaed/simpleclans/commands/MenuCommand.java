@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -271,6 +272,32 @@ public class MenuCommand
         }
 
         ChatBlock.sendBlank(player);
+    }
+
+    /**
+     * Execute the command
+     *
+     * @param sender
+     */
+    public void executeSender(CommandSender sender)
+    {
+        SimpleClans plugin = SimpleClans.getInstance();
+
+        String headColor = plugin.getSettingsManager().getPageHeadingsColor();
+        String subColor = plugin.getSettingsManager().getPageSubTitleColor();
+
+        String clanCommand = plugin.getSettingsManager().getCommandClan();
+
+        ChatBlock chatBlock = new ChatBlock();
+
+        chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.verify.tag.1.verify.an.unverified.clan"), clanCommand, ChatColor.WHITE));
+        chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.reload.1.reload.configuration"), clanCommand, ChatColor.WHITE));
+
+        ChatBlock.sendBlank(sender);
+        ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang("clan.commands") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+        ChatBlock.sendBlank(sender);
+        chatBlock.sendBlock(sender, plugin.getSettingsManager().getPageSize());
+        ChatBlock.sendBlank(sender);
     }
 
     /**

@@ -1,7 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
 import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -118,7 +118,7 @@ public class ChatBlock
      * @param player
      * @return
      */
-    public boolean sendBlock(Player player)
+    public boolean sendBlock(CommandSender player)
     {
         return sendBlock(player, null, 0);
     }
@@ -129,7 +129,7 @@ public class ChatBlock
      * @param prefix
      * @return
      */
-    public boolean sendBlock(Player player, String prefix)
+    public boolean sendBlock(CommandSender player, String prefix)
     {
         return sendBlock(player, prefix, 0);
     }
@@ -140,7 +140,7 @@ public class ChatBlock
      * @param amount
      * @return
      */
-    public boolean sendBlock(Player player, int amount)
+    public boolean sendBlock(CommandSender player, int amount)
     {
         return sendBlock(player, null, amount);
     }
@@ -152,7 +152,7 @@ public class ChatBlock
      * @param amount
      * @return
      */
-    boolean sendBlock(Player player, String prefix, int amount)
+    boolean sendBlock(CommandSender player, String prefix, int amount)
     {
         if (player == null)
         {
@@ -707,7 +707,7 @@ public class ChatBlock
      * @param receiver
      * @param msg
      */
-    public static void saySingle(Player receiver, String msg)
+    public static void saySingle(CommandSender receiver, String msg)
     {
         if (receiver == null)
         {
@@ -722,7 +722,7 @@ public class ChatBlock
      * @param receiver
      * @param msg
      */
-    public static void sendMessage(Player receiver, String msg)
+    public static void sendMessage(CommandSender receiver, String msg)
     {
         if (receiver == null)
         {
@@ -750,7 +750,7 @@ public class ChatBlock
      * Send blank lie
      * @param receiver
      */
-    public static void sendBlank(Player receiver)
+    public static void sendBlank(CommandSender receiver)
     {
         if (receiver == null)
         {

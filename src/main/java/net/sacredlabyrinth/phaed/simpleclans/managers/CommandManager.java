@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.commands.*;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -104,185 +105,215 @@ public final class CommandManager
      * @param args
      * @return
      */
-    public void processClan(Player player, String[] args)
+    public void processClan(CommandSender sender, String[] args)
     {
         try
         {
-            if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
+            if (sender instanceof Player)
             {
-                return;
-            }
+                Player player = (Player) sender;
 
-            if (plugin.getSettingsManager().isBanned(player.getName()))
-            {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
-                return;
-            }
+                if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
+                {
+                    return;
+                }
 
-            if (args.length == 0)
-            {
-                menuCommand.execute(player);
-            }
-            else
-            {
-                String subcommand = args[0];
-                String[] subargs = Helper.removeFirst(args);
+                if (plugin.getSettingsManager().isBanned(player.getName()))
+                {
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
+                    return;
+                }
 
-                if (subcommand.equalsIgnoreCase(plugin.getLang("create.command")))
+                if (args.length == 0)
                 {
-                    createCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")))
-                {
-                    listCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command")))
-                {
-                    bankCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("profile.command")))
-                {
-                    profileCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("roster.command")))
-                {
-                    rosterCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("lookup.command")))
-                {
-                    lookupCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("home.command")))
-                {
-                    homeCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("leaderboard.command")))
-                {
-                    leaderboardCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("alliances.command")))
-                {
-                    alliancesCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("rivalries.command")))
-                {
-                    rivalriesCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("vitals.command")))
-                {
-                    vitalsCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("coords.command")))
-                {
-                    coordsCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("stats.command")))
-                {
-                    statsCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("ally.command")))
-                {
-                    allyCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("rival.command")))
-                {
-                    rivalCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("bb.command")))
-                {
-                    bbCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("modtag.command")))
-                {
-                    modtagCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("toggle.command")))
-                {
-                    toggleCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("cape.command")))
-                {
-                    capeCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("invite.command")))
-                {
-                    inviteCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("kick.command")))
-                {
-                    kickCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("trust.command")))
-                {
-                    trustCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("untrust.command")))
-                {
-                    untrustCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("promote.command")))
-                {
-                    promoteCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("demote.command")))
-                {
-                    demoteCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("clanff.command")))
-                {
-                    clanffCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("ff.command")))
-                {
-                    ffCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("resign.command")))
-                {
-                    resignCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("disband.command")))
-                {
-                    disbandCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("verify.command")))
-                {
-                    verifyCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("ban.command")))
-                {
-                    banCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("unban.command")))
-                {
-                    unbanCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("reload.command")))
-                {
-                    reloadCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("globalff.command")))
-                {
-                    globalffCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("war.command")))
-                {
-                    warCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("kills.command")))
-                {
-                    killsCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("mostkilled.command")))
-                {
-                    mostKilledCommand.execute(player, subargs);
-                }
-                else if (subcommand.equalsIgnoreCase(plugin.getLang("setrank.command")))
-                {
-                    setRankCommand.execute(player, subargs);
+                    menuCommand.execute(player);
                 }
                 else
                 {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
+                    String subcommand = args[0];
+                    String[] subargs = Helper.removeFirst(args);
+
+                    if (subcommand.equalsIgnoreCase(plugin.getLang("create.command")))
+                    {
+                        createCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")))
+                    {
+                        listCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command")))
+                    {
+                        bankCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("profile.command")))
+                    {
+                        profileCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("roster.command")))
+                    {
+                        rosterCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("lookup.command")))
+                    {
+                        lookupCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("home.command")))
+                    {
+                        homeCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("leaderboard.command")))
+                    {
+                        leaderboardCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("alliances.command")))
+                    {
+                        alliancesCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("rivalries.command")))
+                    {
+                        rivalriesCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("vitals.command")))
+                    {
+                        vitalsCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("coords.command")))
+                    {
+                        coordsCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("stats.command")))
+                    {
+                        statsCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("ally.command")))
+                    {
+                        allyCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("rival.command")))
+                    {
+                        rivalCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("bb.command")))
+                    {
+                        bbCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("modtag.command")))
+                    {
+                        modtagCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("toggle.command")))
+                    {
+                        toggleCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("cape.command")))
+                    {
+                        capeCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("invite.command")))
+                    {
+                        inviteCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("kick.command")))
+                    {
+                        kickCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("trust.command")))
+                    {
+                        trustCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("untrust.command")))
+                    {
+                        untrustCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("promote.command")))
+                    {
+                        promoteCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("demote.command")))
+                    {
+                        demoteCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("clanff.command")))
+                    {
+                        clanffCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("ff.command")))
+                    {
+                        ffCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("resign.command")))
+                    {
+                        resignCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("disband.command")))
+                    {
+                        disbandCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("verify.command")))
+                    {
+                        verifyCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("ban.command")))
+                    {
+                        banCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("unban.command")))
+                    {
+                        unbanCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("reload.command")))
+                    {
+                        reloadCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("globalff.command")))
+                    {
+                        globalffCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("war.command")))
+                    {
+                        warCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("kills.command")))
+                    {
+                        killsCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("mostkilled.command")))
+                    {
+                        mostKilledCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("setrank.command")))
+                    {
+                        setRankCommand.execute(player, subargs);
+                    }
+                    else
+                    {
+                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
+                    }
+                }
+            }
+            else
+            {
+                if (args.length == 0)
+                {
+                    menuCommand.executeSender(sender);
+                }
+                else
+                {
+                    String subcommand = args[0];
+                    String[] subargs = Helper.removeFirst(args);
+
+                    if (subcommand.equalsIgnoreCase(plugin.getLang("verify.command")))
+                    {
+                        verifyCommand.execute(sender, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("reload.command")))
+                    {
+                        reloadCommand.execute(sender, subargs);
+                    }
+                    else
+                    {
+                        ChatBlock.sendMessage(sender, ChatColor.RED + plugin.getLang("does.not.match"));
+                    }
                 }
             }
         }

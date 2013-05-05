@@ -4,10 +4,10 @@ import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 /**
- *
  * @author phaed
  */
 public class ReloadCommand
@@ -18,26 +18,31 @@ public class ReloadCommand
 
     /**
      * Execute the command
-     * @param player
+     *
+     * @param sender
      * @param arg
      */
-    public void execute(Player player, String[] arg)
+    public void execute(CommandSender sender, String[] arg)
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.admin.reload"))
+        if (sender instanceof Player)
         {
-            plugin.getSettingsManager().load();
-            plugin.getStorageManager().importFromDatabase();
-            SimpleClans.getInstance().getPermissionsManager().loadPermissions();
-            for (Clan clan : plugin.getClanManager().getClans()) {
-                SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
+            if (!plugin.getPermissionsManager().has((Player)sender, "simpleclans.admin.reload"))
+            {
+                ChatBlock.sendMessage(sender, ChatColor.RED + "Think you're slick don't ya");
             }
-            ChatBlock.sendMessage(player,  ChatColor.AQUA + plugin.getLang("configuration.reloaded"));
         }
-        else
+
+        plugin.getSettingsManager().load();
+        plugin.getStorageManager().importFromDatabase();
+        SimpleClans.getInstance().getPermissionsManager().loadPermissions();
+
+        for (Clan clan : plugin.getClanManager().getClans())
         {
-            ChatBlock.sendMessage(player,  ChatColor.RED + "Think you're slick don't ya");
+            SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
         }
+        ChatBlock.sendMessage(sender, ChatColor.AQUA + plugin.getLang("configuration.reloaded"));
+
     }
 }
