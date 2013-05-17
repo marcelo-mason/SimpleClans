@@ -8,6 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
+
 import static org.getspout.spoutapi.SpoutManager.*;
 /**
  * @author phaed

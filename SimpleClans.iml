@@ -17,7 +17,7 @@
     <orderEntry type="library" name="Maven: in.mDec:mChatSuite:dev-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: net.sacredlabyrinth.Phaed.PreciousStones:PreciousStones:dev-SNAPSHOT" level="project" />
     <orderEntry type="library" name="Maven: com.griefcraft:LWC:dev-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.5.1-R0.3-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.5.2-R0.1" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:Vault:1.2.19" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.nijikokun.bukkit:Permissions:2.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.7" level="project" />
