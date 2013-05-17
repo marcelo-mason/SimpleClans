@@ -45,8 +45,8 @@ public class PromoteCommand
                             {
                                 if (!promoted.getName().equals(player.getName()))
                                 {
-                                    if (clan.allLeadersOnline())
-                                    {
+                                    //if (clan.allLeadersOnline())
+                                    //{
                                         if (clan.isMember(promoted))
                                         {
                                             if (!clan.isLeader(promoted) || !plugin.getSettingsManager().isConfirmationForPromote())
@@ -63,11 +63,11 @@ public class PromoteCommand
                                         {
                                             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.not.a.member.of.your.clan"));
                                         }
-                                    }
-                                    else
-                                    {
+                                    //}
+                                    //else
+                                    //{
                                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("all.leaders.must.be.online.to.vote.on.this.promotion"));
-                                    }
+                                    //}
                                 }
                                 else
                                 {
