@@ -768,7 +768,7 @@ public final class ClanManager
      * @param health
      * @return
      */
-    public String getHealthString(int health)
+    public String getHealthString(double health)
     {
         String out = "";
 
