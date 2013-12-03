@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
-import java.util.Iterator;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
@@ -11,6 +10,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.*;
+
+import java.util.Iterator;
 
 /**
  * @author phaed
@@ -283,7 +284,7 @@ public class SCPlayerListener implements Listener
             public void run()
             {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-                
+
                 plugin.getClanManager().updateLastSeen(player);
                 plugin.getClanManager().updateDisplayName(player);
                 plugin.getSpoutPluginManager().processPlayer(player.getName());
@@ -309,6 +310,14 @@ public class SCPlayerListener implements Listener
                 }
             }
         }, 1);
+
+        if (event.getPlayer().isOp())
+        {
+            for (String message : plugin.getMessages())
+            {
+                event.getPlayer().sendMessage(ChatColor.YELLOW + message);
+            }
+        }
     }
 
     /**
@@ -350,9 +359,9 @@ public class SCPlayerListener implements Listener
         {
             return;
         }
-        
+
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
-                        
+
         SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
         plugin.getClanManager().updateLastSeen(event.getPlayer());
         plugin.getRequestManager().endPendingRequest(event.getPlayer().getName());

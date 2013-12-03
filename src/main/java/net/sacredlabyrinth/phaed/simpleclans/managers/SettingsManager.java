@@ -1,18 +1,20 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.bukkit.configuration.file.FileConfiguration;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import org.bukkit.configuration.file.FileConfiguration;
 
 /**
  * @author phaed
  */
 public final class SettingsManager
 {
+    private boolean disableMessages;
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
     private boolean teleportOnSpawn;
@@ -129,7 +131,7 @@ public final class SettingsManager
     private boolean tamableMobsSharing;
     private int strifeLimit;
     private boolean autoWar;
-    
+
     /**
      *
      */
@@ -166,6 +168,7 @@ public final class SettingsManager
             getConfig().options().copyDefaults(true);
         }
 
+        disableMessages = getConfig().getBoolean("settings.disable-messages");
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
         keepOnHome = getConfig().getBoolean("settings.keep-items-on-clan-home");
@@ -278,7 +281,7 @@ public final class SettingsManager
         tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         strifeLimit = getConfig().getInt("war.strife-limit");
         autoWar = getConfig().getBoolean("war.auto-war-start");
-        
+
         save();
     }
 
@@ -1275,5 +1278,10 @@ public final class SettingsManager
      */
     public boolean isAutoWar() {
         return autoWar;
+    }
+
+    public boolean isDisableMessages()
+    {
+        return disableMessages;
     }
 }

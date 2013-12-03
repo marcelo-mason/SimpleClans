@@ -3,9 +3,15 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
+import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.net.URL;
 import java.text.MessageFormat;
+import java.util.ArrayList;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -16,6 +22,7 @@ import java.util.logging.Logger;
  */
 public class SimpleClans extends JavaPlugin {
 
+    private ArrayList<String> messages = new ArrayList<String>();
     private static SimpleClans instance;
     private static final Logger logger = Logger.getLogger("Minecraft");
     private ClanManager clanManager;
@@ -81,6 +88,7 @@ public class SimpleClans extends JavaPlugin {
 
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
+        pullMessages();
     }
 
     @Override
@@ -88,6 +96,32 @@ public class SimpleClans extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();
+    }
+
+    public void pullMessages()
+    {
+        if (getSettingsManager().isDisableMessages())
+        {
+            return;
+        }
+
+        try
+        {
+            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("http://minecraftcubed.net/pluginmessage/").openStream()));
+
+            String message;
+            while ((message = in.readLine()) != null)
+            {
+                messages.add(message);
+                getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + message);
+            }
+            in.close();
+
+        }
+        catch (IOException e)
+        {
+            // do nothing
+        }
     }
 
     /**
@@ -148,5 +182,10 @@ public class SimpleClans extends JavaPlugin {
 
     public TeleportManager getTeleportManager() {
         return teleportManager;
+    }
+
+    public ArrayList<String> getMessages()
+    {
+        return messages;
     }
 }

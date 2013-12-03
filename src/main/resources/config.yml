@@ -11,6 +11,7 @@ tag:
         color: '8'
         char: ' .'
 settings:
+    disable-messages: false
     tameable-mobs-sharing: false
     teleport-blocks: false
     teleport-home-on-spawn: false
