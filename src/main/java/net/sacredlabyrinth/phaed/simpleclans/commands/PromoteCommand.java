@@ -25,83 +25,68 @@ public class PromoteCommand
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.leader.promote"))
-        {
-            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
-            if (cp != null)
-            {
-                Clan clan = cp.getClan();
-
-                if (clan.isLeader(player))
-                {
-                    if (arg.length == 1)
-                    {
-                        Player promoted = Helper.matchOnePlayer(arg[0]);
-
-                        if (promoted != null)
-                        {
-                            if (plugin.getPermissionsManager().has(promoted, "simpleclans.leader.promotable"))
-                            {
-                                if (!promoted.getName().equals(player.getName()))
-                                {
-                                    //if (clan.allLeadersOnline())
-                                    //{
-                                        if (clan.isMember(promoted))
-                                        {
-                                            if (!clan.isLeader(promoted) || !plugin.getSettingsManager().isConfirmationForPromote())
-                                            {
-                                                clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted.getName())));
-                                                clan.promote(promoted.getName());
-                                            }
-                                            else
-                                            {
-                                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.already.a.leader"));
-                                            }
-                                        }
-                                        else
-                                        {
-                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.not.a.member.of.your.clan"));
-                                        }
-                                    //}
-                                    //else
-                                    //{
-                                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("all.leaders.must.be.online.to.vote.on.this.promotion"));
-                                    //}
-                                }
-                                else
-                                {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.promote.yourself"));
-                                }
-                            }
-                            else
-                            {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.does.not.have.the.permissions.to.lead.a.clan"));
-                            }
-                        }
-                        else
-                        {
-                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.member.to.be.promoted.must.be.online"));
-                        }
-                    }
-                    else
-                    {
-                        ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.promote.member"), plugin.getSettingsManager().getCommandClan()));
-                    }
-                }
-                else
-                {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
-                }
-            }
-            else
-            {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
-            }
-        }
-        else
+        if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.promote"))
         {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
+            return;
         }
+
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+        if (cp == null)
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
+            return;
+        }
+
+        Clan clan = cp.getClan();
+
+        if (!clan.isLeader(player))
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+            return;
+        }
+
+        if (arg.length != 1)
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.promote.member"), plugin.getSettingsManager().getCommandClan()));return;
+
+        }
+
+        Player promoted = Helper.matchOnePlayer(arg[0]);
+
+        if (promoted == null)
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.member.to.be.promoted.must.be.online"));
+            return;
+        }
+
+        if (!plugin.getPermissionsManager().has(promoted, "simpleclans.leader.promotable"))
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.does.not.have.the.permissions.to.lead.a.clan"));
+            return;
+        }
+
+        if (promoted.getName().equals(player.getName()))
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.promote.yourself"));
+            return;
+        }
+
+        if (!clan.isMember(promoted))
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.not.a.member.of.your.clan"));
+            return;
+        }
+
+        if (clan.isLeader(promoted) && plugin.getSettingsManager().isConfirmationForPromote())
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.already.a.leader"));
+            return;
+        }
+
+        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted.getName())));
+        clan.promote(promoted.getName());
     }
 }
+

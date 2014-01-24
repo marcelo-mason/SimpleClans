@@ -159,7 +159,7 @@ public class SCPlayerListener implements Listener
      * @param event
      */
     @EventHandler(priority = EventPriority.HIGHEST)
-    public void onPlayerChat(PlayerChatEvent event)
+    public void onPlayerChat(AsyncPlayerChatEvent event)
     {
         if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName()))
         {
@@ -224,7 +224,6 @@ public class SCPlayerListener implements Listener
                         if (!isAllyChat && !isClanChat)
                         {
                             iter.remove();
-                            continue;
                         }
                     }
                 }
