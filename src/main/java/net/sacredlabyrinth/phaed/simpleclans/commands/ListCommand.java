@@ -40,7 +40,7 @@ public class ListCommand
             if (arg.length == 0)
             {
                 List<Clan> clans = plugin.getClanManager().getClans();
-                plugin.getClanManager().sortClansByKDR(clans);
+                plugin.getClanManager().sortClansBySize(clans);
 
                 if (!clans.isEmpty())
                 {

@@ -845,6 +845,27 @@ public final class ClanManager
             }
         });
     }
+    /**
+     * Sort clans by KDR
+     *
+     * @param clans
+     * @return
+     */
+    public void sortClansBySize(List<Clan> clans)
+    {
+        Collections.sort(clans, new Comparator<Clan>()
+        {
+
+            @Override
+            public int compare(Clan c1, Clan c2)
+            {
+                Integer o1 = c1.getAllMembers().size();
+                Integer o2 = c2.getAllMembers().size();
+
+                return o2.compareTo(o1);
+            }
+        });
+    }
 
     /**
      * Sort clan players by KDR
