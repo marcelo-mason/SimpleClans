@@ -1655,7 +1655,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (world != null)
         {
-            if (world.getBlockAt(homeX, homeY, homeZ).getTypeId() != 0 || world.getBlockAt(homeX, homeY + 1, homeZ).getTypeId() != 0 || homeY == 0)
+            if (!(world.getBlockAt(homeX, homeY, homeZ).isEmpty()) || !(world.getBlockAt(homeX, homeY + 1, homeZ).isEmpty()) != 0 || homeY == 0)
             {
                 return new Location(world, homeX, world.getHighestBlockYAt(homeX, homeZ), homeZ);
             }
