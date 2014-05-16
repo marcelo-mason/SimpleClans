@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
+import org.bukkit.Material;
 
 /**
  * @author phaed
@@ -1655,7 +1656,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         if (world != null)
         {
-            if (!(world.getBlockAt(homeX, homeY, homeZ).isEmpty()) || !(world.getBlockAt(homeX, homeY + 1, homeZ).isEmpty()) != 0 || homeY == 0)
+            if (!(world.getBlockAt(homeX, homeY, homeZ).getType().equals(Material.AIR)) || !(world.getBlockAt(homeX, homeY + 1, homeZ).getType().equals(Material.AIR)) || homeY == 0)
             {
                 return new Location(world, homeX, world.getHighestBlockYAt(homeX, homeZ), homeZ);
             }
