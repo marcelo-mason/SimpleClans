@@ -106,6 +106,7 @@ public final class TeleportManager
     {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
+            @Override
             public void run()
             {
                 for (Iterator iter = waitingPlayers.values().iterator(); iter.hasNext(); )

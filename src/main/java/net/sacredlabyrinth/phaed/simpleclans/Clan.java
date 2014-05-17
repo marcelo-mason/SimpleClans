@@ -12,6 +12,15 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.events.AllyClanAddEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.AllyClanRemoveEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.DisbandClanEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.PlayerDemoteEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.PlayerJoinedClanEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.PlayerKickedClanEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.PlayerPromoteEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.RivalClanAddEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.RivalClanRemoveEvent;
 import org.bukkit.Material;
 
 /**
@@ -1050,6 +1059,7 @@ public class Clan implements Serializable, Comparable<Clan>
         {
             SimpleClans.getInstance().getClanManager().updateDisplayName(player);
         }
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerJoinedClanEvent(this , cp));
     }
 
     /**
@@ -1085,6 +1095,7 @@ public class Clan implements Serializable, Comparable<Clan>
         {
             SimpleClans.getInstance().getClanManager().updateDisplayName(matched);
         }
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerKickedClanEvent(this , cp));
     }
 
     /**
@@ -1105,6 +1116,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerPromoteEvent(this , cp));
     }
 
     /**
@@ -1124,6 +1136,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerDemoteEvent(this , cp));
     }
 
     /**
@@ -1141,6 +1154,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getStorageManager().updateClan(ally);
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new AllyClanAddEvent(this , ally));
     }
 
     /**
@@ -1155,6 +1169,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getStorageManager().updateClan(ally);
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new AllyClanRemoveEvent(this , ally));
     }
 
     /**
@@ -1172,6 +1187,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getStorageManager().updateClan(rival);
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RivalClanAddEvent(this , rival));
     }
 
     /**
@@ -1186,6 +1202,7 @@ public class Clan implements Serializable, Comparable<Clan>
 
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getStorageManager().updateClan(rival);
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RivalClanRemoveEvent(this , rival));
     }
 
     /**
@@ -1436,10 +1453,12 @@ public class Clan implements Serializable, Comparable<Clan>
         SimpleClans.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(SimpleClans.getInstance(), new Runnable()
         {
 
+            @Override
             public void run()
             {
                 SimpleClans.getInstance().getClanManager().removeClan(thisOne.getTag());
                 SimpleClans.getInstance().getStorageManager().deleteClan(thisOne);
+                SimpleClans.getInstance().getServer().getPluginManager().callEvent(new DisbandClanEvent(thisOne));
             }
         }, 1);
     }

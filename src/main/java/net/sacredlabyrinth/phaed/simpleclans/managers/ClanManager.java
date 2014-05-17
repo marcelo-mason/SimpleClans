@@ -10,6 +10,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.events.CreateClanEvent;
 
 /**
  * @author phaed
@@ -82,6 +83,7 @@ public final class ClanManager
         SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
 
         plugin.getSpoutPluginManager().processPlayer(player.getName());
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new CreateClanEvent(clan));
     }
 
     /**

@@ -5,6 +5,8 @@ import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.events.RequestFinishedEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.RequestEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -423,7 +425,8 @@ public final class RequestManager
                     clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("clan.deletion"), deniers));
                 }
             }
-
+            
+            SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestFinishedEvent(req));
             req.cleanVotes();
             requests.remove(req.getClan().getTag());
         }
@@ -460,6 +463,7 @@ public final class RequestManager
     {
         plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
         {
+            @Override
             public void run()
             {
                 for (Request req : requests.values())
@@ -511,5 +515,6 @@ public final class RequestManager
                 }
             }
         }
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestEvent(req));
     }
 }
