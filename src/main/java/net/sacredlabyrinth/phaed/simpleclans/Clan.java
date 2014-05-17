@@ -1403,6 +1403,7 @@ public class Clan implements Serializable, Comparable<Clan>
      */
     public void disband()
     {
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new DisbandClanEvent(this));
         Collection<ClanPlayer> clanPlayers = SimpleClans.getInstance().getClanManager().getAllClanPlayers();
         List<Clan> clans = SimpleClans.getInstance().getClanManager().getClans();
 
@@ -1458,7 +1459,6 @@ public class Clan implements Serializable, Comparable<Clan>
             {
                 SimpleClans.getInstance().getClanManager().removeClan(thisOne.getTag());
                 SimpleClans.getInstance().getStorageManager().deleteClan(thisOne);
-                SimpleClans.getInstance().getServer().getPluginManager().callEvent(new DisbandClanEvent(thisOne));
             }
         }, 1);
     }
