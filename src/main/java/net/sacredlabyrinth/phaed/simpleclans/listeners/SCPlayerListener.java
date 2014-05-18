@@ -272,47 +272,49 @@ public class SCPlayerListener implements Listener
     {
         final Player player = event.getPlayer();
 
-        if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
+        if (SimpleClans.getInstance().getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
         {
             return;
         }
 
-        plugin.getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+        SimpleClans.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
         {
             @Override
             public void run()
             {
-                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+                ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
 
-                plugin.getClanManager().updateLastSeen(player);
-                plugin.getClanManager().updateDisplayName(player);
-                plugin.getSpoutPluginManager().processPlayer(player.getName());
+                if (cp == null)
+                {
+                    return;
+                }
+                cp.setName(player.getName());
+                SimpleClans.getInstance().getClanManager().updateLastSeen(player);
+                SimpleClans.getInstance().getClanManager().updateDisplayName(player);
+                if (SimpleClans.getInstance().hasUUID()) 
+                {
+                    SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
+                } else 
+                {
+                    SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+                }
                 SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
 
                 if (plugin.getSettingsManager().isBbShowOnLogin())
                 {
-
-                    if (cp != null)
-                    {
                         if (cp.isBbEnabled())
                         {
                             cp.getClan().displayBb(player);
                         }
-                    }
                 }
-
-                ClanPlayer anyCp = plugin.getClanManager().getAnyClanPlayer(player.getName());
-
-                if (anyCp != null)
-                {
-                    plugin.getPermissionsManager().addClanPermissions(anyCp);
-                }
+                
+                SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
             }
         }, 1);
 
         if (event.getPlayer().isOp())
         {
-            for (String message : plugin.getMessages())
+            for (String message : SimpleClans.getInstance().getMessages())
             {
                 event.getPlayer().sendMessage(ChatColor.YELLOW + message);
             }

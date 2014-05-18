@@ -52,7 +52,13 @@ public class KickCommand
                                     if (!clan.isLeader(kicked))
                                     {
                                         clan.addBb(player.getName(),  ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.kicked.by"), Helper.capitalize(kicked), player.getName()));
-                                        clan.removePlayerFromClan(kicked);
+                                        if (SimpleClans.getInstance().hasUUID())
+                                        {
+                                            clan.removePlayerFromClan(Helper.matchOnePlayer(kicked).getUniqueId());
+                                        } else 
+                                        {
+                                            clan.removePlayerFromClan(kicked);
+                                        }
                                     }
                                     else
                                     {

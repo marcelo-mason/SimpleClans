@@ -8,6 +8,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 
 /**
  * @author phaed
@@ -407,11 +409,16 @@ public final class SettingsManager
      * @param playerName the player's name
      * @return whether player is banned
      */
+    @Deprecated
     public boolean isBanned(String playerName)
     {
-        for (Object pl : getBannedPlayers())
+        if (SimpleClans.getInstance().hasUUID())
         {
-            if (((String) pl).equalsIgnoreCase(playerName))
+            playerName = UUIDMigration.getForcedPlayerUUID(playerName).toString();
+        }
+        for (String pl : getBannedPlayers())
+        {
+            if (pl.equalsIgnoreCase(playerName))
             {
                 return true;
             }
@@ -425,8 +432,13 @@ public final class SettingsManager
      *
      * @param playerName the player's name
      */
+    @Deprecated
     public void addBanned(String playerName)
     {
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            playerName = UUIDMigration.getForcedPlayerUUID(playerName).toString();
+        }
         if (!bannedPlayers.contains(playerName))
         {
             getBannedPlayers().add(playerName);
@@ -440,11 +452,65 @@ public final class SettingsManager
      *
      * @param playerName the player's name
      */
+    @Deprecated
     public void removeBanned(String playerName)
     {
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            playerName = UUIDMigration.getForcedPlayerUUID(playerName).toString();
+        }
         if (getBannedPlayers().contains(playerName))
         {
             getBannedPlayers().remove(playerName);
+        }
+
+        save();
+    }
+    
+    /**
+     * Check whether a player is banned
+     *
+     * @param playerUniqueId the player's name
+     * @return whether player is banned
+     */
+    public boolean isBanned(UUID playerUniqueId)
+    {
+        for (String pl : getBannedPlayers())
+        {
+            if (pl.equals(playerUniqueId.toString()))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Add a player to the banned list
+     *
+     * @param playerUniqueId the player's name
+     */
+    public void addBanned(UUID playerUniqueId)
+    {
+        if (!bannedPlayers.contains(playerUniqueId.toString()))
+        {
+            getBannedPlayers().add(playerUniqueId.toString());
+        }
+
+        save();
+    }
+
+    /**
+     * Remove a player from the banned list
+     *
+     * @param playerUniqueId the player's name
+     */
+    public void removeBanned(UUID playerUniqueId)
+    {
+        if (getBannedPlayers().contains(playerUniqueId.toString()))
+        {
+            getBannedPlayers().remove(playerUniqueId.toString());
         }
 
         save();

@@ -91,7 +91,7 @@ public class RosterCommand
                 for (ClanPlayer cp : leaders)
                 {
 
-                    Player p = plugin.getServer().getPlayer(cp.getName());
+                    Player p = cp.toPlayer();
 
                     String name = plugin.getSettingsManager().getPageLeaderColor() + cp.getName();
                     String lastSeen = (p != null && p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());
@@ -102,7 +102,7 @@ public class RosterCommand
 
                 for (ClanPlayer cp : members)
                 {
-                    Player p = plugin.getServer().getPlayer(cp.getName());
+                    Player p = cp.toPlayer();
 
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
                     String lastSeen = (p != null && p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString());

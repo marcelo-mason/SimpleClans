@@ -13,6 +13,8 @@ import java.util.Date;
 import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
+import org.bukkit.OfflinePlayer;
 
 /**
  * @author phaed
@@ -20,7 +22,8 @@ import java.util.List;
 public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 {
     private static final long serialVersionUID = 1L;
-    private String name;
+    private UUID uniqueId;
+    private String displayName;
     private boolean leader;
     private boolean trusted;
     private String tag;
@@ -57,9 +60,34 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     /**
      * @param playerName
      */
+    @Deprecated
     public ClanPlayer(String playerName)
     {
-        this.name = playerName;
+        this.displayName = playerName;
+        this.lastSeen = (new Date()).getTime();
+        this.joinDate = (new Date()).getTime();
+        this.neutralKills = 0;
+        this.rivalKills = 0;
+        this.civilianKills = 0;
+        this.tag = "";
+        this.channel = Channel.NONE;
+    }
+    
+    /**
+     * @param playerUniqueId
+     */
+    public ClanPlayer(UUID playerUniqueId)
+    {
+        this.uniqueId = playerUniqueId;
+        Player OnlinePlayer = Helper.matchOnePlayer(playerUniqueId);
+        if (OnlinePlayer != null) 
+        {
+            this.displayName = OnlinePlayer.getName();
+        } else 
+        {
+            OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerUniqueId);
+            this.displayName = OfflinePlayer.getName();
+        }
         this.lastSeen = (new Date()).getTime();
         this.joinDate = (new Date()).getTime();
         this.neutralKills = 0;
@@ -87,15 +115,22 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         return other.getName().equals(this.getName());
     }
 
+    @Override
     public int compareTo(ClanPlayer other)
     {
-        return this.getName().compareToIgnoreCase(other.getName());
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            return this.getUniqueId().compareTo(other.getUniqueId());
+        } else 
+        {
+            return this.getName().compareToIgnoreCase(other.getName());
+        }
     }
 
     @Override
     public String toString()
     {
-        return name;
+        return displayName;
     }
 
     /**
@@ -105,9 +140,19 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public String getName()
     {
-        return name;
+        return displayName;
     }
-
+    
+    /**
+     * (used internally)
+     *
+     * @return the uniqueId
+     */
+    public UUID getUniqueId()
+    {
+        return uniqueId;
+    }
+    
     /**
      * Returns the clean name for this player (lowercase)
      *
@@ -115,7 +160,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public String getCleanName()
     {
-        return name.toLowerCase();
+        return displayName.toLowerCase();
     }
 
     /**
@@ -125,9 +170,19 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public void setName(String name)
     {
-        this.name = name;
+        this.displayName = name;
     }
-
+    
+    /**
+     * (used internally)
+     *
+     * @param uniqueId the name to set
+     */
+    public void setUniqueId(UUID uniqueId)
+    {
+        this.uniqueId = uniqueId;
+    }
+    
     /**
      * Whether this player is a leader or not
      *
@@ -879,7 +934,13 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
     public Player toPlayer()
     {
-        return SimpleClans.getInstance().getServer().getPlayer(this.name);
+        if (this.uniqueId != null) 
+        {
+            return Helper.matchOnePlayer(this.uniqueId);
+        } else 
+        {
+            return Helper.matchOnePlayer(this.displayName);
+        }
     }
 }
 

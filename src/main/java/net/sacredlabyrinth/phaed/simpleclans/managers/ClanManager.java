@@ -56,7 +56,22 @@ public final class ClanManager
      */
     public void importClanPlayer(ClanPlayer cp)
     {
-        this.clanPlayers.put(cp.getCleanName(), cp);
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            if (cp.getUniqueId() != null)
+            {
+                this.clanPlayers.put(cp.getUniqueId().toString(), cp);
+            } else 
+            {
+                SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
+                SimpleClans.log("[SimpleClans] [ERRO]: " + cp.getName() + "; UUID: ???");
+                SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
+            }
+        } else 
+        {
+            this.clanPlayers.put(cp.getCleanName(), cp);
+        }
+
     }
 
     /**
@@ -68,7 +83,14 @@ public final class ClanManager
      */
     public void createClan(Player player, String colorTag, String name)
     {
-        ClanPlayer cp = getCreateClanPlayer(player.getName());
+        ClanPlayer cp;
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            cp = getCreateClanPlayer(player.getUniqueId());
+        } else 
+        {
+            cp = getCreateClanPlayer(player.getName());
+        }
 
         boolean verified = !plugin.getSettingsManager().isRequireVerification() || plugin.getPermissionsManager().has(player, "simpleclans.mod.verify");
 
@@ -81,8 +103,15 @@ public final class ClanManager
         plugin.getStorageManager().updateClanPlayer(cp);
 
         SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
-
-        plugin.getSpoutPluginManager().processPlayer(player.getName());
+        
+        if (SimpleClans.getInstance().hasUUID()) 
+        {
+            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
+        } else 
+        {
+            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+        }
+        
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new CreateClanEvent(clan));
     }
 
@@ -136,6 +165,7 @@ public final class ClanManager
      * @param playerName
      * @return null if not in a clan
      */
+    @Deprecated
     public Clan getClanByPlayerName(String playerName)
     {
         ClanPlayer cp = getClanPlayer(playerName);
@@ -147,7 +177,25 @@ public final class ClanManager
 
         return null;
     }
+    
+    /**
+     * Get a player's clan
+     *
+     * @param playerUniqueId
+     * @return null if not in a clan
+     */
+    public Clan getClanByPlayerUniqueId(UUID playerUniqueId)
+    {
+        ClanPlayer cp = getClanPlayer(playerUniqueId);
 
+        if (cp != null)
+        {
+            return cp.getClan();
+        }
+
+        return null;
+    }
+    
     /**
      * @return the clans
      */
@@ -175,7 +223,13 @@ public final class ClanManager
      */
     public ClanPlayer getClanPlayer(Player player)
     {
-        return getClanPlayer(player.getName());
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            return getClanPlayer(player.getUniqueId());  
+        } else 
+        {
+            return getClanPlayer(player.getName());  
+        }
     }
 
     /**
@@ -185,9 +239,17 @@ public final class ClanManager
      * @param playerName
      * @return
      */
+    @Deprecated
     public ClanPlayer getClanPlayer(String playerName)
     {
-        ClanPlayer cp = clanPlayers.get(playerName.toLowerCase());
+        ClanPlayer cp;
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            cp = getClanPlayerName(playerName);
+        } else 
+        {
+            cp = clanPlayers.get(playerName.toLowerCase());
+        }
 
         if (cp == null)
         {
@@ -201,7 +263,55 @@ public final class ClanManager
 
         return cp;
     }
+    
+    /**
+     * Gets the ClanPlayer data object if a player is currently in a clan, null
+     * if he's not in a clan
+     *
+     * @param playerUniqueId
+     * @return
+     */
+    public ClanPlayer getClanPlayer(UUID playerUniqueId)
+    {
+        ClanPlayer cp = clanPlayers.get(playerUniqueId.toString());
 
+        if (cp == null)
+        {
+            return null;
+        }
+
+        if (cp.getClan() == null)
+        {
+            return null;
+        }
+
+        return cp;
+    }
+    
+    /**
+     * Gets the ClanPlayer data object if a player is currently in a clan, null
+     * if he's not in a clan
+     *
+     * @param playerDisplayName
+     * @return
+     */
+    public ClanPlayer getClanPlayerName(String playerDisplayName)
+    {
+        ClanPlayer cp = clanPlayers.get(Helper.matchOnePlayer(playerDisplayName).getUniqueId().toString());
+
+        if (cp == null)
+        {
+            return null;
+        }
+
+        if (cp.getClan() == null)
+        {
+            return null;
+        }
+
+        return cp;
+    }
+    
     /**
      * Gets the ClanPlayer data object for the player, will retrieve disabled
      * clan players as well, these are players who used to be in a clan but are
@@ -211,9 +321,30 @@ public final class ClanManager
      * @param playerName
      * @return
      */
+    @Deprecated
     public ClanPlayer getAnyClanPlayer(String playerName)
     {
-        return clanPlayers.get(playerName.toLowerCase());
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            return getClanPlayerName(playerName);
+        } else 
+        {
+           return clanPlayers.get(playerName.toLowerCase());
+        }
+    }
+    
+    /**
+     * Gets the ClanPlayer data object for the player, will retrieve disabled
+     * clan players as well, these are players who used to be in a clan but are
+     * not currently in one, their data file persists and can be accessed. their
+     * clan will be null though.
+     *
+     * @param playerUniqueId
+     * @return
+     */
+    public ClanPlayer getAnyClanPlayer(UUID playerUniqueId)
+    {
+        return clanPlayers.get(playerUniqueId.toString());
     }
 
     /**
@@ -222,6 +353,7 @@ public final class ClanManager
      * @param playerName
      * @return
      */
+    @Deprecated
     public ClanPlayer getCreateClanPlayer(String playerName)
     {
         if (clanPlayers.containsKey(playerName.toLowerCase()))
@@ -230,6 +362,50 @@ public final class ClanManager
         }
 
         ClanPlayer cp = new ClanPlayer(playerName);
+
+        plugin.getStorageManager().insertClanPlayer(cp);
+        importClanPlayer(cp);
+
+        return cp;
+    }
+    
+    /**
+     * Gets the ClanPlayer object for the player, creates one if not found
+     *
+     * @param playerDisplayName
+     * @return
+     */
+    public ClanPlayer getCreateClanPlayerUUID(String playerDisplayName)
+    {
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayer(playerDisplayName);
+            if (OnlinePlayer != null) {
+                return getCreateClanPlayer(OnlinePlayer.getUniqueId());
+            } else 
+            {
+                return null;
+            }
+        } else 
+        {
+            return getCreateClanPlayer(playerDisplayName);
+        }
+    }
+    
+    /**
+     * Gets the ClanPlayer object for the player, creates one if not found
+     *
+     * @param playerUniqueId
+     * @return
+     */
+    public ClanPlayer getCreateClanPlayer(UUID playerUniqueId)
+    {
+        if (clanPlayers.containsKey(playerUniqueId.toString()))
+        {
+            return clanPlayers.get(playerUniqueId.toString());
+        }
+
+        ClanPlayer cp = new ClanPlayer(playerUniqueId);
 
         plugin.getStorageManager().insertClanPlayer(cp);
         importClanPlayer(cp);
@@ -260,7 +436,7 @@ public final class ClanManager
      * @param player
      */
     public void updateDisplayName(Player player)
-    {
+    {        
         // do not update displayname if in compat mode
 
         if (plugin.getSettingsManager().isCompatMode())
@@ -1094,6 +1270,7 @@ public final class ClanManager
     /**
      * Processes a clan chat command
      *
+     * @param player
      * @param msg
      */
     public void processClanChat(Player player, String msg)
@@ -1161,7 +1338,7 @@ public final class ClanManager
 
             for (ClanPlayer cpp : cps)
             {
-                Player member = plugin.getServer().getPlayer(cpp.getName());
+                Player member = cpp.toPlayer();
 
                 ChatBlock.sendMessage(member, message);
             }
@@ -1199,6 +1376,7 @@ public final class ClanManager
     /**
      * Processes a ally chat command
      *
+     * @param player
      * @param msg
      */
     public void processAllyChat(Player player, String msg)
@@ -1257,12 +1435,20 @@ public final class ClanManager
 
             for (ClanPlayer ally : allies)
             {
-                if (player.getName().equalsIgnoreCase(ally.getName()))
+                Player member = ally.toPlayer();
+                if (SimpleClans.getInstance().hasUUID())
                 {
-                    continue;
+                    if (player.getUniqueId().equals(ally.getUniqueId()))
+                    {
+                        continue;
+                    }
+                } else 
+                {
+                    if (player.getName().equalsIgnoreCase(ally.getName()))
+                    {
+                        continue;
+                    }
                 }
-
-                Player member = plugin.getServer().getPlayer(ally.getName());
                 ChatBlock.sendMessage(member, message);
             }
         }
@@ -1271,11 +1457,20 @@ public final class ClanManager
     /**
      * Processes a global chat command
      *
+     * @param player
      * @param msg
+     * @return boolean
      */
     public boolean processGlobalChat(Player player, String msg)
     {
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player.getName());
+        ClanPlayer cp;
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            cp = plugin.getClanManager().getClanPlayer(player.getUniqueId());
+        } else 
+        {
+            cp = plugin.getClanManager().getClanPlayer(player.getName());
+        }
 
         if (cp == null)
         {

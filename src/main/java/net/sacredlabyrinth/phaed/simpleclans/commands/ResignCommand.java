@@ -40,7 +40,13 @@ public class ResignCommand
                 if (!clan.isLeader(player) || clan.getLeaders().size() > 1)
                 {
                     clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("0.has.resigned"), Helper.capitalize(player.getName())));
-                    clan.removePlayerFromClan(player.getName());
+                    if (SimpleClans.getInstance().hasUUID())
+                    {
+                        clan.removePlayerFromClan(player.getUniqueId());
+                    } else 
+                    {
+                        clan.removePlayerFromClan(player.getName()); 
+                    }
                 }
                 else if (clan.isLeader(player) && clan.getLeaders().size() == 1)
                 {

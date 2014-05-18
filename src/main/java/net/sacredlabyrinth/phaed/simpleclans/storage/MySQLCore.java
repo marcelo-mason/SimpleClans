@@ -236,7 +236,8 @@ public class MySQLCore implements DBCore
     /**
      * Check whether a colum exists
      *
-     * @param column
+     * @param tabell
+     * @param colum
      * @return
      */
     @Override

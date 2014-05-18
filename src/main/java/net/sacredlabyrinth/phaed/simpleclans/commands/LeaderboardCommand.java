@@ -56,7 +56,7 @@ public class LeaderboardCommand
 
                 for (ClanPlayer cp : clanPlayers)
                 {
-                    Player p = plugin.getServer().getPlayer(cp.getName());
+                    Player p = cp.toPlayer();
 
                     boolean isOnline = false;
 

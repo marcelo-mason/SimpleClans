@@ -66,6 +66,7 @@ public interface DBCore
     /**
      * Check whether a colum exists
      *
+     * @param tabell
      * @param colum
      * @return
      */

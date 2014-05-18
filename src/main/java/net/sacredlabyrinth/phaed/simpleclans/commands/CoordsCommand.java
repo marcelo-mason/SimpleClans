@@ -59,7 +59,7 @@ public class CoordsCommand
 
                             for (ClanPlayer cpm : members)
                             {
-                                Player p = plugin.getServer().getPlayer(cpm.getName());
+                                Player p = cpm.toPlayer();
 
                                 if (p != null)
                                 {

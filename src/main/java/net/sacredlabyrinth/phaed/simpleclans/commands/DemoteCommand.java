@@ -42,15 +42,45 @@ public class DemoteCommand
                     if (arg.length == 1)
                     {
                         String demotedName = arg[0];
+                        boolean allOtherLeadersOnline;
+                        
+                        if (demotedName == null) 
+                        {
+                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
+                            return;
+                        }
+                        
+                        Player pDemote = Helper.matchOnePlayer(demotedName);
+                        
+                        if (SimpleClans.getInstance().hasUUID())
+                        {
+                            if (pDemote == null) 
+                            {
+                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
+                                return;
+                            } else 
+                            {
+                                allOtherLeadersOnline = clan.allOtherLeadersOnline(pDemote.getUniqueId());
+                            }
+                        } else 
+                        {
+                            allOtherLeadersOnline = clan.allOtherLeadersOnline(demotedName);
+                        }
 
-                        if (clan.allOtherLeadersOnline(demotedName))
+                        if (allOtherLeadersOnline)
                         {
                             if (clan.isLeader(demotedName))
                             {
                                 if (clan.getLeaders().size() == 1|| !plugin.getSettingsManager().isConfirmationForDemote())
                                 {
                                     clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("demoted.back.to.member"), Helper.capitalize(demotedName)));
-                                    clan.demote(demotedName);
+                                    if (SimpleClans.getInstance().hasUUID())
+                                    {
+                                        clan.demote(pDemote.getUniqueId());
+                                    } else 
+                                    {
+                                        clan.demote(demotedName);
+                                    }
                                 }
                                 else
                                 {

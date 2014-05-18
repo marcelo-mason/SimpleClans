@@ -86,7 +86,13 @@ public class PromoteCommand
         }
 
         clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted.getName())));
-        clan.promote(promoted.getName());
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            clan.promote(promoted.getUniqueId());
+        } else 
+        {
+            clan.promote(promoted.getName());
+        }
     }
 }
 
