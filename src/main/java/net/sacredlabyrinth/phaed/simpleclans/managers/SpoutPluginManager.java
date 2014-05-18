@@ -1,9 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import java.util.UUID;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
@@ -48,11 +50,30 @@ public final class SpoutPluginManager
      *
      * @param playerName
      */
+    @Deprecated
     public void processPlayer(String playerName)
     {
         if (isHasSpout())
         {
             Player player = Helper.matchOnePlayer(playerName);
+
+            if (player != null)
+            {
+                processPlayer(player);
+            }
+        }
+    }
+    
+    /**
+     * Adds cape and title to a player
+     *
+     * @param playerUniqueId
+     */
+    public void processPlayer(UUID playerUniqueId)
+    {
+        if (isHasSpout())
+        {
+            Player player = Helper.matchOnePlayer(playerUniqueId);
 
             if (player != null)
             {

@@ -51,8 +51,13 @@ public class TrustCommand
                                 {
                                     if (!clan.isLeader(trusted))
                                     {
-                                        ClanPlayer tcp = plugin.getClanManager().getCreateClanPlayer(trusted);
-
+                                        ClanPlayer tcp = plugin.getClanManager().getClanPlayerName(trusted);
+                                        if (tcp == null) 
+                                        {
+                                            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
+                                            return;
+                                        }
+                                        
                                         if (!tcp.isTrusted())
                                         {
                                             clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.trusted.status.by"), Helper.capitalize(trusted), player.getName()));

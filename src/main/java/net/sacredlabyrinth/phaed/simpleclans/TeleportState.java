@@ -50,7 +50,7 @@ public class TeleportState
      */
     public Player getPlayer()
     {
-        return SimpleClans.getInstance().getServer().getPlayer(playerName);
+        return Helper.matchOnePlayer(playerName);
     }
 
     /**

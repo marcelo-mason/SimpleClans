@@ -252,8 +252,12 @@ public final class RequestManager
 
         if (vote.equals(VoteResult.ACCEPT))
         {
-            ClanPlayer cp = plugin.getClanManager().getCreateClanPlayer(invited);
-
+            ClanPlayer cp = plugin.getClanManager().getCreateClanPlayerUUID(invited);
+            if (cp == null) 
+            {
+                return;
+            }
+                                                    
             clan.addBb(ChatColor.AQUA + MessageFormat.format(plugin.getLang("joined.the.clan"), Helper.capitalize(invited)));
             plugin.getClanManager().serverAnnounce(MessageFormat.format(plugin.getLang("has.joined"), Helper.capitalize(invited), clan.getName()));
             clan.addPlayerToClan(cp);
@@ -382,11 +386,23 @@ public final class RequestManager
             {
                 Clan clan = req.getClan();
                 String demoted = req.getTarget();
+                Player pDemote = Helper.matchOnePlayer(demoted);
+                
+                if (pDemote == null)
+                {
+                    return;
+                }
 
                 if (denies.isEmpty())
                 {
                     clan.addBb(plugin.getLang("leaders"), ChatColor.AQUA + MessageFormat.format(plugin.getLang("demoted.back.to.member"), Helper.capitalize(demoted)));
-                    clan.demote(demoted);
+                    if (SimpleClans.getInstance().hasUUID())
+                    {
+                        clan.demote(pDemote.getUniqueId());
+                    } else 
+                    {
+                        clan.demote(demoted);
+                    }
                 }
                 else
                 {
@@ -402,7 +418,17 @@ public final class RequestManager
                 if (denies.isEmpty())
                 {
                     clan.addBb(plugin.getLang("leaders"), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted)));
-                    clan.promote(promoted);
+                    if (SimpleClans.getInstance().hasUUID())
+                    {
+                        Player pPromoted = Helper.matchOnePlayer(promoted);
+                        if (pPromoted != null)
+                        {
+                            clan.promote(pPromoted.getUniqueId());
+                        }
+                    } else 
+                    {
+                        clan.promote(promoted);
+                    }
                 }
                 else
                 {
@@ -487,7 +513,7 @@ public final class RequestManager
 
         if (req.getType().equals(ClanRequest.INVITE))
         {
-            Player player = plugin.getServer().getPlayer(req.getTarget());
+            Player player = Helper.matchOnePlayer(req.getTarget());
 
             if (player != null)
             {
@@ -503,7 +529,7 @@ public final class RequestManager
             {
                 if (cp.getVote() == null)
                 {
-                    Player player = plugin.getServer().getPlayer(cp.getName());
+                    Player player = cp.toPlayer();
 
                     if (player != null)
                     {

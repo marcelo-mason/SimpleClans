@@ -374,7 +374,13 @@ public final class CommandManager
         {
             if (plugin.getRequestManager().hasRequest(player.getName().toLowerCase()))
             {
-                cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
+                if (SimpleClans.getInstance().hasUUID())
+                {
+                    cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
+                } else 
+                {
+                    cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
+                }
                 plugin.getRequestManager().accept(cp);
             }
             else
@@ -431,7 +437,13 @@ public final class CommandManager
         {
             if (plugin.getRequestManager().hasRequest(player.getName().toLowerCase()))
             {
-                cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
+                if (SimpleClans.getInstance().hasUUID())
+                {
+                    cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
+                } else 
+                {
+                    cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
+                }
                 plugin.getRequestManager().deny(cp);
             }
             else

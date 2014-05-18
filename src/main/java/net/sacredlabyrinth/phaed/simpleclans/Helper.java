@@ -34,6 +34,7 @@ public class Helper
      * @param playername
      * @return matched player, null if more than one player matched
      */
+    @Deprecated
     public static Player matchOnePlayer(String playername)
     {
         List<Player> players = SimpleClans.getInstance().getServer().matchPlayer(playername);
@@ -41,6 +42,27 @@ public class Helper
         if (players.size() == 1)
         {
             return players.get(0);
+        }
+
+        return null;
+    }
+    
+    /**
+     * Ensures only one player can be matched from a partial name
+     *
+     * @param playerUniqueId
+     * @return matched player, null if more than one player matched
+     */
+    public static Player matchOnePlayer(UUID playerUniqueId)
+    {
+        Player[] players = SimpleClans.getInstance().getServer().getOnlinePlayers();
+
+        for (Player pOn : players)
+        {
+            if (pOn.getUniqueId().equals(playerUniqueId))
+            {
+                return pOn;
+            }
         }
 
         return null;
@@ -58,7 +80,7 @@ public class Helper
 
         if (players.size() == 1)
         {
-            return SimpleClans.getInstance().getPermissionsManager().getPrefix(players.get(0)) + players.get(0).getDisplayName() + SimpleClans.getInstance().getPermissionsManager().getSuffix(players.get(0));
+            return SimpleClans.getInstance().getPermissionsManager().getPrefix(players.get(0)) + players.get(0).getName() + SimpleClans.getInstance().getPermissionsManager().getSuffix(players.get(0));
         }
 
         return playerName;
@@ -522,6 +544,7 @@ public class Helper
      * @param playerName
      * @return
      */
+    @Deprecated
     public static boolean isOnline(String playerName)
     {
         Player[] online = SimpleClans.getInstance().getServer().getOnlinePlayers();
@@ -529,6 +552,28 @@ public class Helper
         for (Player o : online)
         {
             if (o.getName().equalsIgnoreCase(playerName))
+            {
+                return true;
+            }
+        }
+
+        return false;
+    }
+    
+
+    /**
+     * Check whether a player is online
+     *
+     * @param playerUniqueId
+     * @return
+     */
+    public static boolean isOnline(UUID playerUniqueId)
+    {
+        Player[] online = SimpleClans.getInstance().getServer().getOnlinePlayers();
+
+        for (Player o : online)
+        {
+            if (o.getUniqueId().equals(playerUniqueId))
             {
                 return true;
             }
@@ -549,7 +594,7 @@ public class Helper
 
         for (ClanPlayer cp : in)
         {
-            if (SimpleClans.getInstance().getServer().getPlayer(cp.getName()) != null)
+            if (cp.toPlayer() != null)
             {
                 out.add(cp);
             }
