@@ -10,6 +10,7 @@ import org.bukkit.inventory.PlayerInventory;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.CreateClanEvent;
 
 /**
@@ -297,7 +298,7 @@ public final class ClanManager
      */
     public ClanPlayer getClanPlayerName(String playerDisplayName)
     {
-        ClanPlayer cp = clanPlayers.get(Helper.matchOnePlayer(playerDisplayName).getUniqueId().toString());
+        ClanPlayer cp = clanPlayers.get(UUIDMigration.getForcedPlayerUUID(playerDisplayName).toString());
 
         if (cp == null)
         {
@@ -379,9 +380,9 @@ public final class ClanManager
     {
         if (SimpleClans.getInstance().hasUUID())
         {
-            Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayer(playerDisplayName);
-            if (OnlinePlayer != null) {
-                return getCreateClanPlayer(OnlinePlayer.getUniqueId());
+            UUID playerUniqueId = UUIDMigration.getForcedPlayerUUID(playerDisplayName);
+            if (playerUniqueId != null) {
+                return getCreateClanPlayer(playerUniqueId);
             } else 
             {
                 return null;
@@ -1427,7 +1428,7 @@ public final class ClanManager
             String message = code + plugin.getSettingsManager().getAllyChatBracketColor() + plugin.getSettingsManager().getAllyChatTagBracketLeft() + plugin.getSettingsManager().getAllyChatTagColor() + plugin.getSettingsManager().getCommandAlly() + plugin.getSettingsManager().getAllyChatBracketColor() + plugin.getSettingsManager().getAllyChatTagBracketRight() + " " + plugin.getSettingsManager().getAllyChatNameColor() + plugin.getSettingsManager().getAllyChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getAllyChatPlayerBracketRight() + " " + plugin.getSettingsManager().getAllyChatMessageColor() + msg;
             SimpleClans.log(message);
 
-            Player self = plugin.getServer().getPlayer(player.getName());
+            Player self = cp.toPlayer();
             ChatBlock.sendMessage(self, message);
 
             Set<ClanPlayer> allies = cp.getClan().getAllAllyMembers();

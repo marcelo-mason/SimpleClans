@@ -248,6 +248,10 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.ban.unban.player.1.ban.unban.a.player"), clanCommand, ChatColor.WHITE));
         }
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.hometp"))
+        {
+            chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.hometp.clan.1.tp.home.a.clan"), clanCommand, ChatColor.WHITE));
+        }
         if (plugin.getPermissionsManager().has(player, "simpleclans.mod.globalff"))
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.globalff.allow.auto.1.set.global.friendly.fire"), clanCommand, ChatColor.WHITE));

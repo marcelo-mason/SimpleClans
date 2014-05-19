@@ -7,6 +7,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 
 /**
  *
@@ -35,7 +36,14 @@ public class UnbanCommand
 
                 if (plugin.getSettingsManager().isBanned(banned))
                 {
-                    Player pl = Helper.matchOnePlayer(banned);
+                    Player pl;
+                    if (SimpleClans.getInstance().hasUUID())
+                    {
+                        pl = Helper.matchOnePlayer(UUIDMigration.getForcedPlayerUUID(banned));
+                    } else 
+                    {
+                        pl = Helper.matchOnePlayer(banned);
+                    }
 
                     if (pl != null)
                     {
