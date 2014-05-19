@@ -48,8 +48,6 @@ public class UUIDMigration {
         OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
         if (OnlinePlayer != null) {
             return OnlinePlayer.getUniqueId();
-        } else if (OfflinePlayer != null) {
-            return OfflinePlayer.getUniqueId();
         } else {
             for (ClanPlayer cp : SimpleClans.getInstance().getClanManager().getAllClanPlayers()) {
                 if (cp.getName().equalsIgnoreCase(playerDisplayName)) {
@@ -59,7 +57,11 @@ public class UUIDMigration {
             try {
                 return UUIDFetcher.getUUIDOf(playerDisplayName);
             } catch (Exception ex) {
-                return null;
+                if (OfflinePlayer != null) {
+                    return OfflinePlayer.getUniqueId();
+                } else {
+                    return null;
+                }
             }
         }
     }
