@@ -1,10 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.api;
 
-import java.io.File;
-import java.io.IOException;
-import java.net.URISyntaxException;
-import java.security.CodeSource;
 import java.util.UUID;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Bukkit;
@@ -48,11 +45,22 @@ public class UUIDMigration {
 
     public static UUID getForcedPlayerUUID(String playerDisplayName) {
         Player OnlinePlayer = Helper.matchOnePlayer(playerDisplayName);
+        OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
         if (OnlinePlayer != null) {
             return OnlinePlayer.getUniqueId();
-        } else {
-            OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
+        } else if (OfflinePlayer != null) {
             return OfflinePlayer.getUniqueId();
+        } else {
+            for (ClanPlayer cp : SimpleClans.getInstance().getClanManager().getAllClanPlayers()) {
+                if (cp.getName().equalsIgnoreCase(playerDisplayName)) {
+                    return cp.getUniqueId();
+                }
+            }
+            try {
+                return UUIDFetcher.getUUIDOf(playerDisplayName);
+            } catch (Exception ex) {
+                return null;
+            }
         }
     }
 

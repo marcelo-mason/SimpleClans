@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 
 /**
  * @author phaed
@@ -53,7 +54,14 @@ public class PromoteCommand
 
         }
 
-        Player promoted = Helper.matchOnePlayer(arg[0]);
+        Player promoted;
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            promoted = Helper.matchOnePlayer(UUIDMigration.getForcedPlayerUUID(arg[0]));
+        } else 
+        {
+            promoted = Helper.matchOnePlayer(arg[0]);
+        }
 
         if (promoted == null)
         {

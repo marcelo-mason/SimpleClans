@@ -41,7 +41,13 @@ public final class TeleportManager
     {
         int secs = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
 
-        waitingPlayers.put(player.getName(), new TeleportState(player, dest, clanName));
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            waitingPlayers.put(player.getUniqueId().toString(), new TeleportState(player, dest, clanName));
+        } else 
+        {
+            waitingPlayers.put(player.getName(), new TeleportState(player, dest, clanName));
+        }
 
         if (secs > 0)
         {

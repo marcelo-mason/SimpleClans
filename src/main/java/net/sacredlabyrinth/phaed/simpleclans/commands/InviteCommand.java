@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 
 /**
  *
@@ -41,7 +42,14 @@ public class InviteCommand
                 {
                     if (arg.length == 1)
                     {
-                        Player invited = Helper.matchOnePlayer(arg[0]);
+                        Player invited;
+                        if (SimpleClans.getInstance().hasUUID())
+                        {
+                            invited = Helper.matchOnePlayer(UUIDMigration.getForcedPlayerUUID(arg[0]));
+                        } else 
+                        {
+                            invited = Helper.matchOnePlayer(arg[0]);
+                        }
 
                         if (invited != null)
                         {

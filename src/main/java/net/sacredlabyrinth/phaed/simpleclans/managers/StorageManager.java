@@ -20,6 +20,7 @@ import java.util.UUID;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.api.UUIDFetcher;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 
 /**
  * @author phaed
@@ -69,8 +70,7 @@ public final class StorageManager
     {
         if (SimpleClans.getInstance().hasUUID())
         {
-            Player pOn = Helper.matchOnePlayer(player.getName());
-            chatBlocks.put(pOn.getUniqueId().toString(), cb);
+            chatBlocks.put(UUIDMigration.getForcedPlayerUUID(player.getName()).toString(), cb);
         } else 
         {
             chatBlocks.put(player.getName(), cb);

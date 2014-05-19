@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 import java.text.MessageFormat;
 import java.util.List;
 import java.util.Random;
+import net.sacredlabyrinth.phaed.simpleclans.events.PlayerHomeSetEvent;
 
 /**
  * @author phaed
@@ -45,6 +46,29 @@ public class HomeCommand
             {
                 clan.setHomeLocation(loc);
                 ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("hombase.mod.set"), clan.getName()) + " " + ChatColor.YELLOW + Helper.toLocationString(loc));
+            }
+        }
+        
+        if (arg.length == 2 && arg[0].equalsIgnoreCase("tp") && plugin.getPermissionsManager().has(player, "simpleclans.mod.hometp"))
+        {
+            Clan clan = plugin.getClanManager().getClan(arg[1]);
+
+            if (clan != null)
+            {
+                Location loc = clan.getHomeLocation();
+
+                if (loc == null)
+                {
+                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("hombase.not.set"));
+                    return;
+                }
+                player.teleport(loc);
+                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("now.at.homebase"), clan.getName()));
+                return;
+            } else 
+            {
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.does.not.exist"));
+                return;
             }
         }
 
@@ -112,6 +136,13 @@ public class HomeCommand
                 if (plugin.getSettingsManager().isHomebaseSetOnce() && clan.getHomeLocation() != null && !plugin.getPermissionsManager().has(player, "simpleclans.mod.home"))
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("home.base.only.once"));
+                    return;
+                }
+                
+                PlayerHomeSetEvent homeSetEvent = new PlayerHomeSetEvent(clan, cp, player.getLocation());
+                SimpleClans.getInstance().getServer().getPluginManager().callEvent(homeSetEvent);
+                if (homeSetEvent.isCancelled()) 
+                {
                     return;
                 }
 

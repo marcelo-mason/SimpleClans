@@ -9,6 +9,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 
 /**
  *
@@ -45,7 +46,7 @@ public class KickCommand
 
                         if (kicked != null)
                         {
-                            if (!kicked.equals(player.getName()))
+                            if (!kicked.equalsIgnoreCase(player.getName()))
                             {
                                 if (clan.isMember(kicked))
                                 {
@@ -54,7 +55,7 @@ public class KickCommand
                                         clan.addBb(player.getName(),  ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.kicked.by"), Helper.capitalize(kicked), player.getName()));
                                         if (SimpleClans.getInstance().hasUUID())
                                         {
-                                            clan.removePlayerFromClan(Helper.matchOnePlayer(kicked).getUniqueId());
+                                            clan.removePlayerFromClan(UUIDMigration.getForcedPlayerUUID(kicked));
                                         } else 
                                         {
                                             clan.removePlayerFromClan(kicked);

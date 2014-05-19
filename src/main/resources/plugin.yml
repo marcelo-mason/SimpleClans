@@ -21,6 +21,8 @@ permissions:
     description: Messages from these players cannot be hidden via chat commands
   simpleclans.mod.home:
     description: Can set other clan's home
+  simpleclans.mod.hometp:
+    description: Can teleport to all clans homes
   simpleclans.mod.bypass:
     description: Can bypass restrictions
   simpleclans.mod.nopvpinwar:

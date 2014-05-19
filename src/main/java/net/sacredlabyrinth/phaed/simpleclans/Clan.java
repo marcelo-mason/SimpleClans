@@ -12,6 +12,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.AllyClanAddEvent;
 import net.sacredlabyrinth.phaed.simpleclans.events.AllyClanRemoveEvent;
 import net.sacredlabyrinth.phaed.simpleclans.events.DisbandClanEvent;
@@ -310,10 +311,10 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (SimpleClans.getInstance().hasUUID())
         {
-            Player OnlinePlayer = Helper.matchOnePlayer(playerName);
-            if (OnlinePlayer != null)
+            UUID PlayerUniqueId = UUIDMigration.getForcedPlayerUUID(playerName);
+            if (PlayerUniqueId != null)
             {
-                return this.members.contains(OnlinePlayer.getUniqueId().toString());
+                return this.members.contains(PlayerUniqueId.toString());
             } else 
             {
                 return false;
@@ -484,10 +485,10 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (SimpleClans.getInstance().hasUUID())
         {
-            Player OnlinePlayer = Helper.matchOnePlayer(playerName);
-            if (OnlinePlayer != null)
+            UUID PlayerUniqueId = UUIDMigration.getForcedPlayerUUID(playerName);
+            if (PlayerUniqueId != null)
             {
-                this.members.remove(OnlinePlayer.getUniqueId().toString());
+                this.members.remove(PlayerUniqueId.toString());
             }
         } else 
         {
@@ -1348,9 +1349,8 @@ public class Clan implements Serializable, Comparable<Clan>
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
         }
 
-
-        Player matched = Helper.matchOnePlayer(playerName);
-
+        Player matched = cp.toPlayer();
+        
         if (matched != null)
         {
             SimpleClans.getInstance().getClanManager().updateDisplayName(matched);

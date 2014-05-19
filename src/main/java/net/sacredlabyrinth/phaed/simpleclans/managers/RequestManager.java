@@ -4,7 +4,9 @@ import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.UUID;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.RequestFinishedEvent;
 import net.sacredlabyrinth.phaed.simpleclans.events.RequestEvent;
 import org.bukkit.ChatColor;
@@ -386,11 +388,14 @@ public final class RequestManager
             {
                 Clan clan = req.getClan();
                 String demoted = req.getTarget();
-                Player pDemote = Helper.matchOnePlayer(demoted);
+                UUID demotedUniqueId = UUIDMigration.getForcedPlayerUUID(demoted);
                 
-                if (pDemote == null)
+                if (SimpleClans.getInstance().hasUUID())
                 {
-                    return;
+                    if (demotedUniqueId == null)
+                    {
+                        return;
+                    }
                 }
 
                 if (denies.isEmpty())
@@ -398,7 +403,7 @@ public final class RequestManager
                     clan.addBb(plugin.getLang("leaders"), ChatColor.AQUA + MessageFormat.format(plugin.getLang("demoted.back.to.member"), Helper.capitalize(demoted)));
                     if (SimpleClans.getInstance().hasUUID())
                     {
-                        clan.demote(pDemote.getUniqueId());
+                        clan.demote(demotedUniqueId);
                     } else 
                     {
                         clan.demote(demoted);
@@ -414,17 +419,21 @@ public final class RequestManager
             {
                 Clan clan = req.getClan();
                 String promoted = req.getTarget();
-
+                UUID promotedUniqueId = UUIDMigration.getForcedPlayerUUID(promoted);
+                
+                if (SimpleClans.getInstance().hasUUID())
+                {
+                    if (promotedUniqueId == null)
+                    {
+                        return;
+                    }
+                }
                 if (denies.isEmpty())
                 {
                     clan.addBb(plugin.getLang("leaders"), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted)));
                     if (SimpleClans.getInstance().hasUUID())
                     {
-                        Player pPromoted = Helper.matchOnePlayer(promoted);
-                        if (pPromoted != null)
-                        {
-                            clan.promote(pPromoted.getUniqueId());
-                        }
+                        clan.promote(promotedUniqueId);
                     } else 
                     {
                         clan.promote(promoted);
@@ -513,7 +522,14 @@ public final class RequestManager
 
         if (req.getType().equals(ClanRequest.INVITE))
         {
-            Player player = Helper.matchOnePlayer(req.getTarget());
+            Player player;
+            if (SimpleClans.getInstance().hasUUID())
+            {
+                player = Helper.matchOnePlayer(UUIDMigration.getForcedPlayerUUID(req.getTarget()));
+            } else 
+            {
+                player = Helper.matchOnePlayer(req.getTarget());
+            }
 
             if (player != null)
             {

@@ -1,10 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 public class TeleportState
 {
+    private UUID playerUniqueId;
     private String playerName;
     private Location playerLocation;
     private Location destination;
@@ -19,6 +21,7 @@ public class TeleportState
         this.playerName = player.getName();
         this.clanName = clanName;
         this.counter = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
+        this.playerUniqueId = player.getUniqueId();
     }
 
     /**
@@ -26,7 +29,7 @@ public class TeleportState
      */
     public Location getLocation()
     {
-        return playerLocation;
+        return this.playerLocation;
     }
 
     /**
@@ -35,9 +38,9 @@ public class TeleportState
      */
     public boolean isTeleportTime()
     {
-        if (counter > 1)
+        if (this.counter > 1)
         {
-            counter--;
+            this.counter--;
             return false;
         }
 
@@ -50,7 +53,13 @@ public class TeleportState
      */
     public Player getPlayer()
     {
-        return Helper.matchOnePlayer(playerName);
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            return Helper.matchOnePlayer(this.playerUniqueId);
+        } else 
+        {
+            return Helper.matchOnePlayer(this.playerName);
+        }
     }
 
     /**
@@ -59,7 +68,7 @@ public class TeleportState
      */
     public int getCounter()
     {
-        return counter;
+        return this.counter;
     }
 
     public void setCounter(int counter)
@@ -69,21 +78,26 @@ public class TeleportState
 
     public String getClanName()
     {
-        return clanName;
+        return this.clanName;
     }
 
     public Location getDestination()
     {
-        return destination;
+        return this.destination;
     }
 
     public boolean isProcessing()
     {
-        return processing;
+        return this.processing;
     }
 
     public void setProcessing(boolean processing)
     {
         this.processing = processing;
+    }
+    
+    public UUID getUniqueId()
+    {
+        return this.playerUniqueId;
     }
 }
