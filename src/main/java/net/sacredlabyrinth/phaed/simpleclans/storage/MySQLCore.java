@@ -6,12 +6,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.threads.ThreadUpdateSQL;
 
 /**
  * @author cc_madelg
  */
-public class MySQLCore implements DBCore
-{
+public class MySQLCore implements DBCore {
+
     private Logger log;
     private Connection connection;
     private String host;
@@ -32,7 +33,6 @@ public class MySQLCore implements DBCore
         this.username = username;
         this.password = password;
         this.log = SimpleClans.getLog();
-
         initialize();
     }
 
@@ -70,7 +70,6 @@ public class MySQLCore implements DBCore
         {
             initialize();
         }
-
         return connection;
     }
 
@@ -120,7 +119,6 @@ public class MySQLCore implements DBCore
             log.severe("Error at SQL Query: " + ex.getMessage());
             log.severe("Query: " + query);
         }
-
         return null;
     }
 
@@ -132,16 +130,24 @@ public class MySQLCore implements DBCore
     @Override
     public void insert(String query)
     {
-        try
+        if (SimpleClans.getInstance().getSettingsManager().getUseThreads())
         {
-            getConnection().createStatement().executeUpdate(query);
+            Thread th = new Thread(new ThreadUpdateSQL(getConnection(), query, "INSERT"));
+            th.start();
         }
-        catch (SQLException ex)
+        else
         {
-            if (!ex.toString().contains("not return ResultSet"))
+            try
             {
-                log.severe("Error at SQL INSERT Query: " + ex);
-                log.severe("Query: " + query);
+                getConnection().createStatement().executeUpdate(query);
+            }
+            catch (SQLException ex)
+            {
+                if (!ex.toString().contains("not return ResultSet"))
+                {
+                    log.severe("Error at SQL INSERT Query: " + ex);
+                    log.severe("Query: " + query);
+                }
             }
         }
     }
@@ -154,16 +160,24 @@ public class MySQLCore implements DBCore
     @Override
     public void update(String query)
     {
-        try
+        if (SimpleClans.getInstance().getSettingsManager().getUseThreads())
         {
-            getConnection().createStatement().executeUpdate(query);
+            Thread th = new Thread(new ThreadUpdateSQL(getConnection(), query, "UPDATE"));
+            th.start();
         }
-        catch (SQLException ex)
+        else
         {
-            if (!ex.toString().contains("not return ResultSet"))
+            try
             {
-                log.severe("Error at SQL UPDATE Query: " + ex);
-                log.severe("Query: " + query);
+                getConnection().createStatement().executeUpdate(query);
+            }
+            catch (SQLException ex)
+            {
+                if (!ex.toString().contains("not return ResultSet"))
+                {
+                    log.severe("Error at SQL UPDATE Query: " + ex);
+                    log.severe("Query: " + query);
+                }
             }
         }
     }
@@ -176,16 +190,24 @@ public class MySQLCore implements DBCore
     @Override
     public void delete(String query)
     {
-        try
+        if (SimpleClans.getInstance().getSettingsManager().getUseThreads())
         {
-            getConnection().createStatement().executeUpdate(query);
+            Thread th = new Thread(new ThreadUpdateSQL(getConnection(), query, "DELETE"));
+            th.start();
         }
-        catch (SQLException ex)
+        else
         {
-            if (!ex.toString().contains("not return ResultSet"))
+            try
             {
-                log.severe("Error at SQL DELETE Query: " + ex);
-                log.severe("Query: " + query);
+                getConnection().createStatement().executeUpdate(query);
+            }
+            catch (SQLException ex)
+            {
+                if (!ex.toString().contains("not return ResultSet"))
+                {
+                    log.severe("Error at SQL DELETE Query: " + ex);
+                    log.severe("Query: " + query);
+                }
             }
         }
     }
@@ -232,7 +254,7 @@ public class MySQLCore implements DBCore
             return false;
         }
     }
-    
+
     /**
      * Check whether a colum exists
      *

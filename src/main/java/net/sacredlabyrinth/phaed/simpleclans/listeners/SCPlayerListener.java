@@ -282,7 +282,15 @@ public class SCPlayerListener implements Listener
             @Override
             public void run()
             {
-                ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
+                ClanPlayer cp;
+                if (SimpleClans.getInstance().getSettingsManager().getUseBungeeCord())
+                {
+                    cp = SimpleClans.getInstance().getClanManager().getClanPlayerJoinEvent(player);
+                }
+                else 
+                {
+                    cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
+                }
 
                 if (cp == null)
                 {
