@@ -102,8 +102,8 @@ public final class CommandManager
     }
 
     /**
+     * @param sender
      * @param args
-     * @return
      */
     public void processClan(CommandSender sender, String[] args)
     {

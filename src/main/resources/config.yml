@@ -40,6 +40,7 @@ settings:
     - '4'
     server-name: '&9MinecraftServer'
     new-clan-verification-required: true
+    allow-regroup-command: true
 spout:
     in-game-tags: true
     alert-url: ''
@@ -141,3 +142,6 @@ permissions:
   auto-group-groupname: true
   YourClanNameHere:
   - test.permission
+performance:
+  use-threads: false
+  use-bungeecord: false

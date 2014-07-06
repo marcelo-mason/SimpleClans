@@ -133,6 +133,9 @@ public final class SettingsManager
     private boolean tamableMobsSharing;
     private int strifeLimit;
     private boolean autoWar;
+    private boolean allowReGroupCommand;
+    private boolean useThreads;
+    private boolean useBungeeCord;
 
     /**
      *
@@ -283,6 +286,9 @@ public final class SettingsManager
         tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         strifeLimit = getConfig().getInt("war.strife-limit");
         autoWar = getConfig().getBoolean("war.auto-war-start");
+        allowReGroupCommand = getConfig().getBoolean("settings.allow-regroup-command");
+        useThreads = getConfig().getBoolean("performance.use-threads");
+        useBungeeCord = getConfig().getBoolean("performance.use-bungeecord");
 
         save();
     }
@@ -1349,5 +1355,29 @@ public final class SettingsManager
     public boolean isDisableMessages()
     {
         return disableMessages;
+    }
+
+    /**
+     * @return the allowReGroupCommand
+     */
+    public boolean getAllowReGroupCommand()
+    {
+        return allowReGroupCommand;
+    }
+    
+    /**
+     * @return the useThreads
+     */
+    public boolean getUseThreads()
+    {
+        return useThreads;
+    }
+    
+    /**
+     * @return the useBungeeCord
+     */
+    public boolean getUseBungeeCord()
+    {
+        return useBungeeCord;
     }
 }

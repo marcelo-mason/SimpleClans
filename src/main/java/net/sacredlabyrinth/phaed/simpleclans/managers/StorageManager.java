@@ -222,6 +222,32 @@ public final class StorageManager
         }
     }
 
+    /**
+     * Import one ClanPlayer data from database to memory
+     * Used for BungeeCord Reload ClanPlayer and your Clan
+     * 
+     * @param player
+     */
+    public void importFromDatabaseOnePlayer(Player player)
+    {
+        plugin.getClanManager().deleteClanPlayerFromMemory(player.getUniqueId());
+
+        ClanPlayer cp = retrieveOneClanPlayer(player.getUniqueId());
+        
+        if (cp != null) 
+        {
+            Clan tm = cp.getClan();
+
+            if (tm != null)
+            {
+                tm.importMember(cp);
+            }
+            plugin.getClanManager().importClanPlayer(cp);
+
+            SimpleClans.log("[SimpleClans] ClanPlayer Reloaded: " + player.getName() + ", UUID: " + player.getUniqueId().toString());
+        }
+    }
+    
     private void purgeClans(List<Clan> clans)
     {
         List<Clan> purge = new ArrayList<Clan>();
@@ -352,6 +378,86 @@ public final class StorageManager
         return out;
     }
 
+    /**
+     * Retrieves one Clan from the database
+     * Used for BungeeCord Reload ClanPlayer and your Clan
+     *
+     * @param tagClan
+     * @return
+     */
+    public Clan retrieveOneClan(String tagClan)
+    {
+        Clan out = null;
+
+        String query = "SELECT * FROM  `sc_clans` WHERE `tag` = '" + tagClan + "';";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        boolean verified = res.getBoolean("verified");
+                        boolean friendly_fire = res.getBoolean("friendly_fire");
+                        String tag = res.getString("tag");
+                        String color_tag = Helper.parseColors(res.getString("color_tag"));
+                        String name = res.getString("name");
+                        String packed_allies = res.getString("packed_allies");
+                        String packed_rivals = res.getString("packed_rivals");
+                        String packed_bb = res.getString("packed_bb");
+                        String cape_url = res.getString("cape_url");
+                        String flags = res.getString("flags");
+                        long founded = res.getLong("founded");
+                        long last_used = res.getLong("last_used");
+                        double balance = res.getDouble("balance");
+
+                        if (founded == 0)
+                        {
+                            founded = (new Date()).getTime();
+                        }
+
+                        if (last_used == 0)
+                        {
+                            last_used = (new Date()).getTime();
+                        }
+
+                        Clan clan = new Clan();
+                        clan.setFlags(flags);
+                        clan.setVerified(verified);
+                        clan.setFriendlyFire(friendly_fire);
+                        clan.setTag(tag);
+                        clan.setColorTag(color_tag);
+                        clan.setName(name);
+                        clan.setPackedAllies(packed_allies);
+                        clan.setPackedRivals(packed_rivals);
+                        clan.setPackedBb(packed_bb);
+                        clan.setCapeUrl(cape_url);
+                        clan.setFounded(founded);
+                        clan.setLastUsed(last_used);
+                        clan.setBalance(balance);
+
+                        out = clan;
+                    } catch (Exception ex)
+                    {
+                        for (StackTraceElement el : ex.getStackTrace())
+                        {
+                            System.out.print(el.toString());
+                        }
+                    }
+                }
+            } catch (SQLException ex)
+            {
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
+    }
+    
     /**
      * Retrieves the strifes relativ to another clan
      *
@@ -494,6 +600,119 @@ public final class StorageManager
     }
 
     /**
+     * Retrieves one clan player from the database
+     * Used for BungeeCord Reload ClanPlayer and your Clan
+     *
+     * @param playerUniqueId
+     * @return
+     */
+    public ClanPlayer retrieveOneClanPlayer(UUID playerUniqueId)
+    {
+        ClanPlayer out = null;
+
+        String query = "SELECT * FROM `sc_players` WHERE `uuid` = '" + playerUniqueId.toString() + "';";
+        ResultSet res = core.select(query);
+
+        if (res != null)
+        {
+            try
+            {
+                while (res.next())
+                {
+                    try
+                    {
+                        String uuid = res.getString("uuid");
+                        String name = res.getString("name");
+                        String tag = res.getString("tag");
+                        boolean leader = res.getBoolean("leader");
+                        boolean friendly_fire = res.getBoolean("friendly_fire");
+                        boolean trusted = res.getBoolean("trusted");
+                        int neutral_kills = res.getInt("neutral_kills");
+                        int rival_kills = res.getInt("rival_kills");
+                        int civilian_kills = res.getInt("civilian_kills");
+                        int deaths = res.getInt("deaths");
+                        long last_seen = res.getLong("last_seen");
+                        long join_date = res.getLong("join_date");
+                        String flags = res.getString("flags");
+                        String packed_past_clans = Helper.parseColors(res.getString("packed_past_clans"));
+
+                        if (last_seen == 0)
+                        {
+                            last_seen = (new Date()).getTime();
+                        }
+
+                        if (join_date == 0)
+                        {
+                            join_date = (new Date()).getTime();
+                        }
+
+                        ClanPlayer cp = new ClanPlayer();
+                        if (uuid != null) {
+                            cp.setUniqueId(UUID.fromString(uuid));
+                        }
+                        cp.setFlags(flags);
+                        cp.setName(name);
+                        cp.setLeader(leader);
+                        cp.setFriendlyFire(friendly_fire);
+                        cp.setNeutralKills(neutral_kills);
+                        cp.setRivalKills(rival_kills);
+                        cp.setCivilianKills(civilian_kills);
+                        cp.setDeaths(deaths);
+                        cp.setLastSeen(last_seen);
+                        cp.setJoinDate(join_date);
+                        cp.setPackedPastClans(packed_past_clans);
+                        cp.setTrusted(leader || trusted);
+
+                        if (!tag.isEmpty())
+                        {
+                            Clan clanDB = retrieveOneClan(tag);
+                            Clan clan = SimpleClans.getInstance().getClanManager().getClan(tag);
+
+                            if (clan != null)
+                            {
+                                Clan clanReSync = SimpleClans.getInstance().getClanManager().getClan(tag);
+                                clanReSync.setFlags(clanDB.getFlags());
+                                clanReSync.setVerified(clanDB.isVerified());
+                                clanReSync.setFriendlyFire(clanDB.isFriendlyFire());
+                                clanReSync.setTag(clanDB.getTag());
+                                clanReSync.setColorTag(clanDB.getColorTag());
+                                clanReSync.setName(clanDB.getName());
+                                clanReSync.setPackedAllies(clanDB.getPackedAllies());
+                                clanReSync.setPackedRivals(clanDB.getPackedRivals());
+                                clanReSync.setPackedBb(clanDB.getPackedBb());
+                                clanReSync.setCapeUrl(clanDB.getCapeUrl());
+                                clanReSync.setFounded(clanDB.getFounded());
+                                clanReSync.setLastUsed(clanDB.getLastUsed());
+                                clanReSync.setBalance(clanDB.getBalance());
+                                cp.setClan(clanReSync);
+                            } else {
+                                plugin.getClanManager().importClan(clanDB);
+                                clanDB.validateWarring();
+                                Clan newclan = SimpleClans.getInstance().getClanManager().getClan(clanDB.getTag());
+                                cp.setClan(newclan);
+                            }
+                        }
+
+                        out = cp;
+                    } catch (Exception ex)
+                    {
+                        for (StackTraceElement el : ex.getStackTrace())
+                        {
+                            System.out.print(el.toString());
+                        }
+                    }
+                }
+            } catch (SQLException ex)
+            {
+                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
+                SimpleClans.getLog().log(Level.SEVERE, null, ex);
+            }
+        }
+
+        return out;
+    }
+    
+    /**
      * Insert a clan into the database
      *
      * @param clan
@@ -571,7 +790,7 @@ public final class StorageManager
         {
             if (Helper.existsEntry(core, "sc_war", "clan_name", clan.getTag()))
             {
-                war += "DELETE FROM `sc_war` WHERE clan_name = '" + clan.getTag() + "';";
+                war = "DELETE FROM `sc_war` WHERE clan_name = '" + clan.getTag() + "';";
             }
         } catch (SQLException ex)
         {
