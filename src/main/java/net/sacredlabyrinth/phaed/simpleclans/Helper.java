@@ -1,5 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -9,7 +10,6 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
-import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 
 /**
  * @author phaed
@@ -46,7 +46,7 @@ public class Helper
 
         return null;
     }
-    
+
     /**
      * Ensures only one player can be matched from a partial name
      *
@@ -55,7 +55,7 @@ public class Helper
      */
     public static Player matchOnePlayer(UUID playerUniqueId)
     {
-        Player[] players = SimpleClans.getInstance().getServer().getOnlinePlayers();
+        Collection<Player> players = (Collection<Player>) SimpleClans.getInstance().getServer().getOnlinePlayers();
 
         for (Player pOn : players)
         {
@@ -547,7 +547,7 @@ public class Helper
     @Deprecated
     public static boolean isOnline(String playerName)
     {
-        Player[] online = SimpleClans.getInstance().getServer().getOnlinePlayers();
+        Collection<Player> online = (Collection<Player>) SimpleClans.getInstance().getServer().getOnlinePlayers();
 
         for (Player o : online)
         {
@@ -559,7 +559,7 @@ public class Helper
 
         return false;
     }
-    
+
 
     /**
      * Check whether a player is online
@@ -569,7 +569,7 @@ public class Helper
      */
     public static boolean isOnline(UUID playerUniqueId)
     {
-        Player[] online = SimpleClans.getInstance().getServer().getOnlinePlayers();
+        Collection<Player> online = (Collection<Player>) SimpleClans.getInstance().getServer().getOnlinePlayers();
 
         for (Player o : online)
         {

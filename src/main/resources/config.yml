@@ -38,7 +38,7 @@ settings:
     language: en
     disallowed-tag-colors:
     - '4'
-    server-name: '&9MinecraftServer'
+    server-name: '&4SimpleClans'
     new-clan-verification-required: true
     allow-regroup-command: true
 spout:

@@ -13,10 +13,15 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.7.2-R0.3-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:Vault:1.2.19" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.sacredlabyrinth.Phaed:PreciousStones:9.6.6" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.7.9-R0.2" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.bukkit:bukkit:1.8-R0.1-SNAPSHOT" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.9" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.googlecode.json-simple:json-simple:1.1" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: org.avaje:ebean:2.7.3" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: javax.persistence:persistence-api:1.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: com.google.guava:guava:17.0" level="project" />
+    <orderEntry type="library" scope="PROVIDED" name="Maven: commons-lang:commons-lang:2.3" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.milkbowl.vault:VaultAPI:1.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.nijikokun.bukkit:Permissions:2.7.4" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: org.yaml:snakeyaml:1.7" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.sacredlabyrinth.Phaed:PreciousStones:9.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.getspout:spoutplugin:dev-SNAPSHOT" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: n.mDev.MiracleM4n.mChatSuite:mChatSuite:1.4.5-R0.1.9-Unknown" level="project" />

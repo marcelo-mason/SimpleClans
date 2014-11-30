@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import java.util.UUID;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
@@ -10,6 +9,9 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.Plugin;
 import org.getspout.spoutapi.player.SpoutPlayer;
+
+import java.util.Collection;
+import java.util.UUID;
 
 import static org.getspout.spoutapi.SpoutManager.*;
 /**
@@ -36,7 +38,7 @@ public final class SpoutPluginManager
     {
         if (isHasSpout())
         {
-            Player[] onlinePlayers = plugin.getServer().getOnlinePlayers();
+            Collection<Player> onlinePlayers = (Collection<Player>) plugin.getServer().getOnlinePlayers();
 
             for (Player player : onlinePlayers)
             {
@@ -59,7 +61,7 @@ public final class SpoutPluginManager
             if (SimpleClans.getInstance().hasUUID())
             {
                 player = Helper.matchOnePlayer(UUIDMigration.getForcedPlayerUUID(playerName));
-            } else 
+            } else
             {
                 player = Helper.matchOnePlayer(playerName);
             }
@@ -70,7 +72,7 @@ public final class SpoutPluginManager
             }
         }
     }
-    
+
     /**
      * Adds cape and title to a player
      *

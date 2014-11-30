@@ -1,6 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
+import net.sacredlabyrinth.phaed.simpleclans.events.CreateClanEvent;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
@@ -10,8 +12,6 @@ import org.bukkit.inventory.PlayerInventory;
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.util.*;
-import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
-import net.sacredlabyrinth.phaed.simpleclans.events.CreateClanEvent;
 
 /**
  * @author phaed
@@ -62,13 +62,13 @@ public final class ClanManager
             if (cp.getUniqueId() != null)
             {
                 this.clanPlayers.put(cp.getUniqueId().toString(), cp);
-            } else 
+            } else
             {
                 SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
                 SimpleClans.log("[SimpleClans] [ERRO]: " + cp.getName() + "; UUID: ???");
                 SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
             }
-        } else 
+        } else
         {
             this.clanPlayers.put(cp.getCleanName(), cp);
         }
@@ -88,7 +88,7 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             cp = getCreateClanPlayer(player.getUniqueId());
-        } else 
+        } else
         {
             cp = getCreateClanPlayer(player.getName());
         }
@@ -104,15 +104,15 @@ public final class ClanManager
         plugin.getStorageManager().updateClanPlayer(cp);
 
         SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
-        
-        if (SimpleClans.getInstance().hasUUID()) 
+
+        if (SimpleClans.getInstance().hasUUID())
         {
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else 
+        } else
         {
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
         }
-        
+
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new CreateClanEvent(clan));
     }
 
@@ -126,7 +126,7 @@ public final class ClanManager
         clanPlayers.remove(cp.getCleanName());
         plugin.getStorageManager().deleteClanPlayer(cp);
     }
-    
+
     /**
      * Delete a player data from memory
      *
@@ -188,7 +188,7 @@ public final class ClanManager
 
         return null;
     }
-    
+
     /**
      * Get a player's clan
      *
@@ -206,7 +206,7 @@ public final class ClanManager
 
         return null;
     }
-    
+
     /**
      * @return the clans
      */
@@ -238,13 +238,13 @@ public final class ClanManager
         SimpleClans.getInstance().getStorageManager().importFromDatabaseOnePlayer(player);
         if (SimpleClans.getInstance().hasUUID())
         {
-            return getClanPlayer(player.getUniqueId());  
-        } else 
+            return getClanPlayer(player.getUniqueId());
+        } else
         {
-            return getClanPlayer(player.getName());  
+            return getClanPlayer(player.getName());
         }
     }
-    
+
     /**
      * Gets the ClanPlayer data object if a player is currently in a clan, null
      * if he's not in a clan
@@ -256,10 +256,10 @@ public final class ClanManager
     {
         if (SimpleClans.getInstance().hasUUID())
         {
-            return getClanPlayer(player.getUniqueId());  
-        } else 
+            return getClanPlayer(player.getUniqueId());
+        } else
         {
-            return getClanPlayer(player.getName());  
+            return getClanPlayer(player.getName());
         }
     }
 
@@ -277,7 +277,7 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             cp = getClanPlayerName(playerName);
-        } else 
+        } else
         {
             cp = clanPlayers.get(playerName.toLowerCase());
         }
@@ -294,7 +294,7 @@ public final class ClanManager
 
         return cp;
     }
-    
+
     /**
      * Gets the ClanPlayer data object if a player is currently in a clan, null
      * if he's not in a clan
@@ -318,7 +318,7 @@ public final class ClanManager
 
         return cp;
     }
-    
+
     /**
      * Gets the ClanPlayer data object if a player is currently in a clan, null
      * if he's not in a clan
@@ -342,7 +342,7 @@ public final class ClanManager
 
         return cp;
     }
-    
+
     /**
      * Gets the ClanPlayer data object for the player, will retrieve disabled
      * clan players as well, these are players who used to be in a clan but are
@@ -358,12 +358,12 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             return getClanPlayerName(playerName);
-        } else 
+        } else
         {
            return clanPlayers.get(playerName.toLowerCase());
         }
     }
-    
+
     /**
      * Gets the ClanPlayer data object for the player, will retrieve disabled
      * clan players as well, these are players who used to be in a clan but are
@@ -399,7 +399,7 @@ public final class ClanManager
 
         return cp;
     }
-    
+
     /**
      * Gets the ClanPlayer object for the player, creates one if not found
      *
@@ -413,16 +413,16 @@ public final class ClanManager
             UUID playerUniqueId = UUIDMigration.getForcedPlayerUUID(playerDisplayName);
             if (playerUniqueId != null) {
                 return getCreateClanPlayer(playerUniqueId);
-            } else 
+            } else
             {
                 return null;
             }
-        } else 
+        } else
         {
             return getCreateClanPlayer(playerDisplayName);
         }
     }
-    
+
     /**
      * Gets the ClanPlayer object for the player, creates one if not found
      *
@@ -451,7 +451,7 @@ public final class ClanManager
      */
     public void serverAnnounce(String msg)
     {
-        Player[] players = plugin.getServer().getOnlinePlayers();
+        Collection<Player> players = (Collection<Player>) plugin.getServer().getOnlinePlayers();
 
         for (Player player : players)
         {
@@ -467,7 +467,7 @@ public final class ClanManager
      * @param player
      */
     public void updateDisplayName(Player player)
-    {        
+    {
         // do not update displayname if in compat mode
 
         if (plugin.getSettingsManager().isCompatMode())
@@ -627,7 +627,7 @@ public final class ClanManager
 
         ItemStack h = inv.getHelmet();
 
-        if (h != null) 
+        if (h != null)
         {
             if (h.getType().equals(Material.CHAINMAIL_HELMET))
             {
@@ -660,7 +660,7 @@ public final class ClanManager
         }
         ItemStack c = inv.getChestplate();
 
-        if (c != null) 
+        if (c != null)
         {
             if (c.getType().equals(Material.CHAINMAIL_CHESTPLATE))
             {
@@ -693,7 +693,7 @@ public final class ClanManager
         }
         ItemStack l = inv.getLeggings();
 
-        if (l != null) 
+        if (l != null)
         {
             if (l.getType().equals(Material.CHAINMAIL_LEGGINGS))
             {
@@ -726,7 +726,7 @@ public final class ClanManager
         }
         ItemStack b = inv.getBoots();
 
-        if (b != null) 
+        if (b != null)
         {
             if (b.getType().equals(Material.CHAINMAIL_BOOTS))
             {
@@ -757,12 +757,12 @@ public final class ClanManager
                 out += ChatColor.RED + plugin.getLang("armor.B");
             }
         }
-        
+
         if (out.length() == 0)
         {
             out = ChatColor.BLACK + "None";
         }
-        
+
         return out;
     }
 
@@ -1394,7 +1394,7 @@ public final class ClanManager
 
     public void sendToAllSeeing(String msg, List<ClanPlayer> cps)
     {
-        Player[] players = plugin.getServer().getOnlinePlayers();
+        Collection<Player> players = (Collection<Player>) plugin.getServer().getOnlinePlayers();
 
         for (Player player : players)
         {
@@ -1487,7 +1487,7 @@ public final class ClanManager
                     {
                         continue;
                     }
-                } else 
+                } else
                 {
                     if (player.getName().equalsIgnoreCase(ally.getName()))
                     {
@@ -1512,7 +1512,7 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             cp = plugin.getClanManager().getClanPlayer(player.getUniqueId());
-        } else 
+        } else
         {
             cp = plugin.getClanManager().getClanPlayer(player.getName());
         }
