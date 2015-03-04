@@ -38,7 +38,7 @@ public final class SpoutPluginManager
     {
         if (isHasSpout())
         {
-            Collection<Player> onlinePlayers = (Collection<Player>) plugin.getServer().getOnlinePlayers();
+            Collection<Player> onlinePlayers = Helper.getOnlinePlayers();
 
             for (Player player : onlinePlayers)
             {

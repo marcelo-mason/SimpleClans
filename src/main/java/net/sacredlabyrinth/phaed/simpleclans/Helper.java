@@ -1,11 +1,13 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 
 import java.io.IOException;
+import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
@@ -109,7 +111,8 @@ public class Helper
         {
             Byte.parseByte(input);
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return false;
         }
@@ -142,7 +145,8 @@ public class Helper
         {
             Short.parseShort(input);
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return false;
         }
@@ -160,7 +164,8 @@ public class Helper
         {
             Integer.parseInt(input);
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return false;
         }
@@ -178,7 +183,8 @@ public class Helper
         {
             Float.parseFloat(input);
             return true;
-        } catch (Exception ex)
+        }
+        catch (Exception ex)
         {
             return false;
         }
@@ -449,6 +455,7 @@ public class Helper
     /*
      * Retrieves the last color code @param msg @return
      */
+
     /**
      * @param msg
      * @return
@@ -621,7 +628,8 @@ public class Helper
             {
                 return false;
             }
-        } catch (IOException e)
+        }
+        catch (IOException e)
         {
             return false;
         }
@@ -708,7 +716,7 @@ public class Helper
         });
 
         Map result = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext();)
+        for (Iterator it = list.iterator(); it.hasNext(); )
         {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());
@@ -729,5 +737,29 @@ public class Helper
             }
         }
         return false;
+    }
+
+    public static Collection<Player> getOnlinePlayers()
+    {
+        try
+        {
+            Method method = Bukkit.class.getDeclaredMethod("getOnlinePlayers");
+            Object players = method.invoke(null);
+
+            if (players instanceof Player[])
+            {
+                return new ArrayList<>(Arrays.asList((Player[])players));
+            }
+            else
+            {
+                return ((Collection<Player>) players);
+            }
+        }
+        catch (Exception e)
+        {
+            e.printStackTrace();
+        }
+
+        return new ArrayList<>();
     }
 }

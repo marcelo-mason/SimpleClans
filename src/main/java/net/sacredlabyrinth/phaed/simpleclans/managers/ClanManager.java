@@ -451,7 +451,7 @@ public final class ClanManager
      */
     public void serverAnnounce(String msg)
     {
-        Collection<Player> players = (Collection<Player>) plugin.getServer().getOnlinePlayers();
+        Collection<Player> players = Helper.getOnlinePlayers();
 
         for (Player player : players)
         {
@@ -1394,7 +1394,7 @@ public final class ClanManager
 
     public void sendToAllSeeing(String msg, List<ClanPlayer> cps)
     {
-        Collection<Player> players = (Collection<Player>) plugin.getServer().getOnlinePlayers();
+        Collection<Player> players = Helper.getOnlinePlayers();
 
         for (Player player : players)
         {
