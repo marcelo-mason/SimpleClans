@@ -27,7 +27,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>3.1</version>
                 <configuration>
                     <source>1.7</source>
                     <target>1.7</target>
@@ -41,7 +41,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-jar-plugin</artifactId>
-                <version>2.3.2</version>
+                <version>2.4</version>
                 <configuration>
                     <outputDirectory>${basedir}/out/</outputDirectory>
                     <!--<outputDirectory>F:\Minecraft\server\plugins\</outputDirectory>-->
@@ -111,9 +111,9 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:git:git:@github.com:SacredCoding/SimpleClans.git</connection>
-        <developerConnection>scm:git:git:@github.com:SacredCoding/SimpleClans.git</developerConnection>
-        <url>http://github.com/SacredCoding/SimpleClans.git/tree/master/</url>
+        <connection>scm:git:git:@github.com:phaed420/SimpleClans.git</connection>
+        <developerConnection>scm:git:git:@github.com:phaed420/SimpleClans.git</developerConnection>
+        <url>http://github.com/phaed420/SimpleClans.git/tree/master/</url>
         <tag>SimpleClans</tag>
     </scm>
 
