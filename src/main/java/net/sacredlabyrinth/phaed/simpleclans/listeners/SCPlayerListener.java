@@ -277,48 +277,41 @@ public class SCPlayerListener implements Listener
             return;
         }
 
-        SimpleClans.getInstance().getServer().getScheduler().scheduleSyncDelayedTask(plugin, new Runnable()
+        ClanPlayer cp;
+        if (SimpleClans.getInstance().getSettingsManager().getUseBungeeCord())
         {
-            @Override
-            public void run()
-            {
-                ClanPlayer cp;
-                if (SimpleClans.getInstance().getSettingsManager().getUseBungeeCord())
-                {
-                    cp = SimpleClans.getInstance().getClanManager().getClanPlayerJoinEvent(player);
-                }
-                else 
-                {
-                    cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
-                }
+            cp = SimpleClans.getInstance().getClanManager().getClanPlayerJoinEvent(player);
+        }
+        else
+        {
+            cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
+        }
 
-                if (cp == null)
-                {
-                    return;
-                }
-                cp.setName(player.getName());
-                SimpleClans.getInstance().getClanManager().updateLastSeen(player);
-                SimpleClans.getInstance().getClanManager().updateDisplayName(player);
-                if (SimpleClans.getInstance().hasUUID()) 
-                {
-                    SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-                } else 
-                {
-                    SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-                }
-                SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
+        if (cp == null)
+        {
+            return;
+        }
+        cp.setName(player.getName());
+        SimpleClans.getInstance().getClanManager().updateLastSeen(player);
+        SimpleClans.getInstance().getClanManager().updateDisplayName(player);
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
+        } else
+        {
+            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
+        }
+        SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
 
-                if (plugin.getSettingsManager().isBbShowOnLogin())
+        if (plugin.getSettingsManager().isBbShowOnLogin())
+        {
+                if (cp.isBbEnabled())
                 {
-                        if (cp.isBbEnabled())
-                        {
-                            cp.getClan().displayBb(player);
-                        }
+                    cp.getClan().displayBb(player);
                 }
-                
-                SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
-            }
-        }, 1);
+        }
+
+        SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
 
         if (event.getPlayer().isOp())
         {
