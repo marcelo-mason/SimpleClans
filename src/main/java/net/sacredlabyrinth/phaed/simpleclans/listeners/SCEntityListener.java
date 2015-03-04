@@ -1,9 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
-import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.*;
@@ -15,6 +13,8 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+
+import java.text.MessageFormat;
 
 /**
  * @author phaed
@@ -75,42 +75,15 @@ public class SCEntityListener implements Listener
             {
                 ClanPlayer acp;
                 ClanPlayer vcp;
-                if (SimpleClans.getInstance().hasUUID()) 
+                if (SimpleClans.getInstance().hasUUID())
                 {
                     acp = plugin.getClanManager().getCreateClanPlayer(attacker.getUniqueId());
                     vcp = plugin.getClanManager().getCreateClanPlayer(victim.getUniqueId());
-                } else 
+                } else
                 {
                     acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
                     vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
                 }
-
-                // record attacker kill
-
-                // if victim doesn't have a clan or attacker doesn't have a clan, then the kill is civilian
-                // if both have verified clans, check for rival or default to neutral
-
-                int strifemax = plugin.getSettingsManager().getStrifeLimit();
-
-                if (plugin.getSettingsManager().isAutoWar())
-                {
-                    if (acp.getClan() != null && vcp.getClan() != null)
-                    {
-                        if (!acp.getClan().equals(vcp.getClan()) && !acp.getClan().isWarring(vcp.getClan()) && !vcp.getClan().isWarring(acp.getClan()))
-                        {
-                            plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), 1);
-                            if (plugin.getStorageManager().retrieveStrifes(acp.getClan(), vcp.getClan()) >= strifemax)
-                            {
-                                acp.getClan().addWarringClan(vcp.getClan());
-                                vcp.getClan().addWarringClan(acp.getClan());
-                                acp.getClan().addBb(acp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(acp.getClan().getName()), vcp.getClan().getColorTag()));
-                                vcp.getClan().addBb(vcp.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("you.are.at.war"), Helper.capitalize(vcp.getClan().getName()), acp.getClan().getColorTag()));
-                                plugin.getStorageManager().addStrife(acp.getClan(), vcp.getClan(), -strifemax);
-                            }
-                        }
-                    }
-                }
-
 
                 double reward = 0;
                 double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();

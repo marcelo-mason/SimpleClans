@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
@@ -9,7 +10,6 @@ import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
-import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
 
 /**
  * @author phaed
@@ -131,8 +131,6 @@ public final class SettingsManager
     private boolean teleportBlocks;
     private boolean AutoGroupGroupName;
     private boolean tamableMobsSharing;
-    private int strifeLimit;
-    private boolean autoWar;
     private boolean allowReGroupCommand;
     private boolean useThreads;
     private boolean useBungeeCord;
@@ -284,8 +282,6 @@ public final class SettingsManager
         teleportBlocks = getConfig().getBoolean("settings.teleport-blocks");
         AutoGroupGroupName = getConfig().getBoolean("permissions.auto-group-groupname");
         tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
-        strifeLimit = getConfig().getInt("war.strife-limit");
-        autoWar = getConfig().getBoolean("war.auto-war-start");
         allowReGroupCommand = getConfig().getBoolean("settings.allow-regroup-command");
         useThreads = getConfig().getBoolean("performance.use-threads");
         useBungeeCord = getConfig().getBoolean("performance.use-bungeecord");
@@ -472,7 +468,7 @@ public final class SettingsManager
 
         save();
     }
-    
+
     /**
      * Check whether a player is banned
      *
@@ -1338,19 +1334,6 @@ public final class SettingsManager
         return tamableMobsSharing;
     }
 
-    /**
-     * @return the strifeLimit
-     */
-    public int getStrifeLimit() {
-        return strifeLimit;
-    }
-
-    /**
-     * @return the autoWar
-     */
-    public boolean isAutoWar() {
-        return autoWar;
-    }
 
     public boolean isDisableMessages()
     {
@@ -1364,7 +1347,7 @@ public final class SettingsManager
     {
         return allowReGroupCommand;
     }
-    
+
     /**
      * @return the useThreads
      */
@@ -1372,7 +1355,7 @@ public final class SettingsManager
     {
         return useThreads;
     }
-    
+
     /**
      * @return the useBungeeCord
      */
