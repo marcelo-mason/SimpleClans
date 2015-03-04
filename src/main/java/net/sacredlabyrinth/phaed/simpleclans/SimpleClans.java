@@ -24,7 +24,6 @@ import org.bukkit.entity.Player;
  */
 public class SimpleClans extends JavaPlugin {
 
-    private ArrayList<Player> MutedAllSeeingPlayers = new ArrayList<Player>();
     private ArrayList<String> messages = new ArrayList<String>();
     private static SimpleClans instance;
     private static final Logger logger = Logger.getLogger("Minecraft");
@@ -222,12 +221,5 @@ public class SimpleClans extends JavaPlugin {
     public void setUUID(boolean trueOrFalse) 
     {
         this.hasUUID = trueOrFalse;
-    }
-    /**
-     * @return the MutedAllSeeingPlayers
-     */
-    public ArrayList<Player> getMutedAllSeeingPlayers() 
-    {
-        return MutedAllSeeingPlayers;
     }
 }

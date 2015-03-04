@@ -43,10 +43,12 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer> {
     private boolean globalChat = true;
     private boolean allyChat = true;
     private boolean clanChat = true;
-    private boolean allSeeingChat = true;
     private boolean bbEnabled = true;
     private boolean tagEnabled = true;
     private boolean capeEnabled = true;
+    
+    private boolean clanChatMute = true;
+    private boolean allyChatMute = true;
     private String rank = "";
 
     /**
@@ -823,10 +825,18 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer> {
         }
     }
 
-    public void setAllSeeingChat(boolean allSChat) {
-        allSeeingChat = allSChat;
+    public void setMuted(boolean b) {
+            allyChatMute = b;
     }
-    public boolean getAllSeeingChat() {
-        return allSeeingChat;
+    
+    public void setMutedAlly(boolean b) {
+            allyChatMute = b;
+    }
+
+    public boolean isMuted() {
+            return clanChatMute;
+    }
+    public boolean isMutedAlly(){
+            return allyChatMute;
     }
 }
