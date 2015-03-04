@@ -151,8 +151,14 @@ public class SCEntityListener implements Listener
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
                 Tameable tamed = (Tameable) entity;
 
-                if (tamed.isTamed() && ((Wolf) entity).isSitting())
+                if (tamed.isTamed())
                 {
+                    if(entity instanceof Wolf)
+                    {
+                        if(!((Wolf) entity).isSitting()){
+                            return;
+                        }
+                    }
                     if (cp.getClan().isMember((Player) tamed.getOwner()))
                     {
                         tamed.setOwner(player);
@@ -170,10 +176,11 @@ public class SCEntityListener implements Listener
     {
         if (plugin.getSettingsManager().isTamableMobsSharing())
         {
-            if (event.getEntity() instanceof Wolf && event.getTarget() instanceof Player)
+            if (event.getEntity() instanceof Tameable && event.getTarget() instanceof Player)
             {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer((Player) event.getTarget());
                 Tameable wolf = (Tameable) event.getEntity();
+
                 if (wolf.isTamed())
                 {
                     if (cp.getClan().isMember((Player) wolf.getOwner()))
