@@ -21,7 +21,7 @@ settings:
     show-debug-info: false
     mchat-integration: true
     enable-auto-groups: false
-    chat-compatibility-mode: false
+    chat-compatibility-mode: true
     rival-limit-percent: 50
     use-colorcode-from-prefix-for-name: true
     display-chat-tags: true
