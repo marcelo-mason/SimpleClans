@@ -1360,6 +1360,18 @@ public final class ClanManager
             plugin.getStorageManager().updateClanPlayer(cp);
             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left clan chat");
         }
+        else if (command.equals(plugin.getLang("mute")))
+        {
+            if (cp.isMuted())
+            {
+             cp.setMuted(true);
+             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted clan chat");
+            } else
+            {
+             cp.setMuted(false);
+             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted clan chat");
+            }
+        }
         else
         {
             String code = "" + ChatColor.RED + ChatColor.WHITE + ChatColor.RED + ChatColor.BLACK;
@@ -1384,7 +1396,10 @@ public final class ClanManager
             for (ClanPlayer cpp : cps)
             {
                 Player member = cpp.toPlayer();
-
+                if (cpp.isMuted())
+                {
+                    continue;
+                }
                 ChatBlock.sendMessage(member, message);
             }
 
@@ -1401,7 +1416,10 @@ public final class ClanManager
             if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye"))
             {
                 boolean alreadySent = false;
-
+                if(plugin.getClanManager().getClanPlayer(player).isMuted())
+               {
+                   continue;
+               }
                 for (ClanPlayer cpp : cps)
                 {
                     if (cpp.getName().equalsIgnoreCase(player.getName()))
@@ -1466,6 +1484,18 @@ public final class ClanManager
             plugin.getStorageManager().updateClanPlayer(cp);
             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left ally chat");
         }
+        else if (command.equals(plugin.getLang("mute")))
+        {
+            if (!cp.isMutedAlly())
+            {
+             cp.setMutedAlly(true);
+             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted ally chat");
+            } else
+            {
+             cp.setMutedAlly(false);
+             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted ally chat");
+            }
+        }
         else
         {
             String code = "" + ChatColor.AQUA + ChatColor.WHITE + ChatColor.AQUA + ChatColor.BLACK;
@@ -1480,6 +1510,9 @@ public final class ClanManager
 
             for (ClanPlayer ally : allies)
             {
+               if(ally.isMutedAlly()){
+                   continue;
+               }
                 Player member = ally.toPlayer();
                 if (SimpleClans.getInstance().hasUUID())
                 {

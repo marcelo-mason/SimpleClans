@@ -46,6 +46,10 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean bbEnabled = true;
     private boolean tagEnabled = true;
     private boolean capeEnabled = true;
+    
+    private boolean allyChatMute = false;
+    private boolean clanChatMute = false;
+    
     private String rank = "";
 
     /**
@@ -942,5 +946,23 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
             return Helper.matchOnePlayer(this.displayName);
         }
     }
+   public void setMuted(boolean b)
+   {
+       clanChatMute = b;
+   }
+   
+   public void setMutedAlly(boolean b)
+   {
+       allyChatMute = b;
+   }
+   
+   public boolean isMuted()
+   {
+       return clanChatMute;
+   }
+   
+   public boolean isMutedAlly()
+   {
+       return allyChatMute;
+   }
 }
-

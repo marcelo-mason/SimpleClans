@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
+import org.bukkit.entity.Player;
 
 /**
  * @author Phaed
