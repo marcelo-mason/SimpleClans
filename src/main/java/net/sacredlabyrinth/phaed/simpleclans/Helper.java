@@ -57,7 +57,7 @@ public class Helper
      */
     public static Player matchOnePlayer(UUID playerUniqueId)
     {
-        Collection<Player> players = (Collection<Player>) SimpleClans.getInstance().getServer().getOnlinePlayers();
+        Collection<Player> players = getOnlinePlayers();
 
         for (Player pOn : players)
         {
@@ -554,7 +554,7 @@ public class Helper
     @Deprecated
     public static boolean isOnline(String playerName)
     {
-        Collection<Player> online = (Collection<Player>) SimpleClans.getInstance().getServer().getOnlinePlayers();
+        Collection<Player> online = getOnlinePlayers();
 
         for (Player o : online)
         {
@@ -576,7 +576,7 @@ public class Helper
      */
     public static boolean isOnline(UUID playerUniqueId)
     {
-        Collection<Player> online = (Collection<Player>) SimpleClans.getInstance().getServer().getOnlinePlayers();
+        Collection<Player> online = getOnlinePlayers();
 
         for (Player o : online)
         {
