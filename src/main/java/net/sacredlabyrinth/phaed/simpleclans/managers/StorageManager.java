@@ -2,8 +2,8 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import com.google.common.base.Charsets;
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.api.UUIDFetcher;
-import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDFetcher;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;

@@ -1,6 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;

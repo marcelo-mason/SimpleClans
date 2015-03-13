@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.UUID;
-import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  *

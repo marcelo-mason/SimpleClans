@@ -1,4 +1,4 @@
-package net.sacredlabyrinth.phaed.simpleclans.api;
+package net.sacredlabyrinth.phaed.simpleclans.uuid;
 
 import com.google.common.collect.ImmutableList;
 import org.json.simple.JSONArray;

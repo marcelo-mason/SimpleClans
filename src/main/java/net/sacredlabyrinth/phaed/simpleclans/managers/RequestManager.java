@@ -6,7 +6,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.api.UUIDMigration;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.RequestFinishedEvent;
 import net.sacredlabyrinth.phaed.simpleclans.events.RequestEvent;
 import org.bukkit.ChatColor;

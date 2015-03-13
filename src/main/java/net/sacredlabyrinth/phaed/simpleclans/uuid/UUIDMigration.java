@@ -1,8 +1,7 @@
-package net.sacredlabyrinth.phaed.simpleclans.api;
+package net.sacredlabyrinth.phaed.simpleclans.uuid;
 
 import java.util.UUID;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
