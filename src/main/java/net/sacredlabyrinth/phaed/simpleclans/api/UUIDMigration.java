@@ -34,7 +34,7 @@ public class UUIDMigration {
     }
 
     public static Object getForcedPlayer(String playerDisplayName) {
-        Player OnlinePlayer = Helper.matchOnePlayer(playerDisplayName);
+        Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayerExact(playerDisplayName);
         if (OnlinePlayer != null) {
             return OnlinePlayer;
         } else {
@@ -44,7 +44,7 @@ public class UUIDMigration {
     }
 
     public static UUID getForcedPlayerUUID(String playerDisplayName) {
-        Player OnlinePlayer = Helper.matchOnePlayer(playerDisplayName);
+        Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayerExact(playerDisplayName);
         OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
         if (OnlinePlayer != null) {
             return OnlinePlayer.getUniqueId();

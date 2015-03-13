@@ -62,13 +62,15 @@ public final class ClanManager
             if (cp.getUniqueId() != null)
             {
                 this.clanPlayers.put(cp.getUniqueId().toString(), cp);
-            } else
+            }
+            else
             {
                 SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
                 SimpleClans.log("[SimpleClans] [ERRO]: " + cp.getName() + "; UUID: ???");
                 SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
             }
-        } else
+        }
+        else
         {
             this.clanPlayers.put(cp.getCleanName(), cp);
         }
@@ -88,7 +90,8 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             cp = getCreateClanPlayer(player.getUniqueId());
-        } else
+        }
+        else
         {
             cp = getCreateClanPlayer(player.getName());
         }
@@ -108,7 +111,8 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else
+        }
+        else
         {
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
         }
@@ -239,7 +243,8 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             return getClanPlayer(player.getUniqueId());
-        } else
+        }
+        else
         {
             return getClanPlayer(player.getName());
         }
@@ -257,7 +262,8 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             return getClanPlayer(player.getUniqueId());
-        } else
+        }
+        else
         {
             return getClanPlayer(player.getName());
         }
@@ -277,7 +283,8 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             cp = getClanPlayerName(playerName);
-        } else
+        }
+        else
         {
             cp = clanPlayers.get(playerName.toLowerCase());
         }
@@ -328,7 +335,14 @@ public final class ClanManager
      */
     public ClanPlayer getClanPlayerName(String playerDisplayName)
     {
-        ClanPlayer cp = clanPlayers.get(UUIDMigration.getForcedPlayerUUID(playerDisplayName).toString());
+        UUID uuid = UUIDMigration.getForcedPlayerUUID(playerDisplayName);
+
+        if (uuid == null)
+        {
+            return null;
+        }
+
+        ClanPlayer cp = clanPlayers.get(uuid.toString());
 
         if (cp == null)
         {
@@ -358,9 +372,10 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             return getClanPlayerName(playerName);
-        } else
+        }
+        else
         {
-           return clanPlayers.get(playerName.toLowerCase());
+            return clanPlayers.get(playerName.toLowerCase());
         }
     }
 
@@ -411,13 +426,16 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             UUID playerUniqueId = UUIDMigration.getForcedPlayerUUID(playerDisplayName);
-            if (playerUniqueId != null) {
+            if (playerUniqueId != null)
+            {
                 return getCreateClanPlayer(playerUniqueId);
-            } else
+            }
+            else
             {
                 return null;
             }
-        } else
+        }
+        else
         {
             return getCreateClanPlayer(playerDisplayName);
         }
@@ -1068,6 +1086,7 @@ public final class ClanManager
             }
         });
     }
+
     /**
      * Sort clans by KDR
      *
@@ -1364,12 +1383,13 @@ public final class ClanManager
         {
             if (cp.isMuted())
             {
-             cp.setMuted(true);
-             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted clan chat");
-            } else
+                cp.setMuted(true);
+                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted clan chat");
+            }
+            else
             {
-             cp.setMuted(false);
-             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted clan chat");
+                cp.setMuted(false);
+                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted clan chat");
             }
         }
         else
@@ -1416,10 +1436,10 @@ public final class ClanManager
             if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye"))
             {
                 boolean alreadySent = false;
-                if(plugin.getClanManager().getClanPlayer(player).isMuted())
-               {
-                   continue;
-               }
+                if (plugin.getClanManager().getClanPlayer(player).isMuted())
+                {
+                    continue;
+                }
                 for (ClanPlayer cpp : cps)
                 {
                     if (cpp.getName().equalsIgnoreCase(player.getName()))
@@ -1488,12 +1508,13 @@ public final class ClanManager
         {
             if (!cp.isMutedAlly())
             {
-             cp.setMutedAlly(true);
-             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted ally chat");
-            } else
+                cp.setMutedAlly(true);
+                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted ally chat");
+            }
+            else
             {
-             cp.setMutedAlly(false);
-             ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted ally chat");
+                cp.setMutedAlly(false);
+                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted ally chat");
             }
         }
         else
@@ -1510,9 +1531,10 @@ public final class ClanManager
 
             for (ClanPlayer ally : allies)
             {
-               if(ally.isMutedAlly()){
-                   continue;
-               }
+                if (ally.isMutedAlly())
+                {
+                    continue;
+                }
                 Player member = ally.toPlayer();
                 if (SimpleClans.getInstance().hasUUID())
                 {
@@ -1520,7 +1542,8 @@ public final class ClanManager
                     {
                         continue;
                     }
-                } else
+                }
+                else
                 {
                     if (player.getName().equalsIgnoreCase(ally.getName()))
                     {
@@ -1545,7 +1568,8 @@ public final class ClanManager
         if (SimpleClans.getInstance().hasUUID())
         {
             cp = plugin.getClanManager().getClanPlayer(player.getUniqueId());
-        } else
+        }
+        else
         {
             cp = plugin.getClanManager().getClanPlayer(player.getName());
         }

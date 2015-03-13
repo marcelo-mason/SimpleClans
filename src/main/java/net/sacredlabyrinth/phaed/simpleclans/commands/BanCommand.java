@@ -40,7 +40,7 @@ public class BanCommand
                     UUID PlayerUniqueId = UUIDMigration.getForcedPlayerUUID(banned);
                     if (!plugin.getSettingsManager().isBanned(PlayerUniqueId))
                     {
-                        Player pl = Helper.matchOnePlayer(PlayerUniqueId);
+                        Player pl = SimpleClans.getInstance().getServer().getPlayer(PlayerUniqueId);
 
                         if (pl != null)
                         {
@@ -58,7 +58,7 @@ public class BanCommand
                 {
                     if (!plugin.getSettingsManager().isBanned(banned))
                     {
-                        Player pl = Helper.matchOnePlayer(banned);
+                        Player pl = SimpleClans.getInstance().getServer().getPlayerExact(banned);
 
                         if (pl != null)
                         {

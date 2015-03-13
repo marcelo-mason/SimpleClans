@@ -65,7 +65,14 @@ public final class StorageManager
     {
         if (SimpleClans.getInstance().hasUUID())
         {
-            chatBlocks.put(UUIDMigration.getForcedPlayerUUID(player.getName()).toString(), cb);
+            UUID uuid = UUIDMigration.getForcedPlayerUUID(player.getName());
+
+            if (uuid == null)
+            {
+                return;
+            }
+
+            chatBlocks.put(uuid.toString(), cb);
         } else
         {
             chatBlocks.put(player.getName(), cb);

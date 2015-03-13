@@ -1295,10 +1295,10 @@ public class Clan implements Serializable, Comparable<Clan>
         Player player;
         if (SimpleClans.getInstance().hasUUID())
         {
-            player = Helper.matchOnePlayer(cp.getUniqueId());
+            player = SimpleClans.getInstance().getServer().getPlayer(cp.getUniqueId());
         } else
         {
-            player = Helper.matchOnePlayer(cp.getName());
+            player = SimpleClans.getInstance().getServer().getPlayerExact(cp.getName());
         }
 
         if (player != null)
@@ -1376,7 +1376,7 @@ public class Clan implements Serializable, Comparable<Clan>
         SimpleClans.getInstance().getStorageManager().updateClan(this);
         SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
 
-        Player matched = Helper.matchOnePlayer(playerUniqueId);
+        Player matched = SimpleClans.getInstance().getServer().getPlayer(playerUniqueId);
 
         if (matched != null)
         {
@@ -1738,10 +1738,10 @@ public class Clan implements Serializable, Comparable<Clan>
             Player pl;
             if (SimpleClans.getInstance().hasUUID())
             {
-                pl = Helper.matchOnePlayer(UUID.fromString(member));
+                pl = SimpleClans.getInstance().getServer().getPlayer(UUID.fromString(member));
             } else
             {
-                pl = Helper.matchOnePlayer(member);
+                pl = SimpleClans.getInstance().getServer().getPlayerExact(member);
             }
             if (pl == null)
             {

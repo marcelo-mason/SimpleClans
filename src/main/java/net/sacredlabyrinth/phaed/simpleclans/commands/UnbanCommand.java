@@ -39,10 +39,10 @@ public class UnbanCommand
                     Player pl;
                     if (SimpleClans.getInstance().hasUUID())
                     {
-                        pl = Helper.matchOnePlayer(UUIDMigration.getForcedPlayerUUID(banned));
+                        pl = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(banned));
                     } else 
                     {
-                        pl = Helper.matchOnePlayer(banned);
+                        pl = SimpleClans.getInstance().getServer().getPlayerExact(banned);
                     }
 
                     if (pl != null)

@@ -525,10 +525,10 @@ public final class RequestManager
             Player player;
             if (SimpleClans.getInstance().hasUUID())
             {
-                player = Helper.matchOnePlayer(UUIDMigration.getForcedPlayerUUID(req.getTarget()));
+                player = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(req.getTarget()));
             } else 
             {
-                player = Helper.matchOnePlayer(req.getTarget());
+                player = SimpleClans.getInstance().getServer().getPlayerExact(req.getTarget());
             }
 
             if (player != null)

@@ -83,7 +83,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public ClanPlayer(UUID playerUniqueId)
     {
         this.uniqueId = playerUniqueId;
-        Player OnlinePlayer = Helper.matchOnePlayer(playerUniqueId);
+        Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayer(playerUniqueId);
         if (OnlinePlayer != null) 
         {
             this.displayName = OnlinePlayer.getName();
@@ -940,10 +940,10 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         if (this.uniqueId != null) 
         {
-            return Helper.matchOnePlayer(this.uniqueId);
+            return SimpleClans.getInstance().getServer().getPlayer(this.uniqueId);
         } else 
         {
-            return Helper.matchOnePlayer(this.displayName);
+            return SimpleClans.getInstance().getServer().getPlayerExact(this.displayName);
         }
     }
    public void setMuted(boolean b)

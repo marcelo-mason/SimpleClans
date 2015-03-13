@@ -31,46 +31,6 @@ public class Helper
     }
 
     /**
-     * Ensures only one player can be matched from a partial name
-     *
-     * @param playername
-     * @return matched player, null if more than one player matched
-     */
-    @Deprecated
-    public static Player matchOnePlayer(String playername)
-    {
-        List<Player> players = SimpleClans.getInstance().getServer().matchPlayer(playername);
-
-        if (players.size() == 1)
-        {
-            return players.get(0);
-        }
-
-        return null;
-    }
-
-    /**
-     * Ensures only one player can be matched from a partial name
-     *
-     * @param playerUniqueId
-     * @return matched player, null if more than one player matched
-     */
-    public static Player matchOnePlayer(UUID playerUniqueId)
-    {
-        Collection<Player> players = getOnlinePlayers();
-
-        for (Player pOn : players)
-        {
-            if (pOn.getUniqueId().equals(playerUniqueId))
-            {
-                return pOn;
-            }
-        }
-
-        return null;
-    }
-
-    /**
      * Get a players full color name if he is online
      *
      * @param playerName
