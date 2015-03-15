@@ -95,7 +95,7 @@ public class TeleportState
     {
         this.processing = processing;
     }
-    
+
     public UUID getUniqueId()
     {
         return this.playerUniqueId;

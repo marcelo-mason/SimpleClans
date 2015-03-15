@@ -70,11 +70,7 @@ public final class PermissionsManager
      */
     public boolean hasEconomy()
     {
-        if (economy != null && economy.isEnabled())
-        {
-            return true;
-        }
-        return false;
+        return economy != null && economy.isEnabled();
     }
 
     /**

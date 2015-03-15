@@ -114,7 +114,7 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (SimpleClans.getInstance().getPermissionsManager().playerHasMoney(player, amount))
         {
-            if (SimpleClans.getInstance().getPermissionsManager().playerChargeMoney(player, amount) == true)
+            if (SimpleClans.getInstance().getPermissionsManager().playerChargeMoney(player, amount))
             {
                 player.sendMessage(ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("player.clan.deposit"), amount));
                 addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("bb.clan.deposit"), amount));
@@ -142,7 +142,7 @@ public class Clan implements Serializable, Comparable<Clan>
     {
         if (getBalance() >= amount)
         {
-            if (SimpleClans.getInstance().getPermissionsManager().playerGrantMoney(player, amount) == true)
+            if (SimpleClans.getInstance().getPermissionsManager().playerGrantMoney(player, amount))
             {
                 player.sendMessage(ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("player.clan.withdraw"), amount));
                 addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("bb.clan.withdraw"), amount));

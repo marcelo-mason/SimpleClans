@@ -22,29 +22,10 @@ public class UUIDMigration {
         }
     }
 
-    /**
-     * Converts a String to a UUID
-     *
-     * @param uuid The string to be converted
-     * @return The result
-     */
-    public static UUID getUUID(String uuid) {
-        return UUID.fromString(uuid.substring(0, 8) + "-" + uuid.substring(8, 12) + "-" + uuid.substring(12, 16) + "-" + uuid.substring(16, 20) + "-" + uuid.substring(20, 32));
-    }
-
-    public static Object getForcedPlayer(String playerDisplayName) {
-        Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayerExact(playerDisplayName);
-        if (OnlinePlayer != null) {
-            return OnlinePlayer;
-        } else {
-            OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
-            return OfflinePlayer;
-        }
-    }
-
     public static UUID getForcedPlayerUUID(String playerDisplayName) {
         Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayerExact(playerDisplayName);
         OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
+
         if (OnlinePlayer != null) {
             return OnlinePlayer.getUniqueId();
         } else {

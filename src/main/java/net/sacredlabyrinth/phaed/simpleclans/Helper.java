@@ -79,21 +79,6 @@ public class Helper
     }
 
     /**
-     * Checks if a entry in a column exists
-     *
-     * @param core
-     * @param tabell
-     * @param column
-     * @param entry
-     * @return
-     */
-    public static Boolean existsEntry(DBCore core, String tabell, String column, String entry) throws SQLException
-    {
-        String query = "SELECT " + column + " FROM  `" + tabell + "` WHERE `" + tabell + "`.`" + column + "` =  '" + entry + "';";
-        return core.select(query).next() ? true : false;
-    }
-
-    /**
      * Check for short
      *
      * @param input
@@ -632,11 +617,7 @@ public class Helper
      */
     public static boolean isSameBlock(Location loc, Location loc2)
     {
-        if (loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ())
-        {
-            return true;
-        }
-        return false;
+        return loc.getBlockX() == loc2.getBlockX() && loc.getBlockY() == loc2.getBlockY() && loc.getBlockZ() == loc2.getBlockZ();
     }
 
     /**

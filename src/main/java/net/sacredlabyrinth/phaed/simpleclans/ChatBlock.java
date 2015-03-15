@@ -244,8 +244,7 @@ public class ChatBlock
 
             // add in spacings
 
-            int colspacing = 12;
-            int availableSpacing = colspacing;
+            int availableSpacing = 12;
 
             while (calculatedRowSize(measuredCols) < lineLength && availableSpacing > 0)
             {

@@ -115,13 +115,6 @@ public final class StorageManager
                     String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20) NOT NULL auto_increment, `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
                     core.execute(query);
                 }
-                if (!core.existsTable("sc_war"))
-                {
-                    SimpleClans.log("Creating table: sc_war");
-
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `clan_name` varchar(16) NOT NULL, PRIMARY KEY  (`clan_name`));";
-                    core.execute(query);
-                }
             } else
             {
                 SimpleClans.getInstance().getServer().getConsoleSender().sendMessage("[SimpleClans] " + ChatColor.RED + plugin.getLang("mysql.connection.failed"));
@@ -155,13 +148,6 @@ public final class StorageManager
                     SimpleClans.log("Creating table: sc_kills");
 
                     String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20), `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
-                    core.execute(query);
-                }
-                if (!core.existsTable("sc_war"))
-                {
-                    SimpleClans.log("Creating table: sc_war");
-
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_war` ( `clan_name` varchar(16) NOT NULL, PRIMARY KEY  (`clan_name`));";
                     core.execute(query);
                 }
             } else
@@ -696,29 +682,7 @@ public final class StorageManager
     public void deleteClan(Clan clan)
     {
         String query = "DELETE FROM `sc_clans` WHERE tag = '" + clan.getTag() + "';";
-        String war = null;
-        if (core.existsColumn("sc_war", clan.getTag()))
-        {
-            String warc = "ALTER TABLE `sc_war` DROP COLUMN `" + clan.getTag() + "`;";
-        }
-
-        try
-        {
-            if (Helper.existsEntry(core, "sc_war", "clan_name", clan.getTag()))
-            {
-                war = "DELETE FROM `sc_war` WHERE clan_name = '" + clan.getTag() + "';";
-            }
-        } catch (SQLException ex)
-        {
-            SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-            SimpleClans.getLog().log(Level.SEVERE, null, ex);
-        }
-        if (war != null)
-        {
-            core.delete(war);
-        }
         core.delete(query);
-
     }
 
     /**
@@ -892,166 +856,6 @@ public final class StorageManager
                         String victim = res.getString("victim");
                         int kills = res.getInt("kills");
                         out.put(attacker + " " + victim, kills);
-                    } catch (Exception ex)
-                    {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
-                    }
-                }
-            } catch (SQLException ex)
-            {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return out;
-    }
-
-    /**
-     * Returns a map of tag->count of all deaths by each clan
-     *
-     * @return
-     */
-    public HashMap<String, Integer> getTotalDeathsPerClan()
-    {
-        HashMap<String, Integer> out = new HashMap<String, Integer>();
-
-        String query = "SELECT victim_tag, count(victim_tag) AS kills FROM `sc_kills` GROUP BY victim_tag ORDER BY 2 DESC;";
-        ResultSet res = core.select(query);
-
-        if (res != null)
-        {
-            try
-            {
-                while (res.next())
-                {
-                    try
-                    {
-                        String victimTag = res.getString("victim_tag");
-                        int kills = res.getInt("kills");
-                        out.put(victimTag, kills);
-                    } catch (Exception ex)
-                    {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
-                    }
-                }
-            } catch (SQLException ex)
-            {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return out;
-    }
-
-    /**
-     * Returns a map of tag->count of all kills by each clan
-     *
-     * @return
-     */
-    public HashMap<String, Integer> getTotalKillsPerClan()
-    {
-        HashMap<String, Integer> out = new HashMap<String, Integer>();
-
-        String query = "SELECT attacker_tag, count(attacker_tag) AS kills FROM `sc_kills` GROUP BY attacker_tag ORDER BY 2 DESC;";
-        ResultSet res = core.select(query);
-
-        if (res != null)
-        {
-            try
-            {
-                while (res.next())
-                {
-                    try
-                    {
-                        String victimTag = res.getString("attacker_tag");
-                        int kills = res.getInt("kills");
-                        out.put(victimTag, kills);
-                    } catch (Exception ex)
-                    {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
-                    }
-                }
-            } catch (SQLException ex)
-            {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return out;
-    }
-
-    /**
-     * Returns a map of playerName->count of all kills by each player
-     *
-     * @return
-     */
-    public HashMap<String, Integer> getTotalKillsPerPlayer()
-    {
-        HashMap<String, Integer> out = new HashMap<String, Integer>();
-
-        String query = "SELECT attacker, count(attacker) AS kills FROM `sc_kills` GROUP BY attacker ORDER BY 2 DESC;";
-        ResultSet res = core.select(query);
-
-        if (res != null)
-        {
-            try
-            {
-                while (res.next())
-                {
-                    try
-                    {
-                        String attacker = res.getString("attacker");
-                        int kills = res.getInt("kills");
-                        out.put(attacker, kills);
-                    } catch (Exception ex)
-                    {
-                        SimpleClans.getLog().info(ex.getMessage());
-
-
-                    }
-                }
-            } catch (SQLException ex)
-            {
-                SimpleClans.getLog().severe(String.format("An Error occurred: %s", ex.getErrorCode()));
-                SimpleClans.getLog().log(Level.SEVERE, null, ex);
-            }
-        }
-
-        return out;
-    }
-
-    /**
-     * Returns a map of playerName->count of all kills by each player
-     *
-     * @return
-     */
-    public HashMap<String, Integer> getTotalDeathsPerPlayer()
-    {
-        HashMap<String, Integer> out = new HashMap<String, Integer>();
-
-        String query = "SELECT victim, count(victim) AS kills FROM `sc_kills` GROUP BY victim ORDER BY 2 DESC;";
-        ResultSet res = core.select(query);
-
-        if (res != null)
-        {
-            try
-            {
-                while (res.next())
-                {
-                    try
-                    {
-                        String victim = res.getString("victim");
-                        int kills = res.getInt("kills");
-                        out.put(victim, kills);
                     } catch (Exception ex)
                     {
                         SimpleClans.getLog().info(ex.getMessage());
