@@ -993,11 +993,11 @@ public final class StorageManager
 
                 String query3 = "UPDATE `sc_kills` SET victim_uuid = '" + uuidPlayer.toString() + "' WHERE victim = '" + cp.getName() + "';";
                 core.update(query3);
-                SimpleClans.log("[" + i + " / " + cps.size() + "][SimpleClans] Success: " + cp.getName() + "; UUID: " + uuidPlayer.toString());
+                SimpleClans.log("[" + i + " / " + cps.size() + "] Success: " + cp.getName() + "; UUID: " + uuidPlayer.toString());
             }
             catch (Exception ex)
             {
-                SimpleClans.log("[SimpleClans] Failed [ERRO]: " + cp.getName() + "; UUID: ???");
+                SimpleClans.log("[" + i + " / " + cps.size() + "] Failed [ERRO]: " + cp.getName() + "; UUID: ???");
             }
             i++;
         }
