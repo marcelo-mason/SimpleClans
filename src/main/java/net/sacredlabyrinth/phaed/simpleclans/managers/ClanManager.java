@@ -63,12 +63,6 @@ public final class ClanManager
             {
                 this.clanPlayers.put(cp.getUniqueId().toString(), cp);
             }
-            else
-            {
-                SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
-                SimpleClans.log("[SimpleClans] [ERRO]: " + cp.getName() + "; UUID: ???");
-                SimpleClans.log("[SimpleClans] ==================== ATTENTION ! ==================== ");
-            }
         }
         else
         {
