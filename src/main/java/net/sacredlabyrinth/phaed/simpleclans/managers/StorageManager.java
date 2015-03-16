@@ -974,8 +974,6 @@ public final class StorageManager
         int i = 1;
         for (ClanPlayer cp : cps)
         {
-            SimpleClans.log("[SimpleClans] ==================== [" + i + " / " + cps.size() + "] ====================");
-            SimpleClans.log("[SimpleClans] - ClanPlayer: " + cp.getName());
             try
             {
                 UUID uuidPlayer;
@@ -987,7 +985,6 @@ public final class StorageManager
                 {
                     uuidPlayer = UUID.nameUUIDFromBytes(("OfflinePlayer:" + cp.getName()).getBytes(Charsets.UTF_8));
                 }
-                SimpleClans.log("[SimpleClans] Success: " + cp.getName() + "; UUID: " + uuidPlayer.toString());
                 String query = "UPDATE `sc_players` SET uuid = '" + uuidPlayer.toString() + "' WHERE name = '" + cp.getName() + "';";
                 core.update(query);
 
@@ -996,6 +993,7 @@ public final class StorageManager
 
                 String query3 = "UPDATE `sc_kills` SET victim_uuid = '" + uuidPlayer.toString() + "' WHERE victim = '" + cp.getName() + "';";
                 core.update(query3);
+                SimpleClans.log("[" + i + " / " + cps.size() + "][SimpleClans] Success: " + cp.getName() + "; UUID: " + uuidPlayer.toString());
             }
             catch (Exception ex)
             {

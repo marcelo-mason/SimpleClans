@@ -68,7 +68,6 @@ public final class ClanManager
         {
             this.clanPlayers.put(cp.getCleanName(), cp);
         }
-
     }
 
     /**
