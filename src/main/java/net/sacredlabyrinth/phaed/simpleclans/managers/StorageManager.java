@@ -979,7 +979,7 @@ public final class StorageManager
                 UUID uuidPlayer;
                 if (SimpleClans.getInstance().getServer().getOnlineMode())
                 {
-                    uuidPlayer = UUIDFetcher.getUUIDOf(cp.getName());
+                    uuidPlayer = UUIDFetcher.getUUIDOfThrottled(cp.getName());
                 }
                 else
                 {

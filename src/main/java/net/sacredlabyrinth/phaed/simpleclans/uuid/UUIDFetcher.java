@@ -80,6 +80,10 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
         return new UUIDFetcher(Arrays.asList(name)).call().get(name);
     }
 
+    public static UUID getUUIDOfThrottled(String name) throws Exception {
+        return new UUIDFetcher(Arrays.asList(name), true).call().get(name);
+    }
+
     @Override
     public Map<String, UUID> call() throws Exception {
         Map<String, UUID> uuidMap = new HashMap<String, UUID>();
