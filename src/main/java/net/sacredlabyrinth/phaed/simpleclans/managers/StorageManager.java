@@ -896,20 +896,29 @@ public final class StorageManager
          */
         if (!core.existsColumn("sc_kills", "attacker_uuid"))
         {
-            query = "ALTER TABLE sc_kills ADD attacker_uuid VARCHAR( 255 ) NULL DEFAULT NULL;";
+            query = "ALTER TABLE sc_kills ADD attacker_uuid VARCHAR( 255 ) DEFAULT NULL;";
             core.execute(query);
         }
         if (!core.existsColumn("sc_kills", "victim_uuid"))
         {
-            query = "ALTER TABLE sc_kills ADD victim_uuid VARCHAR( 255 ) NULL DEFAULT NULL;";
+            query = "ALTER TABLE sc_kills ADD victim_uuid VARCHAR( 255 ) DEFAULT NULL;";
             core.execute(query);
         }
         if (!core.existsColumn("sc_players", "uuid"))
         {
-            query = "ALTER TABLE sc_players ADD uuid VARCHAR( 255 ) NULL DEFAULT NULL;";
+            query = "ALTER TABLE sc_players ADD uuid VARCHAR( 255 ) DEFAULT NULL;";
             core.execute(query);
-            query = "ALTER TABLE sc_players ADD UNIQUE (uuid);";
-            core.execute(query);
+
+            if (plugin.getSettingsManager().isUseMysql())
+            {
+                query = "ALTER TABLE `sc_players` ADD UNIQUE `uq_player_uuid` (`uuid`);";
+                core.execute(query);
+            }
+            else
+            {
+                query = "CREATE UNIQUE INDEX IF NOT EXISTS `uq_player_uuid` ON `sc_players` (`uuid`);";
+                core.execute(query);
+            }
 
             updatePlayersToUUID();
 
