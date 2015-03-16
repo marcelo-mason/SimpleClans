@@ -918,7 +918,7 @@ public final class StorageManager
         }
 
         /**
-         * Bukkit 1.7.5+ UUID Migration, Fuck You Mojang :@
+         * Bukkit 1.7.5+ UUID Migration
          */
         if (!core.existsColumn("sc_kills", "attacker_uuid"))
         {
