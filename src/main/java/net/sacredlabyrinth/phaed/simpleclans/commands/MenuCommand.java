@@ -236,6 +236,10 @@ public class MenuCommand
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.verify.tag.1.verify.an.unverified.clan"), clanCommand, ChatColor.WHITE));
         }
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.place"))
+        {
+            chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.place"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.mod.mostkilled"))
         {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.mostkilled"), clanCommand, ChatColor.WHITE));

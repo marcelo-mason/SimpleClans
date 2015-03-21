@@ -1,15 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  *
@@ -46,7 +42,7 @@ public class InviteCommand
                         if (SimpleClans.getInstance().hasUUID())
                         {
                             invited = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(arg[0]));
-                        } else 
+                        } else
                         {
                             invited = SimpleClans.getInstance().getServer().getPlayerExact(arg[0]);
                         }

@@ -53,6 +53,7 @@ public final class CommandManager
     private MostKilledCommand mostKilledCommand;
     private SetRankCommand setRankCommand;
     private BankCommand bankCommand;
+    private PlaceCommand placeCommand;
 
     /**
      *
@@ -99,6 +100,7 @@ public final class CommandManager
         mostKilledCommand = new MostKilledCommand();
         setRankCommand = new SetRankCommand();
         bankCommand = new BankCommand();
+        placeCommand = new PlaceCommand();
     }
 
     /**
@@ -285,6 +287,10 @@ public final class CommandManager
                     {
                         setRankCommand.execute(player, subargs);
                     }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("place.command")))
+                    {
+                        placeCommand.execute(player, subargs);
+                    }
                     else
                     {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
@@ -377,7 +383,7 @@ public final class CommandManager
                 if (SimpleClans.getInstance().hasUUID())
                 {
                     cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
-                } else 
+                } else
                 {
                     cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
                 }
@@ -440,7 +446,7 @@ public final class CommandManager
                 if (SimpleClans.getInstance().hasUUID())
                 {
                     cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
-                } else 
+                } else
                 {
                     cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
                 }

@@ -93,6 +93,8 @@ permissions:
     description: Can view his and other's clans mostkilled
   simpleclans.mod.keep-items:
     description: Can keep items when teleporting home
+  simpleclans.mod.place:
+    description: Can manually place players in clans
   simpleclans.leader.invite:
     description: Can invite players into his clan
   simpleclans.leader.kick:
@@ -134,6 +136,7 @@ permissions:
       simpleclans.mod.mostkilled: true
       simpleclans.mod.keep-items: true
       simpleclans.mod.nopvpinwar: true
+      simpleclans.mod.place: true
   simpleclans.anyone.*:
     description: Permissions for anyone
     default: false
