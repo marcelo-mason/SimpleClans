@@ -529,7 +529,7 @@ public final class RequestManager
                 player = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(req.getTarget()));
             } else
             {
-                player = SimpleClans.getInstance().getServer().getPlayerExact(req.getTarget());
+                player = SimpleClans.getInstance().getServer().getPlayer(req.getTarget());
             }
 
             if (player != null)

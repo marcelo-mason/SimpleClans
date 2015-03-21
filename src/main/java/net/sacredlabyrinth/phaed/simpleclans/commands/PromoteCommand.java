@@ -1,11 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  * @author phaed
@@ -58,9 +58,9 @@ public class PromoteCommand
         if (SimpleClans.getInstance().hasUUID())
         {
             promoted = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(arg[0]));
-        } else 
+        } else
         {
-            promoted = SimpleClans.getInstance().getServer().getPlayerExact(arg[0]);
+            promoted = SimpleClans.getInstance().getServer().getPlayer(arg[0]);
         }
 
         if (promoted == null)
@@ -97,7 +97,7 @@ public class PromoteCommand
         if (SimpleClans.getInstance().hasUUID())
         {
             clan.promote(promoted.getUniqueId());
-        } else 
+        } else
         {
             clan.promote(promoted.getName());
         }

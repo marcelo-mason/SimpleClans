@@ -44,7 +44,7 @@ public class InviteCommand
                             invited = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(arg[0]));
                         } else
                         {
-                            invited = SimpleClans.getInstance().getServer().getPlayerExact(arg[0]);
+                            invited = SimpleClans.getInstance().getServer().getPlayer(arg[0]);
                         }
 
                         if (invited != null)

@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -9,12 +10,7 @@ import org.json.simple.JSONValue;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
-import org.bukkit.OfflinePlayer;
+import java.util.*;
 
 /**
  * @author phaed
@@ -46,10 +42,10 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private boolean bbEnabled = true;
     private boolean tagEnabled = true;
     private boolean capeEnabled = true;
-    
+
     private boolean allyChatMute = false;
     private boolean clanChatMute = false;
-    
+
     private String rank = "";
 
     /**
@@ -76,7 +72,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         this.tag = "";
         this.channel = Channel.NONE;
     }
-    
+
     /**
      * @param playerUniqueId
      */
@@ -84,10 +80,10 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         this.uniqueId = playerUniqueId;
         Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayer(playerUniqueId);
-        if (OnlinePlayer != null) 
+        if (OnlinePlayer != null)
         {
             this.displayName = OnlinePlayer.getName();
-        } else 
+        } else
         {
             OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerUniqueId);
             this.displayName = OfflinePlayer.getName();
@@ -125,7 +121,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         if (SimpleClans.getInstance().hasUUID())
         {
             return this.getUniqueId().compareTo(other.getUniqueId());
-        } else 
+        } else
         {
             return this.getName().compareToIgnoreCase(other.getName());
         }
@@ -146,7 +142,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         return displayName;
     }
-    
+
     /**
      * (used internally)
      *
@@ -156,7 +152,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         return uniqueId;
     }
-    
+
     /**
      * Returns the clean name for this player (lowercase)
      *
@@ -176,7 +172,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         this.displayName = name;
     }
-    
+
     /**
      * (used internally)
      *
@@ -186,7 +182,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         this.uniqueId = uniqueId;
     }
-    
+
     /**
      * Whether this player is a leader or not
      *
@@ -229,7 +225,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         return false;
     }
-    
+
     /**
      * Check whether the player is an rival with another player
      *
@@ -938,29 +934,29 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
     public Player toPlayer()
     {
-        if (this.uniqueId != null) 
+        if (this.uniqueId != null)
         {
             return SimpleClans.getInstance().getServer().getPlayer(this.uniqueId);
-        } else 
+        } else
         {
-            return SimpleClans.getInstance().getServer().getPlayerExact(this.displayName);
+            return SimpleClans.getInstance().getServer().getPlayer(this.displayName);
         }
     }
    public void setMuted(boolean b)
    {
        clanChatMute = b;
    }
-   
+
    public void setMutedAlly(boolean b)
    {
        allyChatMute = b;
    }
-   
+
    public boolean isMuted()
    {
        return clanChatMute;
    }
-   
+
    public boolean isMutedAlly()
    {
        return allyChatMute;

@@ -1,8 +1,9 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import java.util.UUID;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+
+import java.util.UUID;
 
 public class TeleportState
 {
@@ -56,9 +57,9 @@ public class TeleportState
         if (SimpleClans.getInstance().hasUUID())
         {
             return SimpleClans.getInstance().getServer().getPlayer(this.playerUniqueId);
-        } else 
+        } else
         {
-            return SimpleClans.getInstance().getServer().getPlayerExact(this.playerName);
+            return SimpleClans.getInstance().getServer().getPlayer(this.playerName);
         }
     }
 
