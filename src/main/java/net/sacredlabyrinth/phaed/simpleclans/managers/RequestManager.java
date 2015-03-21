@@ -1,16 +1,17 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.events.RequestEvent;
+import net.sacredlabyrinth.phaed.simpleclans.events.RequestFinishedEvent;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
+
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.UUID;
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
-import net.sacredlabyrinth.phaed.simpleclans.events.RequestFinishedEvent;
-import net.sacredlabyrinth.phaed.simpleclans.events.RequestEvent;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 
 /**
  * @author phaed
@@ -255,11 +256,11 @@ public final class RequestManager
         if (vote.equals(VoteResult.ACCEPT))
         {
             ClanPlayer cp = plugin.getClanManager().getCreateClanPlayerUUID(invited);
-            if (cp == null) 
+            if (cp == null)
             {
                 return;
             }
-                                                    
+
             clan.addBb(ChatColor.AQUA + MessageFormat.format(plugin.getLang("joined.the.clan"), Helper.capitalize(invited)));
             plugin.getClanManager().serverAnnounce(MessageFormat.format(plugin.getLang("has.joined"), Helper.capitalize(invited), clan.getName()));
             clan.addPlayerToClan(cp);
@@ -389,7 +390,7 @@ public final class RequestManager
                 Clan clan = req.getClan();
                 String demoted = req.getTarget();
                 UUID demotedUniqueId = UUIDMigration.getForcedPlayerUUID(demoted);
-                
+
                 if (SimpleClans.getInstance().hasUUID())
                 {
                     if (demotedUniqueId == null)
@@ -404,7 +405,7 @@ public final class RequestManager
                     if (SimpleClans.getInstance().hasUUID())
                     {
                         clan.demote(demotedUniqueId);
-                    } else 
+                    } else
                     {
                         clan.demote(demoted);
                     }
@@ -420,7 +421,7 @@ public final class RequestManager
                 Clan clan = req.getClan();
                 String promoted = req.getTarget();
                 UUID promotedUniqueId = UUIDMigration.getForcedPlayerUUID(promoted);
-                
+
                 if (SimpleClans.getInstance().hasUUID())
                 {
                     if (promotedUniqueId == null)
@@ -434,7 +435,7 @@ public final class RequestManager
                     if (SimpleClans.getInstance().hasUUID())
                     {
                         clan.promote(promotedUniqueId);
-                    } else 
+                    } else
                     {
                         clan.promote(promoted);
                     }
@@ -460,11 +461,11 @@ public final class RequestManager
                     clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("clan.deletion"), deniers));
                 }
             }
-            
-            SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestFinishedEvent(req));
-            req.cleanVotes();
-            requests.remove(req.getClan().getTag());
         }
+
+        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestFinishedEvent(req));
+        req.cleanVotes();
+        requests.remove(req.getClan().getTag());
     }
 
     /**
@@ -526,7 +527,7 @@ public final class RequestManager
             if (SimpleClans.getInstance().hasUUID())
             {
                 player = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(req.getTarget()));
-            } else 
+            } else
             {
                 player = SimpleClans.getInstance().getServer().getPlayerExact(req.getTarget());
             }
