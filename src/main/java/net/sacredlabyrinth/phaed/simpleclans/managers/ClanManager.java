@@ -500,54 +500,25 @@ public final class ClanManager
 
             ClanPlayer cp = plugin.getClanManager().getAnyClanPlayer(player.getName());
 
-            if (plugin.getSettingsManager().ismChatIntegration() && plugin.getPermissionsManager().getMChat() != null)
+            if (cp == null)
             {
-                if (cp == null)
+                return;
+            }
+
+            if (cp.isTagEnabled())
+            {
+                Clan clan = cp.getClan();
+
+                if (clan != null)
                 {
-                    plugin.getPermissionsManager().clearSetMChatClanTag(player);
-                    return;
+                    fullName = clan.getTagLabel() + lastColor + fullName + ChatColor.WHITE;
                 }
 
-                if (cp.isTagEnabled())
-                {
-                    Clan clan = cp.getClan();
-
-                    if (clan != null)
-                    {
-                        plugin.getPermissionsManager().addSetMChatClanTag(player, clan.getTagLabel());
-                    }
-                    else
-                    {
-                        plugin.getPermissionsManager().clearSetMChatClanTag(player);
-                    }
-                }
-                else
-                {
-                    plugin.getPermissionsManager().clearSetMChatClanTag(player);
-                }
+                player.setDisplayName(fullName);
             }
             else
             {
-                if (cp == null)
-                {
-                    return;
-                }
-
-                if (cp.isTagEnabled())
-                {
-                    Clan clan = cp.getClan();
-
-                    if (clan != null)
-                    {
-                        fullName = clan.getTagLabel() + lastColor + fullName + ChatColor.WHITE;
-                    }
-
-                    player.setDisplayName(fullName);
-                }
-                else
-                {
-                    player.setDisplayName(lastColor + fullName + ChatColor.WHITE);
-                }
+                player.setDisplayName(lastColor + fullName + ChatColor.WHITE);
             }
         }
     }
