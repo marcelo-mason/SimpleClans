@@ -1,7 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import in.mDev.MiracleM4n.mChatSuite.api.API;
-import in.mDev.MiracleM4n.mChatSuite.mChatSuite;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
@@ -10,7 +8,6 @@ import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
-import org.bukkit.plugin.Plugin;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.HashMap;
@@ -29,7 +26,6 @@ public final class PermissionsManager
     public static Permission permission = null;
     public static Economy economy = null;
     public static Chat chat = null;
-    private mChatSuite mchat = null;
 
     private HashMap<String, List<String>> permissions = new HashMap<String, List<String>>();
     private HashMap<Player, PermissionAttachment> permAttaches = new HashMap<Player, PermissionAttachment>();
@@ -41,7 +37,6 @@ public final class PermissionsManager
     public PermissionsManager()
     {
         plugin = SimpleClans.getInstance();
-        detectMChat();
 
         try
         {
@@ -56,11 +51,6 @@ public final class PermissionsManager
             //SimpleClans.log("[PreciousStones] Vault.jar not found. No economy support.");
             //no need to spam everyone who doesnt use vault
         }
-    }
-
-    public mChatSuite getMChat()
-    {
-        return mchat;
     }
 
     /**
@@ -263,37 +253,6 @@ public final class PermissionsManager
     }
 
     /**
-     * Sets the mChat clan tag
-     *
-     * @param player
-     * @param value
-     */
-    public void addSetMChatClanTag(Player player, String value)
-    {
-        if(mchat != null)
-        {
-            API api = mchat.getAPI();
-
-            api.addPlayerVar(player.getName(), "clan", value);
-        }
-    }
-
-    /**
-     * Clears the mChat clan tag
-     *
-     * @param player
-     */
-    public void clearSetMChatClanTag(Player player)
-    {
-        if(mchat != null)
-        {
-            API api = mchat.getAPI();
-
-            api.addPlayerVar(player.getName(), "clan", "");
-        }
-    }
-
-    /**
      * Gives the player permissions linked to a clan
      *
      * @param cp
@@ -379,16 +338,6 @@ public final class PermissionsManager
                 permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
                 permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
             }
-        }
-    }
-
-    private void detectMChat()
-    {
-        Plugin test = plugin.getServer().getPluginManager().getPlugin("mChatSuite");
-
-        if (test != null)
-        {
-            mchat = (mChatSuite) test;
         }
     }
 
