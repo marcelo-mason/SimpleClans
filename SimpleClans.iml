@@ -24,7 +24,5 @@
     <orderEntry type="library" scope="PROVIDED" name="Maven: com.nijikokun.bukkit:Permissions:2.7.4" level="project" />
     <orderEntry type="library" scope="PROVIDED" name="Maven: net.sacredlabyrinth.Phaed:PreciousStones:9.7.0" level="project" />
     <orderEntry type="library" name="Maven: org.getspout:spoutplugin:dev-SNAPSHOT" level="project" />
-    <orderEntry type="library" scope="PROVIDED" name="Maven: n.mDev.MiracleM4n.mChatSuite:mChatSuite:1.4.5-R0.1.9-Unknown" level="project" />
   </component>
 </module>
-
