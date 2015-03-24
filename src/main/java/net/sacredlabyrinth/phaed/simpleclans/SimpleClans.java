@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.*;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import org.bukkit.ChatColor;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -16,7 +17,6 @@ import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  * @author Phaed
@@ -47,7 +47,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @param msg
      */
-    public static void debug(String msg) 
+    public static void debug(String msg)
     {
         if (getInstance().getSettingsManager().isDebugging()) {
             logger.log(Level.INFO, msg);
@@ -57,12 +57,12 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the instance
      */
-    public static SimpleClans getInstance() 
+    public static SimpleClans getInstance()
     {
         return instance;
     }
 
-    public static void log(String msg, Object... arg) 
+    public static void log(String msg, Object... arg)
     {
         if (arg == null || arg.length == 0) {
             logger.log(Level.INFO, msg);
@@ -72,7 +72,7 @@ public class SimpleClans extends JavaPlugin {
     }
 
     @Override
-    public void onEnable() 
+    public void onEnable()
     {
         instance = this;
         this.hasUUID = UUIDMigration.canReturnUUID();
@@ -95,13 +95,14 @@ public class SimpleClans extends JavaPlugin {
 
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
+
         pullMessages();
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
     }
 
     @Override
-    public void onDisable() 
+    public void onDisable()
     {
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
@@ -117,7 +118,7 @@ public class SimpleClans extends JavaPlugin {
 
         try
         {
-            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("http://minecraftcubed.net/pluginmessage/").openStream()));
+            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://minecraftcubed.net/pluginmessage/").openStream()));
 
             String message;
             while ((message = in.readLine()) != null)
@@ -137,7 +138,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the clanManager
      */
-    public ClanManager getClanManager() 
+    public ClanManager getClanManager()
     {
         return clanManager;
     }
@@ -145,7 +146,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the requestManager
      */
-    public RequestManager getRequestManager() 
+    public RequestManager getRequestManager()
     {
         return requestManager;
     }
@@ -153,7 +154,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the storageManager
      */
-    public StorageManager getStorageManager() 
+    public StorageManager getStorageManager()
     {
         return storageManager;
     }
@@ -161,7 +162,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the spoutManager
      */
-    public SpoutPluginManager getSpoutPluginManager() 
+    public SpoutPluginManager getSpoutPluginManager()
     {
         return spoutPluginManager;
     }
@@ -169,7 +170,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the settingsManager
      */
-    public SettingsManager getSettingsManager() 
+    public SettingsManager getSettingsManager()
     {
         return settingsManager;
     }
@@ -177,7 +178,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the permissionsManager
      */
-    public PermissionsManager getPermissionsManager() 
+    public PermissionsManager getPermissionsManager()
     {
         return permissionsManager;
     }
@@ -185,7 +186,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the commandManager
      */
-    public CommandManager getCommandManager() 
+    public CommandManager getCommandManager()
     {
         return commandManager;
     }
@@ -205,7 +206,7 @@ public class SimpleClans extends JavaPlugin {
     {
         return messages;
     }
-    
+
     /**
      * @return the hasUUID
      */
@@ -213,11 +214,11 @@ public class SimpleClans extends JavaPlugin {
     {
         return this.hasUUID;
     }
-    
+
     /**
      * @param trueOrFalse
      */
-    public void setUUID(boolean trueOrFalse) 
+    public void setUUID(boolean trueOrFalse)
     {
         this.hasUUID = trueOrFalse;
     }
