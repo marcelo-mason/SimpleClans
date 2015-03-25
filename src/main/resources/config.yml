@@ -90,7 +90,7 @@ page:
     trusted-color: f
     leader-color: '4'
     separator: '-'
-    size: 13
+    size: 100
 clanchat:
     rank.color: e
     tag-based-clan-chat: false
