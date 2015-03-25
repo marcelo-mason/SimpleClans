@@ -274,7 +274,14 @@ public class MenuCommand
         ChatBlock.saySingle(player, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang("clan.commands") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
         ChatBlock.sendBlank(player);
 
-        chatBlock.sendBlock(player);
+        boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+
+        if (more)
+        {
+            plugin.getStorageManager().addChatBlock(player, chatBlock);
+            ChatBlock.sendBlank(player);
+            ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+        }
 
         ChatBlock.sendBlank(player);
     }
@@ -301,7 +308,7 @@ public class MenuCommand
         ChatBlock.sendBlank(sender);
         ChatBlock.saySingle(sender, plugin.getSettingsManager().getServerName() + subColor + " " + plugin.getLang("clan.commands") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
         ChatBlock.sendBlank(sender);
-        chatBlock.sendBlock(sender);
+        chatBlock.sendBlock(sender, plugin.getSettingsManager().getPageSize());
         ChatBlock.sendBlank(sender);
     }
 

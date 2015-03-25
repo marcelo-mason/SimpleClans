@@ -89,7 +89,14 @@ public class CoordsCommand
                                 ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor+ " " + plugin.getLang("coords") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                                 ChatBlock.sendBlank(player);
 
-                                chatBlock.sendBlock(player);
+                                boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+
+                                if (more)
+                                {
+                                    plugin.getStorageManager().addChatBlock(player, chatBlock);
+                                    ChatBlock.sendBlank(player);
+                                    ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                                }
 
                                 ChatBlock.sendBlank(player);
                             }

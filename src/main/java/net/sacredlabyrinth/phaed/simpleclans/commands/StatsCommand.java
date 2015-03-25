@@ -1,13 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
-
 import java.text.DecimalFormat;
 import java.text.MessageFormat;
 import java.text.NumberFormat;
 import java.util.List;
+import net.sacredlabyrinth.phaed.simpleclans.*;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 /**
  * @author phaed
@@ -90,7 +89,14 @@ public class StatsCommand
                                 chatBlock.addRow("  " + name, ChatColor.YELLOW + kdr, ChatColor.WHITE + rival, ChatColor.GRAY + neutral, ChatColor.DARK_GRAY + civilian, ChatColor.DARK_RED + deaths);
                             }
 
-                            chatBlock.sendBlock(player);
+                            boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+
+                            if (more)
+                            {
+                                plugin.getStorageManager().addChatBlock(player, chatBlock);
+                                ChatBlock.sendBlank(player);
+                                ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                            }
 
                             ChatBlock.sendBlank(player);
                         }

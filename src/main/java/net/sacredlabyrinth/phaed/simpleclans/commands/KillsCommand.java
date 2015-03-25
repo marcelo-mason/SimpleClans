@@ -4,6 +4,7 @@ import net.sacredlabyrinth.phaed.simpleclans.*;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -72,7 +73,14 @@ public class KillsCommand
                         ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(polledPlayerName) + subColor + " " + plugin.getLang("kills") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                         ChatBlock.sendBlank(player);
 
-                        chatBlock.sendBlock(player);
+                        boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+
+                        if (more)
+                        {
+                            plugin.getStorageManager().addChatBlock(player, chatBlock);
+                            ChatBlock.sendBlank(player);
+                            ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                        }
 
                         ChatBlock.sendBlank(player);
                     }

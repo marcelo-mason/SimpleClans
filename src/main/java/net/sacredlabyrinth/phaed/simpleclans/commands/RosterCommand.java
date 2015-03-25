@@ -110,7 +110,14 @@ public class RosterCommand
                     chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()), lastSeen);
                 }
 
-                chatBlock.sendBlock(player);
+                boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+
+                if (more)
+                {
+                    plugin.getStorageManager().addChatBlock(player, chatBlock);
+                    ChatBlock.sendBlank(player);
+                    ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+                }
 
                 ChatBlock.sendBlank(player);
             } else

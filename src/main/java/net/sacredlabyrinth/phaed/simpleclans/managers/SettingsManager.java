@@ -61,6 +61,7 @@ public final class SettingsManager
     private int purgePlayers;
     private int requestFreqencySecs;
     private String requestMessageColor;
+    private int pageSize;
     private String pageSep;
     private String pageHeadingsColor;
     private String pageSubTitleColor;
@@ -211,6 +212,7 @@ public final class SettingsManager
         purgePlayers = getConfig().getInt("purge.inactive-player-data-days");
         requestFreqencySecs = getConfig().getInt("request.ask-frequency-secs");
         requestMessageColor = getConfig().getString("request.message-color");
+        pageSize = getConfig().getInt("page.size");
         pageSep = getConfig().getString("page.separator");
         pageSubTitleColor = getConfig().getString("page.subtitle-color");
         pageHeadingsColor = getConfig().getString("page.headings-color");
@@ -650,6 +652,14 @@ public final class SettingsManager
     public String getRequestMessageColor()
     {
         return Helper.toColor(requestMessageColor);
+    }
+
+    /**
+     * @return the pageSize
+     */
+    public int getPageSize()
+    {
+        return pageSize;
     }
 
     /**
