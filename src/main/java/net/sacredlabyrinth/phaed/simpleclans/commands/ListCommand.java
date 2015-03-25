@@ -79,14 +79,7 @@ public class ListCommand
                         rank++;
                     }
 
-                    boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
-
-                    if (more)
-                    {
-                        plugin.getStorageManager().addChatBlock(player, chatBlock);
-                        ChatBlock.sendBlank(player);
-                        ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
-                    }
+                    chatBlock.sendBlock(player);
 
                     ChatBlock.sendBlank(player);
                 }

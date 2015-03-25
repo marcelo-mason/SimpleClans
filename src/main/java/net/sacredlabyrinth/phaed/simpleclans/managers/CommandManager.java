@@ -476,7 +476,7 @@ public final class CommandManager
 
         if (chatBlock != null && chatBlock.size() > 0)
         {
-            chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+            chatBlock.sendBlock(player);
 
             if (chatBlock.size() > 0)
             {
