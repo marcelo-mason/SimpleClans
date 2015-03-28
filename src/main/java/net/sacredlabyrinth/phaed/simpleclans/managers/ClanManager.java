@@ -1400,10 +1400,14 @@ public final class ClanManager
             if (plugin.getPermissionsManager().has(player, "simpleclans.admin.all-seeing-eye"))
             {
                 boolean alreadySent = false;
-                if (plugin.getClanManager().getClanPlayer(player).isMuted())
+
+                ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+                if (cp != null && cp.isMuted())
                 {
                     continue;
                 }
+
                 for (ClanPlayer cpp : cps)
                 {
                     if (cpp.getName().equalsIgnoreCase(player.getName()))
