@@ -511,7 +511,7 @@ public final class ClanManager
 
                 if (clan != null)
                 {
-                    fullName = clan.getTagLabel() + lastColor + fullName + ChatColor.WHITE;
+                    fullName = clan.getTagLabel(cp.isLeader()) + lastColor + fullName + ChatColor.WHITE;
                 }
 
                 player.setDisplayName(fullName);

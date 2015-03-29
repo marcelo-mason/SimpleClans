@@ -679,7 +679,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
             return "";
         }
 
-        return clan.getTagLabel();
+        return clan.getTagLabel(isLeader());
     }
 
     /**

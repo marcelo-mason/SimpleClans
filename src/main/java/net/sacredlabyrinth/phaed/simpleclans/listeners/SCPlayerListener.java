@@ -234,7 +234,7 @@ public class SCPlayerListener implements Listener
         {
             if (cp != null && cp.isTagEnabled())
             {
-                String tagLabel = cp.getClan().getTagLabel();
+                String tagLabel = cp.getClan().getTagLabel(cp.isLeader());
 
                 Player player = event.getPlayer();
 

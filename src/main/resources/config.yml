@@ -4,11 +4,13 @@ tag:
     max-length: 5
     bracket:
         color: '8'
+        leader-color: '4'
         left: ''
         right: ''
     min-length: 2
     separator:
         color: '8'
+        leader-color: '4'
         char: ' .'
 settings:
     disable-messages: false

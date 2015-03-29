@@ -88,9 +88,11 @@ public final class SettingsManager
     private String tagDefaultColor;
     private String tagSeparator;
     private String tagSeparatorColor;
+    private String tagSeparatorLeaderColor;
     private String tagBracketLeft;
     private String tagBracketRight;
     private String tagBracketColor;
+    private String tagBracketLeaderColor;
     private boolean clanTrustByDefault;
     private boolean allyChatEnable;
     private String allyChatMessageColor;
@@ -245,7 +247,9 @@ public final class SettingsManager
         tagDefaultColor = getConfig().getString("tag.default-color");
         tagSeparator = getConfig().getString("tag.separator.char");
         tagSeparatorColor = getConfig().getString("tag.separator.color");
+        tagSeparatorLeaderColor = getConfig().getString("tag.separator.leader-color");
         tagBracketColor = getConfig().getString("tag.bracket.color");
+        tagBracketLeaderColor = getConfig().getString("tag.bracket.leader-color");
         tagBracketLeft = getConfig().getString("tag.bracket.left");
         tagBracketRight = getConfig().getString("tag.bracket.right");
         allyChatEnable = getConfig().getBoolean("allychat.enable");
@@ -1362,5 +1366,15 @@ public final class SettingsManager
     public boolean getUseBungeeCord()
     {
         return useBungeeCord;
+    }
+
+    public String getTagSeparatorLeaderColor()
+    {
+        return tagSeparatorLeaderColor;
+    }
+
+    public String getTagBracketLeaderColor()
+    {
+        return tagBracketLeaderColor;
     }
 }
