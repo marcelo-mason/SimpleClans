@@ -240,7 +240,6 @@ public class MySQLCore implements DBCore {
      * @param table
      * @return
      */
-    @Override
     public Boolean existsTable(String table)
     {
         try
@@ -250,29 +249,28 @@ public class MySQLCore implements DBCore {
         }
         catch (SQLException e)
         {
-            log.severe("Failed to check if table '" + table + "' exists: " + e.getMessage());
+            log.severe("Failed to check if table " + table + " exists: " + e.getMessage());
             return false;
         }
     }
 
     /**
-     * Check whether a colum exists
+     * Check whether a column exists
      *
-     * @param tabell
-     * @param colum
+     * @param table
+     * @param column
      * @return
      */
-    @Override
-    public Boolean existsColumn(String tabell, String colum)
+    public Boolean existsColumn(String table, String column)
     {
         try
         {
-            ResultSet colums = getConnection().getMetaData().getColumns(null, null, tabell, colum);
-            return colums.next();
+            ResultSet col = getConnection().getMetaData().getColumns(null, null, table, column);
+            return col.next();
         }
-        catch (SQLException e)
+        catch (Exception e)
         {
-            SimpleClans.getLog().severe("Failed to check if colum '" + colum + "' exists: " + e.getMessage());
+            log.severe("Failed to check if column " + column + " exists in table " + table + " : " + e.getMessage());
             return false;
         }
     }
