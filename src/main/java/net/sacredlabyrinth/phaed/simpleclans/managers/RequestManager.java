@@ -461,10 +461,11 @@ public final class RequestManager
                     clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("clan.deletion"), deniers));
                 }
             }
+
+            req.cleanVotes();
         }
 
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestFinishedEvent(req));
-        req.cleanVotes();
         requests.remove(req.getClan().getTag());
     }
 
