@@ -1370,11 +1370,11 @@ public final class SettingsManager
 
     public String getTagSeparatorLeaderColor()
     {
-        return tagSeparatorLeaderColor;
+        return Helper.toColor(tagSeparatorLeaderColor);
     }
 
     public String getTagBracketLeaderColor()
     {
-        return tagBracketLeaderColor;
+        return Helper.toColor(tagBracketLeaderColor);
     }
 }

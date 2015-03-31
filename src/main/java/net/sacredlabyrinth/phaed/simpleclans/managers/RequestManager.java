@@ -393,7 +393,7 @@ public final class RequestManager
 
                 if (SimpleClans.getInstance().hasUUID())
                 {
-                    if (demotedUniqueId == null)
+                    if (demotedUniqueId != null)
                     {
                         return;
                     }
