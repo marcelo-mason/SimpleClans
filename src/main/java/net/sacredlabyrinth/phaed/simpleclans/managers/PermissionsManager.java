@@ -302,38 +302,38 @@ public final class PermissionsManager
 
                     if (cp.isLeader())
                     {
-                        if (!permission.playerInGroup(cp.toPlayer(), "SCLeader"))
+                        if (!permission.playerInGroup(cp.toPlayer(), "sc.leader"))
                         {
-                            permission.playerAddGroup(cp.toPlayer(), "SCLeader");
+                            permission.playerAddGroup(cp.toPlayer(), "sc.leader");
                         }
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+                        permission.playerRemoveGroup(cp.toPlayer(), "sc.untrusted");
+                        permission.playerRemoveGroup(cp.toPlayer(), "sc.trusted");
                         return;
                     }
 
                     if (cp.isTrusted())
                     {
-                        if (!permission.playerInGroup(cp.toPlayer(), "SCTrusted"))
+                        if (!permission.playerInGroup(cp.toPlayer(), "sc.trusted"))
                         {
-                            permission.playerAddGroup(cp.toPlayer(), "SCTrusted");
+                            permission.playerAddGroup(cp.toPlayer(), "sc.trusted");
                         }
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                        permission.playerRemoveGroup(cp.toPlayer(), "sc.untrusted");
+                        permission.playerRemoveGroup(cp.toPlayer(), "sc.leader");
                         return;
                     }
 
-                    if (!permission.playerInGroup(cp.toPlayer(), "SCUntrusted"))
+                    if (!permission.playerInGroup(cp.toPlayer(), "sc.untrusted"))
                     {
-                        permission.playerAddGroup(cp.toPlayer(), "SCUntrusted");
+                        permission.playerAddGroup(cp.toPlayer(), "sc.untrusted");
                     }
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                    permission.playerRemoveGroup(cp.toPlayer(), "sc.trusted");
+                    permission.playerRemoveGroup(cp.toPlayer(), "sc.leader");
                 }
                 else
                 {
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                    permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                    permission.playerRemoveGroup(cp.toPlayer(), "sc.untrusted");
+                    permission.playerRemoveGroup(cp.toPlayer(), "sc.trusted");
+                    permission.playerRemoveGroup(cp.toPlayer(), "sc.leader");
                 }
             }
         }
@@ -356,9 +356,9 @@ public final class PermissionsManager
             if (cp.toPlayer() != null)
             {
                 permission.playerRemoveGroup(cp.toPlayer(), "clan." + cp.getTag());
-                permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                permission.playerRemoveGroup(cp.toPlayer(), "sc.untrusted");
+                permission.playerRemoveGroup(cp.toPlayer(), "sc.trusted");
+                permission.playerRemoveGroup(cp.toPlayer(), "sc.leader");
             }
         }
     }
