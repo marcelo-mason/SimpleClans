@@ -355,7 +355,7 @@ public final class PermissionsManager
         {
             if (cp.toPlayer() != null)
             {
-                permission.playerRemoveGroup(cp.toPlayer(), "Clan" + cp.getTag());
+                permission.playerRemoveGroup(cp.toPlayer(), "clan." + cp.getTag());
                 permission.playerRemoveGroup(cp.toPlayer(), "SCUntrusted");
                 permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
                 permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
