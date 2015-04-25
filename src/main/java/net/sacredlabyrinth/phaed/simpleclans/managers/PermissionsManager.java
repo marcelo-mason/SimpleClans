@@ -295,9 +295,9 @@ public final class PermissionsManager
             {
                 if (cp.getClan() != null)
                 {
-                    if (!permission.playerInGroup(cp.toPlayer(), "Clan" + cp.getTag()))
+                    if (!permission.playerInGroup(cp.toPlayer(), "clan." + cp.getTag()))
                     {
-                        permission.playerAddGroup(cp.toPlayer(), "Clan" + cp.getTag());
+                        permission.playerAddGroup(cp.toPlayer(), "clan." + cp.getTag());
                     }
 
                     if (cp.isLeader())
@@ -322,15 +322,12 @@ public final class PermissionsManager
                         return;
                     }
 
-                    if (!cp.isTrusted() && !cp.isLeader())
+                    if (!permission.playerInGroup(cp.toPlayer(), "SCUntrusted"))
                     {
-                        if (!permission.playerInGroup(cp.toPlayer(), "SCUntrusted"))
-                        {
-                            permission.playerAddGroup(cp.toPlayer(), "SCUntrusted");
-                        }
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
-                        permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
+                        permission.playerAddGroup(cp.toPlayer(), "SCUntrusted");
                     }
+                    permission.playerRemoveGroup(cp.toPlayer(), "SCTrusted");
+                    permission.playerRemoveGroup(cp.toPlayer(), "SCLeader");
                 }
                 else
                 {

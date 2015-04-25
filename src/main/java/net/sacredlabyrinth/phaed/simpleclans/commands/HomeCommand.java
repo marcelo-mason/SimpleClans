@@ -32,7 +32,6 @@ public class HomeCommand {
         {
             if (!plugin.getClanManager().purchaseHomeTeleportSet(player))
             {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.does.not.exist"));
                 return;
             }
             Location loc = player.getLocation();
