@@ -316,6 +316,10 @@ public final class CommandManager
                     {
                         reloadCommand.execute(sender, subargs);
                     }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("place.command")))
+                    {
+                        placeCommand.execute(sender, subargs);
+                    }
                     else
                     {
                         ChatBlock.sendMessage(sender, ChatColor.RED + plugin.getLang("does.not.match"));
