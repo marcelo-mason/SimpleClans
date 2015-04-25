@@ -47,7 +47,6 @@ public final class RequestManager
      */
     public void addDemoteRequest(ClanPlayer requester, String demotedName, Clan clan)
     {
-
         String msg = MessageFormat.format(plugin.getLang("asking.for.the.demotion"), Helper.capitalize(requester.getName()), demotedName);
 
         ClanPlayer demotedTp = plugin.getClanManager().getClanPlayer(demotedName.toLowerCase());
@@ -92,7 +91,7 @@ public final class RequestManager
         List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(clan.getLeaders());
         acceptors.remove(requester);
 
-        Request req = new Request(plugin, ClanRequest.DISBAND, acceptors, requester, null, clan, msg);
+        Request req = new Request(plugin, ClanRequest.DISBAND, acceptors, requester, clan.getTag(), clan, msg);
         requests.put(clan.getTag(), req);
         ask(req);
     }
@@ -116,18 +115,18 @@ public final class RequestManager
      * Add an clan war request
      *
      * @param requester
-     * @param allyClan
+     * @param warClan
      * @param requestingClan
      */
-    public void addWarStartRequest(ClanPlayer requester, Clan allyClan, Clan requestingClan)
+    public void addWarStartRequest(ClanPlayer requester, Clan warClan, Clan requestingClan)
     {
-        String msg = MessageFormat.format(plugin.getLang("proposing.war"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(allyClan.getColorTag()));
+        String msg = MessageFormat.format(plugin.getLang("proposing.war"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(warClan.getColorTag()));
 
-        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(allyClan.getLeaders());
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(warClan.getLeaders());
         acceptors.remove(requester);
 
-        Request req = new Request(plugin, ClanRequest.START_WAR, acceptors, requester, allyClan.getTag(), requestingClan, msg);
-        requests.put(allyClan.getTag(), req);
+        Request req = new Request(plugin, ClanRequest.START_WAR, acceptors, requester, warClan.getTag(), requestingClan, msg);
+        requests.put(warClan.getTag(), req);
         ask(req);
     }
 
@@ -135,18 +134,18 @@ public final class RequestManager
      * Add an war end request
      *
      * @param requester
-     * @param rivalClan
+     * @param warClan
      * @param requestingClan
      */
-    public void addWarEndRequest(ClanPlayer requester, Clan rivalClan, Clan requestingClan)
+    public void addWarEndRequest(ClanPlayer requester, Clan warClan, Clan requestingClan)
     {
-        String msg = MessageFormat.format(plugin.getLang("proposing.to.end.the.war"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(rivalClan.getColorTag()));
+        String msg = MessageFormat.format(plugin.getLang("proposing.to.end.the.war"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(warClan.getColorTag()));
 
-        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(rivalClan.getLeaders());
+        List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(warClan.getLeaders());
         acceptors.remove(requester);
 
-        Request req = new Request(plugin, ClanRequest.END_WAR, acceptors, requester, rivalClan.getTag(), requestingClan, msg);
-        requests.put(rivalClan.getTag(), req);
+        Request req = new Request(plugin, ClanRequest.END_WAR, acceptors, requester, warClan.getTag(), requestingClan, msg);
+        requests.put(warClan.getTag(), req);
         ask(req);
     }
 
@@ -178,7 +177,6 @@ public final class RequestManager
      */
     public void addRivalryBreakRequest(ClanPlayer requester, Clan rivalClan, Clan requestingClan)
     {
-
         String msg = MessageFormat.format(plugin.getLang("proposing.to.end.the.rivalry"), Helper.capitalize(requestingClan.getName()), Helper.stripColors(rivalClan.getColorTag()));
 
         List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(rivalClan.getLeaders());
@@ -464,8 +462,8 @@ public final class RequestManager
             req.cleanVotes();
         }
 
+        requests.remove(req.getTarget());
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestFinishedEvent(req));
-        requests.remove(req.getClan().getTag());
     }
 
     /**
