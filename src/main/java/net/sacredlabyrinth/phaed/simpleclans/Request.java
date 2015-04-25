@@ -15,6 +15,7 @@ public final class Request
     private String target;
     private ClanRequest type;
     private ClanPlayer requester;
+    private int askCount;
 
     /**
      * @param plugin
@@ -226,5 +227,15 @@ public final class Request
     public void setRequester(ClanPlayer requester)
     {
         this.requester = requester;
+    }
+
+    public void incrementAskCount()
+    {
+        askCount += 1;
+    }
+
+    public boolean reachedRequestLimit()
+    {
+        return askCount > SimpleClans.getInstance().getSettingsManager().getMaxAsksPerRequest();
     }
 }

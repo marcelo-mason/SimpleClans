@@ -136,6 +136,7 @@ public final class SettingsManager
     private boolean allowReGroupCommand;
     private boolean useThreads;
     private boolean useBungeeCord;
+    private int maxAsksPerRequest;
 
     /**
      *
@@ -214,6 +215,7 @@ public final class SettingsManager
         purgePlayers = getConfig().getInt("purge.inactive-player-data-days");
         requestFreqencySecs = getConfig().getInt("request.ask-frequency-secs");
         requestMessageColor = getConfig().getString("request.message-color");
+        setMaxAsksPerRequest(getConfig().getInt("request.max-asks-per-request"));
         pageSize = getConfig().getInt("page.size");
         pageSep = getConfig().getString("page.separator");
         pageSubTitleColor = getConfig().getString("page.subtitle-color");
@@ -1376,5 +1378,15 @@ public final class SettingsManager
     public String getTagBracketLeaderColor()
     {
         return Helper.toColor(tagBracketLeaderColor);
+    }
+
+    public int getMaxAsksPerRequest()
+    {
+        return maxAsksPerRequest;
+    }
+
+    public void setMaxAsksPerRequest(int maxAsksPerRequest)
+    {
+        this.maxAsksPerRequest = maxAsksPerRequest;
     }
 }

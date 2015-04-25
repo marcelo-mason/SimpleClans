@@ -8,10 +8,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * @author phaed
@@ -405,7 +402,8 @@ public final class RequestManager
                     if (SimpleClans.getInstance().hasUUID())
                     {
                         clan.demote(demotedUniqueId);
-                    } else
+                    }
+                    else
                     {
                         clan.demote(demoted);
                     }
@@ -435,7 +433,8 @@ public final class RequestManager
                     if (SimpleClans.getInstance().hasUUID())
                     {
                         clan.promote(promotedUniqueId);
-                    } else
+                    }
+                    else
                     {
                         clan.promote(promoted);
                     }
@@ -498,14 +497,22 @@ public final class RequestManager
      */
     public void askerTask()
     {
-        plugin.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, new Runnable()
+        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable()
         {
             @Override
             public void run()
             {
-                for (Request req : requests.values())
+                for (Iterator<Map.Entry<String, Request>> iter = requests.entrySet().iterator(); iter.hasNext(); )
                 {
+                    Request req = iter.next().getValue();
+
+                    if (req.reachedRequestLimit())
+                    {
+                        iter.remove();
+                    }
+
                     ask(req);
+                    req.incrementAskCount();
                 }
             }
         }, 0, plugin.getSettingsManager().getRequestFreqencySecs() * 20L);
@@ -528,7 +535,8 @@ public final class RequestManager
             if (SimpleClans.getInstance().hasUUID())
             {
                 player = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(req.getTarget()));
-            } else
+            }
+            else
             {
                 player = SimpleClans.getInstance().getServer().getPlayer(req.getTarget());
             }
@@ -559,6 +567,7 @@ public final class RequestManager
                 }
             }
         }
+
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestEvent(req));
     }
 }

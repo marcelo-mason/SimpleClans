@@ -110,6 +110,7 @@ clanchat:
 request:
     message-color: b
     ask-frequency-secs: 60
+    max-asks-per-request: 1440
 bb:
     color: e
     accent-color: '8'
