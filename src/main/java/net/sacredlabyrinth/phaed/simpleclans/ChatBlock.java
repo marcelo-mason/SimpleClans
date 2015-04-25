@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
+import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -545,37 +546,39 @@ public class ChatBlock
      */
     private static int charLength(char x)
     {
-        if ("i.:,;|!".indexOf(x) != -1)
+        String normalized = StringSimplifier.simplifiedString(x + "");
+
+        if ("i.:,;|!".contains(normalized))
         {
             return 2;
         }
-        else if ("l'".indexOf(x) != -1)
+        else if ("l'".contains(normalized))
         {
             return 3;
         }
-        else if ("tI[]".indexOf(x) != -1)
+        else if ("tI[]".contains(normalized))
         {
             return 4;
         }
-        else if ("fk{}<>\"*()".indexOf(x) != -1)
+        else if ("fk{}<>\"*()".contains(normalized))
         {
             return 5;
         }
-        else if ("abcdeghjmnopqrsuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890\\/#?$%-=_+&^".indexOf(x) != -1)
+        else if ("abcdeghjmnopqrsuvwxyzABCDEFGHJKLMNOPQRSTUVWXYZ1234567890\\/#?$%-=_+&^".contains(normalized))
         {
             return 6;
         }
-        else if ("@~".indexOf(x) != -1)
+        else if ("@~".contains(normalized))
         {
             return 7;
         }
-        else if (x == ' ')
+        else if (normalized.equals(" "))
         {
             return 4;
         }
         else
         {
-            return -1;
+            return 7;
         }
     }
 
@@ -605,8 +608,8 @@ public class ChatBlock
 
             ArrayList<String> words = new ArrayList<String>();
 
-            // Loop through the words finding their length and increasing
-            // j, the end point for the sub string
+            // go through the split array containing all the words, and adding them to the words array
+            // until reaching the point where their width no longer fits on a chat line
 
             while (!split.isEmpty() && split.get(0) != null && len <= lineLength)
             {
@@ -630,10 +633,13 @@ public class ChatBlock
                     words.add(split.remove(0));
                 }
             }
-            // Merge them and add them to the output array.
-            String merged = combineSplit(words.toArray(new String[words.size()])) + " ";
-            out.add(merged.replaceAll("\\s+$", ""));
+
+            // Merge the words into a sentence (that now fits into a single chat line) and add them to the output array.
+
+            String merged = combineSplit(words.toArray(new String[words.size()]));
+            out.add(merged);
         }
+
         // Convert to an array and return
 
         return out.toArray(new String[out.size()]);
