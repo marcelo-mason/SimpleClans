@@ -7,6 +7,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class PlayerNameTabCompleter implements TabCompleter
@@ -23,6 +24,11 @@ public class PlayerNameTabCompleter implements TabCompleter
     {
         if (command.getName().equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
         {
+            if (strings.length < 2)
+            {
+                return null;
+            }
+
             if (strings[0].equalsIgnoreCase(plugin.getLang("lookup.command")) ||
                     strings[0].equalsIgnoreCase(plugin.getLang("ban.command")) ||
                     strings[0].equalsIgnoreCase(plugin.getLang("unban.command")) ||
@@ -40,8 +46,13 @@ public class PlayerNameTabCompleter implements TabCompleter
 
                 for (OfflinePlayer player : plugin.getServer().getOnlinePlayers())
                 {
-                    list.add(player.getName());
+                    if (player.getName().startsWith(strings[1]))
+                    {
+                        list.add(player.getName());
+                    }
                 }
+
+                Collections.sort(list);
 
                 return list;
             }
