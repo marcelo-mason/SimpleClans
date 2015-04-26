@@ -96,6 +96,7 @@ public class SimpleClans extends JavaPlugin {
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
 
+        getCommand(getSettingsManager().getCommandClan()).setExecutor(commandManager);
         getCommand(getSettingsManager().getCommandClan()).setTabCompleter(new PlayerNameTabCompleter());
 
         pullMessages();

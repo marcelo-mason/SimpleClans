@@ -3,6 +3,8 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.commands.*;
 import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -11,7 +13,7 @@ import java.text.MessageFormat;
 /**
  * @author phaed
  */
-public final class CommandManager
+public final class CommandManager implements CommandExecutor
 {
     private SimpleClans plugin;
     private CreateCommand createCommand;
@@ -103,11 +105,8 @@ public final class CommandManager
         placeCommand = new PlaceCommand();
     }
 
-    /**
-     * @param sender
-     * @param args
-     */
-    public void processClan(CommandSender sender, String[] args)
+    @Override
+    public boolean onCommand(CommandSender sender, Command command, String s, String[] args)
     {
         try
         {
@@ -117,13 +116,13 @@ public final class CommandManager
 
                 if (plugin.getSettingsManager().isBlacklistedWorld(player.getLocation().getWorld().getName()))
                 {
-                    return;
+                    return false;
                 }
 
                 if (plugin.getSettingsManager().isBanned(player.getName()))
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
-                    return;
+                    return false;
                 }
 
                 if (args.length == 0)
@@ -335,6 +334,8 @@ public final class CommandManager
                 System.out.print(el.toString());
             }
         }
+
+        return false;
     }
 
     /**
