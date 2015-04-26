@@ -133,6 +133,11 @@ public class SCPlayerListener implements Listener
                 plugin.getClanManager().processGlobalChat(player, Helper.toMessage(Helper.removeFirst(split)));
             }
         }
+        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
+        {
+            event.setCancelled(true);
+            plugin.getCommandManager().processClan(player, Helper.removeFirst(split));
+        }
         else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAccept()))
         {
             event.setCancelled(true);
