@@ -110,49 +110,6 @@ public class SCPlayerListener implements Listener
                 plugin.getClanManager().processClanChat(player, cp.getTag(), Helper.toMessage(Helper.removeFirst(split)));
             }
         }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAlly()))
-        {
-            if (!plugin.getSettingsManager().isAllyChatEnable())
-            {
-                return;
-            }
-
-            event.setCancelled(true);
-
-            if (split.length > 1)
-            {
-                plugin.getClanManager().processAllyChat(player, Helper.toMessage(Helper.removeFirst(split)));
-            }
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandGlobal()))
-        {
-            event.setCancelled(true);
-
-            if (split.length > 1)
-            {
-                plugin.getClanManager().processGlobalChat(player, Helper.toMessage(Helper.removeFirst(split)));
-            }
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
-        {
-            event.setCancelled(true);
-            plugin.getCommandManager().processClan(player, Helper.removeFirst(split));
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAccept()))
-        {
-            event.setCancelled(true);
-            plugin.getCommandManager().processAccept(player);
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandDeny()))
-        {
-            event.setCancelled(true);
-            plugin.getCommandManager().processDeny(player);
-        }
-        else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandMore()))
-        {
-            event.setCancelled(true);
-            plugin.getCommandManager().processMore(player);
-        }
     }
 
     /**
