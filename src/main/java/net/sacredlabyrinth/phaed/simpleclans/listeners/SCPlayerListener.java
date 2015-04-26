@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.listeners;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.executors.*;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -108,6 +109,58 @@ public class SCPlayerListener implements Listener
             if (split.length > 1)
             {
                 plugin.getClanManager().processClanChat(player, cp.getTag(), Helper.toMessage(Helper.removeFirst(split)));
+            }
+        }
+
+        if (plugin.getSettingsManager().isForceCommandPriority())
+        {
+            if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAlly()))
+            {
+                if (!plugin.getServer().getPluginCommand(plugin.getSettingsManager().getCommandAlly()).equals(plugin.getCommand(plugin.getSettingsManager().getCommandAlly())))
+                {
+                    new AllyCommandExecutor().onCommand(player, null, null, Helper.removeFirst(split));
+                    event.setCancelled(true);
+                }
+            }
+            else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandGlobal()))
+            {
+                if (!plugin.getServer().getPluginCommand(plugin.getSettingsManager().getCommandGlobal()).equals(plugin.getCommand(plugin.getSettingsManager().getCommandGlobal())))
+                {
+                    new GlobalCommandExecutor().onCommand(player, null, null, Helper.removeFirst(split));
+                    event.setCancelled(true);
+                }
+            }
+            else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
+            {
+                if (!plugin.getServer().getPluginCommand(plugin.getSettingsManager().getCommandClan()).equals(plugin.getCommand(plugin.getSettingsManager().getCommandClan())))
+                {
+                    new ClanCommandExecutor().onCommand(player, null, null, Helper.removeFirst(split));
+                    event.setCancelled(true);
+                }
+            }
+            else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandAccept()))
+            {
+                if (!plugin.getServer().getPluginCommand(plugin.getSettingsManager().getCommandAccept()).equals(plugin.getCommand(plugin.getSettingsManager().getCommandAccept())))
+                {
+                    new AcceptCommandExecutor().onCommand(player, null, null, Helper.removeFirst(split));
+                    event.setCancelled(true);
+                }
+            }
+            else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandDeny()))
+            {
+                if (!plugin.getServer().getPluginCommand(plugin.getSettingsManager().getCommandDeny()).equals(plugin.getCommand(plugin.getSettingsManager().getCommandDeny())))
+                {
+                    new DenyCommandExecutor().onCommand(player, null, null, Helper.removeFirst(split));
+                    event.setCancelled(true);
+                }
+            }
+            else if (command.equalsIgnoreCase(plugin.getSettingsManager().getCommandMore()))
+            {
+                if (!plugin.getServer().getPluginCommand(plugin.getSettingsManager().getCommandMore()).equals(plugin.getCommand(plugin.getSettingsManager().getCommandMore())))
+                {
+                    new MoreCommandExecutor().onCommand(player, null, null, Helper.removeFirst(split));
+                    event.setCancelled(true);
+                }
             }
         }
     }
@@ -254,7 +307,8 @@ public class SCPlayerListener implements Listener
         if (SimpleClans.getInstance().hasUUID())
         {
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else
+        }
+        else
         {
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
         }
@@ -262,10 +316,10 @@ public class SCPlayerListener implements Listener
 
         if (plugin.getSettingsManager().isBbShowOnLogin())
         {
-                if (cp.isBbEnabled())
-                {
-                    cp.getClan().displayBb(player);
-                }
+            if (cp.isBbEnabled())
+            {
+                cp.getClan().displayBb(player);
+            }
         }
 
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);

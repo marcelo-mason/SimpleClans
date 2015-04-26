@@ -56,6 +56,7 @@ commands:
     accept: accept
     deny: deny
     global: global
+    force-priority: true
 economy:
     creation-price: 100.0
     purchase-clan-create: false

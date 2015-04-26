@@ -136,6 +136,7 @@ public final class SettingsManager
     private boolean allowReGroupCommand;
     private boolean useThreads;
     private boolean useBungeeCord;
+    private boolean forceCommandPriority;
     private int maxAsksPerRequest;
 
     /**
@@ -234,6 +235,7 @@ public final class SettingsManager
         commandMore = getConfig().getString("commands.more");
         commandDeny = getConfig().getString("commands.deny");
         commandAccept = getConfig().getString("commands.accept");
+        forceCommandPriority = getConfig().getBoolean("commands.force-priority");
         homebaseSetOnce = getConfig().getBoolean("clan.homebase-can-be-set-only-once");
         waitSecs = getConfig().getInt("clan.homebase-teleport-wait-secs");
         confirmationForPromote = getConfig().getBoolean("clan.confirmation-for-demote");
@@ -1388,5 +1390,15 @@ public final class SettingsManager
     public void setMaxAsksPerRequest(int maxAsksPerRequest)
     {
         this.maxAsksPerRequest = maxAsksPerRequest;
+    }
+
+    public boolean isForceCommandPriority()
+    {
+        return forceCommandPriority;
+    }
+
+    public void setForceCommandPriority(boolean forceCommandPriority)
+    {
+        this.forceCommandPriority = forceCommandPriority;
     }
 }
