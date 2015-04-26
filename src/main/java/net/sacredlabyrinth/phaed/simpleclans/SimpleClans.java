@@ -96,6 +96,8 @@ public class SimpleClans extends JavaPlugin {
         spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
 
+        getCommand(getSettingsManager().getCommandClan()).setTabCompleter(new PlayerNameTabCompleter());
+
         pullMessages();
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
