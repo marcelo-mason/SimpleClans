@@ -504,6 +504,11 @@ public final class RequestManager
                 {
                     Request req = iter.next().getValue();
 
+                    if (req == null)
+                    {
+                        continue;
+                    }
+
                     if (req.reachedRequestLimit())
                     {
                         iter.remove();
