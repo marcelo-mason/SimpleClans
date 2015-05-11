@@ -106,9 +106,9 @@
     </ciManagement>
 
     <scm>
-        <connection>scm:git:git:@github.com:phaed420/SimpleClans.git</connection>
-        <developerConnection>scm:git:git:@github.com:phaed420/SimpleClans.git</developerConnection>
-        <url>http://github.com/phaed420/SimpleClans.git/tree/master/</url>
+        <connection>scm:git:git:@github.com:marcelo-mason/SimpleClans.git</connection>
+        <developerConnection>scm:git:git:@github.com:marcelo-mason/SimpleClans.git</developerConnection>
+        <url>http://github.com/marcelo-mason/SimpleClans.git/tree/master/</url>
         <tag>SimpleClans</tag>
     </scm>
 
