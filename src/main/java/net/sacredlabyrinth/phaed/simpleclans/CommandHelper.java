@@ -14,10 +14,16 @@ public class CommandHelper
 {
     public static void registerCommand(String... aliases)
     {
-        PluginCommand command = getCommand(aliases[0], SimpleClans.getInstance());
+        if (aliases != null)
+        {
+            PluginCommand command = getCommand(aliases[0], SimpleClans.getInstance());
 
-        command.setAliases(Arrays.asList(aliases));
-        getCommandMap().register(SimpleClans.getInstance().getDescription().getName(), command);
+            if (command != null)
+            {
+                command.setAliases(Arrays.asList(aliases));
+                getCommandMap().register(SimpleClans.getInstance().getDescription().getName(), command);
+            }
+        }
     }
 
     private static PluginCommand getCommand(String name, Plugin plugin)
