@@ -681,6 +681,23 @@ public final class StorageManager
     }
 
     /**
+     * Update a clan to the database asynchronously
+     *
+     * @param clan
+     */
+    public void updateClanAsync(final Clan clan)
+    {
+        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                updateClan(clan);
+            }
+        });
+    }
+
+    /**
      * Update a clan to the database
      *
      * @param clan
@@ -722,6 +739,23 @@ public final class StorageManager
             String values = "VALUES ( '" + cp.getName() + "'," + (cp.isLeader() ? 1 : 0) + ",'" + Helper.escapeQuotes(cp.getTag()) + "'," + (cp.isFriendlyFire() ? 1 : 0) + "," + cp.getNeutralKills() + "," + cp.getRivalKills() + "," + cp.getCivilianKills() + "," + cp.getDeaths() + ",'" + cp.getLastSeen() + "',' " + cp.getJoinDate() + "','" + Helper.escapeQuotes(cp.getPackedPastClans()) + "','" + Helper.escapeQuotes(cp.getFlags()) + "');";
             core.insert(query + values);
         }
+    }
+
+    /**
+     * Update a clan player to the database asynchronously
+     *
+     * @param cp
+     */
+    public void updateClanPlayerAsync(final ClanPlayer cp)
+    {
+        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+                updateClanPlayer(cp);
+            }
+        });
     }
 
     /**

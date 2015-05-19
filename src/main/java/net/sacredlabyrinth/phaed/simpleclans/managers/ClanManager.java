@@ -535,14 +535,14 @@ public final class ClanManager
         if (cp != null)
         {
             cp.updateLastSeen();
-            plugin.getStorageManager().updateClanPlayer(cp);
+            plugin.getStorageManager().updateClanPlayerAsync(cp);
 
             Clan clan = cp.getClan();
 
             if (clan != null)
             {
                 clan.updateLastUsed();
-                plugin.getStorageManager().updateClan(clan);
+                plugin.getStorageManager().updateClanAsync(clan);
             }
         }
     }

@@ -126,7 +126,7 @@ public class SCEntityListener implements Listener
 
                 // record death for victim
                 vcp.addDeath();
-                plugin.getStorageManager().updateClanPlayer(vcp);
+                plugin.getStorageManager().updateClanPlayerAsync(vcp);
             }
         }
     }
