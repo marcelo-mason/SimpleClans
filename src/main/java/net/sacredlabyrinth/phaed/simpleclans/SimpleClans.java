@@ -78,7 +78,7 @@ public class SimpleClans extends JavaPlugin {
         this.hasUUID = UUIDMigration.canReturnUUID();
         settingsManager = new SettingsManager();
 
-        lang = PropertyResourceBundle.getBundle("languages.lang");
+        lang = PropertyResourceBundle.getBundle("languages.lang", new UTF8Control());
 
         logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
