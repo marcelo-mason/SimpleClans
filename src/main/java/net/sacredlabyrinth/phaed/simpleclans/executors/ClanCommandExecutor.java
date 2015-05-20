@@ -54,6 +54,7 @@ public final class ClanCommandExecutor implements CommandExecutor
     private SetRankCommand setRankCommand;
     private BankCommand bankCommand;
     private PlaceCommand placeCommand;
+    private ResetKDRCommand resetKDRCommand;
 
     /**
      *
@@ -101,6 +102,7 @@ public final class ClanCommandExecutor implements CommandExecutor
         setRankCommand = new SetRankCommand();
         bankCommand = new BankCommand();
         placeCommand = new PlaceCommand();
+        resetKDRCommand = new ResetKDRCommand();
     }
 
     @Override
@@ -287,6 +289,10 @@ public final class ClanCommandExecutor implements CommandExecutor
                     else if (subcommand.equalsIgnoreCase(plugin.getLang("place.command")))
                     {
                         placeCommand.execute(player, subargs);
+                    }
+                    else if (subcommand.equalsIgnoreCase(plugin.getLang("resetkdr.command")))
+                    {
+                        resetKDRCommand.execute(player, subargs);
                     }
                     else
                     {
