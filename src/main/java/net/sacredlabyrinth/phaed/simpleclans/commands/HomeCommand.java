@@ -87,14 +87,14 @@ public class HomeCommand {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                 return;
             }
-            if (plugin.getClanManager().purchaseHomeTeleport(player))
-            {
                 Location loc = clan.getHomeLocation();
                 if (loc == null)
                 {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("hombase.not.set"));
                     return;
                 }
+            if (plugin.getClanManager().purchaseHomeTeleport(player))
+            {
                 plugin.getTeleportManager().addPlayer(player, clan.getHomeLocation(), clan.getName());
             }
         }
