@@ -34,7 +34,7 @@ public class SimpleClans extends JavaPlugin {
     private SettingsManager settingsManager;
     private PermissionsManager permissionsManager;
     private TeleportManager teleportManager;
-    private ResourceBundle lang;
+    private LanguageManager languageManager;
     private boolean hasUUID;
 
     /**
@@ -76,11 +76,8 @@ public class SimpleClans extends JavaPlugin {
     {
         instance = this;
         this.hasUUID = UUIDMigration.canReturnUUID();
+        languageManager = new LanguageManager();
         settingsManager = new SettingsManager();
-
-        lang = PropertyResourceBundle.getBundle("languages.lang", new UTF8Control());
-
-        logger.info(MessageFormat.format(lang.getString("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
         spoutPluginManager = new SpoutPluginManager();
         permissionsManager = new PermissionsManager();
@@ -88,6 +85,8 @@ public class SimpleClans extends JavaPlugin {
         clanManager = new ClanManager();
         storageManager = new StorageManager();
         teleportManager = new TeleportManager();
+
+        logger.info(MessageFormat.format(getLang("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
         getServer().getPluginManager().registerEvents(new SCEntityListener(), this);
         getServer().getPluginManager().registerEvents(new SCPlayerListener(), this);
@@ -202,7 +201,7 @@ public class SimpleClans extends JavaPlugin {
      * @return the lang
      */
     public String getLang(String msg) {
-        return lang.getString(msg);
+        return languageManager.get(msg);
     }
 
     public TeleportManager getTeleportManager() {
@@ -228,5 +227,10 @@ public class SimpleClans extends JavaPlugin {
     public void setUUID(boolean trueOrFalse)
     {
         this.hasUUID = trueOrFalse;
+    }
+
+    public LanguageManager getLanguageManager()
+    {
+        return languageManager;
     }
 }

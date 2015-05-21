@@ -35,6 +35,7 @@ public class ReloadCommand
         }
 
         plugin.getSettingsManager().load();
+        plugin.getLanguageManager().load();
         plugin.getStorageManager().importFromDatabase();
         SimpleClans.getInstance().getPermissionsManager().loadPermissions();
 
