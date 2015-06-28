@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import org.bukkit.ChatColor;
@@ -35,14 +36,7 @@ public class UnbanCommand
 
                 if (plugin.getSettingsManager().isBanned(banned))
                 {
-                    Player pl;
-                    if (SimpleClans.getInstance().hasUUID())
-                    {
-                        pl = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(banned));
-                    } else
-                    {
-                        pl = SimpleClans.getInstance().getServer().getPlayer(banned);
-                    }
+                    Player pl = Helper.getPlayer(banned);
 
                     if (pl != null)
                     {

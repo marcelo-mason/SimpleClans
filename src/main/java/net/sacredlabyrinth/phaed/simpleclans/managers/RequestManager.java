@@ -534,15 +534,7 @@ public final class RequestManager
 
         if (req.getType().equals(ClanRequest.INVITE))
         {
-            Player player;
-            if (SimpleClans.getInstance().hasUUID())
-            {
-                player = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(req.getTarget()));
-            }
-            else
-            {
-                player = SimpleClans.getInstance().getServer().getPlayer(req.getTarget());
-            }
+            Player player = Helper.getPlayer(req.getTarget());
 
             if (player != null)
             {

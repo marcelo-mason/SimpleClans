@@ -37,16 +37,7 @@ public class PlaceCommand
 
         if (arg.length == 2)
         {
-            Player player;
-
-            if (SimpleClans.getInstance().hasUUID())
-            {
-                player = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(arg[0]));
-            }
-            else
-            {
-                player = SimpleClans.getInstance().getServer().getPlayer(arg[0]);
-            }
+            Player player = Helper.getPlayer(arg[0]);
 
             if (player != null)
             {

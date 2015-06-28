@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -689,7 +690,7 @@ public class Helper
 
             if (players instanceof Player[])
             {
-                return new ArrayList<>(Arrays.asList((Player[])players));
+                return new ArrayList<>(Arrays.asList((Player[]) players));
             }
             else
             {
@@ -702,5 +703,15 @@ public class Helper
         }
 
         return new ArrayList<>();
+    }
+
+    public static Player getPlayer(String playerName)
+    {
+        if (SimpleClans.getInstance().hasUUID())
+        {
+            return SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(playerName));
+        }
+
+        return SimpleClans.getInstance().getServer().getPlayer(playerName);
     }
 }

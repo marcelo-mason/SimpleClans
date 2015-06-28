@@ -57,14 +57,7 @@ public final class SpoutPluginManager
     {
         if (isHasSpout())
         {
-            Player player;
-            if (SimpleClans.getInstance().hasUUID())
-            {
-                player = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(playerName));
-            } else
-            {
-                player = SimpleClans.getInstance().getServer().getPlayer(playerName);
-            }
+            Player player = Helper.getPlayer(playerName);
 
             if (player != null)
             {

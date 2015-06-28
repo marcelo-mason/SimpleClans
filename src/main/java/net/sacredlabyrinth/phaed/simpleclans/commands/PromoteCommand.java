@@ -54,14 +54,7 @@ public class PromoteCommand
 
         }
 
-        Player promoted;
-        if (SimpleClans.getInstance().hasUUID())
-        {
-            promoted = SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(arg[0]));
-        } else
-        {
-            promoted = SimpleClans.getInstance().getServer().getPlayer(arg[0]);
-        }
+        Player promoted = Helper.getPlayer(arg[0]);
 
         if (promoted == null)
         {
