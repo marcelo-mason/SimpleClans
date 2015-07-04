@@ -242,30 +242,33 @@ public class SCPlayerListener implements Listener
 
         if (plugin.getSettingsManager().isCompatMode())
         {
-            if (cp != null && cp.isTagEnabled())
+            if (plugin.getSettingsManager().isChatTags())
             {
-                String tagLabel = cp.getClan().getTagLabel(cp.isLeader());
-
-                Player player = event.getPlayer();
-
-                if (player.getDisplayName().contains("{clan}"))
+                if (cp != null && cp.isTagEnabled())
                 {
-                    player.setDisplayName(player.getDisplayName().replace("{clan}", tagLabel));
-                }
-                else if (event.getFormat().contains("{clan}"))
-                {
-                    event.setFormat(event.getFormat().replace("{clan}", tagLabel));
+                    String tagLabel = cp.getClan().getTagLabel(cp.isLeader());
+
+                    Player player = event.getPlayer();
+
+                    if (player.getDisplayName().contains("{clan}"))
+                    {
+                        player.setDisplayName(player.getDisplayName().replace("{clan}", tagLabel));
+                    }
+                    else if (event.getFormat().contains("{clan}"))
+                    {
+                        event.setFormat(event.getFormat().replace("{clan}", tagLabel));
+                    }
+                    else
+                    {
+                        String format = event.getFormat();
+                        event.setFormat(tagLabel + format);
+                    }
                 }
                 else
                 {
-                    String format = event.getFormat();
-                    event.setFormat(tagLabel + format);
+                    event.setFormat(event.getFormat().replace("{clan}", ""));
+                    event.setFormat(event.getFormat().replace("tagLabel", ""));
                 }
-            }
-            else
-            {
-                event.setFormat(event.getFormat().replace("{clan}", ""));
-                event.setFormat(event.getFormat().replace("tagLabel", ""));
             }
         }
         else
