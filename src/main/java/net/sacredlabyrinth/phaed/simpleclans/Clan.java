@@ -146,7 +146,7 @@ public class Clan implements Serializable, Comparable<Clan>
             {
                 player.sendMessage(ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("player.clan.withdraw"), amount));
                 addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(SimpleClans.getInstance().getLang("bb.clan.withdraw"), amount));
-                setBalance(0);
+                setBalance(getBalance() - amount);
                 SimpleClans.getInstance().getStorageManager().updateClan(this);
             }
         }
