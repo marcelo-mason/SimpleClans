@@ -1,12 +1,14 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
 import com.google.common.base.Charsets;
+
 import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.MySQLCore;
 import net.sacredlabyrinth.phaed.simpleclans.storage.SQLiteCore;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDFetcher;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -88,7 +90,7 @@ public final class StorageManager
     {
         if (plugin.getSettingsManager().isUseMysql())
         {
-            core = new MySQLCore(plugin.getSettingsManager().getHost(), plugin.getSettingsManager().getDatabase(), plugin.getSettingsManager().getUsername(), plugin.getSettingsManager().getPassword());
+            core = new MySQLCore(plugin.getSettingsManager().getHost(), plugin.getSettingsManager().getPort(), plugin.getSettingsManager().getDatabase(), plugin.getSettingsManager().getUsername(), plugin.getSettingsManager().getPassword());
 
             if (core.checkConnection())
             {
@@ -685,7 +687,8 @@ public final class StorageManager
      *
      * @param clan
      */
-    public void updateClanAsync(final Clan clan)
+    @SuppressWarnings("deprecation")
+	public void updateClanAsync(final Clan clan)
     {
         plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
         {
@@ -746,7 +749,8 @@ public final class StorageManager
      *
      * @param cp
      */
-    public void updateClanPlayerAsync(final ClanPlayer cp)
+    @SuppressWarnings("deprecation")
+	public void updateClanPlayerAsync(final ClanPlayer cp)
     {
         plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
         {
