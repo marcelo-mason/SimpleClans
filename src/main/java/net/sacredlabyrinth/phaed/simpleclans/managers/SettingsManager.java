@@ -16,6 +16,7 @@ import java.util.UUID;
  */
 public final class SettingsManager
 {
+    private boolean onlineMode;
     private boolean disableMessages;
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
@@ -175,6 +176,7 @@ public final class SettingsManager
             getConfig().options().copyDefaults(true);
         }
 
+        onlineMode = getConfig().getBoolean("settings.online-mode");
         disableMessages = getConfig().getBoolean("settings.disable-messages");
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
@@ -1342,6 +1344,10 @@ public final class SettingsManager
         return tamableMobsSharing;
     }
 
+    public boolean isOnlineMode()
+    {
+        return onlineMode;
+    }
 
     public boolean isDisableMessages()
     {
