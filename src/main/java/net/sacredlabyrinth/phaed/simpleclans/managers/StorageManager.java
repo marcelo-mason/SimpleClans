@@ -34,7 +34,8 @@ public final class StorageManager
     {
         plugin = SimpleClans.getInstance();
         initiateDB();
-        updateDatabase();
+        if(SimpleClans.getInstance().getSettingsManager().isOnlineMode())
+            updateDatabase();
         importFromDatabase();
     }
 
