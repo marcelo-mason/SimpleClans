@@ -288,6 +288,7 @@ public final class SettingsManager
         database = getConfig().getString("mysql.database");
         username = getConfig().getString("mysql.username");
         password = getConfig().getString("mysql.password");
+        port = getConfig().getInt("mysql.port");
         safeCivilians = getConfig().getBoolean("safe-civilians");
         moneyperkill = getConfig().getBoolean("economy.money-per-kill");
         KDRMultipliesPerKill = getConfig().getDouble("economy.money-per-kill-kdr-multipier");
@@ -297,6 +298,13 @@ public final class SettingsManager
         allowReGroupCommand = getConfig().getBoolean("settings.allow-regroup-command");
         useThreads = getConfig().getBoolean("performance.use-threads");
         useBungeeCord = getConfig().getBoolean("performance.use-bungeecord");
+
+        // migrate from old way of adding ports
+        if (database.contains(":")) {
+            String[] strings = database.split(":");
+            database = strings[0];
+            port = Integer.valueOf(strings[1]);
+        }
 
         save();
     }

@@ -137,7 +137,7 @@ purge:
 mysql:
     username: ''
     host: localhost
-    port: ''
+    port: 3306
     enable: false
     password: ''
     database: ''

@@ -631,11 +631,7 @@ public class Helper
      */
     public static boolean isSameLocation(Location loc, Location loc2)
     {
-        if (loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ())
-        {
-            return true;
-        }
-        return false;
+        return loc.getX() == loc2.getX() && loc.getY() == loc2.getY() && loc.getZ() == loc2.getZ();
     }
 
     /**

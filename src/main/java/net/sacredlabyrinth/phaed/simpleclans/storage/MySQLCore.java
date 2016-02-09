@@ -19,6 +19,7 @@ public class MySQLCore implements DBCore {
     private String username;
     private String password;
     private String database;
+    private int port;
 
     /**
      * @param host
@@ -26,9 +27,10 @@ public class MySQLCore implements DBCore {
      * @param username
      * @param password
      */
-    public MySQLCore(String host, String database, String username, String password)
+    public MySQLCore(String host, String database, int port, String username, String password)
     {
         this.database = database;
+        this.port = port;
         this.host = host;
         this.username = username;
         this.password = password;
@@ -41,7 +43,7 @@ public class MySQLCore implements DBCore {
         try
         {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database+ "?useUnicode=true&characterEncoding=utf-8", username, password );
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + "/" + database + ":" + port + "?useUnicode=true&characterEncoding=utf-8", username, password);
         }
         catch (ClassNotFoundException e)
         {
