@@ -119,6 +119,7 @@ public final class SettingsManager
     private double kwCivilian;
     private boolean useMysql;
     private String host;
+    private int port;
     private String database;
     private String username;
     private String password;
@@ -154,7 +155,7 @@ public final class SettingsManager
     /**
      * Load the configuration
      */
-    @SuppressWarnings("unchecked")
+
     public void load()
     {
         boolean exists = (main).exists();
@@ -283,6 +284,7 @@ public final class SettingsManager
         kwCivilian = getConfig().getDouble("kill-weights.civilian");
         useMysql = getConfig().getBoolean("mysql.enable");
         host = getConfig().getString("mysql.host");
+        port = getConfig().getInt("mysql.port");
         database = getConfig().getString("mysql.database");
         username = getConfig().getString("mysql.username");
         password = getConfig().getString("mysql.password");
@@ -952,6 +954,14 @@ public final class SettingsManager
     public String getHost()
     {
         return host;
+    }
+    
+    /**
+     * @return the port
+     */
+    public int getPort()
+    {
+        return port;
     }
 
     /**
