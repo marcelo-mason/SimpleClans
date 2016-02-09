@@ -13,6 +13,7 @@ tag:
         leader-color: '4'
         char: ' .'
 settings:
+    online-mode: true
     disable-messages: false
     tameable-mobs-sharing: false
     teleport-blocks: false
@@ -136,6 +137,7 @@ purge:
 mysql:
     username: ''
     host: localhost
+    port: ''
     enable: false
     password: ''
     database: ''

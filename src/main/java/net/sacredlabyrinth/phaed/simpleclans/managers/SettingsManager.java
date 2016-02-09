@@ -16,6 +16,7 @@ import java.util.UUID;
  */
 public final class SettingsManager
 {
+    private boolean onlineMode;
     private boolean disableMessages;
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
@@ -118,6 +119,7 @@ public final class SettingsManager
     private double kwCivilian;
     private boolean useMysql;
     private String host;
+    private int port;
     private String database;
     private String username;
     private String password;
@@ -153,7 +155,7 @@ public final class SettingsManager
     /**
      * Load the configuration
      */
-    @SuppressWarnings("unchecked")
+
     public void load()
     {
         boolean exists = (main).exists();
@@ -175,6 +177,7 @@ public final class SettingsManager
             getConfig().options().copyDefaults(true);
         }
 
+        onlineMode = getConfig().getBoolean("settings.online-mode");
         disableMessages = getConfig().getBoolean("settings.disable-messages");
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
@@ -281,6 +284,7 @@ public final class SettingsManager
         kwCivilian = getConfig().getDouble("kill-weights.civilian");
         useMysql = getConfig().getBoolean("mysql.enable");
         host = getConfig().getString("mysql.host");
+        port = getConfig().getInt("mysql.port");
         database = getConfig().getString("mysql.database");
         username = getConfig().getString("mysql.username");
         password = getConfig().getString("mysql.password");
@@ -951,6 +955,14 @@ public final class SettingsManager
     {
         return host;
     }
+    
+    /**
+     * @return the port
+     */
+    public int getPort()
+    {
+        return port;
+    }
 
     /**
      * @return the database
@@ -1342,6 +1354,10 @@ public final class SettingsManager
         return tamableMobsSharing;
     }
 
+    public boolean isOnlineMode()
+    {
+        return onlineMode;
+    }
 
     public boolean isDisableMessages()
     {

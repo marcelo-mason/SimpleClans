@@ -75,9 +75,10 @@ public class SimpleClans extends JavaPlugin {
     public void onEnable()
     {
         instance = this;
+
+        settingsManager = new SettingsManager();
         this.hasUUID = UUIDMigration.canReturnUUID();
         languageManager = new LanguageManager();
-        settingsManager = new SettingsManager();
 
         spoutPluginManager = new SpoutPluginManager();
         permissionsManager = new PermissionsManager();
@@ -111,6 +112,7 @@ public class SimpleClans extends JavaPlugin {
         getCommand(getSettingsManager().getCommandClan()).setTabCompleter(new PlayerNameTabCompleter());
 
         pullMessages();
+        logger.info("[SimpleClans] Online Mode: " + hasUUID);
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
     }
