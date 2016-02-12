@@ -140,6 +140,7 @@ public final class SettingsManager
     private boolean useBungeeCord;
     private boolean forceCommandPriority;
     private int maxAsksPerRequest;
+    private int maxMembers;
 
     /**
      *
@@ -298,6 +299,7 @@ public final class SettingsManager
         allowReGroupCommand = getConfig().getBoolean("settings.allow-regroup-command");
         useThreads = getConfig().getBoolean("performance.use-threads");
         useBungeeCord = getConfig().getBoolean("performance.use-bungeecord");
+        maxMembers = getConfig().getInt("clan.max-members");
 
         // migrate from old way of adding ports
         if (database.contains(":")) {
@@ -1424,5 +1426,10 @@ public final class SettingsManager
     public void setForceCommandPriority(boolean forceCommandPriority)
     {
         this.forceCommandPriority = forceCommandPriority;
+    }
+
+    public int getMaxMembers()
+    {
+        return this.maxMembers;
     }
 }
