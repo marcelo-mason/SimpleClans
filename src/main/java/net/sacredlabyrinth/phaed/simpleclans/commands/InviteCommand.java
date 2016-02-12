@@ -54,8 +54,13 @@ public class InviteCommand
                                         {
                                             if (plugin.getClanManager().purchaseInvite(player))
                                             {
-                                                plugin.getRequestManager().addInviteRequest(cp, invited.getName(), clan);
-                                                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.asked.to.join"), Helper.capitalize(invited.getName()), clan.getName()));
+                                                if(clan.getSize() < plugin.getSettingsManager().getMaxMembers())
+                                                {
+                                                    plugin.getRequestManager().addInviteRequest(cp, invited.getName(), clan);
+                                                    ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.asked.to.join"), Helper.capitalize(invited.getName()), clan.getName()));
+                                                } else {
+                                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.members.reached.limit"));
+                                                }
                                             }
                                         }
                                         else
