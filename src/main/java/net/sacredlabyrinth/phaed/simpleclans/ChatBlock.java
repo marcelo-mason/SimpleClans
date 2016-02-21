@@ -76,7 +76,7 @@ public class ChatBlock
      */
     public boolean hasContent()
     {
-        return rows.size() > 0;
+        return !rows.isEmpty();
     }
 
     /**
@@ -103,7 +103,7 @@ public class ChatBlock
      */
     public boolean isEmpty()
     {
-        return rows.size() == 0;
+        return rows.isEmpty();
     }
 
     /**
@@ -160,7 +160,7 @@ public class ChatBlock
             return false;
         }
 
-        if (rows.size() == 0)
+        if (rows.isEmpty())
         {
             return false;
         }
@@ -191,7 +191,7 @@ public class ChatBlock
 
         for (int i = 0; i < amount; i++)
         {
-            if (rows.size() == 0)
+            if (rows.isEmpty())
             {
                 continue;
             }
@@ -323,7 +323,7 @@ public class ChatBlock
             prefix_used = true;
         }
 
-        return rows.size() > 0;
+        return !rows.isEmpty();
     }
 
     private int calculatedRowSize(List<String> cols)

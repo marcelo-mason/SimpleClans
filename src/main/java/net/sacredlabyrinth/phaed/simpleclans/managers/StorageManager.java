@@ -193,7 +193,7 @@ public final class StorageManager
             clan.validateWarring();
         }
 
-        if (clans.size() > 0)
+        if (!clans.isEmpty())
         {
             SimpleClans.log(MessageFormat.format("[SimpleClans] " + plugin.getLang("clans"), clans.size()));
         }
@@ -212,7 +212,7 @@ public final class StorageManager
             plugin.getClanManager().importClanPlayer(cp);
         }
 
-        if (cps.size() > 0)
+        if (!cps.isEmpty())
         {
             SimpleClans.log(MessageFormat.format("[SimpleClans] " + plugin.getLang("clan.players"), cps.size()));
         }
@@ -1045,7 +1045,7 @@ public final class StorageManager
         SimpleClans.log("[SimpleClans] ==================== END OF MIGRATION ====================");
 
 
-        if (cps.size() > 0)
+        if (!cps.isEmpty())
         {
             SimpleClans.log(MessageFormat.format("[SimpleClans] " + plugin.getLang("clan.players"), cps.size()));
         }
