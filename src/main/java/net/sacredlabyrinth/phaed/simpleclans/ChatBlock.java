@@ -792,10 +792,10 @@ public class ChatBlock
      */
     public static String colorize(String message)
     {
-        return colorizeBase((new String[]
+        return colorizeBase(new String[]
                 {
                     message
-                }))[0];
+                })[0];
     }
 
     /**

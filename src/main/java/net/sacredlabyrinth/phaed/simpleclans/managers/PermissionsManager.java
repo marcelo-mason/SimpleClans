@@ -370,7 +370,7 @@ public final class PermissionsManager
         {
             permission = permissionProvider.getProvider();
         }
-        return (permission != null);
+        return permission != null;
     }
 
     private Boolean setupChat()
@@ -381,7 +381,7 @@ public final class PermissionsManager
             chat = chatProvider.getProvider();
         }
 
-        return (chat != null);
+        return chat != null;
     }
 
     private Boolean setupEconomy()
@@ -392,7 +392,7 @@ public final class PermissionsManager
             economy = economyProvider.getProvider();
         }
 
-        return (economy != null);
+        return economy != null;
     }
 
     /**

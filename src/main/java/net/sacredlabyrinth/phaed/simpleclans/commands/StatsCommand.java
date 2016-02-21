@@ -67,7 +67,7 @@ public class StatsCommand
 
                             for (ClanPlayer cpm : leaders)
                             {
-                                String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : ((cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()))) + cpm.getName();
+                                String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : (cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor())) + cpm.getName();
                                 String rival = NumberFormat.getInstance().format(cpm.getRivalKills());
                                 String neutral = NumberFormat.getInstance().format(cpm.getNeutralKills());
                                 String civilian = NumberFormat.getInstance().format(cpm.getCivilianKills());
@@ -79,7 +79,7 @@ public class StatsCommand
 
                             for (ClanPlayer cpm : members)
                             {
-                                String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : ((cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()))) + cpm.getName();
+                                String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : (cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor())) + cpm.getName();
                                 String rival = NumberFormat.getInstance().format(cpm.getRivalKills());
                                 String neutral = NumberFormat.getInstance().format(cpm.getNeutralKills());
                                 String civilian = NumberFormat.getInstance().format(cpm.getCivilianKills());

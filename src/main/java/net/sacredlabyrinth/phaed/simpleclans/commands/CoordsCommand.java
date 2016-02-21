@@ -63,7 +63,7 @@ public class CoordsCommand
 
                                 if (p != null)
                                 {
-                                    String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : ((cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()))) + cpm.getName();
+                                    String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : (cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor())) + cpm.getName();
                                     Location loc = p.getLocation();
                                     int distance = (int) Math.ceil(loc.toVector().distance(player.getLocation().toVector()));
                                     String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
