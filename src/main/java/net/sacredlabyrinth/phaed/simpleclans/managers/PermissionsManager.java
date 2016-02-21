@@ -23,9 +23,9 @@ public final class PermissionsManager
      */
     private SimpleClans plugin;
 
-    public static Permission permission = null;
-    public static Economy economy = null;
-    public static Chat chat = null;
+    private static Permission permission = null;
+    private static Economy economy = null;
+    private static Chat chat = null;
 
     private HashMap<String, List<String>> permissions = new HashMap<String, List<String>>();
     private HashMap<Player, PermissionAttachment> permAttaches = new HashMap<Player, PermissionAttachment>();

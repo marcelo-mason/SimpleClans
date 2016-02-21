@@ -1,12 +1,14 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class MostKilledCommand
 {
@@ -56,16 +58,16 @@ public class MostKilledCommand
 
                         Map<String, Integer> killsPerPlayer = Helper.sortByValue(killsPerPlayerUnordered);
 
-                        for (String attackerVictim : killsPerPlayer.keySet())
+                        for (Entry<String, Integer> attackerVictim : killsPerPlayer.entrySet())
                         {
-                            String[] split = attackerVictim.split(" ");
+                            String[] split = attackerVictim.getKey().split(" ");
 
                             if (split.length < 2)
                             {
                                 continue;
                             }
 
-                            int count = killsPerPlayer.get(attackerVictim);
+                            int count = attackerVictim.getValue();
                             String attacker = split[0];
                             String victim = split[1];
 
