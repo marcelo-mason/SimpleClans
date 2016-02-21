@@ -31,7 +31,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private int deaths;
     private long lastSeen;
     private long joinDate;
-    private HashSet<String> pastClans = new HashSet<String>();
+    private Set<String> pastClans = new HashSet<String>();
     private VoteResult vote;
     private Channel channel;
 
@@ -551,7 +551,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     {
         String PackedPastClans = "";
 
-        HashSet<String> pt = getPastClans();
+        Set<String> pt = getPastClans();
 
         for (String pastClan : pt)
         {
@@ -621,7 +621,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      *
      * @return the pastClans
      */
-    public HashSet<String> getPastClans()
+    public Set<String> getPastClans()
     {
         HashSet<String> pc = new HashSet<String>();
         pc.addAll(pastClans);

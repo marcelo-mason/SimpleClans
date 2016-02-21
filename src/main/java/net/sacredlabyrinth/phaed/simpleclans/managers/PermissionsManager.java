@@ -6,12 +6,14 @@ import net.milkbowl.vault.permission.Permission;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author phaed
@@ -189,7 +191,7 @@ public final class PermissionsManager
     /**
      * @return the PermissionsAttachments for every player
      */
-    public HashMap<Player, PermissionAttachment> getPermAttaches()
+    public Map<Player, PermissionAttachment> getPermAttaches()
     {
         return permAttaches;
     }

@@ -858,7 +858,7 @@ public final class StorageManager
      * @param playerName
      * @return
      */
-    public HashMap<String, Integer> getKillsPerPlayer(String playerName)
+    public Map<String, Integer> getKillsPerPlayer(String playerName)
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 
@@ -900,7 +900,7 @@ public final class StorageManager
      *
      * @return
      */
-    public HashMap<String, Integer> getMostKilled()
+    public Map<String, Integer> getMostKilled()
     {
         HashMap<String, Integer> out = new HashMap<String, Integer>();
 

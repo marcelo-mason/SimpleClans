@@ -53,7 +53,7 @@ public class KillsCommand
 
                         chatBlock.addRow("  " + headColor + plugin.getLang("victim"), plugin.getLang("killcount"));
 
-                        HashMap<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getKillsPerPlayer(polledPlayerName);
+                        Map<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getKillsPerPlayer(polledPlayerName);
 
                         if (killsPerPlayerUnordered.isEmpty())
                         {
