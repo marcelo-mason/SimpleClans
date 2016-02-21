@@ -16,7 +16,7 @@ import java.util.*;
 public final class RequestManager
 {
     private SimpleClans plugin;
-    private HashMap<String, Request> requests = new HashMap<String, Request>();
+    private HashMap<String, Request> requests = new HashMap<>();
 
     /**
      *

@@ -27,7 +27,7 @@ import java.util.logging.Logger;
  */
 public class SimpleClans extends JavaPlugin {
 
-    private ArrayList<String> messages = new ArrayList<String>();
+    private ArrayList<String> messages = new ArrayList<>();
     private static SimpleClans instance;
     private static final Logger logger = Logger.getLogger("Minecraft");
     private ClanManager clanManager;
