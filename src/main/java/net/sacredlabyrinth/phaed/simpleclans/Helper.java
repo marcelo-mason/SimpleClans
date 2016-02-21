@@ -19,6 +19,8 @@ import java.util.*;
  */
 public class Helper
 {
+	
+	private Helper() {}
 
     /**
      * Dumps stacktrace to log
