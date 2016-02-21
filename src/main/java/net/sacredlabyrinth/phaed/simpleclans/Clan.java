@@ -885,12 +885,9 @@ public class Clan implements Serializable, Comparable<Clan>
             {
                 continue;
             }
-            if (cp.toPlayer() != null)
+            if (cp.toPlayer() != null && cp.toPlayer().isOnline())
             {
-                if (cp.toPlayer().isOnline())
-                {
-                    out.add(cp);
-                }
+            	out.add(cp);
             }
         }
 
