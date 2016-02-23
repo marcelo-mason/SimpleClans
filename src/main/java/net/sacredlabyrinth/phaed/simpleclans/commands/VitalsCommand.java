@@ -66,7 +66,7 @@ public class VitalsCommand
 
                                 if (p != null)
                                 {
-                                    String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : ((cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()))) + cpm.getName();
+                                    String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : (cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor())) + cpm.getName();
                                     String health = plugin.getClanManager().getHealthString(p.getHealth());
                                     String hunger = plugin.getClanManager().getHungerString(p.getFoodLevel());
                                     String armor = plugin.getClanManager().getArmorString(p.getInventory());
@@ -87,7 +87,7 @@ public class VitalsCommand
 
                                 if (p != null)
                                 {
-                                    String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : ((cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()))) + cpm.getName();
+                                    String name = (cpm.isLeader() ? plugin.getSettingsManager().getPageLeaderColor() : (cpm.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor())) + cpm.getName();
                                     String health = plugin.getClanManager().getHealthString(p.getHealth());
                                     String hunger = plugin.getClanManager().getHungerString(p.getFoodLevel());
                                     String armor = plugin.getClanManager().getArmorString(p.getInventory());

@@ -466,7 +466,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     public double getWeightedKills()
     {
         SimpleClans plugin = SimpleClans.getInstance();
-        return (((double) rivalKills * plugin.getSettingsManager().getKwRival()) + ((double) neutralKills * plugin.getSettingsManager().getKwNeutral()) + ((double) civilianKills * plugin.getSettingsManager().getKwCivilian()));
+        return ((double) rivalKills * plugin.getSettingsManager().getKwRival()) + ((double) neutralKills * plugin.getSettingsManager().getKwNeutral()) + ((double) civilianKills * plugin.getSettingsManager().getKwCivilian());
     }
 
     /**

@@ -686,7 +686,7 @@ public class Helper
             }
             else
             {
-                return ((Collection<Player>) players);
+                return (Collection<Player>) players;
             }
         }
         catch (Exception e)
