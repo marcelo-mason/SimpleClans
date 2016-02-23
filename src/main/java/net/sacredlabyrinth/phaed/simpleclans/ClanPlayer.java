@@ -31,7 +31,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private int deaths;
     private long lastSeen;
     private long joinDate;
-    private Set<String> pastClans = new HashSet<String>();
+    private Set<String> pastClans = new HashSet<>();
     private VoteResult vote;
     private Channel channel;
 
@@ -623,7 +623,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public Set<String> getPastClans()
     {
-        HashSet<String> pc = new HashSet<String>();
+        HashSet<String> pc = new HashSet<>();
         pc.addAll(pastClans);
         return pc;
     }
@@ -724,7 +724,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
         // writing the channel state settings flags
 
-        List<Boolean> settings = new LinkedList<Boolean>();
+        List<Boolean> settings = new LinkedList<>();
         settings.add(globalChat);
         settings.add(allyChat);
         settings.add(clanChat);

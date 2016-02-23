@@ -55,7 +55,7 @@ public class CoordsCommand
 
                             List<ClanPlayer> members = Helper.stripOffLinePlayers(clan.getMembers());
 
-                            Map<Integer, List<String>> rows = new TreeMap<Integer, List<String>>();
+                            Map<Integer, List<String>> rows = new TreeMap<>();
 
                             for (ClanPlayer cpm : members)
                             {
@@ -69,7 +69,7 @@ public class CoordsCommand
                                     String coords = loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ();
                                     String world = loc.getWorld().getName();
 
-                                    List<String> cols = new ArrayList<String>();
+                                    List<String> cols = new ArrayList<>();
                                     cols.add("  " + name);
                                     cols.add(ChatColor.AQUA + "" + distance);
                                     cols.add(ChatColor.WHITE + "" + coords);

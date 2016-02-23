@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
 public class ChatBlock
 {
     private static final int lineLength = 319;
-    private ArrayList<Boolean> columnFlexes = new ArrayList<Boolean>();
-    private ArrayList<Integer> columnSizes = new ArrayList<Integer>();
-    private ArrayList<String> columnAlignments = new ArrayList<String>();
-    private LinkedList<String[]> rows = new LinkedList<String[]>();
+    private ArrayList<Boolean> columnFlexes = new ArrayList<>();
+    private ArrayList<Integer> columnSizes = new ArrayList<>();
+    private ArrayList<String> columnAlignments = new ArrayList<>();
+    private LinkedList<String[]> rows = new LinkedList<>();
     private String color = "";
     /**
      *
@@ -196,7 +196,7 @@ public class ChatBlock
                 continue;
             }
 
-            List<String> measuredCols = new ArrayList<String>();
+            List<String> measuredCols = new ArrayList<>();
             String row[] = rows.pollFirst();
 
             for (int sid = 0; sid < row.length; sid++)
@@ -591,12 +591,12 @@ public class ChatBlock
     {
         // Split each word apart
 
-        ArrayList<String> split = new ArrayList<String>();
+        ArrayList<String> split = new ArrayList<>();
         split.addAll(Arrays.asList(msg.split(" ")));
 
         // Create an array list for the output
 
-        ArrayList<String> out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<>();
 
         // While i is less than the length of the array of words
 
@@ -606,7 +606,7 @@ public class ChatBlock
 
             // Create an array list to hold individual words
 
-            ArrayList<String> words = new ArrayList<String>();
+            ArrayList<String> words = new ArrayList<>();
 
             // go through the split array containing all the words, and adding them to the words array
             // until reaching the point where their width no longer fits on a chat line

@@ -9,7 +9,7 @@ import java.util.List;
  */
 public final class Request
 {
-    private List<ClanPlayer> acceptors = new ArrayList<ClanPlayer>();
+    private List<ClanPlayer> acceptors = new ArrayList<>();
     private Clan clan;
     private String msg;
     private String target;
@@ -163,7 +163,7 @@ public final class Request
      */
     public List<String> getDenies()
     {
-        List<String> out = new ArrayList<String>();
+        List<String> out = new ArrayList<>();
 
         for (ClanPlayer cp : acceptors)
         {
@@ -183,7 +183,7 @@ public final class Request
      */
     public List<String> getAccepts()
     {
-        List<String> out = new ArrayList<String>();
+        List<String> out = new ArrayList<>();
 
         for (ClanPlayer cp : acceptors)
         {

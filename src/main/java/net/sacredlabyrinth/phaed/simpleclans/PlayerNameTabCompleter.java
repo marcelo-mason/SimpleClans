@@ -42,7 +42,7 @@ public class PlayerNameTabCompleter implements TabCompleter
                     strings[0].equalsIgnoreCase(plugin.getLang("invite.command")) ||
                     strings[0].equalsIgnoreCase(plugin.getLang("kills.command")))
             {
-                List<String> list = new ArrayList<String>();
+                List<String> list = new ArrayList<>();
 
                 for (OfflinePlayer player : plugin.getServer().getOnlinePlayers())
                 {

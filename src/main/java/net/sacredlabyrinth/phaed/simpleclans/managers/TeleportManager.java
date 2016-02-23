@@ -19,7 +19,7 @@ import java.util.List;
 public final class TeleportManager
 {
     private SimpleClans plugin;
-    private HashMap<String, TeleportState> waitingPlayers = new HashMap<String, TeleportState>();
+    private HashMap<String, TeleportState> waitingPlayers = new HashMap<>();
 
     /**
      *

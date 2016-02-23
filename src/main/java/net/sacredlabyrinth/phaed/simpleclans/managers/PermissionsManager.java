@@ -29,8 +29,8 @@ public final class PermissionsManager
     private static Economy economy = null;
     private static Chat chat = null;
 
-    private HashMap<String, List<String>> permissions = new HashMap<String, List<String>>();
-    private HashMap<Player, PermissionAttachment> permAttaches = new HashMap<Player, PermissionAttachment>();
+    private HashMap<String, List<String>> permissions = new HashMap<>();
+    private HashMap<Player, PermissionAttachment> permAttaches = new HashMap<>();
 
 
     /**
