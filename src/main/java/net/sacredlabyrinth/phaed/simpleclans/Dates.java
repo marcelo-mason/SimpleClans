@@ -11,6 +11,9 @@ import java.util.Date;
 
 public class Dates
 {
+	
+	private Dates() {}
+	
     /**
      *
      * @param date1

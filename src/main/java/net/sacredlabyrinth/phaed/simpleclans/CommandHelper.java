@@ -12,6 +12,9 @@ import java.util.Arrays;
 
 public class CommandHelper
 {
+	
+	private CommandHelper() {}
+	
     public static void registerCommand(String... aliases)
     {
         if (aliases != null)
