@@ -61,12 +61,9 @@ public class ListCommand
 
                     for (Clan clan : clans)
                     {
-                        if (!plugin.getSettingsManager().isShowUnverifiedOnList())
+                        if (!plugin.getSettingsManager().isShowUnverifiedOnList() && !clan.isVerified())
                         {
-                            if (!clan.isVerified())
-                            {
-                                continue;
-                            }
+                        	continue;
                         }
 
                         String tag = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight();

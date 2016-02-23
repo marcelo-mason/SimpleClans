@@ -103,23 +103,20 @@ public class LookupCommand
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("past.clans.0"), pastClans));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("inactive.0"), inactive));
 
-                if (arg.length == 1 && targetClan != null)
+                if (arg.length == 1 && targetClan != null && !targetCp.equals(myCp))
                 {
-                    if (!targetCp.equals(myCp))
+                	String killType = ChatColor.GRAY + plugin.getLang("neutral");
+
+                    if (targetClan == null)
                     {
-                        String killType = ChatColor.GRAY + plugin.getLang("neutral");
-
-                        if (targetClan == null)
-                        {
-                            killType = ChatColor.DARK_GRAY + plugin.getLang("civilian");
-                        }
-                        else if (myClan != null && myClan.isRival(targetClan.getTag()))
-                        {
-                            killType = ChatColor.WHITE + plugin.getLang("rival");
-                        }
-
-                        ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("kill.type.0"), killType));
+                        killType = ChatColor.DARK_GRAY + plugin.getLang("civilian");
                     }
+                    else if (myClan != null && myClan.isRival(targetClan.getTag()))
+                    {
+                        killType = ChatColor.WHITE + plugin.getLang("rival");
+                    }
+
+                    ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("kill.type.0"), killType));
                 }
 
                 ChatBlock.sendBlank(player);

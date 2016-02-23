@@ -280,12 +280,9 @@ public final class StorageManager
 
         for (ClanPlayer cp : cps)
         {
-            if (cp.getInactiveDays() > plugin.getSettingsManager().getPurgePlayers())
+            if (cp.getInactiveDays() > plugin.getSettingsManager().getPurgePlayers() && !cp.isLeader())
             {
-                if (!cp.isLeader())
-                {
-                    purge.add(cp);
-                }
+            	purge.add(cp);
             }
         }
 
@@ -986,13 +983,10 @@ public final class StorageManager
             core.execute(query);
         }
 
-        if (core.existsColumn("sc_players", "uuid"))
+        if (core.existsColumn("sc_players", "uuid") && !plugin.getSettingsManager().isUseMysql())
         {
-            if (!plugin.getSettingsManager().isUseMysql())
-            {
-                query = "CREATE UNIQUE INDEX IF NOT EXISTS `uq_player_uuid` ON `sc_players` (`uuid`);";
-                core.execute(query);
-            }
+        	query = "CREATE UNIQUE INDEX IF NOT EXISTS `uq_player_uuid` ON `sc_players` (`uuid`);";
+            core.execute(query);
         }
     }
 

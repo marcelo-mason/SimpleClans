@@ -153,25 +153,13 @@ public final class PermissionsManager
      */
     public void removeClanPlayerPermissions(ClanPlayer cp)
     {
-        if (cp != null)
+        if (cp != null && cp.getClan() != null && cp.toPlayer() != null)
         {
-            if (cp.getClan() != null)
+        	Player player = cp.toPlayer();
+            if (player.isOnline() && permissions.containsKey(cp.getClan().getTag()) && permAttaches.containsKey(player))
             {
-                if (cp.toPlayer() != null)
-                {
-                    Player player = cp.toPlayer();
-                    if (player.isOnline())
-                    {
-                        if (permissions.containsKey(cp.getClan().getTag()))
-                        {
-                            if (permAttaches.containsKey(player))
-                            {
-                                permAttaches.get(player).remove();
-                                permAttaches.remove(player);
-                            }
-                        }
-                    }
-                }
+            	permAttaches.get(player).remove();
+                permAttaches.remove(player);
             }
         }
     }
@@ -351,15 +339,12 @@ public final class PermissionsManager
             return;
         }
 
-        if (permission != null)
+        if (permission != null && cp.toPlayer() != null)
         {
-            if (cp.toPlayer() != null)
-            {
-                permission.playerRemoveGroup(cp.toPlayer(), "clan." + cp.getTag());
-                permission.playerRemoveGroup(cp.toPlayer(), "sc.untrusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "sc.trusted");
-                permission.playerRemoveGroup(cp.toPlayer(), "sc.leader");
-            }
+        	permission.playerRemoveGroup(cp.toPlayer(), "clan." + cp.getTag());
+            permission.playerRemoveGroup(cp.toPlayer(), "sc.untrusted");
+            permission.playerRemoveGroup(cp.toPlayer(), "sc.trusted");
+            permission.playerRemoveGroup(cp.toPlayer(), "sc.leader");
         }
     }
 

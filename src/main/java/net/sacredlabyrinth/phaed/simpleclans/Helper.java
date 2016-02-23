@@ -666,15 +666,9 @@ public class Helper
 
     public static boolean isVanished(Player player)
     {
-        if (player != null)
+        if (player != null && player.hasMetadata("vanished") && !player.getMetadata("vanished").isEmpty())
         {
-            if (player.hasMetadata("vanished"))
-            {
-                if (!player.getMetadata("vanished").isEmpty())
-                {
-                    return player.getMetadata("vanished").get(0).asBoolean();
-                }
-            }
+        	return player.getMetadata("vanished").get(0).asBoolean();
         }
         return false;
     }

@@ -167,12 +167,9 @@ public final class Request
 
         for (ClanPlayer cp : acceptors)
         {
-            if (cp.getVote() != null)
+            if (cp.getVote() != null && cp.getVote().equals(VoteResult.DENY))
             {
-                if (cp.getVote().equals(VoteResult.DENY))
-                {
-                    out.add(cp.getName());
-                }
+            	out.add(cp.getName());
             }
         }
 
@@ -190,12 +187,9 @@ public final class Request
 
         for (ClanPlayer cp : acceptors)
         {
-            if (cp.getVote() != null)
+            if (cp.getVote() != null && cp.getVote().equals(VoteResult.ACCEPT))
             {
-                if (cp.getVote().equals(VoteResult.ACCEPT))
-                {
-                    out.add(cp.getName());
-                }
+            	out.add(cp.getName());
             }
         }
 

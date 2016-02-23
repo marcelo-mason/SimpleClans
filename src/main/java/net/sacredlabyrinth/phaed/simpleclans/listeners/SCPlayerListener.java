@@ -211,30 +211,21 @@ public class SCPlayerListener implements Listener
 
                 if (rcp != null)
                 {
-                    if (!rcp.isClanChat())
+                    if (!rcp.isClanChat() && isClanChat)
                     {
-                        if (isClanChat)
-                        {
-                            iter.remove();
-                            continue;
-                        }
+                    	iter.remove();
+                        continue;
                     }
 
-                    if (!rcp.isAllyChat())
+                    if (!rcp.isAllyChat() && isAllyChat)
                     {
-                        if (isAllyChat)
-                        {
-                            iter.remove();
-                            continue;
-                        }
+                    	iter.remove();
+                        continue;
                     }
 
-                    if (!rcp.isGlobalChat())
+                    if (!rcp.isGlobalChat() && !isAllyChat && !isClanChat)
                     {
-                        if (!isAllyChat && !isClanChat)
-                        {
-                            iter.remove();
-                        }
+                    	iter.remove();
                     }
                 }
             }
@@ -317,12 +308,9 @@ public class SCPlayerListener implements Listener
         }
         SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
 
-        if (plugin.getSettingsManager().isBbShowOnLogin())
+        if (plugin.getSettingsManager().isBbShowOnLogin() && cp.isBbEnabled())
         {
-            if (cp.isBbEnabled())
-            {
-                cp.getClan().displayBb(player);
-            }
+        	cp.getClan().displayBb(player);
         }
 
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
