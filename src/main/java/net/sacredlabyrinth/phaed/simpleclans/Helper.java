@@ -271,7 +271,7 @@ public class Helper
      * @param values
      * @return
      */
-    public static HashSet<String> fromArray2(String... values)
+    public static Set<String> fromArray2(String... values)
     {
         HashSet<String> results = new HashSet<String>();
         Collections.addAll(results, values);

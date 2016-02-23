@@ -46,7 +46,7 @@ public class MostKilledCommand
 
                         chatBlock.addRow("  " + headColor + plugin.getLang("victim"), headColor + plugin.getLang("killcount"), headColor + plugin.getLang("attacker"));
 
-                        HashMap<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getMostKilled();
+                        Map<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getMostKilled();
 
                         if (killsPerPlayerUnordered.isEmpty())
                         {

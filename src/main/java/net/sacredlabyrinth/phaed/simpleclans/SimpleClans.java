@@ -16,6 +16,7 @@ import java.net.URL;
 import java.nio.charset.StandardCharsets;
 import java.text.MessageFormat;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.PropertyResourceBundle;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -213,7 +214,7 @@ public class SimpleClans extends JavaPlugin {
         return teleportManager;
     }
 
-    public ArrayList<String> getMessages()
+    public List<String> getMessages()
     {
         return messages;
     }
