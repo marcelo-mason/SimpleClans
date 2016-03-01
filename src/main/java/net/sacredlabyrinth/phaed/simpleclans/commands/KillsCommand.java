@@ -1,12 +1,14 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Map.Entry;
 
 public class KillsCommand
 {
@@ -53,7 +55,7 @@ public class KillsCommand
 
                         chatBlock.addRow("  " + headColor + plugin.getLang("victim"), plugin.getLang("killcount"));
 
-                        HashMap<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getKillsPerPlayer(polledPlayerName);
+                        Map<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getKillsPerPlayer(polledPlayerName);
 
                         if (killsPerPlayerUnordered.isEmpty())
                         {
@@ -63,11 +65,11 @@ public class KillsCommand
 
                          Map<String, Integer> killsPerPlayer = Helper.sortByValue(killsPerPlayerUnordered);
 
-                        for (String playerName : killsPerPlayer.keySet())
+                        for (Entry<String, Integer> playerKills : killsPerPlayer.entrySet())
                         {
-                            int count = killsPerPlayer.get(playerName);
+                            int count = playerKills.getValue();
 
-                            chatBlock.addRow("  " + playerName, ChatColor.AQUA + "" + count);
+                            chatBlock.addRow("  " + playerKills.getKey(), ChatColor.AQUA + "" + count);
                         }
 
                         ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(polledPlayerName) + subColor + " " + plugin.getLang("kills") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));

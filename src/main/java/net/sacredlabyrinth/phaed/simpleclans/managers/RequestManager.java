@@ -16,7 +16,7 @@ import java.util.*;
 public final class RequestManager
 {
     private SimpleClans plugin;
-    private HashMap<String, Request> requests = new HashMap<String, Request>();
+    private HashMap<String, Request> requests = new HashMap<>();
 
     /**
      *
@@ -386,12 +386,9 @@ public final class RequestManager
                 String demoted = req.getTarget();
                 UUID demotedUniqueId = UUIDMigration.getForcedPlayerUUID(demoted);
 
-                if (SimpleClans.getInstance().hasUUID())
+                if (SimpleClans.getInstance().hasUUID() && demotedUniqueId != null)
                 {
-                    if (demotedUniqueId != null)
-                    {
-                        return;
-                    }
+                	return;
                 }
 
                 if (denies.isEmpty())
@@ -418,12 +415,9 @@ public final class RequestManager
                 String promoted = req.getTarget();
                 UUID promotedUniqueId = UUIDMigration.getForcedPlayerUUID(promoted);
 
-                if (SimpleClans.getInstance().hasUUID())
+                if (SimpleClans.getInstance().hasUUID() && promotedUniqueId == null)
                 {
-                    if (promotedUniqueId == null)
-                    {
-                        return;
-                    }
+                	return;
                 }
                 if (denies.isEmpty())
                 {

@@ -7,6 +7,9 @@ import java.util.regex.Pattern;
 
 public class StringSimplifier
 {
+	
+	private StringSimplifier() {}
+	
     public static final char DEFAULT_REPLACE_CHAR = '-';
     public static final String DEFAULT_REPLACE = String.valueOf(DEFAULT_REPLACE_CHAR);
     private static final ImmutableMap<String, String> NONDIACRITICS = ImmutableMap.<String, String>builder()

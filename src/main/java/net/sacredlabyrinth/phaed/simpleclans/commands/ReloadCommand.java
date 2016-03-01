@@ -26,12 +26,9 @@ public class ReloadCommand
     {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (sender instanceof Player)
+        if (sender instanceof Player && !plugin.getPermissionsManager().has((Player)sender, "simpleclans.admin.reload"))
         {
-            if (!plugin.getPermissionsManager().has((Player)sender, "simpleclans.admin.reload"))
-            {
-                ChatBlock.sendMessage(sender, ChatColor.RED + "Think you're slick don't ya");
-            }
+        	ChatBlock.sendMessage(sender, ChatColor.RED + "Think you're slick don't ya");
         }
 
         plugin.getSettingsManager().load();

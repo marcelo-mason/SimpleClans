@@ -120,7 +120,7 @@ public class HomeCommand {
                 }
                 PlayerHomeSetEvent homeSetEvent = new PlayerHomeSetEvent(clan, cp, player.getLocation());
                 SimpleClans.getInstance().getServer().getPluginManager().callEvent(homeSetEvent);
-                if (homeSetEvent.isCancelled())
+                if (homeSetEvent.isCancelled() || !plugin.getClanManager().purchaseHomeTeleportSet(player))
                 {
                     return;
                 }

@@ -19,10 +19,10 @@ import java.util.regex.Pattern;
 public class ChatBlock
 {
     private static final int lineLength = 319;
-    private ArrayList<Boolean> columnFlexes = new ArrayList<Boolean>();
-    private ArrayList<Integer> columnSizes = new ArrayList<Integer>();
-    private ArrayList<String> columnAlignments = new ArrayList<String>();
-    private LinkedList<String[]> rows = new LinkedList<String[]>();
+    private ArrayList<Boolean> columnFlexes = new ArrayList<>();
+    private ArrayList<Integer> columnSizes = new ArrayList<>();
+    private ArrayList<String> columnAlignments = new ArrayList<>();
+    private LinkedList<String[]> rows = new LinkedList<>();
     private String color = "";
     /**
      *
@@ -76,7 +76,7 @@ public class ChatBlock
      */
     public boolean hasContent()
     {
-        return rows.size() > 0;
+        return !rows.isEmpty();
     }
 
     /**
@@ -103,7 +103,7 @@ public class ChatBlock
      */
     public boolean isEmpty()
     {
-        return rows.size() == 0;
+        return rows.isEmpty();
     }
 
     /**
@@ -160,7 +160,7 @@ public class ChatBlock
             return false;
         }
 
-        if (rows.size() == 0)
+        if (rows.isEmpty())
         {
             return false;
         }
@@ -191,12 +191,12 @@ public class ChatBlock
 
         for (int i = 0; i < amount; i++)
         {
-            if (rows.size() == 0)
+            if (rows.isEmpty())
             {
                 continue;
             }
 
-            List<String> measuredCols = new ArrayList<String>();
+            List<String> measuredCols = new ArrayList<>();
             String row[] = rows.pollFirst();
 
             for (int sid = 0; sid < row.length; sid++)
@@ -323,7 +323,7 @@ public class ChatBlock
             prefix_used = true;
         }
 
-        return rows.size() > 0;
+        return !rows.isEmpty();
     }
 
     private int calculatedRowSize(List<String> cols)
@@ -591,12 +591,12 @@ public class ChatBlock
     {
         // Split each word apart
 
-        ArrayList<String> split = new ArrayList<String>();
+        ArrayList<String> split = new ArrayList<>();
         split.addAll(Arrays.asList(msg.split(" ")));
 
         // Create an array list for the output
 
-        ArrayList<String> out = new ArrayList<String>();
+        ArrayList<String> out = new ArrayList<>();
 
         // While i is less than the length of the array of words
 
@@ -606,7 +606,7 @@ public class ChatBlock
 
             // Create an array list to hold individual words
 
-            ArrayList<String> words = new ArrayList<String>();
+            ArrayList<String> words = new ArrayList<>();
 
             // go through the split array containing all the words, and adding them to the words array
             // until reaching the point where their width no longer fits on a chat line
@@ -792,10 +792,10 @@ public class ChatBlock
      */
     public static String colorize(String message)
     {
-        return colorizeBase((new String[]
+        return colorizeBase(new String[]
                 {
                     message
-                }))[0];
+                })[0];
     }
 
     /**

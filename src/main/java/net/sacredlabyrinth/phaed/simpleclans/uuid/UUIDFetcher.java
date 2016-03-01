@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.uuid;
 
 import com.google.common.collect.ImmutableList;
+
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
@@ -10,6 +11,7 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.ByteBuffer;
+import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.concurrent.Callable;
 
@@ -39,7 +41,7 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
     private static void writeBody(HttpURLConnection connection, String body) throws Exception {
         OutputStream stream = connection.getOutputStream();
-        stream.write(body.getBytes());
+        stream.write(body.getBytes(StandardCharsets.UTF_8));
         stream.flush();
         stream.close();
     }
@@ -86,13 +88,13 @@ public class UUIDFetcher implements Callable<Map<String, UUID>> {
 
     @Override
     public Map<String, UUID> call() throws Exception {
-        Map<String, UUID> uuidMap = new HashMap<String, UUID>();
+        Map<String, UUID> uuidMap = new HashMap<>();
         int requests = (int) Math.ceil(names.size() / PROFILES_PER_REQUEST);
         for (int i = 0; i < requests; i++) {
             HttpURLConnection connection = createConnection();
             String body = JSONArray.toJSONString(names.subList(i * 100, Math.min((i + 1) * 100, names.size())));
             writeBody(connection, body);
-            JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream()));
+            JSONArray array = (JSONArray) jsonParser.parse(new InputStreamReader(connection.getInputStream(), StandardCharsets.UTF_8));
             for (Object profile : array) {
                 JSONObject jsonProfile = (JSONObject) profile;
                 String id = (String) jsonProfile.get("id");

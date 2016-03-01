@@ -41,14 +41,11 @@ public class VerifyCommand
 
             if (isBuyer)
             {
-                if (arg.length == 0)
+                if (arg.length == 0 && plugin.getClanManager().purchaseVerification(player))
                 {
-                    if (plugin.getClanManager().purchaseVerification(player))
-                    {
-                        clan.verifyClan();
-                        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
-                    }
+                	clan.verifyClan();
+                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
                 }
             }
             else if (plugin.getPermissionsManager().has(player, "simpleclans.mod.verify"))
