@@ -699,6 +699,35 @@ public final class StorageManager
     }
 
     /**
+     * Change the name of a player in the database asynchronously
+     * 
+     * @param Player to update
+     */
+    @SuppressWarnings("deprecation")
+	public void updatePlayerNameAsync(final Player p)
+    {
+        plugin.getServer().getScheduler().scheduleAsyncDelayedTask(plugin, new Runnable()
+        {
+            @Override
+            public void run()
+            {
+            	updatePlayerName(p);
+            }
+        });
+    }
+    
+    /**
+     * Change the name of a player in the database asynchronously
+     * 
+     * @param Player to update
+     */
+    public void updatePlayerName(final Player p)
+    {
+        String query = "UPDATE `sc_players` SET `name` = '"+p.getName()+"' WHERE uuid = '"+p.getUniqueId().toString()+"';";
+        core.update(query);
+    }
+    
+    /**
      * Update a clan to the database
      *
      * @param clan

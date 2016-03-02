@@ -66,6 +66,7 @@ public class AcceptCommandExecutor implements CommandExecutor
                 if (SimpleClans.getInstance().hasUUID())
                 {
                     cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
+                    cp.setName(player.getName());
                 }
                 else
                 {

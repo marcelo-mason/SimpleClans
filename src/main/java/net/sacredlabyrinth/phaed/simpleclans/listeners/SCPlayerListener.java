@@ -290,14 +290,17 @@ public class SCPlayerListener implements Listener
         {
             cp = SimpleClans.getInstance().getClanManager().getClanPlayer(player);
         }
-
+        
+        SimpleClans.getInstance().getStorageManager().updatePlayerNameAsync(player);
+        SimpleClans.getInstance().getClanManager().updateLastSeen(player);
+        SimpleClans.getInstance().getClanManager().updateDisplayName(player);
+        
         if (cp == null)
         {
             return;
         }
         cp.setName(player.getName());
-        SimpleClans.getInstance().getClanManager().updateLastSeen(player);
-        SimpleClans.getInstance().getClanManager().updateDisplayName(player);
+
         if (SimpleClans.getInstance().hasUUID())
         {
             SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
