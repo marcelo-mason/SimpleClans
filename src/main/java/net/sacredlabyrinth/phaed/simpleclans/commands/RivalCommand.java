@@ -87,7 +87,7 @@ public class RivalCommand
                                                 }
                                                 else
                                                 {
-                                                    ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.ally"), plugin.getSettingsManager().getCommandClan()));
+                                                    ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.rival"), plugin.getSettingsManager().getCommandClan()));
                                                 }
                                             }
                                             else
