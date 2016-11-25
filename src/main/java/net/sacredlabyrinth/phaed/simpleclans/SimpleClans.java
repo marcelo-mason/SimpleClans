@@ -109,8 +109,6 @@ public class SimpleClans extends JavaPlugin {
         getCommand(getSettingsManager().getCommandGlobal()).setExecutor(new GlobalCommandExecutor());
 
         getCommand(getSettingsManager().getCommandClan()).setTabCompleter(new PlayerNameTabCompleter());
-
-        pullMessages();
         logger.info("[SimpleClans] Online Mode: " + hasUUID);
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
@@ -121,27 +119,6 @@ public class SimpleClans extends JavaPlugin {
         getServer().getScheduler().cancelTasks(this);
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();
-    }
-
-    public void pullMessages() {
-        if (getSettingsManager().isDisableMessages()) {
-            return;
-        }
-
-        try {
-            BufferedReader in = new BufferedReader(new InputStreamReader(new URL("https://minecraftcubed.net/pluginmessage/").openStream()
-                    , StandardCharsets.UTF_8));
-
-            String message;
-            while ((message = in.readLine()) != null) {
-                messages.add(message);
-                getServer().getConsoleSender().sendMessage(ChatColor.YELLOW + message);
-            }
-            in.close();
-
-        } catch (IOException e) {
-            // do nothing
-        }
     }
 
     /**
