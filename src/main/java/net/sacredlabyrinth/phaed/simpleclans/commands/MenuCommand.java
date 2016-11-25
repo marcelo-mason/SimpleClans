@@ -12,12 +12,10 @@ import java.util.List;
 /**
  * @author phaed
  */
-public class MenuCommand
-{
+public class MenuCommand {
     private List<String> menuItems = new LinkedList<>();
 
-    public MenuCommand()
-    {
+    public MenuCommand() {
     }
 
     /**
@@ -25,8 +23,7 @@ public class MenuCommand
      *
      * @param player
      */
-    public void execute(Player player)
-    {
+    public void execute(Player player) {
         SimpleClans plugin = SimpleClans.getInstance();
 
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
@@ -44,228 +41,173 @@ public class MenuCommand
 
         ChatBlock chatBlock = new ChatBlock();
 
-        if (clan == null && plugin.getPermissionsManager().has(player, "simpleclans.leader.create"))
-        {
-            if (plugin.getSettingsManager().isePurchaseCreation())
-            {
+        if (clan == null && plugin.getPermissionsManager().has(player, "simpleclans.leader.create")) {
+            if (plugin.getSettingsManager().isePurchaseCreation()) {
                 chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.create.tag.name.1.purchase.a.new.clan"), clanCommand, ChatColor.WHITE));
-            }
-            else
-            {
+            } else {
                 chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.create.tag.name.1.create.a.new.clan"), clanCommand, ChatColor.WHITE));
             }
         }
-        if (isNonVerified && plugin.getSettingsManager().isRequireVerification() && plugin.getSettingsManager().isePurchaseVerification())
-        {
+        if (isNonVerified && plugin.getSettingsManager().isRequireVerification() && plugin.getSettingsManager().isePurchaseVerification()) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.verify.1.purchase.verification.of.your.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.list"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.list")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.list.1.lists.all.clans"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.profile"))
-        {
+        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.profile")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.profile.1.view.your.clan.s.profile"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.profile"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.profile")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.profile.tag.1.view.a.clan.s.profile"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.member.lookup"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.member.lookup")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.lookup.1.lookup.your.info"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.lookup"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.lookup")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.lookup.player.1.lookup.a.player.s.info"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.leaderboard"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.leaderboard")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.leaderboard.1.view.leaderboard"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.alliances"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.alliances")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.alliances.1.view.all.clan.alliances"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.rivalries"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.rivalries")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.rivalries.1.view.all.clan.rivalries"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.roster"))
-        {
+        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.roster")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.roster.1.view.your.clan.s.member.list"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.roster"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.roster")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.roster.tag.1.view.a.clan.s.member.list"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.vitals"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.vitals")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.vitals.1.view.your.clan.member.s.vitals"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.coords"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.coords")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.coords.1.view.your.clan.member.s.coordinates"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.stats"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.stats")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.stats.1.view.your.clan.member.s.stats"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.kills"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.kills")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.kills"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.kills"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.kills")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.killsplayer"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.ally"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.ally")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.ally.add.remove.tag.1.add.remove.an.ally.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.rival"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.rival")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.rival.add.remove.tag.1.add.remove.a.rival.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.home"))
-        {
+        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.home")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("home-menu"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.home-set"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.home-set")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("home-set-menu"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.home-set"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.home-set")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("home-clear-menu"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.war"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.war")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.war"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.bb"))
-        {
+        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.bb")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.bb.1.display.bulletin.board"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.bb.msg.1.add.a.message.to.the.bulletin.board"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.modtag"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.modtag")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.modtag.tag.1.modify.the.clan.s.tag"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, "simpleclans.leader.cape"))
-        {
+        if (isVerified && isLeader && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, "simpleclans.leader.cape")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.cape.url.1.change.your.clan.s.cape"), clanCommand, ChatColor.WHITE));
         }
 
         String toggles = "";
 
-        if (isVerified && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, " simpleclans.member.cape-toggle"))
-        {
+        if (isVerified && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, " simpleclans.member.cape-toggle")) {
             toggles += "cape/";
         }
 
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle")) {
             toggles += "bb/";
         }
 
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle")) {
             toggles += "tag/";
         }
 
-        if (!toggles.isEmpty())
-        {
+        if (!toggles.isEmpty()) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.toggle.command"), clanCommand, ChatColor.WHITE, Helper.stripTrailing(toggles, "/")));
         }
 
-        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.invite"))
-        {
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.invite")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.invite.player.1.invite.a.player"), clanCommand, ChatColor.WHITE));
         }
-        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.kick"))
-        {
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.kick")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.kick.player.1.kick.a.player.from.the.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.setrank"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.setrank")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.trust.setrank"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.trust.untrust.player.1.set.trust.level1"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust"))
-        {
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.settrust")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.trust.untrust.player.1.set.trust.level2"), clanCommand, ChatColor.WHITE));
         }
-        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.promote"))
-        {
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.promote")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.promote.member.1.promote.a.member.to.leader"), clanCommand, ChatColor.WHITE));
         }
-        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.demote"))
-        {
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.demote")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.demote.leader.1.demote.a.leader.to.member"), clanCommand, ChatColor.WHITE));
         }
-        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.ff"))
-        {
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.ff")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.clanff.allow.block.1.toggle.clan.s.friendly.fire"), clanCommand, ChatColor.WHITE));
         }
-        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.disband"))
-        {
+        if (isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.disband")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.disband.1.disband.your.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.member.ff"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.member.ff")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.ff.allow.auto.1.toggle.personal.friendly.fire"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.member.resign"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.member.resign")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.resign.1.resign.from.the.clan"), clanCommand, ChatColor.WHITE));
         }
 
-        for (String item : menuItems)
-        {
+        for (String item : menuItems) {
             chatBlock.addRow(ChatColor.AQUA + "  " + item);
         }
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.verify") && plugin.getSettingsManager().isRequireVerification())
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.verify") && plugin.getSettingsManager().isRequireVerification()) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.verify.tag.1.verify.an.unverified.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.place"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.place")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.place"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.mod.mostkilled"))
-        {
+        if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.mod.mostkilled")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.mostkilled"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.disband"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.disband")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.disband.tag.1.disband.a.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.ban"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.ban")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.ban.unban.player.1.ban.unban.a.player"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.hometp"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.hometp")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.hometp.clan.1.tp.home.a.clan"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.globalff"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.mod.globalff")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.globalff.allow.auto.1.set.global.friendly.fire"), clanCommand, ChatColor.WHITE));
         }
-        if (plugin.getPermissionsManager().has(player, "simpleclans.admin.reload"))
-        {
+        if (plugin.getPermissionsManager().has(player, "simpleclans.admin.reload")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.reload.1.reload.configuration"), clanCommand, ChatColor.WHITE));
         }
-        if (chatBlock.isEmpty())
-        {
+        if (chatBlock.isEmpty()) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             return;
         }
@@ -276,8 +218,7 @@ public class MenuCommand
 
         boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
 
-        if (more)
-        {
+        if (more) {
             plugin.getStorageManager().addChatBlock(player, chatBlock);
             ChatBlock.sendBlank(player);
             ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
@@ -291,8 +232,7 @@ public class MenuCommand
      *
      * @param sender
      */
-    public void executeSender(CommandSender sender)
-    {
+    public void executeSender(CommandSender sender) {
         SimpleClans plugin = SimpleClans.getInstance();
 
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
@@ -318,8 +258,7 @@ public class MenuCommand
      * @param syntax
      * @param description
      */
-    public void addMenuItem(String syntax, String description)
-    {
+    public void addMenuItem(String syntax, String description) {
         addMenuItem(syntax, description, ChatColor.AQUA);
     }
 
@@ -331,8 +270,7 @@ public class MenuCommand
      * @param description
      * @param color
      */
-    public void addMenuItem(String syntax, String description, ChatColor color)
-    {
+    public void addMenuItem(String syntax, String description, ChatColor color) {
         menuItems.add(color + "/" + syntax + ChatColor.WHITE + " - " + description);
     }
 }

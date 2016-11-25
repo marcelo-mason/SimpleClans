@@ -10,60 +10,48 @@ import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.util.Arrays;
 
-public class CommandHelper
-{
-	
-	private CommandHelper() {}
-	
-    public static void registerCommand(String... aliases)
-    {
-        if (aliases != null)
-        {
+public class CommandHelper {
+
+    private CommandHelper() {
+    }
+
+    public static void registerCommand(String... aliases) {
+        if (aliases != null) {
             PluginCommand command = getCommand(aliases[0], SimpleClans.getInstance());
 
-            if (command != null)
-            {
+            if (command != null) {
                 command.setAliases(Arrays.asList(aliases));
                 getCommandMap().register(SimpleClans.getInstance().getDescription().getName(), command);
             }
         }
     }
 
-    private static PluginCommand getCommand(String name, Plugin plugin)
-    {
+    private static PluginCommand getCommand(String name, Plugin plugin) {
         PluginCommand command = null;
 
-        try
-        {
+        try {
             Constructor<PluginCommand> c = PluginCommand.class.getDeclaredConstructor(String.class, Plugin.class);
             c.setAccessible(true);
 
             command = c.newInstance(name, plugin);
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 
         return command;
     }
 
-    private static CommandMap getCommandMap()
-    {
+    private static CommandMap getCommandMap() {
         CommandMap commandMap = null;
 
-        try
-        {
-            if (Bukkit.getPluginManager() instanceof SimplePluginManager)
-            {
+        try {
+            if (Bukkit.getPluginManager() instanceof SimplePluginManager) {
                 Field f = SimplePluginManager.class.getDeclaredField("commandMap");
                 f.setAccessible(true);
 
                 commandMap = (CommandMap) f.get(Bukkit.getPluginManager());
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             e.printStackTrace();
         }
 

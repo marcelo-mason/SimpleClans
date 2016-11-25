@@ -9,76 +9,55 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 
-public class AcceptCommandExecutor implements CommandExecutor
-{
+public class AcceptCommandExecutor implements CommandExecutor {
     SimpleClans plugin;
 
-    public AcceptCommandExecutor()
-    {
+    public AcceptCommandExecutor() {
         plugin = SimpleClans.getInstance();
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings)
-    {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         Player player = (Player) commandSender;
 
-        if (plugin.getSettingsManager().isBanned(player.getName()))
-        {
+        if (plugin.getSettingsManager().isBanned(player.getName())) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
             return false;
         }
 
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-        if (cp != null)
-        {
+        if (cp != null) {
             Clan clan = cp.getClan();
 
-            if (clan.isLeader(player))
-            {
-                if (plugin.getRequestManager().hasRequest(clan.getTag()))
-                {
-                    if (cp.getVote() == null)
-                    {
-                        plugin.getRequestManager().accept(cp);
-                        clan.leaderAnnounce(ChatColor.GREEN + MessageFormat.format(plugin.getLang("voted.to.accept"), Helper.capitalize(player.getName())));
-                    }
-                    else
-                    {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.have.already.voted"));
-                    }
-                }
-                else
-                {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.accept"));
-                }
-            }
-            else
-            {
+            if (!clan.isLeader(player)) {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+                return false;
             }
-        }
-        else
-        {
-            if (plugin.getRequestManager().hasRequest(player.getName().toLowerCase()))
-            {
-                if (SimpleClans.getInstance().hasUUID())
-                {
-                    cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
-                    cp.setName(player.getName());
-                }
-                else
-                {
-                    cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
-                }
-                plugin.getRequestManager().accept(cp);
-            }
-            else
-            {
+            if (!plugin.getRequestManager().hasRequest(clan.getTag())) {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.accept"));
+                return false;
             }
+            if (cp.getVote() != null) {
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.have.already.voted"));
+                return false;
+            }
+            plugin.getRequestManager().accept(cp);
+            clan.leaderAnnounce(ChatColor.GREEN + MessageFormat.format(plugin.getLang("voted.to.accept"), Helper.capitalize(player.getName())));
+        } else {
+            if (!plugin.getRequestManager().hasRequest(player.getName().toLowerCase())) {
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.accept"));
+                return false;
+            }
+            if (SimpleClans.getInstance().hasUUID()) {
+                cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
+                cp.setName(player.getName());
+            } else {
+                cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
+            }
+            plugin.getRequestManager().accept(cp);
         }
-        return false;
+
+        return true;
     }
 }

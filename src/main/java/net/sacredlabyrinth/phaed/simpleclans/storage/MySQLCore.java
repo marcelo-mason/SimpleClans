@@ -5,6 +5,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
+
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.threads.ThreadUpdateSQL;
 
@@ -27,8 +28,7 @@ public class MySQLCore implements DBCore {
      * @param username
      * @param password
      */
-    public MySQLCore(String host, String database, int port, String username, String password)
-    {
+    public MySQLCore(String host, String database, int port, String username, String password) {
         this.database = database;
         this.port = port;
         this.host = host;
@@ -38,19 +38,13 @@ public class MySQLCore implements DBCore {
         initialize();
     }
 
-    private void initialize()
-    {
-        try
-        {
+    private void initialize() {
+        try {
             Class.forName("com.mysql.jdbc.Driver");
-            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=utf-8", username, password);
-        }
-        catch (ClassNotFoundException e)
-        {
+            connection = DriverManager.getConnection("jdbc:mysql://" + host + ":" + port + "/" + database + "?useUnicode=true&characterEncoding=utf-8&autoReconnect=false", username, password);
+        } catch (ClassNotFoundException e) {
             log.severe("ClassNotFoundException! " + e.getMessage());
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             log.severe("SQLException! " + e.getMessage());
         }
     }
@@ -59,17 +53,12 @@ public class MySQLCore implements DBCore {
      * @return connection
      */
     @Override
-    public Connection getConnection()
-    {
-        try
-        {
-            if (connection == null || connection.isClosed())
-            {
+    public Connection getConnection() {
+        try {
+            if (connection == null || connection.isClosed()) {
                 initialize();
             }
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             initialize();
         }
         return connection;
@@ -79,8 +68,7 @@ public class MySQLCore implements DBCore {
      * @return whether connection can be established
      */
     @Override
-    public Boolean checkConnection()
-    {
+    public Boolean checkConnection() {
         return getConnection() != null;
     }
 
@@ -88,17 +76,12 @@ public class MySQLCore implements DBCore {
      * Close connection
      */
     @Override
-    public void close()
-    {
-        try
-        {
-            if (connection != null)
-            {
+    public void close() {
+        try {
+            if (connection != null) {
                 connection.close();
             }
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             log.severe("Failed to close database connection! " + e.getMessage());
         }
     }
@@ -110,14 +93,10 @@ public class MySQLCore implements DBCore {
      * @return
      */
     @Override
-    public ResultSet select(String query)
-    {
-        try
-        {
+    public ResultSet select(String query) {
+        try {
             return getConnection().createStatement().executeQuery(query);
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             log.severe("Error at SQL Query: " + ex.getMessage());
             log.severe("Query: " + query);
         }
@@ -130,23 +109,15 @@ public class MySQLCore implements DBCore {
      * @param query
      */
     @Override
-    public void insert(String query)
-    {
-        if (SimpleClans.getInstance().getSettingsManager().getUseThreads())
-        {
+    public void insert(String query) {
+        if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
             Thread th = new Thread(new ThreadUpdateSQL(getConnection(), query, "INSERT"));
             th.start();
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 getConnection().createStatement().executeUpdate(query);
-            }
-            catch (SQLException ex)
-            {
-                if (!ex.toString().contains("not return ResultSet"))
-                {
+            } catch (SQLException ex) {
+                if (!ex.toString().contains("not return ResultSet")) {
                     log.severe("Error at SQL INSERT Query: " + ex);
                     log.severe("Query: " + query);
                 }
@@ -160,23 +131,15 @@ public class MySQLCore implements DBCore {
      * @param query
      */
     @Override
-    public void update(String query)
-    {
-        if (SimpleClans.getInstance().getSettingsManager().getUseThreads())
-        {
+    public void update(String query) {
+        if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
             Thread th = new Thread(new ThreadUpdateSQL(getConnection(), query, "UPDATE"));
             th.start();
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 getConnection().createStatement().executeUpdate(query);
-            }
-            catch (SQLException ex)
-            {
-                if (!ex.toString().contains("not return ResultSet"))
-                {
+            } catch (SQLException ex) {
+                if (!ex.toString().contains("not return ResultSet")) {
                     log.severe("Error at SQL UPDATE Query: " + ex);
                     log.severe("Query: " + query);
                 }
@@ -190,23 +153,15 @@ public class MySQLCore implements DBCore {
      * @param query
      */
     @Override
-    public void delete(String query)
-    {
-        if (SimpleClans.getInstance().getSettingsManager().getUseThreads())
-        {
+    public void delete(String query) {
+        if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
             Thread th = new Thread(new ThreadUpdateSQL(getConnection(), query, "DELETE"));
             th.start();
-        }
-        else
-        {
-            try
-            {
+        } else {
+            try {
                 getConnection().createStatement().executeUpdate(query);
-            }
-            catch (SQLException ex)
-            {
-                if (!ex.toString().contains("not return ResultSet"))
-                {
+            } catch (SQLException ex) {
+                if (!ex.toString().contains("not return ResultSet")) {
                     log.severe("Error at SQL DELETE Query: " + ex);
                     log.severe("Query: " + query);
                 }
@@ -221,15 +176,11 @@ public class MySQLCore implements DBCore {
      * @return
      */
     @Override
-    public Boolean execute(String query)
-    {
-        try
-        {
+    public Boolean execute(String query) {
+        try {
             getConnection().createStatement().execute(query);
             return true;
-        }
-        catch (SQLException ex)
-        {
+        } catch (SQLException ex) {
             log.severe(ex.getMessage());
             log.severe("Query: " + query);
             return false;
@@ -242,15 +193,11 @@ public class MySQLCore implements DBCore {
      * @param table
      * @return
      */
-    public Boolean existsTable(String table)
-    {
-        try
-        {
+    public Boolean existsTable(String table) {
+        try {
             ResultSet tables = getConnection().getMetaData().getTables(null, null, table, null);
             return tables.next();
-        }
-        catch (SQLException e)
-        {
+        } catch (SQLException e) {
             log.severe("Failed to check if table " + table + " exists: " + e.getMessage());
             return false;
         }
@@ -263,15 +210,11 @@ public class MySQLCore implements DBCore {
      * @param column
      * @return
      */
-    public Boolean existsColumn(String table, String column)
-    {
-        try
-        {
+    public Boolean existsColumn(String table, String column) {
+        try {
             ResultSet col = getConnection().getMetaData().getColumns(null, null, table, column);
             return col.next();
-        }
-        catch (Exception e)
-        {
+        } catch (Exception e) {
             log.severe("Failed to check if column " + column + " exists in table " + table + " : " + e.getMessage());
             return false;
         }

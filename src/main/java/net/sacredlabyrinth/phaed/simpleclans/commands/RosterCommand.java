@@ -10,11 +10,9 @@ import java.util.List;
 /**
  * @author phaed
  */
-public class RosterCommand
-{
+public class RosterCommand {
 
-    public RosterCommand()
-    {
+    public RosterCommand() {
     }
 
     /**
@@ -23,54 +21,41 @@ public class RosterCommand
      * @param player
      * @param arg
      */
-    public void execute(Player player, String[] arg)
-    {
+    public void execute(Player player, String[] arg) {
         SimpleClans plugin = SimpleClans.getInstance();
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
 
         Clan clan = null;
 
-        if (arg.length == 0)
-        {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.member.roster"))
-            {
+        if (arg.length == 0) {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.member.roster")) {
                 ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
-                if (cp == null)
-                {
+                if (cp == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
-                } else
-                {
+                } else {
                     clan = cp.getClan();
                 }
-            } else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        } else if (arg.length == 1)
-        {
-            if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.roster"))
-            {
+        } else if (arg.length == 1) {
+            if (plugin.getPermissionsManager().has(player, "simpleclans.anyone.roster")) {
                 clan = plugin.getClanManager().getClan(arg[0]);
 
-                if (clan == null)
-                {
+                if (clan == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clan.matched"));
                 }
-            } else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             }
-        } else
-        {
+        } else {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
         }
 
-        if (clan != null)
-        {
-            if (clan.isVerified())
-            {
+        if (clan != null) {
+            if (clan.isVerified()) {
                 ChatBlock chatBlock = new ChatBlock();
 
                 ChatBlock.sendBlank(player);
@@ -88,8 +73,7 @@ public class RosterCommand
                 List<ClanPlayer> members = clan.getNonLeaders();
                 plugin.getClanManager().sortClanPlayersByLastSeen(members);
 
-                for (ClanPlayer cp : leaders)
-                {
+                for (ClanPlayer cp : leaders) {
 
                     Player p = cp.toPlayer();
 
@@ -100,8 +84,7 @@ public class RosterCommand
 
                 }
 
-                for (ClanPlayer cp : members)
-                {
+                for (ClanPlayer cp : members) {
                     Player p = cp.toPlayer();
 
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
@@ -112,20 +95,17 @@ public class RosterCommand
 
                 boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
 
-                if (more)
-                {
+                if (more) {
                     plugin.getStorageManager().addChatBlock(player, chatBlock);
                     ChatBlock.sendBlank(player);
                     ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
                 }
 
                 ChatBlock.sendBlank(player);
-            } else
-            {
+            } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             }
-        } else
-        {
+        } else {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.roster.tag"), plugin.getSettingsManager().getCommandClan()));
         }
     }

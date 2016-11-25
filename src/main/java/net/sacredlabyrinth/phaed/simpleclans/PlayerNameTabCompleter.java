@@ -10,22 +10,17 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
-public class PlayerNameTabCompleter implements TabCompleter
-{
+public class PlayerNameTabCompleter implements TabCompleter {
     private SimpleClans plugin;
 
-    public PlayerNameTabCompleter()
-    {
+    public PlayerNameTabCompleter() {
         plugin = SimpleClans.getInstance();
     }
 
     @Override
-    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings)
-    {
-        if (command.getName().equalsIgnoreCase(plugin.getSettingsManager().getCommandClan()))
-        {
-            if (strings.length < 2)
-            {
+    public List<String> onTabComplete(CommandSender commandSender, Command command, String s, String[] strings) {
+        if (command.getName().equalsIgnoreCase(plugin.getSettingsManager().getCommandClan())) {
+            if (strings.length < 2) {
                 return null;
             }
 
@@ -40,23 +35,18 @@ public class PlayerNameTabCompleter implements TabCompleter
                     strings[0].equalsIgnoreCase(plugin.getLang("setrank.command")) ||
                     strings[0].equalsIgnoreCase(plugin.getLang("place.command")) ||
                     strings[0].equalsIgnoreCase(plugin.getLang("invite.command")) ||
-                    strings[0].equalsIgnoreCase(plugin.getLang("kills.command")))
-            {
+                    strings[0].equalsIgnoreCase(plugin.getLang("kills.command"))) {
                 List<String> list = new ArrayList<>();
 
-                for (OfflinePlayer player : plugin.getServer().getOnlinePlayers())
-                {
-                    if (player.getName().startsWith(strings[1]))
-                    {
+                for (OfflinePlayer player : plugin.getServer().getOnlinePlayers()) {
+                    if (player.getName().startsWith(strings[1])) {
                         list.add(player.getName());
                     }
                 }
 
                 Collections.sort(list);
-
                 return list;
             }
-
         }
 
         return null;

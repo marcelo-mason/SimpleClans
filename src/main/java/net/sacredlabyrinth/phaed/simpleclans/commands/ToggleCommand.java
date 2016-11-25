@@ -58,7 +58,7 @@ public class ToggleCommand {
         }
 
         if (cmd.equalsIgnoreCase("bb") && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle")) {
-        	ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
             if (cp != null) {
                 Clan clan = cp.getClan();
@@ -77,7 +77,7 @@ public class ToggleCommand {
         }
 
         if (cmd.equalsIgnoreCase("tag") && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle")) {
-        	ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
             if (cp != null) {
                 Clan clan = cp.getClan();
@@ -96,7 +96,7 @@ public class ToggleCommand {
         }
 
         if (cmd.equalsIgnoreCase("deposit") && plugin.getPermissionsManager().has(player, "simpleclans.leader.deposit-toggle")) {
-        	ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
             if (cp != null) {
                 Clan clan = cp.getClan();
@@ -111,7 +111,7 @@ public class ToggleCommand {
         }
 
         if (cmd.equalsIgnoreCase("withdraw") && plugin.getPermissionsManager().has(player, "simpleclans.leader.withdraw-toggle")) {
-        	ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
             if (cp != null) {
                 Clan clan = cp.getClan();
                 if (clan.isVerified()) {

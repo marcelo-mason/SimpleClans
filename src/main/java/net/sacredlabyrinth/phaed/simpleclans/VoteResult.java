@@ -10,5 +10,4 @@ package net.sacredlabyrinth.phaed.simpleclans;
 public enum VoteResult
 {
     ACCEPT, DENY
-
 }

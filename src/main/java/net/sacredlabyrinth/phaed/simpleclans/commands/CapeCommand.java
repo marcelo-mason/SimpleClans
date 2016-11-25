@@ -9,10 +9,8 @@ import java.text.MessageFormat;
 /**
  * @author phaed
  */
-public class CapeCommand
-{
-    public CapeCommand()
-    {
+public class CapeCommand {
+    public CapeCommand() {
     }
 
     /**
@@ -21,66 +19,48 @@ public class CapeCommand
      * @param player
      * @param arg
      */
-    public void execute(Player player, String[] arg)
-    {
+    public void execute(Player player, String[] arg) {
         SimpleClans plugin = SimpleClans.getInstance();
 
-        if (plugin.getPermissionsManager().has(player, "simpleclans.leader.cape"))
-        {
-            ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
-            if (cp != null)
-            {
-                Clan clan = cp.getClan();
-
-                if (clan.isVerified())
-                {
-                    if (clan.isLeader(player))
-                    {
-                        if (arg.length == 1)
-                        {
-                            String url = arg[0];
-
-                            if (url.contains(".png"))
-                            {
-                                if (Helper.testURL(url))
-                                {
-                                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("changed.the.clan.cape"), Helper.capitalize(player.getName())));
-                                    clan.setClanCape(url);
-                                }
-                                else
-                                {
-                                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("url.error"));
-                                }
-                            }
-                            else
-                            {
-                                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("cape.must.be.png"));
-                            }
-                        }
-                        else
-                        {
-                            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.cape.url"), plugin.getSettingsManager().getCommandClan()));
-                        }
-                    }
-                    else
-                    {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
-                    }
-                }
-                else
-                {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
-                }
-            }
-            else
-            {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
-            }
-        }
-        else
-        {
+        if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.cape")) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
+            return;
         }
+
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+        if (cp == null) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
+            return;
+        }
+
+        Clan clan = cp.getClan();
+
+        if (!clan.isVerified()) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
+            return;
+        }
+        if (!clan.isLeader(player)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+            return;
+        }
+        if (arg.length != 1) {
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.cape.url"), plugin.getSettingsManager().getCommandClan()));
+            return;
+        }
+
+        String url = arg[0];
+
+        if (!url.contains(".png")) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("cape.must.be.png"));
+            return;
+        }
+        if (!Helper.testURL(url)) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("url.error"));
+            return;
+        }
+
+        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("changed.the.clan.cape"), Helper.capitalize(player.getName())));
+        clan.setClanCape(url);
     }
 }

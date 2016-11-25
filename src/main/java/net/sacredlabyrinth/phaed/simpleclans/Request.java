@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * @author phaed
  */
-public final class Request
-{
+public final class Request {
     private List<ClanPlayer> acceptors = new ArrayList<>();
     private Clan clan;
     private String msg;
@@ -26,14 +25,12 @@ public final class Request
      * @param clan
      * @param target
      */
-    public Request(SimpleClans plugin, ClanRequest type, List<ClanPlayer> acceptors, ClanPlayer requester, String target, Clan clan, String msg)
-    {
+    public Request(SimpleClans plugin, ClanRequest type, List<ClanPlayer> acceptors, ClanPlayer requester, String target, Clan clan, String msg) {
         this.type = type;
         this.target = target;
         this.clan = clan;
         this.msg = msg;
-        if (acceptors != null)
-        {
+        if (acceptors != null) {
             this.acceptors = acceptors;
         }
         this.requester = requester;
@@ -44,80 +41,70 @@ public final class Request
     /**
      * @return the type
      */
-    public ClanRequest getType()
-    {
+    public ClanRequest getType() {
         return type;
     }
 
     /**
      * @param type the type to set
      */
-    public void setType(ClanRequest type)
-    {
+    public void setType(ClanRequest type) {
         this.type = type;
     }
 
     /**
      * @return the acceptors
      */
-    public List<ClanPlayer> getAcceptors()
-    {
+    public List<ClanPlayer> getAcceptors() {
         return Collections.unmodifiableList(acceptors);
     }
 
     /**
      * @param acceptors the acceptors to set
      */
-    public void setAcceptors(List<ClanPlayer> acceptors)
-    {
+    public void setAcceptors(List<ClanPlayer> acceptors) {
         this.acceptors = acceptors;
     }
 
     /**
      * @return the clan
      */
-    public Clan getClan()
-    {
+    public Clan getClan() {
         return clan;
     }
 
     /**
      * @param clan the clan to set
      */
-    public void setClan(Clan clan)
-    {
+    public void setClan(Clan clan) {
         this.clan = clan;
     }
 
     /**
      * @return the msg
      */
-    public String getMsg()
-    {
+    public String getMsg() {
         return msg;
     }
 
     /**
      * @param msg the msg to set
      */
-    public void setMsg(String msg)
-    {
+    public void setMsg(String msg) {
         this.msg = msg;
     }
 
     /**
      * @return the target
      */
-    public String getTarget()
-    {
+    public String getTarget() {
         return target;
     }
 
     /**
      * @param target the target to set
      */
-    public void setTarget(String target)
-    {
+    public void setTarget(String target) {
         this.target = target;
     }
 
@@ -127,12 +114,9 @@ public final class Request
      * @param playerNAme
      * @param vote
      */
-    public void vote(String playerNAme, VoteResult vote)
-    {
-        for (ClanPlayer cp : acceptors)
-        {
-            if (cp.getName().equalsIgnoreCase(playerNAme))
-            {
+    public void vote(String playerNAme, VoteResult vote) {
+        for (ClanPlayer cp : acceptors) {
+            if (cp.getName().equalsIgnoreCase(playerNAme)) {
                 cp.setVote(vote);
             }
         }
@@ -143,12 +127,9 @@ public final class Request
      *
      * @return
      */
-    public boolean votingFinished()
-    {
-        for (ClanPlayer cp : acceptors)
-        {
-            if (cp.getVote() == null)
-            {
+    public boolean votingFinished() {
+        for (ClanPlayer cp : acceptors) {
+            if (cp.getVote() == null) {
                 return false;
             }
         }
@@ -161,15 +142,12 @@ public final class Request
      *
      * @return
      */
-    public List<String> getDenies()
-    {
+    public List<String> getDenies() {
         List<String> out = new ArrayList<>();
 
-        for (ClanPlayer cp : acceptors)
-        {
-            if (cp.getVote() != null && cp.getVote().equals(VoteResult.DENY))
-            {
-            	out.add(cp.getName());
+        for (ClanPlayer cp : acceptors) {
+            if (cp.getVote() != null && cp.getVote().equals(VoteResult.DENY)) {
+                out.add(cp.getName());
             }
         }
 
@@ -181,15 +159,12 @@ public final class Request
      *
      * @return
      */
-    public List<String> getAccepts()
-    {
+    public List<String> getAccepts() {
         List<String> out = new ArrayList<>();
 
-        for (ClanPlayer cp : acceptors)
-        {
-            if (cp.getVote() != null && cp.getVote().equals(VoteResult.ACCEPT))
-            {
-            	out.add(cp.getName());
+        for (ClanPlayer cp : acceptors) {
+            if (cp.getVote() != null && cp.getVote().equals(VoteResult.ACCEPT)) {
+                out.add(cp.getName());
             }
         }
 
@@ -199,10 +174,8 @@ public final class Request
     /**
      * Cleans votes
      */
-    public void cleanVotes()
-    {
-        for (ClanPlayer cp : acceptors)
-        {
+    public void cleanVotes() {
+        for (ClanPlayer cp : acceptors) {
             cp.setVote(null);
         }
     }
@@ -210,26 +183,22 @@ public final class Request
     /**
      * @return the requester
      */
-    public ClanPlayer getRequester()
-    {
+    public ClanPlayer getRequester() {
         return requester;
     }
 
     /**
      * @param requester the requester to set
      */
-    public void setRequester(ClanPlayer requester)
-    {
+    public void setRequester(ClanPlayer requester) {
         this.requester = requester;
     }
 
-    public void incrementAskCount()
-    {
+    public void incrementAskCount() {
         askCount += 1;
     }
 
-    public boolean reachedRequestLimit()
-    {
+    public boolean reachedRequestLimit() {
         return askCount > SimpleClans.getInstance().getSettingsManager().getMaxAsksPerRequest();
     }
 }
