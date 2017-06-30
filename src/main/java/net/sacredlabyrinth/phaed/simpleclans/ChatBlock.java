@@ -155,7 +155,7 @@ public class ChatBlock {
                 for (int i = 0; i < colCount; i++) {
                     columnSizes.add(getMaxWidth(i) + 4);
                 }
-            } else{
+            } else {
                 columnSizes.add(lineLength);
             }
         }
@@ -647,7 +647,11 @@ public class ChatBlock {
      * @return
      */
     private static String[] colorize(String[] message) {
-        return colorizeBase(message);
+        try {
+            return colorizeBase(message);
+        } catch (Exception ex) {
+            return message;
+        }
     }
 
     /**
@@ -655,10 +659,9 @@ public class ChatBlock {
      * @return
      */
     public static String colorize(String message) {
-        return colorizeBase(new String[]
-                {
-                        message
-                })[0];
+        return colorizeBase(new String[]{
+                message
+        })[0];
     }
 
     /**

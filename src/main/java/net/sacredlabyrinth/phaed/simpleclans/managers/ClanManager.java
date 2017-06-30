@@ -658,6 +658,8 @@ public final class ClanManager {
         }
 
         count = getItemCount(inv.all(Material.ARROW));
+        count += getItemCount(inv.all(Material.SPECTRAL_ARROW));
+        count += getItemCount(inv.all(Material.TIPPED_ARROW));
 
         if (count > 0) {
             out += ChatColor.GOLD + plugin.getLang("weapon.A") + headColor + count;
