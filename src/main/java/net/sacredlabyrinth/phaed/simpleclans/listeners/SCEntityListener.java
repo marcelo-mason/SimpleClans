@@ -47,6 +47,11 @@ public class SCEntityListener implements Listener
                 return;
             }
 
+            if (victim.hasMetadata("NPC"))
+            {
+                return;
+            }
+
             Player attacker = null;
 
             // find attacker

@@ -41,7 +41,7 @@ public class VerifyCommand {
                     clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
                 }
-            } else if (plugin.getPermissionsManager().has(player, "simpleclans.mod.verify")) {
+            } else if (!plugin.getPermissionsManager().has(player, "simpleclans.mod.verify")) {
                 if (arg.length != 1) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                     return;
