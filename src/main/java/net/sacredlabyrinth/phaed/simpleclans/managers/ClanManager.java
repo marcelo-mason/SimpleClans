@@ -662,7 +662,7 @@ public final class ClanManager {
         count += getItemCount(inv.all(Material.TIPPED_ARROW));
 
         if (count > 0) {
-            out += ChatColor.GOLD + plugin.getLang("weapon.A") + headColor + count;
+            out += ChatColor.WHITE + headColor + count;
         }
 
         if (out.length() == 0) {
