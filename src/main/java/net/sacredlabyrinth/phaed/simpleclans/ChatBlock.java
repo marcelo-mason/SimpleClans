@@ -530,13 +530,7 @@ public class ChatBlock
      */
     private static String cleanColors(String str)
     {
-        String patternStr = "ÃƒÂ¯Ã‚Â¿Ã‚Â½.";
-        String replacementStr = "";
-
-        Pattern pattern = Pattern.compile(patternStr);
-        Matcher matcher = pattern.matcher(str);
-
-        return matcher.replaceAll(replacementStr);
+        return ChatColor.stripColor(str);
     }
 
     /**
