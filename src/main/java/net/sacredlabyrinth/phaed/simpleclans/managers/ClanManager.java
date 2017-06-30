@@ -680,6 +680,14 @@ public final class ClanManager {
         return count;
     }
 
+    private double getFoodPoints(PlayerInventory inv, Material material, int points, double saturation){
+        return getItemCount(inv.all(material)) * (points + saturation);
+    }
+
+    private double getFoodPoints(PlayerInventory inv, Material material, int type, int points, double saturation){
+        return getItemCount(inv.all(new ItemStack(material, 1, (short)type))) * (points + saturation) ;
+    }
+
     /**
      * Returns a formatted string detailing the players food
      *
@@ -687,108 +695,47 @@ public final class ClanManager {
      * @return
      */
     public String getFoodString(PlayerInventory inv) {
-        double out = 0;
 
-        int count = getItemCount(inv.all(320)); // cooked porkchop
+        double count = getFoodPoints(inv, Material.APPLE, 4, 2.4);
+        count += getFoodPoints(inv, Material.BAKED_POTATO, 5, 6);
+        count += getFoodPoints(inv, Material.BEETROOT, 1, 1.2);
+        count += getFoodPoints(inv, Material.BEETROOT_SOUP, 6, 7.2);
+        count += getFoodPoints(inv, Material.BREAD, 5, 6);
+        count += getFoodPoints(inv, Material.CAKE, 14, 2.8);
+        count += getFoodPoints(inv, Material.CARROT, 3, 3.6);
+        count += getFoodPoints(inv, Material.CHORUS_FRUIT, 4, 2.4);
+        count += getFoodPoints(inv, Material.RAW_FISH, 2, 5, .2); //clownfish
+        count += getFoodPoints(inv, Material.COOKED_CHICKEN, 6, 7.2);
+        count += getFoodPoints(inv, Material.COOKED_FISH, 5, 6);
+        count += getFoodPoints(inv, Material.COOKED_MUTTON, 6, 9.6);
+        count += getFoodPoints(inv, Material.GRILLED_PORK, 8, 12.8);
+        count += getFoodPoints(inv, Material.COOKED_RABBIT, 5, 6);
+        count += getFoodPoints(inv, Material.COOKED_FISH, 1, 6, 9.6); //salmon
+        count += getFoodPoints(inv, Material.COOKIE, 2, .4);
+        count += getFoodPoints(inv, Material.GOLDEN_APPLE, 4, 9.6);
+        count += getFoodPoints(inv, Material.GOLDEN_CARROT, 6, 14.4);
+        count += getFoodPoints(inv, Material.MELON, 2, 1.2);
+        count += getFoodPoints(inv, Material.MUSHROOM_SOUP, 6, 7.2);
+        count += getFoodPoints(inv, Material.POISONOUS_POTATO, 2, 1.2);
+        count += getFoodPoints(inv, Material.POTATO, 1, 0.6);
+        count += getFoodPoints(inv, Material.RAW_FISH, 3, 1, 0.2); //pufferfish
+        count += getFoodPoints(inv, Material.PUMPKIN_PIE, 8, 4.8);
+        count += getFoodPoints(inv, Material.RABBIT_STEW, 10, 12);
+        count += getFoodPoints(inv, Material.RAW_BEEF, 3, 1.8);
+        count += getFoodPoints(inv, Material.RAW_CHICKEN, 2, 1.2);
+        count += getFoodPoints(inv, Material.RAW_FISH, 0, 4, .4); //fish
+        count += getFoodPoints(inv, Material.MUTTON, 2, 1.2);
+        count += getFoodPoints(inv, Material.PORK, 3, 1.8);
+        count += getFoodPoints(inv, Material.RABBIT, 3, 1.8);
+        count += getFoodPoints(inv, Material.RAW_FISH, 1, .4); //raw salmon
+        count += getFoodPoints(inv, Material.ROTTEN_FLESH, 4, .8);
+        count += getFoodPoints(inv, Material.SPIDER_EYE, 2, 3.2);
+        count += getFoodPoints(inv, Material.COOKED_BEEF, 8, 12.8);
 
-        if (count > 0) {
-            out += count * 4;
-        }
-
-        count = getItemCount(inv.all(Material.COOKED_FISH));
-
-        if (count > 0) {
-            out += count * 3;
-        }
-
-        count = getItemCount(inv.all(Material.COOKIE));
-
-        if (count > 0) {
-            out += count * 1;
-        }
-
-        count = getItemCount(inv.all(Material.CAKE));
-
-        if (count > 0) {
-            out += count * 6;
-        }
-
-        count = getItemCount(inv.all(Material.CAKE_BLOCK));
-
-        if (count > 0) {
-            out += count * 9;
-        }
-
-        count = getItemCount(inv.all(Material.MUSHROOM_SOUP));
-
-        if (count > 0) {
-            out += count * 4;
-        }
-
-        count = getItemCount(inv.all(Material.BREAD));
-
-        if (count > 0) {
-            out += count * 3;
-        }
-
-        count = getItemCount(inv.all(Material.APPLE));
-
-        if (count > 0) {
-            out += count * 2;
-        }
-
-        count = getItemCount(inv.all(Material.GOLDEN_APPLE));
-
-        if (count > 0) {
-            out += count * 5;
-        }
-
-        count = getItemCount(inv.all(Material.RAW_BEEF));
-
-        if (count > 0) {
-            out += count * 2;
-        }
-
-        count = getItemCount(inv.all(364));  // steak
-
-        if (count > 0) {
-            out += count * 4;
-        }
-
-        count = getItemCount(inv.all(319)); // raw porkchop
-
-        if (count > 0) {
-            out += count * 2;
-        }
-
-        count = getItemCount(inv.all(Material.RAW_CHICKEN));
-
-        if (count > 0) {
-            out += count * 1;
-        }
-
-        count = getItemCount(inv.all(Material.COOKED_CHICKEN));
-
-        if (count > 0) {
-            out += count * 3;
-        }
-
-        count = getItemCount(inv.all(Material.ROTTEN_FLESH));
-
-        if (count > 0) {
-            out += count * 2;
-        }
-
-        count = getItemCount(inv.all(360));  // melon slice
-
-        if (count > 0) {
-            out += count * 2;
-        }
-
-        if (out == 0) {
+        if (count == 0) {
             return ChatColor.BLACK + plugin.getLang("none");
         } else {
-            return new DecimalFormat("#.#").format(out) + "" + ChatColor.GOLD + "h";
+            return ((int)count) + "" + ChatColor.GOLD + "p";
         }
     }
 
