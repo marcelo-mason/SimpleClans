@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
@@ -20,7 +21,7 @@ public class GlobalffCommand {
      * @param player
      * @param arg
      */
-    public void execute(Player player, String[] arg) {
+    public void execute(CommandSender player, String[] arg) {
         SimpleClans plugin = SimpleClans.getInstance();
 
         if (arg.length != 1) {
