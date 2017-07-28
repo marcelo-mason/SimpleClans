@@ -300,6 +300,13 @@ public class SCEntityListener implements Listener
                     {
                         return;
                     }
+                    
+                    // global ff enabled, allow damage
+                    
+                    if (plugin.getSettingsManager().isGlobalff())
+                    {
+                        return;
+                    }
 
                     // same clan, deny damage
 
