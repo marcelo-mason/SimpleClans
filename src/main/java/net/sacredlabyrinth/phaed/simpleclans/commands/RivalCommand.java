@@ -65,6 +65,12 @@ public class RivalCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clan.matched"));
             return;
         }
+        if (clan.getTag().equals(rival.getTag()))
+        {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.rival.your.own.clan"));
+            return;
+        }
+            
         if (plugin.getSettingsManager().isUnrivable(rival.getTag())) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.cannot.be.rivaled"));
             return;
