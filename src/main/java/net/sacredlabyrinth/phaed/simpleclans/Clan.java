@@ -376,6 +376,22 @@ public class Clan implements Serializable, Comparable<Clan> {
         bb.add(msg);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
+    
+    /**
+     * Adds a bulletin board message without announcer
+     *
+     * @param msg
+     *
+     * @param updateLastUsed should the clan's last used time be updated as well?
+     */
+    public void addBb(String msg, boolean updateLastUsed) {
+        while (bb.size() > SimpleClans.getInstance().getSettingsManager().getBbSize()) {
+            bb.remove(0);
+        }
+
+        bb.add(msg);
+        SimpleClans.getInstance().getStorageManager().updateClan(this, updateLastUsed);
+    }
 
     /**
      * Clears the bulletin board
@@ -1519,6 +1535,20 @@ public class Clan implements Serializable, Comparable<Clan> {
     public void addBb(String announcerName, String msg) {
         if (isVerified()) {
             addBb(SimpleClans.getInstance().getSettingsManager().getBbColor() + msg);
+            clanAnnounce(announcerName, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
+        }
+    }
+    
+    /**
+     * Add a new bb message and announce it to all online members of a clan
+     *
+     * @param announcerName
+     * @param msg
+     * @param updateLastUsed
+     */
+    public void addBb(String announcerName, String msg, boolean updateLastUsed) {
+        if (isVerified()) {
+            addBb(SimpleClans.getInstance().getSettingsManager().getBbColor() + msg, updateLastUsed);
             clanAnnounce(announcerName, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
         }
     }
