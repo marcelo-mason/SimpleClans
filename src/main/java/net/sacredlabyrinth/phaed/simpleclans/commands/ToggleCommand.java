@@ -102,7 +102,13 @@ public class ToggleCommand {
                 Clan clan = cp.getClan();
                 if (clan.isLeader(player)) {
                     if (clan.isVerified()) {
-                        clan.setAllowDeposit(!clan.isAllowDeposit());
+                    	if (clan.isAllowDeposit()) {
+	                    	ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("depositoff"));
+	                    	clan.setAllowDeposit(false);
+                    	} else {
+	                    	ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("depositon"));
+	                    	clan.setAllowDeposit(true);
+                    	}
                     }
                 } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
@@ -116,7 +122,13 @@ public class ToggleCommand {
                 Clan clan = cp.getClan();
                 if (clan.isVerified()) {
                     if (clan.isLeader(player)) {
-                        clan.setAllowWithdraw(!clan.isAllowWithdraw());
+                    	if (clan.isAllowWithdraw()) {
+	                    	ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("withdrawoff"));
+	                    	clan.setAllowWithdraw(false);
+                    	} else {
+	                    	ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("withdrawon"));
+	                    	clan.setAllowWithdraw(true);
+                    	}
                     } else {
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
                     }
