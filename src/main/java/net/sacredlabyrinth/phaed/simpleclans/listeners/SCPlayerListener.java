@@ -235,11 +235,6 @@ public class SCPlayerListener implements Listener {
         }
         cp.setName(player.getName());
 
-        if (SimpleClans.getInstance().hasUUID()) {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        }
         SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
 
         if (plugin.getSettingsManager().isBbShowOnLogin() && cp.isBbEnabled()) {
@@ -305,29 +300,5 @@ public class SCPlayerListener implements Listener {
         }
 
         plugin.getClanManager().updateLastSeen(event.getPlayer());
-    }
-
-    /**
-     * @param event
-     */
-    @EventHandler
-    public void onPlayerTeleport(PlayerTeleportEvent event) {
-        if (event.isCancelled()) {
-            return;
-        }
-
-        if (plugin.getSettingsManager().isBlacklistedWorld(event.getPlayer().getLocation().getWorld().getName())) {
-            return;
-        }
-
-        plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
-    }
-
-    /**
-     * @param event
-     */
-    @EventHandler
-    public void onPlayerToggleSneak(PlayerToggleSneakEvent event) {
-        plugin.getSpoutPluginManager().processPlayer(event.getPlayer());
     }
 }

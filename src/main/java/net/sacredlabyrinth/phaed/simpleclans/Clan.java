@@ -1063,25 +1063,6 @@ public class Clan implements Serializable, Comparable<Clan> {
     }
 
     /**
-     * Set a clan's cape url
-     *
-     * @param url
-     */
-    public void setClanCape(String url) {
-        setCapeUrl(url);
-
-        SimpleClans.getInstance().getStorageManager().updateClan(this);
-
-        for (String member : members) {
-            if (SimpleClans.getInstance().hasUUID()) {
-                SimpleClans.getInstance().getSpoutPluginManager().processPlayer(UUID.fromString(member));
-            } else {
-                SimpleClans.getInstance().getSpoutPluginManager().processPlayer(member);
-            }
-        }
-    }
-
-    /**
      * Check whether the clan has crossed the rival limit
      *
      * @return
@@ -1111,11 +1092,6 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-        if (SimpleClans.getInstance().hasUUID()) {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        }
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
@@ -1157,11 +1133,6 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-        if (SimpleClans.getInstance().hasUUID()) {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        }
 
         Player matched = cp.toPlayer();
 
@@ -1194,7 +1165,6 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-        SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
 
         Player matched = SimpleClans.getInstance().getServer().getPlayer(playerUniqueId);
 
@@ -1219,11 +1189,6 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-        if (SimpleClans.getInstance().hasUUID()) {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        }
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
@@ -1243,7 +1208,6 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-        SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
@@ -1263,11 +1227,6 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-        if (SimpleClans.getInstance().hasUUID()) {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        }
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
@@ -1286,7 +1245,6 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
-        SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
@@ -1503,30 +1461,6 @@ public class Clan implements Serializable, Comparable<Clan> {
     }
 
     /**
-     * Announce message to a whole clan plus audio alert
-     *
-     * @param playerName
-     * @param msg
-     */
-    public void audioAnnounce(String playerName, String msg) {
-        clanAnnounce(playerName, msg);
-
-        for (String member : members) {
-            Player pl;
-            if (SimpleClans.getInstance().hasUUID()) {
-                pl = SimpleClans.getInstance().getServer().getPlayer(UUID.fromString(member));
-            } else {
-                pl = SimpleClans.getInstance().getServer().getPlayerExact(member);
-            }
-            if (pl == null) {
-                continue;
-            }
-
-            SimpleClans.getInstance().getSpoutPluginManager().playAlert(pl);
-        }
-    }
-
-    /**
      * Add a new bb message and announce it to all online members of a clan
      *
      * @param announcerName
@@ -1594,13 +1528,6 @@ public class Clan implements Serializable, Comparable<Clan> {
                 }
 
                 cp.setLeader(false);
-
-                SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
-                if (SimpleClans.getInstance().hasUUID()) {
-                    SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-                } else {
-                    SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-                }
             }
         }
 

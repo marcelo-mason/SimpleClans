@@ -33,7 +33,6 @@ public class SimpleClans extends JavaPlugin {
     private ClanManager clanManager;
     private RequestManager requestManager;
     private StorageManager storageManager;
-    private SpoutPluginManager spoutPluginManager;
     private SettingsManager settingsManager;
     private PermissionsManager permissionsManager;
     private TeleportManager teleportManager;
@@ -79,7 +78,6 @@ public class SimpleClans extends JavaPlugin {
         this.hasUUID = UUIDMigration.canReturnUUID();
         languageManager = new LanguageManager();
 
-        spoutPluginManager = new SpoutPluginManager();
         permissionsManager = new PermissionsManager();
         requestManager = new RequestManager();
         clanManager = new ClanManager();
@@ -91,7 +89,6 @@ public class SimpleClans extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new SCEntityListener(), this);
         getServer().getPluginManager().registerEvents(new SCPlayerListener(), this);
 
-        spoutPluginManager.processAllPlayers();
         permissionsManager.loadPermissions();
 
         CommandHelper.registerCommand(getSettingsManager().getCommandClan());
@@ -140,13 +137,6 @@ public class SimpleClans extends JavaPlugin {
      */
     public StorageManager getStorageManager() {
         return storageManager;
-    }
-
-    /**
-     * @return the spoutManager
-     */
-    public SpoutPluginManager getSpoutPluginManager() {
-        return spoutPluginManager;
     }
 
     /**

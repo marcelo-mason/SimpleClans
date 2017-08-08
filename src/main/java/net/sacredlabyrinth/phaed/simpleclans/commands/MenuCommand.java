@@ -123,15 +123,8 @@ public class MenuCommand {
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.modtag")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.modtag.tag.1.modify.the.clan.s.tag"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && isLeader && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, "simpleclans.leader.cape")) {
-            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.cape.url.1.change.your.clan.s.cape"), clanCommand, ChatColor.WHITE));
-        }
 
         String toggles = "";
-
-        if (isVerified && plugin.getSpoutPluginManager().isHasSpout() && plugin.getSettingsManager().isClanCapes() && plugin.getPermissionsManager().has(player, " simpleclans.member.cape-toggle")) {
-            toggles += "cape/";
-        }
 
         if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle")) {
             toggles += "bb/";

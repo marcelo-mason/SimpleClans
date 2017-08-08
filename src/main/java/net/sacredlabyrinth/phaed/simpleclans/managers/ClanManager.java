@@ -87,13 +87,6 @@ public final class ClanManager {
         plugin.getStorageManager().updateClanPlayer(cp);
 
         SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
-
-        if (SimpleClans.getInstance().hasUUID()) {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getUniqueId());
-        } else {
-            SimpleClans.getInstance().getSpoutPluginManager().processPlayer(cp.getName());
-        }
-
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new CreateClanEvent(clan));
     }
 

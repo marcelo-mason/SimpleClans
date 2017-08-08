@@ -49,11 +49,6 @@ public final class SettingsManager {
     private double eInvitePrice;
     private double eHomeTeleportPrice;
     private double eHomeTeleportPriceSet;
-    private String alertUrl;
-    private boolean inGameTags;
-    private boolean inGameTagsColored;
-    private boolean clanCapes;
-    private String defaultCapeUrl;
     private String serverName;
     private boolean chatTags;
     private int purgeClan;
@@ -201,11 +196,6 @@ public final class SettingsManager {
         eInvitePrice = getConfig().getDouble("economy.invite-price");
         eHomeTeleportPrice = getConfig().getDouble("economy.home-teleport-price");
         eHomeTeleportPriceSet = getConfig().getDouble("economy.home-teleport-set-price");
-        alertUrl = getConfig().getString("spout.alert-url");
-        inGameTags = getConfig().getBoolean("spout.in-game-tags");
-        inGameTagsColored = getConfig().getBoolean("spout.in-game-tags-colored");
-        clanCapes = getConfig().getBoolean("spout.enable-clan-capes");
-        defaultCapeUrl = getConfig().getString("spout.default-cape-url");
         purgeClan = getConfig().getInt("purge.inactive-clan-days");
         purgeUnverified = getConfig().getInt("purge.unverified-clan-days");
         purgePlayers = getConfig().getInt("purge.inactive-player-data-days");
@@ -538,34 +528,6 @@ public final class SettingsManager {
     }
 
     /**
-     * @return the alertUrl
-     */
-    public String getAlertUrl() {
-        return alertUrl;
-    }
-
-    /**
-     * @return the inGameTags
-     */
-    public boolean isInGameTags() {
-        return inGameTags;
-    }
-
-    /**
-     * @return the clanCapes
-     */
-    public boolean isClanCapes() {
-        return clanCapes;
-    }
-
-    /**
-     * @return the defaultCapeUrl
-     */
-    public String getDefaultCapeUrl() {
-        return defaultCapeUrl;
-    }
-
-    /**
      * @return the serverName
      */
     public String getServerName() {
@@ -893,13 +855,6 @@ public final class SettingsManager {
      */
     public String getPassword() {
         return password;
-    }
-
-    /**
-     * @return the inGameTagsColored
-     */
-    public boolean isInGameTagsColored() {
-        return inGameTagsColored;
     }
 
     /**

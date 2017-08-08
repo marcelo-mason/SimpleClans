@@ -41,7 +41,6 @@ public class ToggleCommand {
                         if (cp.isCapeEnabled()) {
                             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("capeoff"));
                             cp.setCapeEnabled(false);
-                            plugin.getSpoutPluginManager().clearCape(player);
                         } else {
                             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("capeon"));
                             cp.setCapeEnabled(true);

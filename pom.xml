@@ -81,11 +81,6 @@
             <scope>provided</scope>
         </dependency>
         <dependency>
-            <groupId>org.getspout</groupId>
-            <artifactId>spoutplugin</artifactId>
-            <version>dev-SNAPSHOT</version>
-        </dependency>
-        <dependency>
             <groupId>com.wasteofplastic</groupId>
             <artifactId>askyblock</artifactId>
             <version>3.0.4.1</version>
