@@ -49,7 +49,7 @@ public final class PermissionsManager {
             setupEconomy();
             setupPermissions();
         } catch (ClassNotFoundException e) {
-            SimpleClans.log("[PreciousStones] Vault not found. No economy or extended Permissions support.");
+            SimpleClans.log("[SimpleClans] Vault not found. No economy or extended Permissions support.");
         }
 
         detectSkyBlock();

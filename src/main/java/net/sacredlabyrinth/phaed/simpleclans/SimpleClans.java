@@ -106,7 +106,7 @@ public class SimpleClans extends JavaPlugin {
         getCommand(getSettingsManager().getCommandGlobal()).setExecutor(new GlobalCommandExecutor());
 
         getCommand(getSettingsManager().getCommandClan()).setTabCompleter(new PlayerNameTabCompleter());
-        logger.info("[SimpleClans] Online Mode: " + hasUUID);
+        logger.info("[SimpleClans] Online Mode: " + hasUUID); //TODO: Is this necessary?
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
     }
@@ -154,6 +154,7 @@ public class SimpleClans extends JavaPlugin {
     }
 
     /**
+     * @param msg the path within the language file
      * @return the lang
      */
     public String getLang(String msg) {
