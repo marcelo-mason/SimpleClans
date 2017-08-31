@@ -31,7 +31,7 @@ public class ReloadCommand
         	ChatBlock.sendMessage(sender, ChatColor.RED + "Does not match a clan command");
         	return;
         }
-
+        plugin.reloadConfig();
         plugin.getSettingsManager().load();
         plugin.getLanguageManager().load();
         plugin.getStorageManager().importFromDatabase();
