@@ -702,7 +702,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     @Deprecated
     public boolean isLeader(String playerName) {
         if (isMember(playerName)) {
-            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayerName(playerName.toLowerCase());
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName.toLowerCase());
 
             if (cp != null && cp.isLeader()) {
                 return true;

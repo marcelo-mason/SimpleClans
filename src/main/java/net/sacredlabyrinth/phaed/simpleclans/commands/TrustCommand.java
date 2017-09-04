@@ -68,7 +68,7 @@ public class TrustCommand {
             return;
         }
 
-        ClanPlayer tcp = plugin.getClanManager().getClanPlayerName(trusted);
+        ClanPlayer tcp = plugin.getClanManager().getClanPlayer(trusted);
 
         if (tcp == null) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
