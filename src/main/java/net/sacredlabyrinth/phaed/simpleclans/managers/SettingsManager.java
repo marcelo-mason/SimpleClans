@@ -73,6 +73,7 @@ public final class SettingsManager {
     private String commandMore;
     private String commandDeny;
     private String commandAccept;
+    private String commandClanChat;
     private int clanMinSizeToAlly;
     private int clanMinSizeToRival;
     private int clanMinLength;
@@ -220,6 +221,7 @@ public final class SettingsManager {
         commandMore = getConfig().getString("commands.more");
         commandDeny = getConfig().getString("commands.deny");
         commandAccept = getConfig().getString("commands.accept");
+        commandClanChat = getConfig().getString("commands.clan_chat");
         forceCommandPriority = getConfig().getBoolean("commands.force-priority");
         homebaseSetOnce = getConfig().getBoolean("clan.homebase-can-be-set-only-once");
         waitSecs = getConfig().getInt("clan.homebase-teleport-wait-secs");
@@ -310,6 +312,14 @@ public final class SettingsManager {
         return itemsList.contains(typeId);
     }
 
+    /**
+     * Gets the command set as the clan chat command
+     * 
+     * @return the clan chat command
+     */
+    public String getCommandClanChat() {
+        return commandClanChat;
+    }
 
     /**
      * Check whether a worlds is blacklisted

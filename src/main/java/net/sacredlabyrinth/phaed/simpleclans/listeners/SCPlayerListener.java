@@ -77,7 +77,7 @@ public class SCPlayerListener implements Listener {
                 }
             }
         }
-        if (command.equals(".")) {
+        if (command.equals(plugin.getSettingsManager().getCommandClanChat())) {
             if (!plugin.getSettingsManager().getClanChatEnable()) {
                 return;
             }
