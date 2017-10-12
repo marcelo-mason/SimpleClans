@@ -14,6 +14,7 @@ import java.text.MessageFormat;
  * @author phaed
  */
 public class VerifyCommand {
+
     public VerifyCommand() {
     }
 
@@ -35,15 +36,21 @@ public class VerifyCommand {
             boolean isNonVerified = clan != null && !clan.isVerified();
             boolean isBuyer = isNonVerified && plugin.getSettingsManager().isRequireVerification() && plugin.getSettingsManager().isePurchaseVerification();
 
-            if (isBuyer) {
-                if (arg.length == 0 && plugin.getClanManager().purchaseVerification(player)) {
-                    clan.verifyClan();
-                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
-                }
-            } else if (!plugin.getPermissionsManager().has(player, "simpleclans.mod.verify")) {
-                if (arg.length != 1) {
+            if (!plugin.getPermissionsManager().has(player, "simpleclans.mod.verify")) {
+                if (arg.length != 0) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
+                    return;
+                }
+                if (isBuyer) {
+                    if (arg.length == 0 && plugin.getClanManager().purchaseVerification(player)) {
+                        clan.verifyClan();
+                        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.0.has.been.verified"), clan.getName()));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("the.clan.has.been.verified"));
+                    }
+                }
+            } else {
+                if (arg.length != 1) {
+                    ChatBlock.sendMessage(sender, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.verify.tag"), plugin.getSettingsManager().getCommandClan()));
                     return;
                 }
                 verify(player, arg[0]);
