@@ -111,6 +111,9 @@ public class MenuCommand {
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.home-set")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("home-clear-menu"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.home-regroup")) {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("home-regroup-menu"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.war")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.war"), clanCommand, ChatColor.WHITE));
         }
