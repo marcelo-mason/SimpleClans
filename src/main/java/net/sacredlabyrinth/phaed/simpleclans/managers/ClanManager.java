@@ -190,8 +190,7 @@ public final class ClanManager {
 
     /**
      * Gets the ClanPlayer data object if a player is currently in a clan, null
-     * if he's not in a clan
-     * Used for BungeeCord Reload ClanPlayer and your Clan
+     * if he's not in a clan Used for BungeeCord Reload ClanPlayer and your Clan
      *
      * @param player
      * @return
@@ -675,12 +674,12 @@ public final class ClanManager {
         return count;
     }
 
-    private double getFoodPoints(PlayerInventory inv, Material material, int points, double saturation){
+    private double getFoodPoints(PlayerInventory inv, Material material, int points, double saturation) {
         return getItemCount(inv.all(material)) * (points + saturation);
     }
 
-    private double getFoodPoints(PlayerInventory inv, Material material, int type, int points, double saturation){
-        return getItemCount(inv.all(new ItemStack(material, 1, (short)type))) * (points + saturation) ;
+    private double getFoodPoints(PlayerInventory inv, Material material, int type, int points, double saturation) {
+        return getItemCount(inv.all(new ItemStack(material, 1, (short) type))) * (points + saturation);
     }
 
     /**
@@ -730,7 +729,7 @@ public final class ClanManager {
         if (count == 0) {
             return ChatColor.BLACK + plugin.getLang("none");
         } else {
-            return ((int)count) + "" + ChatColor.GOLD + "p";
+            return ((int) count) + "" + ChatColor.GOLD + "p";
         }
     }
 
@@ -957,6 +956,47 @@ public final class ClanManager {
                 player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
                 return false;
             }
+        }
+
+        return true;
+    }
+
+    /**
+     * Purchase Home Regroup
+     *
+     * @param player
+     * @return
+     */
+    public boolean purchaseHomeRegroup(Player player) {
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+        if (!plugin.getSettingsManager().isePurchaseHomeRegroup()) {
+            return true;
+        }
+
+        double price = plugin.getSettingsManager().getHomeRegroupPrice();
+        if (!plugin.getSettingsManager().iseUniqueTaxOnRegroup()) {
+            price = price * cp.getClan().getOnlineMembers().size();
+        }
+
+        if (plugin.getSettingsManager().iseIssuerPaysRegroup()) {
+            if (plugin.getPermissionsManager().hasEconomy()) {
+                if (plugin.getPermissionsManager().playerHasMoney(player, price)) {
+                    plugin.getPermissionsManager().playerChargeMoney(player, price);
+                    player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+                } else {
+                    player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                    return false;
+                }
+            }
+        } else {
+            Clan clan = cp.getClan();
+            double balance = clan.getBalance();
+            if (price > balance) {
+                player.sendMessage(ChatColor.RED + plugin.getLang("clan.bank.not.enough.money"));
+                return false;
+            }
+            clan.withdraw(price, player);
         }
 
         return true;

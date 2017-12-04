@@ -23,6 +23,7 @@ public final class SettingsManager {
     private boolean dropOnHome;
     private boolean keepOnHome;
     private boolean debugging;
+    @SuppressWarnings("FieldMayBeFinal")
     private SimpleClans plugin;
     private boolean mChatIntegration;
     private boolean pvpOnlywhileInWar;
@@ -43,11 +44,15 @@ public final class SettingsManager {
     private boolean ePurchaseVerification;
     private boolean ePurchaseInvite;
     private boolean ePurchaseHomeTeleport;
+    private boolean ePurchaseHomeRegroup;
+    private boolean eUniqueTaxOnRegroup;
+    private boolean eIssuerPaysRegroup;
     private boolean ePurchaseHomeTeleportSet;
     private double eCreationPrice;
     private double eVerificationPrice;
     private double eInvitePrice;
     private double eHomeTeleportPrice;
+    private double eHomeRegroupPrice;
     private double eHomeTeleportPriceSet;
     private String serverName;
     private boolean chatTags;
@@ -119,7 +124,9 @@ public final class SettingsManager {
     private String username;
     private String password;
     private boolean safeCivilians;
+    @SuppressWarnings("FieldMayBeFinal")
     private File main;
+    @SuppressWarnings("FieldMayBeFinal")
     private FileConfiguration config;
     private boolean compatMode;
     private boolean homebaseSetOnce;
@@ -151,6 +158,7 @@ public final class SettingsManager {
      * Load the configuration
      */
 
+    @SuppressWarnings({"CallToPrintStackTrace", "UseSpecificCatch"})
     public void load() {
         boolean exists = (main).exists();
 
@@ -191,11 +199,15 @@ public final class SettingsManager {
         ePurchaseVerification = getConfig().getBoolean("economy.purchase-clan-verify");
         ePurchaseInvite = getConfig().getBoolean("economy.purchase-clan-invite");
         ePurchaseHomeTeleport = getConfig().getBoolean("economy.purchase-home-teleport");
+        ePurchaseHomeRegroup = getConfig().getBoolean("economy.purchase-home-regroup");
         ePurchaseHomeTeleportSet = getConfig().getBoolean("economy.purchase-home-teleport-set");
         eCreationPrice = getConfig().getDouble("economy.creation-price");
         eVerificationPrice = getConfig().getDouble("economy.verification-price");
         eInvitePrice = getConfig().getDouble("economy.invite-price");
         eHomeTeleportPrice = getConfig().getDouble("economy.home-teleport-price");
+        eHomeRegroupPrice = getConfig().getDouble("economy.home-regroup-price");
+        eUniqueTaxOnRegroup = getConfig().getBoolean("economy.unique-tax-on-regroup");
+        eIssuerPaysRegroup = getConfig().getBoolean("economy.issuer-pays-regroup");
         eHomeTeleportPriceSet = getConfig().getDouble("economy.home-teleport-set-price");
         purgeClan = getConfig().getInt("purge.inactive-clan-days");
         purgeUnverified = getConfig().getInt("purge.unverified-clan-days");
@@ -294,6 +306,7 @@ public final class SettingsManager {
         save();
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void save() {
         try {
             getConfig().save(main);
@@ -1113,12 +1126,41 @@ public final class SettingsManager {
     public boolean isePurchaseHomeTeleport() {
         return ePurchaseHomeTeleport;
     }
+    
+    /**
+     * @return the eUniqueTaxOnRegroup
+     */
+    public boolean iseUniqueTaxOnRegroup() {
+        return eUniqueTaxOnRegroup;
+    }
+
+    /**
+     * 
+     * @return the eIssuerPaysRegroup
+     */
+    public boolean iseIssuerPaysRegroup() {
+        return eIssuerPaysRegroup;
+    }
+    
+    /**
+     * @return the ePurchaseHomeRegroup
+     */
+    public boolean isePurchaseHomeRegroup() {
+        return ePurchaseHomeRegroup;
+    }
 
     /**
      * @return the HomeTeleportPrice
      */
     public double getHomeTeleportPrice() {
         return eHomeTeleportPrice;
+    }
+    
+    /**
+     * @return the HomeRegroupPrice
+     */
+    public double getHomeRegroupPrice() {
+        return eHomeRegroupPrice;
     }
 
     /**

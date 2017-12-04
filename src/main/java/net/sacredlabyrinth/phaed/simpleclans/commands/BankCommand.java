@@ -54,7 +54,7 @@ public class BankCommand {
 
             if (arg.length == 1) {
                 if (arg[0].equalsIgnoreCase("status")) {
-                    player.sendMessage(ChatColor.AQUA + MessageFormat.format("Clan-Balance: {0}", clanbalance));
+                      player.sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.balance"), clanbalance));
                 }
             } else if (arg.length == 2) {
                 if (arg[1].matches("[0-9]+")) {
