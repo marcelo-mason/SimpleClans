@@ -13,6 +13,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
+import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 
 /**
  * @author phaed
@@ -355,7 +356,6 @@ public class Helper {
     /*
      * Retrieves the last color code @param msg @return
      */
-
     /**
      * @param msg
      * @return
@@ -377,7 +377,6 @@ public class Helper {
         if (one.equals("&")) {
             return Helper.toColor(two);
         }
-
 
         return "";
     }
@@ -452,7 +451,6 @@ public class Helper {
 
         return false;
     }
-
 
     /**
      * Check whether a player is online
@@ -575,7 +573,7 @@ public class Helper {
         });
 
         Map result = new LinkedHashMap();
-        for (Iterator it = list.iterator(); it.hasNext(); ) {
+        for (Iterator it = list.iterator(); it.hasNext();) {
             Map.Entry entry = (Map.Entry) it.next();
             result.put(entry.getKey(), entry.getValue());
         }
@@ -612,5 +610,70 @@ public class Helper {
         }
 
         return SimpleClans.getInstance().getServer().getPlayer(playerName);
+    }
+
+    /**
+     * Formats the ally chat
+     * 
+     * @param cp Sender
+     * @param strings The message
+     * @return The formated message
+     */
+    public static String formatAllyChat(ClanPlayer cp, String[] strings) {
+        SettingsManager sm = SimpleClans.getInstance().getSettingsManager();
+
+        String leaderColor = sm.getAllyChatLeaderColor();
+        String memberColor = sm.getAllyChatMemberColor();
+        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
+        String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getAllyChatRank()).replaceAll("%rank%", rank) : "";
+
+        String message = ChatColor.translateAlternateColorCodes('&', sm.getAllyChatFormat())
+                .replaceAll("%clan%", cp.getClan().getColorTag())
+                .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
+                .replaceAll("%player%", cp.getName())
+                .replaceAll("%rank%", rankFormat)
+                .replaceAll("%message%", Helper.toMessage(strings));
+        return message;
+    }
+
+    /**
+     * Formats the clan chat
+     * 
+     * @param cp Sender
+     * @param msg The message
+     * @return The formated message
+     */
+    public static String formatClanChat(ClanPlayer cp, String msg) {
+        SettingsManager sm = SimpleClans.getInstance().getSettingsManager();
+
+        String leaderColor = sm.getClanChatLeaderColor();
+        String memberColor = sm.getClanChatMemberColor();
+        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
+        String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getClanChatRank()).replaceAll("%rank%", rank) : "";
+
+        String message = ChatColor.translateAlternateColorCodes('&', sm.getClanChatFormat())
+                .replaceAll("%clan%", cp.getClan().getColorTag())
+                .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
+                .replaceAll("%player%", cp.getName())
+                .replaceAll("%rank%", rankFormat)
+                .replaceAll("%message%", msg);
+        return message;
+    }
+
+    /**
+     * Formats the chat in a way that the Clan Tag is always there, so infractors can be easily identified
+     * 
+     * @param cp Sender
+     * @param msg The chat message
+     * @return The formated message
+     */
+    public static String formatSpyClanChat(ClanPlayer cp, String msg) {
+        msg = stripColors(formatClanChat(cp, msg));
+        
+        if (msg.contains(stripColors(cp.getClan().getColorTag()))) {
+            return ChatColor.DARK_GRAY + msg;
+        } else {
+            return ChatColor.DARK_GRAY + "[" + cp.getTag() + "] " + msg;
+        }
     }
 }

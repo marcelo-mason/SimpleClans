@@ -96,6 +96,10 @@ public final class SettingsManager {
     private String tagBracketLeaderColor;
     private boolean clanTrustByDefault;
     private boolean allyChatEnable;
+    private String allyChatFormat;
+    private String allyChatRank;
+    private String allyChatLeaderColor;
+    private String allyChatMemberColor;
     private String allyChatMessageColor;
     private String allyChatNameColor;
     private String allyChatTagColor;
@@ -105,6 +109,10 @@ public final class SettingsManager {
     private String allyChatPlayerBracketLeft;
     private String allyChatPlayerBracketRight;
     private boolean clanChatEnable;
+    private String clanChatFormat;
+    private String clanChatRank;
+    private String clanChatLeaderColor;
+    private String clanChatMemberColor;
     private String clanChatAnnouncementColor;
     private String clanChatMessageColor;
     private String clanChatNameColor;
@@ -256,6 +264,10 @@ public final class SettingsManager {
         tagBracketLeft = getConfig().getString("tag.bracket.left");
         tagBracketRight = getConfig().getString("tag.bracket.right");
         allyChatEnable = getConfig().getBoolean("allychat.enable");
+        allyChatFormat = getConfig().getString("allychat.format");
+        allyChatRank = getConfig().getString("allychat.rank");
+        allyChatLeaderColor = getConfig().getString("allychat.leader-color");
+        allyChatMemberColor = getConfig().getString("allychat.member-color");
         allyChatMessageColor = getConfig().getString("allychat.message-color");
         allyChatTagColor = getConfig().getString("allychat.tag-color");
         allyChatNameColor = getConfig().getString("allychat.name-color");
@@ -265,6 +277,10 @@ public final class SettingsManager {
         allyChatPlayerBracketLeft = getConfig().getString("allychat.player-bracket.left");
         allyChatPlayerBracketRight = getConfig().getString("allychat.player-bracket.right");
         clanChatEnable = getConfig().getBoolean("clanchat.enable");
+        clanChatFormat = getConfig().getString("clanchat.format");
+        clanChatRank = getConfig().getString("clanchat.rank");
+        clanChatLeaderColor = getConfig().getString("clanchat.leader-color");
+        clanChatMemberColor = getConfig().getString("clanchat.member-color");
         tagBasedClanChat = getConfig().getBoolean("clanchat.tag-based-clan-chat");
         clanChatAnnouncementColor = getConfig().getString("clanchat.announcement-color");
         clanChatMessageColor = getConfig().getString("clanchat.message-color");
@@ -760,6 +776,22 @@ public final class SettingsManager {
     public String getTagSeparatorColor() {
         return Helper.toColor(tagSeparatorColor);
     }
+    
+    public String getClanChatFormat() {
+        return clanChatFormat;
+    }
+    
+    public String getClanChatRank() {
+        return clanChatRank;
+    }
+    
+    public String getClanChatLeaderColor() {
+        return Helper.toColor(clanChatLeaderColor);
+    }
+    
+    public String getClanChatMemberColor() {
+        return Helper.toColor(clanChatMemberColor);
+    }
 
     /**
      * @return the clanChatAnnouncementColor
@@ -768,20 +800,23 @@ public final class SettingsManager {
         return Helper.toColor(clanChatAnnouncementColor);
     }
 
+    @Deprecated
     /**
      * @return the clanChatMessageColor
      */
     public String getClanChatMessageColor() {
-        return Helper.toColor(clanChatMessageColor);
+        return clanChatMessageColor;
     }
 
+    @Deprecated
     /**
      * @return the clanChatNameColor
      */
     public String getClanChatNameColor() {
-        return Helper.toColor(clanChatNameColor);
+        return clanChatNameColor;
     }
-
+    
+    @Deprecated
     /**
      * @return the clanChatTagBracketLeft
      */
@@ -789,6 +824,7 @@ public final class SettingsManager {
         return clanChatTagBracketLeft;
     }
 
+    @Deprecated
     /**
      * @return the clanChatTagBracketRight
      */
@@ -796,13 +832,15 @@ public final class SettingsManager {
         return clanChatTagBracketRight;
     }
 
+    @Deprecated
     /**
      * @return the clanChatBracketColor
      */
     public String getClanChatBracketColor() {
-        return Helper.toColor(clanChatBracketColor);
+        return clanChatBracketColor;
     }
 
+    @Deprecated
     /**
      * @return the clanChatPlayerBracketLeft
      */
@@ -810,6 +848,7 @@ public final class SettingsManager {
         return clanChatPlayerBracketLeft;
     }
 
+    @Deprecated
     /**
      * @return the clanChatPlayerBracketRight
      */
@@ -1020,40 +1059,64 @@ public final class SettingsManager {
         return allyChatEnable;
     }
 
+    @Deprecated
     public String getAllyChatMessageColor() {
-        return Helper.toColor(allyChatMessageColor);
+        return allyChatMessageColor;
+    }
+    
+    public String getAllyChatFormat() {
+        return allyChatFormat;
+    }
+    
+    public String getAllyChatRank() {
+        return allyChatRank;
+    }
+    
+    public String getAllyChatLeaderColor() {
+        return Helper.toColor(allyChatLeaderColor);
+    }
+    
+    public String getAllyChatMemberColor() {
+        return Helper.toColor(allyChatMemberColor);
     }
 
+    @Deprecated
     public String getAllyChatNameColor() {
-        return Helper.toColor(allyChatNameColor);
+        return allyChatNameColor;
     }
 
+    @Deprecated
     public String getAllyChatTagBracketLeft() {
         return allyChatTagBracketLeft;
     }
 
+    @Deprecated
     public String getAllyChatTagBracketRight() {
         return allyChatTagBracketRight;
     }
 
+    @Deprecated
     public String getAllyChatBracketColor() {
-        return Helper.toColor(allyChatBracketColor);
+        return allyChatBracketColor;
     }
 
+    @Deprecated
     public String getAllyChatPlayerBracketLeft() {
         return allyChatPlayerBracketLeft;
     }
 
+    @Deprecated
     public String getAllyChatPlayerBracketRight() {
         return allyChatPlayerBracketRight;
     }
-
+    
     public String getCommandGlobal() {
         return commandGlobal;
     }
 
+    @Deprecated
     public String getAllyChatTagColor() {
-        return Helper.toColor(allyChatTagColor);
+        return allyChatTagColor;
     }
 
     public boolean isClanFFOnByDefault() {

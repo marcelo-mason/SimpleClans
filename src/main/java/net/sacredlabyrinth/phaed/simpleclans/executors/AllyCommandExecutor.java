@@ -13,6 +13,7 @@ import org.bukkit.entity.Player;
 import java.util.Set;
 
 public class AllyCommandExecutor implements CommandExecutor {
+
     SimpleClans plugin;
 
     public AllyCommandExecutor() {
@@ -63,8 +64,9 @@ public class AllyCommandExecutor implements CommandExecutor {
                 ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted ally chat");
             }
         } else {
-            String code = "" + ChatColor.AQUA + ChatColor.WHITE + ChatColor.AQUA + ChatColor.BLACK;
-            String message = code + plugin.getSettingsManager().getAllyChatBracketColor() + plugin.getSettingsManager().getAllyChatTagBracketLeft() + plugin.getSettingsManager().getAllyChatTagColor() + plugin.getSettingsManager().getCommandAlly() + plugin.getSettingsManager().getAllyChatBracketColor() + plugin.getSettingsManager().getAllyChatTagBracketRight() + " " + plugin.getSettingsManager().getAllyChatNameColor() + plugin.getSettingsManager().getAllyChatPlayerBracketLeft() + player.getName() + plugin.getSettingsManager().getAllyChatPlayerBracketRight() + " " + plugin.getSettingsManager().getAllyChatMessageColor() + Helper.toMessage(strings);
+            //TODO: Ally Chat Event (containing custom placeholders)
+            String message = Helper.formatAllyChat(cp, strings);
+
             SimpleClans.log(message);
 
             Player self = cp.toPlayer();

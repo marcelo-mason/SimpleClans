@@ -37,6 +37,7 @@ public class SimpleClans extends JavaPlugin {
     private PermissionsManager permissionsManager;
     private TeleportManager teleportManager;
     private LanguageManager languageManager;
+    private ChatFormatMigration chatFormatMigration;
     private boolean hasUUID;
 
     /**
@@ -73,7 +74,7 @@ public class SimpleClans extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
+        
         settingsManager = new SettingsManager();
         this.hasUUID = UUIDMigration.canReturnUUID();
         languageManager = new LanguageManager();
@@ -83,6 +84,10 @@ public class SimpleClans extends JavaPlugin {
         clanManager = new ClanManager();
         storageManager = new StorageManager();
         teleportManager = new TeleportManager();
+        chatFormatMigration = new ChatFormatMigration();
+        
+        chatFormatMigration.migrateAllyChat();
+        chatFormatMigration.migrateClanChat();
 
         logger.info(MessageFormat.format(getLang("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 

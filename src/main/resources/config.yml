@@ -96,19 +96,13 @@ page:
     separator: '-'
     size: 100
 clanchat:
-    rank.color: e
-    tag-based-clan-chat: false
-    name-color: e
-    player-bracket:
-        left: '<'
-        right: '>'
-    announcement-color: e
-    message-color: b
-    tag-bracket:
-        color: e
-        left: '['
-        right: ']'
     enable: true
+    tag-based-clan-chat: false
+    announcement-color: e
+    format: "&b[%clan%&b] &4<%nick-color%%player%&4> %rank%: &b%message%"
+    rank: "&f[%rank%&f]"
+    leader-color: '4'
+    member-color: 'f'
 request:
     message-color: b
     ask-frequency-secs: 60
@@ -119,17 +113,11 @@ bb:
     show-on-login: true
     size: 6
 allychat:
-    tag-color: b
-    name-color: f
-    player-bracket:
-        left: <
-        right: '>'
-    message-color: '3'
-    tag-bracket:
-        color: '8'
-        left: '['
-        right: ']'
     enable: true
+    format: "&b[Ally Chat] &4<%clan%&4> <%nick-color%%player%&4> %rank%: &b%message%"
+    rank: "&f[%rank%&f]"
+    leader-color: '4'
+    member-color: 'f'
 purge:
     inactive-player-data-days: 30
     inactive-clan-days: 7
