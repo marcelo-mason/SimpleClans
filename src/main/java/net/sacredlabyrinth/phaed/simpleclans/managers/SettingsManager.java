@@ -821,7 +821,7 @@ public final class SettingsManager {
      * @return the clanChatTagBracketLeft
      */
     public String getClanChatTagBracketLeft() {
-        return clanChatTagBracketLeft;
+        return clanChatTagBracketLeft == null ? "[" : clanChatTagBracketLeft;
     }
 
     @Deprecated
@@ -829,7 +829,7 @@ public final class SettingsManager {
      * @return the clanChatTagBracketRight
      */
     public String getClanChatTagBracketRight() {
-        return clanChatTagBracketRight;
+        return clanChatTagBracketRight == null ? "]" : clanChatTagBracketRight;
     }
 
     @Deprecated
@@ -837,7 +837,7 @@ public final class SettingsManager {
      * @return the clanChatBracketColor
      */
     public String getClanChatBracketColor() {
-        return clanChatBracketColor;
+        return clanChatBracketColor == null ? Helper.toColor("e") : clanChatBracketColor;
     }
 
     @Deprecated

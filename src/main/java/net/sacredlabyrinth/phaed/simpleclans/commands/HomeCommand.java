@@ -156,7 +156,6 @@ public class HomeCommand {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                 return;
             }
-            
             Location loc;
             if (arg.length >= 2 && arg[1].equalsIgnoreCase("me")) {
                 loc = player.getLocation();

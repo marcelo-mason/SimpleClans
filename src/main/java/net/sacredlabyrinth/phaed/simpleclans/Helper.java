@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import net.sacredlabyrinth.phaed.simpleclans.storage.DBCore;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,8 +10,8 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
+import java.util.Map.Entry;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 
 /**
@@ -616,10 +615,11 @@ public class Helper {
      * Formats the ally chat
      * 
      * @param cp Sender
-     * @param strings The message
+     * @param msg The message
+     * @param placeholders The placeholders
      * @return The formated message
      */
-    public static String formatAllyChat(ClanPlayer cp, String[] strings) {
+    public static String formatAllyChat(ClanPlayer cp, String msg, Map<String, String> placeholders) {
         SettingsManager sm = SimpleClans.getInstance().getSettingsManager();
 
         String leaderColor = sm.getAllyChatLeaderColor();
@@ -632,7 +632,12 @@ public class Helper {
                 .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
                 .replaceAll("%player%", cp.getName())
                 .replaceAll("%rank%", rankFormat)
-                .replaceAll("%message%", Helper.toMessage(strings));
+                .replaceAll("%message%", msg);
+        if (placeholders != null) {
+            for (Entry<String, String> e : placeholders.entrySet()) {
+                message = message.replaceAll("%"+e.getKey()+"%", e.getValue());
+            }
+        }
         return message;
     }
 
@@ -641,9 +646,10 @@ public class Helper {
      * 
      * @param cp Sender
      * @param msg The message
+     * @param placeholders The placeholders
      * @return The formated message
      */
-    public static String formatClanChat(ClanPlayer cp, String msg) {
+    public static String formatClanChat(ClanPlayer cp, String msg, Map<String, String> placeholders) {
         SettingsManager sm = SimpleClans.getInstance().getSettingsManager();
 
         String leaderColor = sm.getClanChatLeaderColor();
@@ -657,6 +663,11 @@ public class Helper {
                 .replaceAll("%player%", cp.getName())
                 .replaceAll("%rank%", rankFormat)
                 .replaceAll("%message%", msg);
+        if (placeholders != null) {
+            for (Entry<String, String> e : placeholders.entrySet()) {
+                message = message.replaceAll("%"+e.getKey()+"%", e.getValue());
+            }
+        }
         return message;
     }
 
@@ -668,7 +679,7 @@ public class Helper {
      * @return The formated message
      */
     public static String formatSpyClanChat(ClanPlayer cp, String msg) {
-        msg = stripColors(formatClanChat(cp, msg));
+        msg = stripColors(msg);
         
         if (msg.contains(stripColors(cp.getClan().getColorTag()))) {
             return ChatColor.DARK_GRAY + msg;
