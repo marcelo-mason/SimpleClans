@@ -117,6 +117,9 @@ public class MenuCommand {
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.war")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.war"), clanCommand, ChatColor.WHITE));
         }
+        if (plugin.getPermissionsManager().has(player, "simpleclans.member.resetkdr")) {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.resetkdr.1.resets.your.kdr"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.bb")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.bb.1.display.bulletin.board"), clanCommand, ChatColor.WHITE));
         }
@@ -199,6 +202,9 @@ public class MenuCommand {
         }
         if (plugin.getPermissionsManager().has(player, "simpleclans.mod.globalff")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.globalff.allow.auto.1.set.global.friendly.fire"), clanCommand, ChatColor.WHITE));
+        }
+        if (plugin.getPermissionsManager().has(player, "simpleclans.admin.resetkdr")) {
+            chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.resetkdr.1.resets.kdr"), clanCommand, ChatColor.WHITE));
         }
         if (plugin.getPermissionsManager().has(player, "simpleclans.admin.reload")) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.reload.1.reload.configuration"), clanCommand, ChatColor.WHITE));

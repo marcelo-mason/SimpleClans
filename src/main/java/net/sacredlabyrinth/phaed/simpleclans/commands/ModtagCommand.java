@@ -57,6 +57,10 @@ public class ModtagCommand {
         String newtag = arg[0];
         String cleantag = Helper.cleanTag(newtag);
 
+        if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.coloredtag") && newtag.contains("&")) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("your.tag.cannot.contain.color.codes"));
+            return;
+        }
         if (Helper.stripColors(newtag).length() > plugin.getSettingsManager().getTagMaxLength()) {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getTagMaxLength()));
             return;

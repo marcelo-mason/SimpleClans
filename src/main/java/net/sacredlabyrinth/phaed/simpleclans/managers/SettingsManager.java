@@ -31,6 +31,7 @@ public final class SettingsManager {
     private boolean confirmationForPromote;
     private boolean confirmationForDemote;
     private boolean globalff;
+    private boolean allowResetKdr;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
     private List<Integer> itemsList;
@@ -48,12 +49,14 @@ public final class SettingsManager {
     private boolean eUniqueTaxOnRegroup;
     private boolean eIssuerPaysRegroup;
     private boolean ePurchaseHomeTeleportSet;
+    private boolean ePurchaseResetKdr;
     private double eCreationPrice;
     private double eVerificationPrice;
     private double eInvitePrice;
     private double eHomeTeleportPrice;
     private double eHomeRegroupPrice;
     private double eHomeTeleportPriceSet;
+    private double eResetKdr;
     private String serverName;
     private boolean chatTags;
     private int purgeClan;
@@ -193,6 +196,7 @@ public final class SettingsManager {
         enableAutoGroups = getConfig().getBoolean("settings.enable-auto-groups");
         useColorCodeFromPrefix = getConfig().getBoolean("settings.use-colorcode-from-prefix-for-name");
         bannedPlayers = getConfig().getStringList("settings.banned-players");
+        allowResetKdr = getConfig().getBoolean("settings.allow-reset-kdr");
         compatMode = getConfig().getBoolean("settings.chat-compatibility-mode");
         disallowedColors = getConfig().getStringList("settings.disallowed-tag-colors");
         blacklistedWorlds = getConfig().getStringList("settings.blacklisted-worlds");
@@ -209,6 +213,8 @@ public final class SettingsManager {
         ePurchaseHomeTeleport = getConfig().getBoolean("economy.purchase-home-teleport");
         ePurchaseHomeRegroup = getConfig().getBoolean("economy.purchase-home-regroup");
         ePurchaseHomeTeleportSet = getConfig().getBoolean("economy.purchase-home-teleport-set");
+        ePurchaseResetKdr = getConfig().getBoolean("economy.purchase-reset-kdr");
+        eResetKdr = getConfig().getDouble("economy.reset-kdr-price");
         eCreationPrice = getConfig().getDouble("economy.creation-price");
         eVerificationPrice = getConfig().getDouble("economy.verification-price");
         eInvitePrice = getConfig().getDouble("economy.invite-price");
@@ -383,6 +389,22 @@ public final class SettingsManager {
 
     }
 
+    public boolean isAllowResetKdr() {
+        return allowResetKdr;
+    }
+
+    public boolean isePurchaseResetKdr() {
+        return ePurchaseResetKdr;
+    }
+
+    /**
+     * Gets the price to reset the KDR
+     * @return the price
+     */
+    public double geteResetKdr() {
+        return eResetKdr;
+    }
+    
     /**
      * Check whether a string has a disallowed color
      *

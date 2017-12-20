@@ -90,6 +90,18 @@ public final class ClanManager {
         SimpleClans.getInstance().getPermissionsManager().updateClanPermissions(clan);
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new CreateClanEvent(clan));
     }
+    
+    /**
+     * Reset a player's kdr
+     * @param cp 
+     */
+    public void resetKdr(ClanPlayer cp) {
+        cp.setCivilianKills(0);
+        cp.setNeutralKills(0);
+        cp.setRivalKills(0);
+        cp.setDeaths(0);
+        plugin.getStorageManager().updateClanPlayerAsync(cp);
+    }
 
     /**
      * Delete a players data file
@@ -959,6 +971,73 @@ public final class ClanManager {
 
         return true;
     }
+    
+    /**
+     * Purchase Reset Kdr
+     * 
+     * @param player
+     * @return
+     */
+    public boolean purchaseResetKdr(Player player) {
+        if (!plugin.getSettingsManager().isePurchaseResetKdr()) {
+            return true;
+        }
+        
+        double price = plugin.getSettingsManager().geteResetKdr();
+        
+        if (plugin.getPermissionsManager().hasEconomy()) {
+            if (plugin.getPermissionsManager().playerHasMoney(player, price)) {
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+            } else {
+                player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                return false;
+            }
+        }
+
+        return true;
+    }
+
+    /**
+     * Purchase Home Regroup
+     *
+     * @param player
+     * @return
+     */
+    public boolean purchaseHomeRegroup(Player player) {
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
+
+        if (!plugin.getSettingsManager().isePurchaseHomeRegroup()) {
+            return true;
+        }
+
+        double price = plugin.getSettingsManager().getHomeRegroupPrice();
+        if (!plugin.getSettingsManager().iseUniqueTaxOnRegroup()) {
+            price = price * cp.getClan().getOnlineMembers().size();
+        }
+
+        if (plugin.getSettingsManager().iseIssuerPaysRegroup()) {
+            if (plugin.getPermissionsManager().hasEconomy()) {
+                if (plugin.getPermissionsManager().playerHasMoney(player, price)) {
+                    plugin.getPermissionsManager().playerChargeMoney(player, price);
+                    player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+                } else {
+                    player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                    return false;
+                }
+            }
+        } else {
+            Clan clan = cp.getClan();
+            double balance = clan.getBalance();
+            if (price > balance) {
+                player.sendMessage(ChatColor.RED + plugin.getLang("clan.bank.not.enough.money"));
+                return false;
+            }
+            clan.withdraw(price, player);
+        }
+
+        return true;
+    }
 
     /**
      * Purchase Home Regroup
@@ -1105,7 +1184,6 @@ public final class ClanManager {
             
             String message = Helper.formatClanChat(cp, ce.getMessage(), ce.getPlaceholders());
             String eyeMessage = Helper.formatSpyClanChat(cp, message);
-
             plugin.getServer().getConsoleSender().sendMessage(eyeMessage);
             
             for (ClanPlayer p : ce.getReceivers()) {

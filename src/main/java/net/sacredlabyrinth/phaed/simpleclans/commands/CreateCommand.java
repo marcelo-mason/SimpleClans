@@ -52,6 +52,10 @@ public class CreateCommand {
                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("your.clan.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getTagMinLength()));
                 return;
             }
+            if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.coloredtag") && tag.contains("&")) {
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("your.tag.cannot.contain.color.codes"));
+                return;
+            }
             if (plugin.getSettingsManager().hasDisallowedColor(tag)) {
                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("your.tag.cannot.contain.the.following.colors"), plugin.getSettingsManager().getDisallowedColorString()));
                 return;

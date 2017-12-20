@@ -44,6 +44,7 @@ settings:
     server-name: '&4SimpleClans'
     new-clan-verification-required: true
     allow-regroup-command: true
+    allow-reset-kdr: false
 commands:
     more: more
     ally: ally
@@ -70,6 +71,8 @@ economy:
     issuer-pays-regroup: true
     money-per-kill: false
     money-per-kill-kdr-multipier: 10
+    purchase-reset-kdr: true
+    reset-kdr-price: 10000.0
 kill-weights:
     rival: 2.0
     civilian: 0.0
