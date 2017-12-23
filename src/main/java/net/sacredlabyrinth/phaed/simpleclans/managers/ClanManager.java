@@ -1040,47 +1040,6 @@ public final class ClanManager {
     }
 
     /**
-     * Purchase Home Regroup
-     *
-     * @param player
-     * @return
-     */
-    public boolean purchaseHomeRegroup(Player player) {
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
-
-        if (!plugin.getSettingsManager().isePurchaseHomeRegroup()) {
-            return true;
-        }
-
-        double price = plugin.getSettingsManager().getHomeRegroupPrice();
-        if (!plugin.getSettingsManager().iseUniqueTaxOnRegroup()) {
-            price = price * cp.getClan().getOnlineMembers().size();
-        }
-
-        if (plugin.getSettingsManager().iseIssuerPaysRegroup()) {
-            if (plugin.getPermissionsManager().hasEconomy()) {
-                if (plugin.getPermissionsManager().playerHasMoney(player, price)) {
-                    plugin.getPermissionsManager().playerChargeMoney(player, price);
-                    player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
-                } else {
-                    player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
-                    return false;
-                }
-            }
-        } else {
-            Clan clan = cp.getClan();
-            double balance = clan.getBalance();
-            if (price > balance) {
-                player.sendMessage(ChatColor.RED + plugin.getLang("clan.bank.not.enough.money"));
-                return false;
-            }
-            clan.withdraw(price, player);
-        }
-
-        return true;
-    }
-
-    /**
      * Purchase clan verification
      *
      * @param player
