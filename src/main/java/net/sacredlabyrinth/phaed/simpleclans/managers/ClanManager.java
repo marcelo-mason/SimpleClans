@@ -13,6 +13,7 @@ import java.text.MessageFormat;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.events.ChatEvent;
 import org.bukkit.Bukkit;
+import org.bukkit.OfflinePlayer;
 
 /**
  * @author phaed
@@ -224,7 +225,7 @@ public final class ClanManager {
      * @param player
      * @return
      */
-    public ClanPlayer getClanPlayer(Player player) {
+    public ClanPlayer getClanPlayer(OfflinePlayer player) {
         if (SimpleClans.getInstance().hasUUID()) {
             return getClanPlayer(player.getUniqueId());
         } else {

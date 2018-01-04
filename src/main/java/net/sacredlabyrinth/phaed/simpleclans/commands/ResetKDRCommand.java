@@ -2,7 +2,9 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.text.MessageFormat;
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -49,8 +51,8 @@ public class ResetKDRCommand {
                     plugin.getClanManager().resetKdr(cp);
                 }
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.have.reseted.kdr.of.all.players"));
-            } else {
-                Player toReset = Helper.getPlayer(arg[0]);
+            } else {                
+                OfflinePlayer toReset = Bukkit.getOfflinePlayer(arg[0]);
                 if (toReset == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
                     return;
