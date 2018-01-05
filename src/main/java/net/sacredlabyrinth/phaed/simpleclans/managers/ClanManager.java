@@ -232,6 +232,18 @@ public final class ClanManager {
             return getClanPlayer(player.getName());
         }
     }
+    
+    
+    /**
+     * Gets the ClanPlayer data object if a player is currently in a clan, null
+     * if he's not in a clan
+     *
+     * @param player
+     * @return
+     */
+    public ClanPlayer getClanPlayer(Player player) {
+        return getClanPlayer((OfflinePlayer) player);
+    }
 
     /**
      * Gets the ClanPlayer data object if a player is currently in a clan, null
