@@ -1531,7 +1531,7 @@ public class Clan implements Serializable, Comparable<Clan> {
                 localBb.remove(0);
             }
 
-            for (String msg : bb) {
+            for (String msg : localBb) {
                 if (!sendBbTime(player, msg)) {
                     ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
                 }
