@@ -1551,7 +1551,7 @@ public class Clan implements Serializable, Comparable<Clan> {
             if (index < 1)
                 return false;
             long time;
-            time = Long.parseLong(msg.substring(index));
+            time = Long.parseLong(msg.substring(0, index));
             msg = String.join("", ChatBlock.getColorizedMessage(SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg.substring(++index, msg.length()))));
             TextComponent textComponent = new TextComponent(msg);
             textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(ChatBlock.formatTime(time, 1))));
