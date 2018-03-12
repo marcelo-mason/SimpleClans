@@ -238,7 +238,7 @@ public class SCPlayerListener implements Listener {
         SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
 
         if (plugin.getSettingsManager().isBbShowOnLogin() && cp.isBbEnabled()) {
-            cp.getClan().displayBb(player, plugin.getSettingsManager().getBbJoinSize());
+            cp.getClan().displayBb(player, plugin.getSettingsManager().getBbLoginSize());
         }
 
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
