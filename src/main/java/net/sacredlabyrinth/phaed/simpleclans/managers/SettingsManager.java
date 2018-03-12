@@ -73,6 +73,7 @@ public final class SettingsManager {
     private String pageUnTrustedColor;
     private boolean bbShowOnLogin;
     private int bbSize;
+    private int bbJoinSize;
     private String bbColor;
     private String bbAccentColor;
     private String commandClan;
@@ -239,6 +240,7 @@ public final class SettingsManager {
         pageClanNameColor = getConfig().getString("page.clan-name-color");
         bbShowOnLogin = getConfig().getBoolean("bb.show-on-login");
         bbSize = getConfig().getInt("bb.size");
+        bbJoinSize = getConfig().getInt("bb.join-size", bbSize);
         bbColor = getConfig().getString("bb.color");
         bbAccentColor = getConfig().getString("bb.accent-color");
         commandClan = getConfig().getString("commands.clan");
@@ -677,6 +679,13 @@ public final class SettingsManager {
      */
     public int getBbSize() {
         return bbSize;
+    }
+
+    /**
+     * @return the bbJoinSize
+     */
+    public int getBbJoinSize() {
+        return bbJoinSize;
     }
 
     /**

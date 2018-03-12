@@ -1515,6 +1515,32 @@ public class Clan implements Serializable, Comparable<Clan> {
     }
 
     /**
+     * Displays bb to a player
+     * @implNote may want to refactor displaybb(Player) to use this?
+     *
+     * @param player
+     * @param maxSize amount of lines to display
+     */
+    public void displayBb(Player player, int maxSize) {
+        if (isVerified()) {
+            ChatBlock.sendBlank(player);
+            ChatBlock.saySingle(player, MessageFormat.format(SimpleClans.getInstance().getLang("bulletin.board.header"), SimpleClans.getInstance().getSettingsManager().getBbAccentColor(), SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor(), Helper.capitalize(getName())));
+
+            List<String> localBb = new ArrayList<>(bb);
+            while (localBb.size() > maxSize) {
+                bb.remove(0);
+            }
+
+            for (String msg : bb) {
+                if (!sendBbTime(player, msg)) {
+                    ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
+                }
+            }
+            ChatBlock.sendBlank(player);
+        }
+    }
+
+    /**
      * Sends a bb message with the timestamp in a hover message, if the bb message is timestamped
      * @param msg the bb message
      * @return true if sent
