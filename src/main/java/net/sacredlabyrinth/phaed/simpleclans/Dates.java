@@ -135,4 +135,61 @@ public class Dates {
         cal.setTime(date);
         return cal.getTimeInMillis() + cal.getTimeZone().getOffset(cal.getTimeInMillis());
     }
+
+    /**
+     * Returns the string representation of the amount of time labeled as days, hours, minutes, seconds
+     * @author RoboMWM, LaxWasHere
+     * @param seconds the time, in the past
+     * @param depth Max amount of detail (e.g. only display days and hours if set to 1 and seconds > 1 day)
+     * @return
+     */
+    public static String formatTime(Long seconds, int depth)
+    {
+        if (seconds == null || seconds < 1) {
+            return "moments";
+        }
+
+        if (seconds < 60) {
+            return seconds + " seconds";
+        }
+
+        if (seconds < 3600) {
+            Long count = (long) Math.ceil(seconds / 60);
+            String res;
+            if (count > 1) {
+                res = count + " minutes";
+            } else {
+                res = "1 minute";
+            }
+            Long remaining = seconds % 60;
+            if (depth > 0 && remaining >= 5) {
+                return res + ", " + formatTime(remaining, --depth);
+            }
+            return res;
+        }
+        if (seconds < 86400) {
+            Long count = (long) Math.ceil(seconds / 3600);
+            String res;
+            if (count > 1) {
+                res = count + " hours";
+            } else {
+                res = "1 hour";
+            }
+            if (depth > 0) {
+                return res + ", " + formatTime(seconds % 3600, --depth);
+            }
+            return res;
+        }
+        Long count = (long) Math.ceil(seconds / 86400);
+        String res;
+        if (count > 1) {
+            res = count + " days";
+        } else {
+            res = "1 day";
+        }
+        if (depth > 0) {
+            return res + ", " + formatTime(seconds % 86400, --depth);
+        }
+        return res;
+    }
 }
