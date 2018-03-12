@@ -1528,7 +1528,7 @@ public class Clan implements Serializable, Comparable<Clan> {
 
             List<String> localBb = new ArrayList<>(bb);
             while (localBb.size() > maxSize) {
-                bb.remove(0);
+                localBb.remove(0);
             }
 
             for (String msg : bb) {
