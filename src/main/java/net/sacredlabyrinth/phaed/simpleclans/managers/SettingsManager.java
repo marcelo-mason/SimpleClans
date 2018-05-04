@@ -143,6 +143,7 @@ public final class SettingsManager {
     private boolean homebaseSetOnce;
     private int waitSecs;
     private boolean enableAutoGroups;
+    private boolean denySameIPKills;
     private boolean moneyperkill;
     private double KDRMultipliesPerKill;
     private boolean teleportBlocks;
@@ -300,6 +301,7 @@ public final class SettingsManager {
         kwRival = getConfig().getDouble("kill-weights.rival");
         kwNeutral = getConfig().getDouble("kill-weights.neutral");
         kwCivilian = getConfig().getDouble("kill-weights.civilian");
+        denySameIPKills = getConfig().getBoolean("kill-weights.deny-same-ip-kills");
         useMysql = getConfig().getBoolean("mysql.enable");
         host = getConfig().getString("mysql.host");
         port = getConfig().getInt("mysql.port");
@@ -1067,6 +1069,10 @@ public final class SettingsManager {
 
     public boolean isConfirmationForDemote() {
         return confirmationForDemote;
+    }
+
+    public boolean isDenySameIPKills() {
+        return denySameIPKills;
     }
 
     public boolean isUseColorCodeFromPrefix() {
