@@ -1082,6 +1082,7 @@ public final class ClanManager {
      * Processes a clan chat command
      *
      * @param player
+     * @param tag
      * @param msg
      */
     public void processClanChat(Player player, String tag, String msg) {
@@ -1101,7 +1102,7 @@ public final class ClanManager {
      * @param msg
      */
     public void processClanChat(Player player, String msg) {
-        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player.getName());
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
         if (cp == null) {
             return;

@@ -3,29 +3,26 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
-import java.text.Normalizer;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.logging.Logger;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * @author phaed
  */
 public class ChatBlock {
-    private static final int lineLength = 319;
-    private ArrayList<Boolean> columnFlexes = new ArrayList<>();
-    private ArrayList<Integer> columnSizes = new ArrayList<>();
-    private ArrayList<String> columnAlignments = new ArrayList<>();
-    private LinkedList<String[]> rows = new LinkedList<>();
+    private static final int LINE_LENGTH = 319;
+    private final ArrayList<Boolean> columnFlexes = new ArrayList<>();
+    private final ArrayList<Integer> columnSizes = new ArrayList<>();
+    private final ArrayList<String> columnAlignments = new ArrayList<>();
+    private final LinkedList<String[]> rows = new LinkedList<>();
     private String color = "";
     /**
      *
      */
-    public static final Logger log = Logger.getLogger("Minecraft");
+    public static final Logger LOG = Logger.getLogger("Minecraft");
 
     /**
      * @param columnAlignment
@@ -48,10 +45,10 @@ public class ChatBlock {
      * @param prefix
      */
     public void setColumnSizes(String prefix, double... columnPercentages) {
-        int ll = lineLength;
+        int ll = LINE_LENGTH;
 
         if (prefix != null) {
-            ll = lineLength - (int) msgLength(prefix);
+            ll = LINE_LENGTH - (int) msgLength(prefix);
         }
 
         for (double percentage : columnPercentages) {
@@ -156,7 +153,7 @@ public class ChatBlock {
                     columnSizes.add(getMaxWidth(i) + 4);
                 }
             } else {
-                columnSizes.add(lineLength);
+                columnSizes.add(LINE_LENGTH);
             }
         }
 
@@ -204,12 +201,12 @@ public class ChatBlock {
 
             int availableSpacing = 12;
 
-            while (calculatedRowSize(measuredCols) < lineLength && availableSpacing > 0) {
+            while (calculatedRowSize(measuredCols) < LINE_LENGTH && availableSpacing > 0) {
                 for (int j = 0; j < measuredCols.size(); j++) {
                     String col = measuredCols.get(j);
                     measuredCols.set(j, col + " ");
 
-                    if (calculatedRowSize(measuredCols) >= lineLength) {
+                    if (calculatedRowSize(measuredCols) >= LINE_LENGTH) {
                         break;
                     }
 
@@ -221,7 +218,7 @@ public class ChatBlock {
             // cut off from flexible columns if too big
 
             if (columnFlexes.size() == measuredCols.size()) {
-                while (calculatedRowSize(measuredCols) > lineLength) {
+                while (calculatedRowSize(measuredCols) > LINE_LENGTH) {
                     boolean didFlex = false;
 
                     for (int j = 0; j < measuredCols.size(); j++) {
@@ -236,7 +233,7 @@ public class ChatBlock {
                             }
                         }
 
-                        if (calculatedRowSize(measuredCols) <= lineLength) {
+                        if (calculatedRowSize(measuredCols) <= LINE_LENGTH) {
                             break;
                         }
                     }
@@ -257,7 +254,7 @@ public class ChatBlock {
 
             // crop and print out
 
-            String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString, lineLength);
+            String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString, LINE_LENGTH);
 
             if (color.length() > 0) {
                 msg = color + msg;
@@ -300,7 +297,7 @@ public class ChatBlock {
      * @return
      */
     public static String centerInLine(String msg) {
-        return centerInLineOf(msg, lineLength);
+        return centerInLineOf(msg, LINE_LENGTH);
     }
 
     /**
@@ -495,12 +492,12 @@ public class ChatBlock {
             // go through the split array containing all the words, and adding them to the words array
             // until reaching the point where their width no longer fits on a chat line
 
-            while (!split.isEmpty() && split.get(0) != null && len <= lineLength) {
+            while (!split.isEmpty() && split.get(0) != null && len <= LINE_LENGTH) {
                 double wordLength = msgLength(split.get(0)) + 4;
 
                 // If a word is too long for a line
 
-                if (wordLength > lineLength) {
+                if (wordLength > LINE_LENGTH) {
                     String[] tempArray = wordCut(len, split.remove(0));
                     words.add(tempArray[0]);
                     split.add(tempArray[1]);
@@ -510,7 +507,7 @@ public class ChatBlock {
 
                 len += wordLength;
 
-                if (len < lineLength) {
+                if (len < LINE_LENGTH) {
                     words.add(split.remove(0));
                 }
             }
@@ -555,7 +552,7 @@ public class ChatBlock {
 
         String[] output = new String[2];
         int x = 0;
-        while (length < lineLength && x < str.length()) {
+        while (length < LINE_LENGTH && x < str.length()) {
             int len = charLength(str.charAt(x));
             if (len > 0) {
                 length += len;
@@ -589,7 +586,7 @@ public class ChatBlock {
             return;
         }
 
-        receiver.sendMessage(colorize(new String[]{cropRightToFit(msg, lineLength)})[0]);
+        receiver.sendMessage(colorize(new String[]{cropRightToFit(msg, LINE_LENGTH)})[0]);
     }
 
     /**
