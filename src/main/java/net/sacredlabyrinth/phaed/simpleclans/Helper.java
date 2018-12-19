@@ -628,17 +628,22 @@ public class Helper {
         String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
         String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getAllyChatRank()).replaceAll("%rank%", rank) : "";
 
-        String message = ChatColor.translateAlternateColorCodes('&', sm.getAllyChatFormat())
-                .replaceAll("%clan%", cp.getClan().getColorTag())
-                .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
-                .replaceAll("%player%", cp.getName())
-                .replaceAll("%rank%", rankFormat)
-                .replaceAll("%message%", msg);
+        String message = replacePlaceholders(sm, cp, leaderColor, memberColor, rankFormat, msg);
         if (placeholders != null) {
             for (Entry<String, String> e : placeholders.entrySet()) {
                 message = message.replaceAll("%"+e.getKey()+"%", e.getValue());
             }
         }
+        return message;
+    }
+
+    private static String replacePlaceholders(SettingsManager sm, ClanPlayer cp, String leaderColor, String memberColor, String rankFormat, String msg) {
+        String message = ChatColor.translateAlternateColorCodes('&', sm.getAllyChatFormat())
+                .replaceAll("%clan%", cp.getClan().getColorTag())
+                .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
+                .replaceAll("%player%", cp.getName())
+                .replaceAll("%rank%", rankFormat)
+                .replaceAll("%message%", Matcher.quoteReplacement(msg));
         return message;
     }
 
@@ -658,12 +663,8 @@ public class Helper {
         String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
         String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getClanChatRank()).replaceAll("%rank%", rank) : "";
 
-        String message = ChatColor.translateAlternateColorCodes('&', sm.getClanChatFormat())
-                .replaceAll("%clan%", cp.getClan().getColorTag())
-                .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
-                .replaceAll("%player%", cp.getName())
-                .replaceAll("%rank%", rankFormat)
-                .replaceAll("%message%", Matcher.quoteReplacement(msg));
+        String message = replacePlaceholders(sm, cp, leaderColor, memberColor, rankFormat, msg);
+        
         if (placeholders != null) {
             for (Entry<String, String> e : placeholders.entrySet()) {
                 message = message.replaceAll("%"+e.getKey()+"%", e.getValue());
