@@ -12,6 +12,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.*;
 import java.util.Map.Entry;
+import java.util.regex.Matcher;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 
 /**
@@ -662,7 +663,7 @@ public class Helper {
                 .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
                 .replaceAll("%player%", cp.getName())
                 .replaceAll("%rank%", rankFormat)
-                .replaceAll("%message%", msg);
+                .replaceAll("%message%", Matcher.quoteReplacement(msg));
         if (placeholders != null) {
             for (Entry<String, String> e : placeholders.entrySet()) {
                 message = message.replaceAll("%"+e.getKey()+"%", e.getValue());
