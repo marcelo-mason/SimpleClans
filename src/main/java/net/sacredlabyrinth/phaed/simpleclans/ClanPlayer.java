@@ -623,9 +623,10 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public Set<String> getPastClans()
     {
-        HashSet<String> pc = new HashSet<>();
-        pc.addAll(pastClans);
-        return pc;
+//        HashSet<String> pc = new HashSet<>();
+//        pc.addAll(pastClans);
+//        return pc;
+        return pastClans;
     }
 
     /**
