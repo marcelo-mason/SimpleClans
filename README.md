@@ -10,6 +10,6 @@ Full featured clan system for PVP Minecraft Servers
 
 ## Disclaimer:
 
-Active development for this plugin has stopped.  It is in maintenence mode and will continue to be kept up to date as-is with any new Minecraft version indefinitely.
+Active development for this plugin has stopped.  It is in maintenance mode and will continue to be kept up to date as-is with any new Minecraft version indefinitely.
 
 Pull-requests for bug fixes or new features are welcomed and will be merged in if they do not break existing functionalities.
