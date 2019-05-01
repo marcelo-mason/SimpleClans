@@ -67,6 +67,8 @@ permissions:
     description: Can resign from his clan
   simpleclans.member.ally:
     description: Can use ally chat
+  simpleclans.member.chat:
+    description: Can use clan chat
   simpleclans.member.can-join:
     description: Can join clans
   simpleclans.member.home:
@@ -75,6 +77,8 @@ permissions:
     description: Can reset his kdr
   simpleclans.leader.create:
     description: Can create simpleclans
+  simpleclans.leader.verify:
+    description: Can verify his clan
   simpleclans.leader.home-set:
     description: Can set home base
   simpleclans.leader.home-regroup:
@@ -174,6 +178,7 @@ permissions:
       simpleclans.member.ff: true
       simpleclans.member.resign: true
       simpleclans.member.ally: true
+      simpleclans.member.chat: true
       simpleclans.member.home: true
       simpleclans.member.kills: true
       simpleclans.member.bank: true
@@ -183,6 +188,7 @@ permissions:
     default: false
     children:
       simpleclans.leader.create: true
+      simpleclans.leader.verify: true
       simpleclans.leader.ally: true
       simpleclans.leader.rival: true
       simpleclans.leader.modtag: true

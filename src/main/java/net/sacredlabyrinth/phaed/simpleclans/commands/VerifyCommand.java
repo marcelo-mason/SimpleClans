@@ -37,7 +37,9 @@ public class VerifyCommand {
             boolean isBuyer = isNonVerified && plugin.getSettingsManager().isRequireVerification() && plugin.getSettingsManager().isePurchaseVerification();
 
             if (!plugin.getPermissionsManager().has(player, "simpleclans.mod.verify")) {
-                if (arg.length != 0) {
+                //if the player does specify a tag, but does not have mod permission to verify
+                //if the player does not specify a tag, but does not have leader permission to verify
+                if (arg.length != 0 || !plugin.getPermissionsManager().has(player, "simpleclans.leader.verify")) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                     return;
                 }
