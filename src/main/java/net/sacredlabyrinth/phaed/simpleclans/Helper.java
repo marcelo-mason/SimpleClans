@@ -626,24 +626,24 @@ public class Helper {
         String leaderColor = sm.getAllyChatLeaderColor();
         String memberColor = sm.getAllyChatMemberColor();
         String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
-        String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getAllyChatRank()).replaceAll("%rank%", rank) : "";
+        String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getAllyChatRank()).replace("%rank%", rank) : "";
 
-        String message = replacePlaceholders(sm, cp, leaderColor, memberColor, rankFormat, msg);
+        String message = replacePlaceholders(sm.getAllyChatFormat(), cp, leaderColor, memberColor, rankFormat, msg);
         if (placeholders != null) {
             for (Entry<String, String> e : placeholders.entrySet()) {
-                message = message.replaceAll("%"+e.getKey()+"%", e.getValue());
+                message = message.replace("%"+e.getKey()+"%", e.getValue());
             }
         }
         return message;
     }
 
-    private static String replacePlaceholders(SettingsManager sm, ClanPlayer cp, String leaderColor, String memberColor, String rankFormat, String msg) {
-        String message = ChatColor.translateAlternateColorCodes('&', sm.getAllyChatFormat())
-                .replaceAll("%clan%", cp.getClan().getColorTag())
-                .replaceAll("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
-                .replaceAll("%player%", cp.getName())
-                .replaceAll("%rank%", rankFormat)
-                .replaceAll("%message%", Matcher.quoteReplacement(msg));
+    private static String replacePlaceholders(String messageFormat, ClanPlayer cp, String leaderColor, String memberColor, String rankFormat, String msg) {
+        String message = ChatColor.translateAlternateColorCodes('&', messageFormat)
+                .replace("%clan%", cp.getClan().getColorTag())
+                .replace("%nick-color%", (cp.isLeader() ? leaderColor : memberColor))
+                .replace("%player%", cp.getName())
+                .replace("%rank%", rankFormat)
+                .replace("%message%", msg);
         return message;
     }
 
@@ -661,13 +661,13 @@ public class Helper {
         String leaderColor = sm.getClanChatLeaderColor();
         String memberColor = sm.getClanChatMemberColor();
         String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
-        String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getClanChatRank()).replaceAll("%rank%", rank) : "";
+        String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getClanChatRank()).replace("%rank%", rank) : "";
 
-        String message = replacePlaceholders(sm, cp, leaderColor, memberColor, rankFormat, msg);
+        String message = replacePlaceholders(sm.getClanChatFormat(), cp, leaderColor, memberColor, rankFormat, msg);
         
         if (placeholders != null) {
             for (Entry<String, String> e : placeholders.entrySet()) {
-                message = message.replaceAll("%"+e.getKey()+"%", e.getValue());
+                message = message.replace("%"+e.getKey()+"%", e.getValue());
             }
         }
         return message;
