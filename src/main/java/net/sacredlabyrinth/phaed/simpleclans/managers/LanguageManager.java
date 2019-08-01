@@ -7,7 +7,6 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.io.*;
 import java.util.HashMap;
-import java.util.TreeMap;
 
 @SuppressWarnings("unchecked")
 public class LanguageManager {
@@ -85,6 +84,6 @@ public class LanguageManager {
             return o.toString();
         }
 
-        return null;
+        return "Missing language for "+key;
     }
 }
