@@ -9,6 +9,7 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 import java.util.*;
+import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  * @author phaed
@@ -436,7 +437,7 @@ public final class RequestManager {
      *
      * @param req
      */
-    public void ask(Request req) {
+    public void ask(final Request req) {
         final String tag = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + req.getClan().getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight();
         final String message = tag + " " + plugin.getSettingsManager().getRequestMessageColor() + req.getMsg();
         final String options = MessageFormat.format(plugin.getLang("accept.or.deny"), ChatBlock.makeEmpty(Helper.stripColors(tag)) + " " + ChatColor.DARK_GREEN + "/" + plugin.getSettingsManager().getCommandAccept() + plugin.getSettingsManager().getPageHeadingsColor(), ChatColor.DARK_RED + "/" + plugin.getSettingsManager().getCommandDeny());
@@ -465,6 +466,11 @@ public final class RequestManager {
             }
         }
 
-        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestEvent(req));
+        new BukkitRunnable() {
+            @Override
+            public void run() {
+                SimpleClans.getInstance().getServer().getPluginManager().callEvent(new RequestEvent(req));
+            }
+        }.runTask(plugin);
     }
 }
