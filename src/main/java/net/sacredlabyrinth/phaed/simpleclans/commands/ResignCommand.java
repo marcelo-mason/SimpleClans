@@ -1,9 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import java.util.HashMap;
-import java.util.Map;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
-import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
@@ -41,7 +38,8 @@ public class ResignCommand {
         
         new ConversationFactory(plugin)
                 .withFirstPrompt(new ResignPrompt(plugin.getLang("resign.yes"), plugin.getLang("resign.no")))
-                .withLocalEcho(false)
+                .withLocalEcho(true)
+                .withTimeout(10)
                 .buildConversation(player).begin();
     }
 }

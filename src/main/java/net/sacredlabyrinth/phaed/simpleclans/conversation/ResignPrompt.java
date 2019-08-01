@@ -33,7 +33,7 @@ public class ResignPrompt extends FixedSetPrompt {
         ClanPlayer cp = cm.getClanPlayer(player);
         Clan clan = cp.getClan();
 
-        if (input.equalsIgnoreCase(yes)) {
+        if (yes.equalsIgnoreCase(input)) {
             if (!clan.isLeader(player) || clan.getLeaders().size() > 1) {
                 clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("0.has.resigned"), Helper.capitalize(player.getName())));
                 if (SimpleClans.getInstance().hasUUID()) {
@@ -41,6 +41,7 @@ public class ResignPrompt extends FixedSetPrompt {
                 } else {
                     clan.removePlayerFromClan(player.getName());
                 }
+                player.sendMessage(ChatColor.AQUA + plugin.getLang("resign.success"));
             } else if (clan.isLeader(player) && clan.getLeaders().size() == 1) {
                 plugin.getClanManager().serverAnnounce(ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.has.been.disbanded"), clan.getName()));
                 clan.disband();
