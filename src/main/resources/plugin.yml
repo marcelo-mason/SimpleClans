@@ -7,6 +7,10 @@ permissions:
     description: Can grant clans permissions
   simpleclans.admin.reload:
     description: Can reload configuration
+  simpleclans.admin.promote:
+    description: Can promote players to clan leaders
+  simpleclans.admin.demote:
+    description: Can demote clan leaders to normal players
   simpleclans.admin.all-seeing-eye:
     description: Can see all clan chats
   simpleclans.admin.resetkdr:
