@@ -1,5 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
+import net.md_5.bungee.api.chat.HoverEvent;
+import net.md_5.bungee.api.chat.TextComponent;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.*;
 import org.bukkit.ChatColor;
@@ -373,7 +375,7 @@ public class Clan implements Serializable, Comparable<Clan> {
             bb.remove(0);
         }
 
-        bb.add(msg);
+        bb.add(System.currentTimeMillis() + "_" + msg);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
     
@@ -389,7 +391,7 @@ public class Clan implements Serializable, Comparable<Clan> {
             bb.remove(0);
         }
 
-        bb.add(msg);
+        bb.add(System.currentTimeMillis() + "_" + msg);
         SimpleClans.getInstance().getStorageManager().updateClan(this, updateLastUsed);
     }
 
@@ -1504,9 +1506,60 @@ public class Clan implements Serializable, Comparable<Clan> {
             }
 
             for (String msg : bb) {
-                ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
+                if (!sendBbTime(player, msg)) {
+                    ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
+                }
             }
             ChatBlock.sendBlank(player);
+        }
+    }
+
+    /**
+     * Displays bb to a player
+     * @implNote may want to refactor displaybb(Player) to use this?
+     *
+     * @param player
+     * @param maxSize amount of lines to display
+     */
+    public void displayBb(Player player, int maxSize) {
+        if (isVerified()) {
+            ChatBlock.sendBlank(player);
+            ChatBlock.saySingle(player, MessageFormat.format(SimpleClans.getInstance().getLang("bulletin.board.header"), SimpleClans.getInstance().getSettingsManager().getBbAccentColor(), SimpleClans.getInstance().getSettingsManager().getPageHeadingsColor(), Helper.capitalize(getName())));
+
+            List<String> localBb = new ArrayList<>(bb);
+            while (localBb.size() > maxSize) {
+                localBb.remove(0);
+            }
+
+            for (String msg : localBb) {
+                if (!sendBbTime(player, msg)) {
+                    ChatBlock.sendMessage(player, SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg));
+                }
+            }
+            ChatBlock.sendBlank(player);
+        }
+    }
+
+    /**
+     * Sends a bb message with the timestamp in a hover message, if the bb message is timestamped
+     * @param msg the bb message
+     * @return true if sent
+     */
+    private boolean sendBbTime(Player player, String msg) {
+        try {
+            int index = msg.indexOf("_");
+            if (index < 1)
+                return false;
+            long time;
+            time = (System.currentTimeMillis() - Long.parseLong(msg.substring(0, index))) / 1000L;
+            msg = String.join("", ChatBlock.getColorizedMessage(SimpleClans.getInstance().getSettingsManager().getBbAccentColor() + "* " + SimpleClans.getInstance().getSettingsManager().getBbColor() + Helper.parseColors(msg.substring(++index, msg.length()))));
+            TextComponent textComponent = new TextComponent(msg);
+            textComponent.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, TextComponent.fromLegacyText(Dates.formatTime(time, 1) + " ago ")));
+            player.sendMessage(textComponent);
+            return true;
+        }
+        catch (Exception rock) {
+            return false;
         }
     }
 

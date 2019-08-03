@@ -638,6 +638,10 @@ public class ChatBlock {
     public static String[] say(String message) {
         return colorize(wordWrap(message));
     }
+    
+    public static String[] getColorizedMessage(String msg) {
+        return colorize(wordWrap(msg));
+    }
 
     /**
      * @param message
