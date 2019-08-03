@@ -145,21 +145,22 @@ public class Dates {
      */
     public static String formatTime(Long seconds, int depth)
     {
+        SimpleClans plugin = SimpleClans.getInstance();
         if (seconds == null || seconds < 1) {
-            return "moments";
+            return plugin.getLang("bb.moments");
         }
 
         if (seconds < 60) {
-            return seconds + " seconds";
+            return seconds + plugin.getLang("bb.seconds");
         }
 
         if (seconds < 3600) {
             Long count = (long) Math.ceil(seconds / 60);
             String res;
             if (count > 1) {
-                res = count + " minutes";
+                res = count + plugin.getLang("bb.minutes");
             } else {
-                res = "1 minute";
+                res = plugin.getLang("bb.one.minute");
             }
             Long remaining = seconds % 60;
             if (depth > 0 && remaining >= 5) {
@@ -171,9 +172,9 @@ public class Dates {
             Long count = (long) Math.ceil(seconds / 3600);
             String res;
             if (count > 1) {
-                res = count + " hours";
+                res = count + plugin.getLang("bb.hours");
             } else {
-                res = "1 hour";
+                res = plugin.getLang("bb.one.hour");
             }
             if (depth > 0) {
                 return res + ", " + formatTime(seconds % 3600, --depth);
@@ -183,9 +184,9 @@ public class Dates {
         Long count = (long) Math.ceil(seconds / 86400);
         String res;
         if (count > 1) {
-            res = count + " days";
+            res = count + plugin.getLang("bb.days");
         } else {
-            res = "1 day";
+            res = plugin.getLang("bb.one.day");
         }
         if (depth > 0) {
             return res + ", " + formatTime(seconds % 86400, --depth);
