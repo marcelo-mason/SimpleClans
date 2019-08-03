@@ -116,6 +116,7 @@ bb:
     accent-color: '8'
     show-on-login: true
     size: 6
+    login-size: 6
 allychat:
     enable: true
     format: "&b[Ally Chat] &4<%clan%&4> <%nick-color%%player%&4> %rank%: &b%message%"
