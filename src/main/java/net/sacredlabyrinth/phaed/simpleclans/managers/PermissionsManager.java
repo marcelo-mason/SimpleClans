@@ -157,6 +157,17 @@ public final class PermissionsManager {
     public Map<Player, PermissionAttachment> getPermAttaches() {
         return permAttaches;
     }
+    
+    /**
+     * Charge a player some money
+     *
+     * @param player
+     * @param money
+     * @return
+     */    
+    public boolean playerChargeMoney(String player, double money) {
+        return economy.withdrawPlayer(player, money).transactionSuccess();
+    }
 
     /**
      * Charge a player some money

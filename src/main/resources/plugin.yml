@@ -101,12 +101,16 @@ permissions:
     description: Can view his and other's kills
   simpleclans.member.tag-toggle:
     description: Can hide his own clan tag
+  simpleclans.member.fee-check:
+    description: Can check his clan's fee
   simpleclans.mod.mostkilled:
     description: Can view his and other's clans mostkilled
   simpleclans.mod.keep-items:
     description: Can keep items when teleporting home
   simpleclans.mod.place:
     description: Can manually place players in clans
+  simpleclans.leader.fee:
+    description: Can enable and set the clan fee
   simpleclans.leader.invite:
     description: Can invite players into his clan
   simpleclans.leader.kick:
@@ -138,6 +142,7 @@ permissions:
       simpleclans.admin.reload: true
       simpleclans.admin.all-seeing-eye: true
       simpleclans.admin.resetkdr: true
+      simpleclans.admin.demote: true
   simpleclans.mod.*:
     description: Permissions for moderators
     default: op
@@ -187,6 +192,7 @@ permissions:
       simpleclans.member.kills: true
       simpleclans.member.bank: true
       simpleclans.member.resetkdr: true
+      simpleclans.member.fee-check: true
   simpleclans.leader.*:
     description: Permissions for those who can be clan leaders
     default: false

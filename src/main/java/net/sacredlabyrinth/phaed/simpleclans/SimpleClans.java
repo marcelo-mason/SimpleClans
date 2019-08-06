@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectFeeTask;
 
 /**
  * @author Phaed
@@ -106,6 +107,10 @@ public class SimpleClans extends JavaPlugin {
         logger.info("[SimpleClans] Online Mode: " + hasUUID); //TODO: Is this necessary?
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
+        
+        if (getSettingsManager().isMemberFee()) {
+            new CollectFeeTask().start();
+        }
     }
 
     @Override

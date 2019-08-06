@@ -41,6 +41,7 @@ public final class ClanCommandExecutor implements CommandExecutor {
     private DisbandCommand disbandCommand;
     private VerifyCommand verifyCommand;
     private BanCommand banCommand;
+    private FeeCommand feeCommand;
     private UnbanCommand unbanCommand;
     private ReloadCommand reloadCommand;
     private GlobalffCommand globalffCommand;
@@ -99,6 +100,7 @@ public final class ClanCommandExecutor implements CommandExecutor {
         bankCommand = new BankCommand();
         placeCommand = new PlaceCommand();
         resetKDRCommand = new ResetKDRCommand();
+        feeCommand = new FeeCommand();
     }
 
     @Override
@@ -200,7 +202,9 @@ public final class ClanCommandExecutor implements CommandExecutor {
                         placeCommand.execute(player, subargs);
                     } else if (subcommand.equalsIgnoreCase(plugin.getLang("resetkdr.command")) || subcommand.equalsIgnoreCase("resetkdr")) {
                         resetKDRCommand.execute(player, subargs);
-                    } else {
+                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("fee.command")) || subcommand.equalsIgnoreCase("fee")) {
+                        feeCommand.execute(player, subargs);
+                    } else {      
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
                     }
                 }

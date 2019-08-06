@@ -50,6 +50,7 @@ public final class SettingsManager {
     private boolean eIssuerPaysRegroup;
     private boolean ePurchaseHomeTeleportSet;
     private boolean ePurchaseResetKdr;
+    private boolean eMemberFee;
     private double eCreationPrice;
     private double eVerificationPrice;
     private double eInvitePrice;
@@ -57,6 +58,7 @@ public final class SettingsManager {
     private double eHomeRegroupPrice;
     private double eHomeTeleportPriceSet;
     private double eResetKdr;
+    private double eMaxMemberFee;
     private String serverName;
     private boolean chatTags;
     private int purgeClan;
@@ -225,6 +227,8 @@ public final class SettingsManager {
         eUniqueTaxOnRegroup = getConfig().getBoolean("economy.unique-tax-on-regroup");
         eIssuerPaysRegroup = getConfig().getBoolean("economy.issuer-pays-regroup");
         eHomeTeleportPriceSet = getConfig().getDouble("economy.home-teleport-set-price");
+        eMaxMemberFee = getConfig().getDouble("economy.max-member-fee");
+        eMemberFee = getConfig().getBoolean("economy.member-fee-enabled");
         purgeClan = getConfig().getInt("purge.inactive-clan-days");
         purgeUnverified = getConfig().getInt("purge.unverified-clan-days");
         purgePlayers = getConfig().getInt("purge.inactive-player-data-days");
@@ -391,6 +395,23 @@ public final class SettingsManager {
 
         return word.equalsIgnoreCase("clan") || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept);
 
+    }
+    
+    
+    /**
+     * Returns the max member fee allowed
+     * @return 
+     */
+    public double getMaxMemberFee() {
+        return eMaxMemberFee;
+    }
+    
+    /**
+     * Checks if the member fee is enabled
+     * @return 
+     */
+    public boolean isMemberFee() {
+        return eMemberFee;
     }
 
     public boolean isAllowResetKdr() {

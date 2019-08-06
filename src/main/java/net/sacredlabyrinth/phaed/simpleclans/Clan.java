@@ -29,6 +29,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     private String colorTag;
     private String name;
     private double balance;
+    private double fee;
     private boolean friendlyFire;
     private long founded;
     private long lastUsed;
@@ -44,6 +45,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     private String homeWorld = "";
     private boolean allowWithdraw = false;
     private boolean allowDeposit = true;
+    private boolean feeEnabled;
 
     /**
      *
@@ -155,6 +157,27 @@ public class Clan implements Serializable, Comparable<Clan> {
         this.name = name;
     }
 
+    /**
+     * Sets the clan's fee
+     * 
+     * @param fee 
+     */
+    public void setMemberFee(double fee) {
+        if (fee < 0) {
+            fee = 0;
+        }
+        this.fee = fee;
+    }
+    
+    /**
+     * Returns the clan's fee
+     * 
+     * @return the fee
+     */
+    public double getMemberFee() {
+        return fee;
+    }
+    
     /**
      * Returns the clan's balance
      *
@@ -1839,6 +1862,24 @@ public class Clan implements Serializable, Comparable<Clan> {
         }
     }
 
+    /**
+     * Checks if the fee is enabled
+     * 
+     * @return true if enabled
+     */
+    public boolean isMemberFeeEnabled() {
+        return feeEnabled;
+    }
+    
+    /**
+     * Enables or disables the fee
+     * 
+     * @param enable 
+     */
+    public void setMemberFeeEnabled(boolean enable) {
+        feeEnabled = enable;
+    }
+    
     /**
      * @return the allowWithdraw
      */

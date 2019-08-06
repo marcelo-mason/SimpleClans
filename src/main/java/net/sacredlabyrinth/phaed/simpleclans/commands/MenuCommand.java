@@ -96,6 +96,12 @@ public class MenuCommand {
         if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.kills")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.killsplayer"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.fee-check")) {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.fee.check"), clanCommand, ChatColor.WHITE));
+        }
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.fee")) {
+            chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.fee.set"), clanCommand, ChatColor.WHITE));
+        }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.ally")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.ally.add.remove.tag.1.add.remove.an.ally.clan"), clanCommand, ChatColor.WHITE));
         }
@@ -138,6 +144,10 @@ public class MenuCommand {
 
         if (isVerified && isTrusted && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle")) {
             toggles += "tag/";
+        }
+        
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.fee")) {
+            toggles += "fee/";
         }
 
         if (!toggles.isEmpty()) {
