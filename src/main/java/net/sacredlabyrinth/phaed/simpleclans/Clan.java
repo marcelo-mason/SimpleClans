@@ -1588,10 +1588,9 @@ public class Clan implements Serializable, Comparable<Clan> {
                             TextComponent.fromLegacyText(
                                     Dates.formatTime(time, 1) + SimpleClans
                                             .getInstance().getLang("bb.ago"))));
-            player.sendMessage(textComponent);
+            player.spigot().sendMessage(textComponent);
             return true;
-        }
-        catch (Exception rock) {
+        } catch (Throwable rock) {
             return false;
         }
     }

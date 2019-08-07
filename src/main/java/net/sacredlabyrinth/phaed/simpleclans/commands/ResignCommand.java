@@ -37,7 +37,7 @@ public class ResignCommand {
         }
         
         new ConversationFactory(plugin)
-                .withFirstPrompt(new ResignPrompt(plugin.getLang("resign.yes"), plugin.getLang("resign.no")))
+                .withFirstPrompt(new ResignPrompt())
                 .withLocalEcho(true)
                 .withTimeout(10)
                 .buildConversation(player).begin();

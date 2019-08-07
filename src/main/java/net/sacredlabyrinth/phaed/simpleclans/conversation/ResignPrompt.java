@@ -9,22 +9,19 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
-import org.bukkit.conversations.FixedSetPrompt;
 import org.bukkit.conversations.Prompt;
+import static org.bukkit.conversations.Prompt.END_OF_CONVERSATION;
+import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 
 /**
  *
  * @author roinujnosde
  */
-public class ResignPrompt extends FixedSetPrompt {
-
-    public ResignPrompt(String... words) {
-        super(words);
-    }
+public class ResignPrompt extends StringPrompt {
 
     @Override
-    protected Prompt acceptValidatedInput(ConversationContext cc, String input) {
+    public Prompt acceptInput(ConversationContext cc, String input) {
         final SimpleClans plugin = (SimpleClans) cc.getPlugin();
 
         String yes = plugin.getLang("resign.yes");
@@ -57,7 +54,9 @@ public class ResignPrompt extends FixedSetPrompt {
     public String getPromptText(ConversationContext cc) {
         final SimpleClans plugin = (SimpleClans) cc.getPlugin();
 
-        return ChatColor.RED + MessageFormat.format(plugin.getLang("resign.confirmation"), this.fixedSet);
+        return ChatColor.RED + MessageFormat.format(
+                plugin.getLang("resign.confirmation"), (Object) new String[] {
+                    plugin.getLang("resign.yes"), plugin.getLang("resign.no")});
     }
 
 }
