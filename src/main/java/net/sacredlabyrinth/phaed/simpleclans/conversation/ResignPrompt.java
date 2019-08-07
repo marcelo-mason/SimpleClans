@@ -1,7 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.conversation;
 
 import java.text.MessageFormat;
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+import java.util.Arrays;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
@@ -38,12 +38,12 @@ public class ResignPrompt extends StringPrompt {
                 } else {
                     clan.removePlayerFromClan(player.getName());
                 }
-                player.sendMessage(ChatColor.AQUA + plugin.getLang("resign.success"));
+                return new MessagePromptImpl(ChatColor.AQUA + plugin.getLang("resign.success"));
             } else if (clan.isLeader(player) && clan.getLeaders().size() == 1) {
                 plugin.getClanManager().serverAnnounce(ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.has.been.disbanded"), clan.getName()));
                 clan.disband();
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("last.leader.cannot.resign.you.must.appoint.another.leader.or.disband.the.clan"));
+                return new MessagePromptImpl(ChatColor.RED + plugin.getLang("last.leader.cannot.resign.you.must.appoint.another.leader.or.disband.the.clan"));
             }
         }
 
@@ -55,8 +55,8 @@ public class ResignPrompt extends StringPrompt {
         final SimpleClans plugin = (SimpleClans) cc.getPlugin();
 
         return ChatColor.RED + MessageFormat.format(
-                plugin.getLang("resign.confirmation"), (Object) new String[] {
-                    plugin.getLang("resign.yes"), plugin.getLang("resign.no")});
+                plugin.getLang("resign.confirmation"), Arrays.asList(
+                    plugin.getLang("resign.yes"), plugin.getLang("resign.no")));
     }
 
 }
