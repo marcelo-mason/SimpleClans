@@ -851,11 +851,11 @@ public final class StorageManager {
          * From 2.7.16 to 2.7.17
          */
         if (!core.existsColumn("sc_clans", "fee_enabled")) {
-            query = "ALTER TABLE sc_clans ADD COLUMN 'fee_enabled' tinyint(1) default '0';";
+            query = "ALTER TABLE sc_clans ADD COLUMN `fee_enabled` tinyint(1) default '0';";
             core.execute(query);
         }
         if (!core.existsColumn("sc_clans", "fee_value")) {
-            query = "ALTER TABLE sc_clans ADD COLUMN 'fee_value' double(64,2);";
+            query = "ALTER TABLE sc_clans ADD COLUMN `fee_value` double(64,2);";
             core.execute(query);
         }
 
