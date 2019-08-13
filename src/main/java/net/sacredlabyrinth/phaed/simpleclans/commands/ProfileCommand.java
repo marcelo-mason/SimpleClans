@@ -79,7 +79,9 @@ public class ProfileCommand {
                 String neutral = ChatColor.WHITE + "" + clan.getTotalNeutral();
                 String civ = ChatColor.WHITE + "" + clan.getTotalCivilian();
                 String status = ChatColor.WHITE + "" + (clan.isVerified() ? plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang("verified") : plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang("unverified"));
-
+                String feeEnabled = ChatColor.WHITE + (clan.isMemberFeeEnabled() ? plugin.getLang("fee.enabled") : plugin.getLang("fee.disabled"));
+                String feeValue = ChatColor.WHITE + "" + clan.getMemberFee();
+                
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("name.0"), name));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("status.0"), status));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("leaders.0"), leaders));
@@ -87,6 +89,7 @@ public class ProfileCommand {
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("kdr.0"), kdr));
                 ChatBlock.sendMessage(player, "  " + subColor + plugin.getLang("kill.totals") + " " + headColor + "[" + plugin.getLang("rival") + ":" + rival + " " + headColor + "" + plugin.getLang("neutral") + ":" + neutral + " " + headColor + "" + plugin.getLang("civilian") + ":" + civ + headColor + "]");
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("deaths.0"), deaths));
+                ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("fee.0.value.1"), feeEnabled, feeValue));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("allies.0"), allies));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("rivals.0"), rivals));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("founded.0"), founded));

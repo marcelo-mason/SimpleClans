@@ -110,6 +110,7 @@ public class SCEntityListener implements Listener
                 if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified())
                 {
                     acp.addCivilianKill();
+                    //TODO: Is this slowing down the server?
                     plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
                 } else if (acp.getClan().isRival(vcp.getTag()))
                 {
