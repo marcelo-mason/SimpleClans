@@ -63,19 +63,20 @@ public class FeeCommand {
                     player.sendMessage(ChatColor.RED + plugin.getLang("invalid.fee"));
                     return;
                 }
-                    double maxFee = plugin.getSettingsManager().getMaxMemberFee();
-                    if (newFee > maxFee) {
-                        ChatBlock.sendMessage(player, ChatColor.RED
-                                + MessageFormat.format(plugin.getLang("max.fee.allowed.is.0"), maxFee));
-                        return;
-                    }
-
+                double maxFee = plugin.getSettingsManager().getMaxMemberFee();
+                if (newFee > maxFee) {
+                    ChatBlock.sendMessage(player, ChatColor.RED
+                            + MessageFormat.format(plugin.getLang("max.fee.allowed.is.0"), maxFee));
+                    return;
+                }
+                
+                if (plugin.getClanManager().purchaseMemberFeeSet(player)) {
                     clan.setMemberFee(newFee);
                     clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("bb.fee.set"), newFee));
                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("fee.set"));
-                    plugin.getStorageManager().updateClanAsync(clan);
-                    return;
-                
+                    plugin.getStorageManager().updateClanAsync(clan);                    
+                }
+                return;
             }
         }
         ChatBlock.sendMessage(player, ChatColor.RED

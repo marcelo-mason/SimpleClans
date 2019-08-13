@@ -73,6 +73,8 @@ economy:
     money-per-kill-kdr-multipier: 10
     purchase-reset-kdr: true
     reset-kdr-price: 10000.0
+    purchase-member-fee-set: false
+    member-fee-set-price: 1000.0
     member-fee-enabled: false
     max-member-fee: 200.0
 kill-weights:

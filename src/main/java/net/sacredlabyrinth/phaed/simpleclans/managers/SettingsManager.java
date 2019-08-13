@@ -23,8 +23,7 @@ public final class SettingsManager {
     private boolean dropOnHome;
     private boolean keepOnHome;
     private boolean debugging;
-    @SuppressWarnings("FieldMayBeFinal")
-    private SimpleClans plugin;
+    private final SimpleClans plugin;
     private boolean mChatIntegration;
     private boolean pvpOnlywhileInWar;
     private boolean useColorCodeFromPrefix;
@@ -51,6 +50,7 @@ public final class SettingsManager {
     private boolean ePurchaseHomeTeleportSet;
     private boolean ePurchaseResetKdr;
     private boolean eMemberFee;
+    private boolean ePurchaseMemberFeeSet;
     private double eCreationPrice;
     private double eVerificationPrice;
     private double eInvitePrice;
@@ -59,6 +59,7 @@ public final class SettingsManager {
     private double eHomeTeleportPriceSet;
     private double eResetKdr;
     private double eMaxMemberFee;
+    private double eMemberFeeSetPrice;
     private String serverName;
     private boolean chatTags;
     private int purgeClan;
@@ -138,10 +139,8 @@ public final class SettingsManager {
     private String username;
     private String password;
     private boolean safeCivilians;
-    @SuppressWarnings("FieldMayBeFinal")
-    private File main;
-    @SuppressWarnings("FieldMayBeFinal")
-    private FileConfiguration config;
+    private final File main;
+    private final FileConfiguration config;
     private boolean compatMode;
     private boolean homebaseSetOnce;
     private int waitSecs;
@@ -218,6 +217,8 @@ public final class SettingsManager {
         ePurchaseHomeRegroup = getConfig().getBoolean("economy.purchase-home-regroup");
         ePurchaseHomeTeleportSet = getConfig().getBoolean("economy.purchase-home-teleport-set");
         ePurchaseResetKdr = getConfig().getBoolean("economy.purchase-reset-kdr");
+        ePurchaseMemberFeeSet = getConfig().getBoolean("economy.purchase-member-fee-set");
+        eMemberFeeSetPrice = getConfig().getDouble("economy.member-fee-set-price");
         eResetKdr = getConfig().getDouble("economy.reset-kdr-price");
         eCreationPrice = getConfig().getDouble("economy.creation-price");
         eVerificationPrice = getConfig().getDouble("economy.verification-price");
@@ -420,6 +421,23 @@ public final class SettingsManager {
 
     public boolean isePurchaseResetKdr() {
         return ePurchaseResetKdr;
+    }
+    
+    /**
+     * Gets the price to pay for setting the member fee
+     * 
+     * @return the price
+     */
+    public double geteMemberFeeSetPrice() {
+        return eMemberFeeSetPrice;
+    }
+    
+    /**
+     * Do leaders need to pay for setting the member fee?
+     * @return true if so
+     */
+    public boolean isePurchaseMemberFeeSet() {
+        return ePurchaseMemberFeeSet;
     }
 
     /**

@@ -881,6 +881,32 @@ public final class ClanManager {
             }
         });
     }
+    
+    /**
+     * Purchase member fee set
+     * 
+     * @param player
+     * @return 
+     */
+    public boolean purchaseMemberFeeSet(Player player) {
+        if (!plugin.getSettingsManager().isePurchaseMemberFeeSet()) {
+            return true;
+        }
+
+        double price = plugin.getSettingsManager().geteMemberFeeSetPrice();
+        
+        if (plugin.getPermissionsManager().hasEconomy()) {
+            if (plugin.getPermissionsManager().playerHasMoney(player, price)) {
+                plugin.getPermissionsManager().playerChargeMoney(player, price);
+                player.sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("account.has.been.debited"), price));
+            } else {
+                player.sendMessage(ChatColor.RED + plugin.getLang("not.sufficient.money"));
+                return false;
+            }
+        }
+
+        return true;
+    }
 
     /**
      * Purchase clan creation
