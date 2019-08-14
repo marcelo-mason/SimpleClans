@@ -17,6 +17,7 @@ import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author phaed
@@ -1366,7 +1367,34 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         return false;
     }
+    
+    /**
+     * Checks if there are enough leaders online to vote
+     * 
+     * @param cp the one to demote
+     * @return true if there are
+     */
+    public boolean enoughLeadersOnlineToDemote(ClanPlayer cp) {
+        List<ClanPlayer> online = getOnlineLeaders();
+        online.remove(cp);
+        
+        double minimum = SimpleClans.getInstance().getSettingsManager().getPercentageOnlineToDemote();
+        double totalLeaders = getLeaders().size();
+        double onlineLeaders = online.size();
+        
+        
+        return (onlineLeaders / totalLeaders) >= minimum;
+    }
 
+    /**
+     * Gets the online leaders
+     * 
+     * @return the online leaders
+     */
+    public List<ClanPlayer> getOnlineLeaders() {
+        return getOnlineMembers().stream().filter(ClanPlayer::isLeader).collect(Collectors.toList());
+    }
+    
     /**
      * Check whether all leaders of a clan are online
      *

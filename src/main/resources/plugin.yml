@@ -7,6 +7,8 @@ permissions:
     description: Can grant clans permissions
   simpleclans.admin.reload:
     description: Can reload configuration
+  simpleclans.admin.purge:
+    description: Can purge a player
   simpleclans.admin.promote:
     description: Can promote players to clan leaders
   simpleclans.admin.demote:

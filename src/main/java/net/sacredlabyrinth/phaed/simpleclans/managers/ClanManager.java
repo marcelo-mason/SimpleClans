@@ -112,6 +112,14 @@ public final class ClanManager {
      * @param cp
      */
     public void deleteClanPlayer(ClanPlayer cp) {
+        Clan clan = cp.getClan();
+        if (clan != null) {
+            if (SimpleClans.getInstance().hasUUID()) {
+                clan.removePlayerFromClan(cp.getUniqueId());
+            } else {
+                clan.removePlayerFromClan(cp.getName());
+            }
+        }
         clanPlayers.remove(cp.getCleanName());
         plugin.getStorageManager().deleteClanPlayer(cp);
     }

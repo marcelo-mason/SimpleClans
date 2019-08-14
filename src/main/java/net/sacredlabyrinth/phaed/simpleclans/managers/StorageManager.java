@@ -710,6 +710,10 @@ public final class StorageManager {
      * @param cp
      */
     public void deleteClanPlayer(ClanPlayer cp) {
+        final Clan clan = cp.getClan();
+        if (clan != null) {
+            clan.addBb(ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.purged"), cp.getName()), false);
+        }
         if (SimpleClans.getInstance().hasUUID()) {
             String query = "DELETE FROM `sc_players` WHERE uuid = '" + cp.getUniqueId() + "';";
             core.delete(query);

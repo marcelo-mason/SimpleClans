@@ -29,6 +29,7 @@ public final class SettingsManager {
     private boolean useColorCodeFromPrefix;
     private boolean confirmationForPromote;
     private boolean confirmationForDemote;
+    private double percentageOnlineToDemote;
     private boolean globalff;
     private boolean allowResetKdr;
     private boolean showUnverifiedOnList;
@@ -261,6 +262,7 @@ public final class SettingsManager {
         waitSecs = getConfig().getInt("clan.homebase-teleport-wait-secs");
         confirmationForPromote = getConfig().getBoolean("clan.confirmation-for-demote");
         confirmationForDemote = getConfig().getBoolean("clan.confirmation-for-promote");
+        percentageOnlineToDemote = getConfig().getDouble("percentage-online-to-demote");
         clanTrustByDefault = getConfig().getBoolean("clan.trust-members-by-default");
         clanMinSizeToAlly = getConfig().getInt("clan.min-size-to-set-ally");
         clanMinSizeToRival = getConfig().getInt("clan.min-size-to-set-rival");
@@ -1117,6 +1119,18 @@ public final class SettingsManager {
 
     public boolean isConfirmationForDemote() {
         return confirmationForDemote;
+    }
+    
+    /**
+     * Returns the min percentage of leaders online required to demote someone
+     * 
+     * @return the percentage
+     */
+    public double getPercentageOnlineToDemote() {
+        if (percentageOnlineToDemote <= 0 || percentageOnlineToDemote > 100) {
+            percentageOnlineToDemote = 100;
+        }
+        return percentageOnlineToDemote;
     }
 
     public boolean isDenySameIPKills() {

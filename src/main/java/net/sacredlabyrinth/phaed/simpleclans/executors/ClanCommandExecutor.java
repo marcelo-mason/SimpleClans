@@ -12,48 +12,49 @@ import java.text.MessageFormat;
  * @author phaed
  */
 public final class ClanCommandExecutor implements CommandExecutor {
-    private SimpleClans plugin;
-    private CreateCommand createCommand;
-    private ListCommand listCommand;
-    private ProfileCommand profileCommand;
-    private RosterCommand rosterCommand;
-    private LookupCommand lookupCommand;
-    private LeaderboardCommand leaderboardCommand;
-    private AlliancesCommand alliancesCommand;
-    private RivalriesCommand rivalriesCommand;
-    private VitalsCommand vitalsCommand;
-    private CoordsCommand coordsCommand;
-    private StatsCommand statsCommand;
-    private AllyCommand allyCommand;
-    private RivalCommand rivalCommand;
-    private BbCommand bbCommand;
-    private ModtagCommand modtagCommand;
-    private ToggleCommand toggleCommand;
-    private InviteCommand inviteCommand;
-    private KickCommand kickCommand;
-    private TrustCommand trustCommand;
-    private UntrustCommand untrustCommand;
-    private PromoteCommand promoteCommand;
-    private DemoteCommand demoteCommand;
-    private ClanffCommand clanffCommand;
-    private FfCommand ffCommand;
-    private ResignCommand resignCommand;
-    private DisbandCommand disbandCommand;
-    private VerifyCommand verifyCommand;
-    private BanCommand banCommand;
-    private FeeCommand feeCommand;
-    private UnbanCommand unbanCommand;
-    private ReloadCommand reloadCommand;
-    private GlobalffCommand globalffCommand;
-    private MenuCommand menuCommand;
-    private WarCommand warCommand;
-    private HomeCommand homeCommand;
-    private KillsCommand killsCommand;
-    private MostKilledCommand mostKilledCommand;
-    private SetRankCommand setRankCommand;
-    private BankCommand bankCommand;
-    private PlaceCommand placeCommand;
-    private ResetKDRCommand resetKDRCommand;
+    private final SimpleClans plugin;
+    private final CreateCommand createCommand;
+    private final ListCommand listCommand;
+    private final ProfileCommand profileCommand;
+    private final RosterCommand rosterCommand;
+    private final LookupCommand lookupCommand;
+    private final LeaderboardCommand leaderboardCommand;
+    private final AlliancesCommand alliancesCommand;
+    private final RivalriesCommand rivalriesCommand;
+    private final VitalsCommand vitalsCommand;
+    private final CoordsCommand coordsCommand;
+    private final StatsCommand statsCommand;
+    private final AllyCommand allyCommand;
+    private final RivalCommand rivalCommand;
+    private final BbCommand bbCommand;
+    private final ModtagCommand modtagCommand;
+    private final ToggleCommand toggleCommand;
+    private final InviteCommand inviteCommand;
+    private final KickCommand kickCommand;
+    private final TrustCommand trustCommand;
+    private final UntrustCommand untrustCommand;
+    private final PromoteCommand promoteCommand;
+    private final DemoteCommand demoteCommand;
+    private final ClanffCommand clanffCommand;
+    private final FfCommand ffCommand;
+    private final ResignCommand resignCommand;
+    private final DisbandCommand disbandCommand;
+    private final VerifyCommand verifyCommand;
+    private final BanCommand banCommand;
+    private final FeeCommand feeCommand;
+    private final UnbanCommand unbanCommand;
+    private final ReloadCommand reloadCommand;
+    private final GlobalffCommand globalffCommand;
+    private final MenuCommand menuCommand;
+    private final WarCommand warCommand;
+    private final HomeCommand homeCommand;
+    private final KillsCommand killsCommand;
+    private final MostKilledCommand mostKilledCommand;
+    private final SetRankCommand setRankCommand;
+    private final BankCommand bankCommand;
+    private final PlaceCommand placeCommand;
+    private final ResetKDRCommand resetKDRCommand;
+    private final PurgeCommand purgeCommand;
 
     /**
      *
@@ -101,6 +102,7 @@ public final class ClanCommandExecutor implements CommandExecutor {
         placeCommand = new PlaceCommand();
         resetKDRCommand = new ResetKDRCommand();
         feeCommand = new FeeCommand();
+        purgeCommand = new PurgeCommand();
     }
 
     @Override
@@ -204,6 +206,8 @@ public final class ClanCommandExecutor implements CommandExecutor {
                         resetKDRCommand.execute(player, subargs);
                     } else if (subcommand.equalsIgnoreCase(plugin.getLang("fee.command")) || subcommand.equalsIgnoreCase("fee")) {
                         feeCommand.execute(player, subargs);
+                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("purge.command")) || subcommand.equalsIgnoreCase("purge")){
+                        purgeCommand.execute(player, subargs);
                     } else {      
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
                     }
@@ -223,8 +227,9 @@ public final class ClanCommandExecutor implements CommandExecutor {
                         placeCommand.execute(sender, subargs);
                     } else if (subcommand.equalsIgnoreCase(plugin.getLang("globalff.command")) || subcommand.equalsIgnoreCase("globalff")) {
                         globalffCommand.execute(sender, subargs);
-                    }
-                    else {
+                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("purge.command")) || subcommand.equalsIgnoreCase("purge")) {
+                        purgeCommand.execute(sender, subargs);
+                    } else {
                         ChatBlock.sendMessage(sender, ChatColor.RED + plugin.getLang("does.not.match"));
                     }
                 }
