@@ -403,19 +403,29 @@ public class Clan implements Serializable, Comparable<Clan> {
         SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
     
+    
     /**
-     * Adds a bulletin board message without announcer
+     * Adds a bulletin board message without saving it to the database
+     * 
+     * @param msg
+     */
+    public void addBbWithoutSaving(String msg) {
+        while (bb.size() > SimpleClans.getInstance().getSettingsManager().getBbSize()) {
+            bb.remove(0);
+        }
+
+        bb.add(System.currentTimeMillis() + "_" + msg);   
+    }
+    
+    /**
+     * Adds a bulletin board message without announcer and saves it to the database
      *
      * @param msg
      *
      * @param updateLastUsed should the clan's last used time be updated as well?
      */
     public void addBb(String msg, boolean updateLastUsed) {
-        while (bb.size() > SimpleClans.getInstance().getSettingsManager().getBbSize()) {
-            bb.remove(0);
-        }
-
-        bb.add(System.currentTimeMillis() + "_" + msg);
+        addBbWithoutSaving(msg);
         SimpleClans.getInstance().getStorageManager().updateClan(this, updateLastUsed);
     }
 
