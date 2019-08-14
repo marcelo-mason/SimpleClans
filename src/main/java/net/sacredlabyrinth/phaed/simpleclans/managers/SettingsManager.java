@@ -262,7 +262,7 @@ public final class SettingsManager {
         waitSecs = getConfig().getInt("clan.homebase-teleport-wait-secs");
         confirmationForPromote = getConfig().getBoolean("clan.confirmation-for-demote");
         confirmationForDemote = getConfig().getBoolean("clan.confirmation-for-promote");
-        percentageOnlineToDemote = getConfig().getDouble("percentage-online-to-demote");
+        percentageOnlineToDemote = getConfig().getDouble("clan.percentage-online-to-demote");
         clanTrustByDefault = getConfig().getBoolean("clan.trust-members-by-default");
         clanMinSizeToAlly = getConfig().getInt("clan.min-size-to-set-ally");
         clanMinSizeToRival = getConfig().getInt("clan.min-size-to-set-rival");

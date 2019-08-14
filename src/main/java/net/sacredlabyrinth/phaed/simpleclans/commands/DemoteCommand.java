@@ -92,8 +92,7 @@ public class DemoteCommand {
         }        
 
         if (!clan.enoughLeadersOnlineToDemote(toDemote)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang(
-                    "not.enough.leaders.online.to.vote.on.demotion:"));
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.enough.leaders.online.to.vote.on.demotion"));
             return;
         }
 

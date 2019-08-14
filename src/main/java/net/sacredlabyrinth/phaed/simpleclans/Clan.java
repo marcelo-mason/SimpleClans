@@ -1383,7 +1383,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         double onlineLeaders = online.size();
         
         
-        return (onlineLeaders / totalLeaders) >= minimum;
+        return ((onlineLeaders / totalLeaders) * 100) >= minimum;
     }
 
     /**
