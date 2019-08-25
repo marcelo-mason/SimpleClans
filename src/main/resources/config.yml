@@ -77,6 +77,9 @@ economy:
     member-fee-set-price: 1000.0
     member-fee-enabled: false
     max-member-fee: 200.0
+    upkeep: 200.0
+    upkeep-enabled: false
+    multiply-upkeep-by-clan-size: false
 kill-weights:
     rival: 2.0
     civilian: 0.0

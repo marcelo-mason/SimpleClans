@@ -14,6 +14,8 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectFeeTask;
+import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectUpkeepTask;
+import net.sacredlabyrinth.phaed.simpleclans.tasks.UpkeepWarningTask;
 
 /**
  * @author Phaed
@@ -108,8 +110,16 @@ public class SimpleClans extends JavaPlugin {
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
         
+        startTasks();
+    }
+
+    private void startTasks() {
         if (getSettingsManager().isMemberFee()) {
             new CollectFeeTask().start();
+        }
+        if (getSettingsManager().isClanUpkeep()) {
+            new CollectUpkeepTask().start();
+            new UpkeepWarningTask().start();
         }
     }
 

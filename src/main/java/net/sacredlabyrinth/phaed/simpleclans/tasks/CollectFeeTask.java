@@ -1,13 +1,11 @@
 package net.sacredlabyrinth.phaed.simpleclans.tasks;
 
 import java.text.MessageFormat;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
-import java.time.temporal.ChronoUnit;
 import net.md_5.bungee.api.ChatColor;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,15 +19,7 @@ public class CollectFeeTask extends BukkitRunnable {
      * Starts the repetitive task
      */
     public void start() {
-        LocalDateTime now = LocalDateTime.now();
-        LocalDateTime d = LocalDateTime.of(now.toLocalDate(), LocalTime.of(1, 0));
-        
-        long delay;
-        if (now.isAfter(d)) {
-            delay = now.until(d.plusDays(1), ChronoUnit.SECONDS);
-        } else {
-            delay = now.until(d, ChronoUnit.SECONDS);
-        }
+        long delay = Helper.getDelayTo(1, 0);
         
         this.runTaskTimerAsynchronously(SimpleClans.getInstance(), delay * 20, 86400 * 20);
     }

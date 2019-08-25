@@ -10,9 +10,11 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Map.Entry;
-import java.util.regex.Matcher;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 
 /**
@@ -30,6 +32,26 @@ public class Helper {
         for (StackTraceElement el : Thread.currentThread().getStackTrace()) {
             SimpleClans.debug(el.toString());
         }
+    }
+    
+    
+    /**
+     * Returns the delay in seconds to the specified hour and minute.
+     * 
+     * @param hour hour
+     * @param minute minute
+     * @return the delay in seconds
+     */
+    public static long getDelayTo(int hour, int minute) {
+        LocalDateTime now = LocalDateTime.now();
+        LocalDateTime d = LocalDateTime.of(now.toLocalDate(), LocalTime.of(1, 0));
+        long delay;
+        if (now.isAfter(d)) {
+            delay = now.until(d.plusDays(1), ChronoUnit.SECONDS);
+        } else {
+            delay = now.until(d, ChronoUnit.SECONDS);
+        }
+        return delay;
     }
 
     /**

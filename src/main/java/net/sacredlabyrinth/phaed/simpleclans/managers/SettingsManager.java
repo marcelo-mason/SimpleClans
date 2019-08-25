@@ -52,6 +52,8 @@ public final class SettingsManager {
     private boolean ePurchaseResetKdr;
     private boolean eMemberFee;
     private boolean ePurchaseMemberFeeSet;
+    private boolean eClanUpkeepEnabled;
+    private boolean eMultiplyUpkeepBySize;
     private double eCreationPrice;
     private double eVerificationPrice;
     private double eInvitePrice;
@@ -61,6 +63,7 @@ public final class SettingsManager {
     private double eResetKdr;
     private double eMaxMemberFee;
     private double eMemberFeeSetPrice;
+    private double eClanUpkeep;
     private String serverName;
     private boolean chatTags;
     private int purgeClan;
@@ -230,6 +233,9 @@ public final class SettingsManager {
         eIssuerPaysRegroup = getConfig().getBoolean("economy.issuer-pays-regroup");
         eHomeTeleportPriceSet = getConfig().getDouble("economy.home-teleport-set-price");
         eMaxMemberFee = getConfig().getDouble("economy.max-member-fee");
+        eClanUpkeep = getConfig().getDouble("economy.upkeep");
+        eClanUpkeepEnabled = getConfig().getBoolean("economy.upkeep-enabled");
+        eMultiplyUpkeepBySize = getConfig().getBoolean("economy.multiply-upkeep-by-clan-size");
         eMemberFee = getConfig().getBoolean("economy.member-fee-enabled");
         purgeClan = getConfig().getInt("purge.inactive-clan-days");
         purgeUnverified = getConfig().getInt("purge.unverified-clan-days");
@@ -398,6 +404,36 @@ public final class SettingsManager {
 
         return word.equalsIgnoreCase("clan") || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept);
 
+    }
+    
+    /**
+     * Checks if the upkeep should be multiplied by the clan size
+     * 
+     * @return 
+     */
+    public boolean isMultiplyUpkeepBySize() {
+        return eMultiplyUpkeepBySize;
+    }
+    
+    /**
+     * Checks if the upkeep is enabled
+     * 
+     * @return 
+     */
+    public boolean isClanUpkeep() {
+        return eClanUpkeepEnabled;
+    }
+    
+    /**
+     * Returns the upkeep
+     * 
+     * @return 
+     */
+    public double getClanUpkeep() {
+        if (eClanUpkeep < 0) {
+            eClanUpkeep = 0;
+        }
+        return eClanUpkeep;
     }
     
     
