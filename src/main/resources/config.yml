@@ -80,6 +80,7 @@ economy:
     upkeep: 200.0
     upkeep-enabled: false
     multiply-upkeep-by-clan-size: false
+    charge-upkeep-only-if-member-fee-enabled: true
 kill-weights:
     rival: 2.0
     civilian: 0.0

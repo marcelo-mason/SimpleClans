@@ -30,6 +30,9 @@ public class CollectUpkeepTask extends BukkitRunnable {
         final SimpleClans plugin = SimpleClans.getInstance();
         final SettingsManager settingsManager = plugin.getSettingsManager();
         plugin.getClanManager().getClans().forEach((clan) -> {
+        	if (settingsManager.isChargeUpkeepOnlyIfMemberFeeEnabled() && !clan.isMemberFeeEnabled()) {
+        		return;
+        	}
             double upkeep = settingsManager.getClanUpkeep();
             if (settingsManager.isMultiplyUpkeepBySize()) {
                 upkeep = upkeep * clan.getSize();

@@ -30,6 +30,9 @@ public class UpkeepWarningTask extends BukkitRunnable {
         final SimpleClans plugin = SimpleClans.getInstance();
         final SettingsManager sm = plugin.getSettingsManager();
         plugin.getClanManager().getClans().forEach((clan) -> {
+        	if (sm.isChargeUpkeepOnlyIfMemberFeeEnabled() && !clan.isMemberFeeEnabled()) {
+        		return;
+        	}
             final double balance = clan.getBalance();
             double upkeep = sm.getClanUpkeep();
             if (sm.isMultiplyUpkeepBySize()) {

@@ -54,6 +54,7 @@ public final class SettingsManager {
     private boolean ePurchaseMemberFeeSet;
     private boolean eClanUpkeepEnabled;
     private boolean eMultiplyUpkeepBySize;
+    private boolean eChargeUpkeepOnlyIfMemberFeeEnabled;
     private double eCreationPrice;
     private double eVerificationPrice;
     private double eInvitePrice;
@@ -235,6 +236,7 @@ public final class SettingsManager {
         eMaxMemberFee = getConfig().getDouble("economy.max-member-fee");
         eClanUpkeep = getConfig().getDouble("economy.upkeep");
         eClanUpkeepEnabled = getConfig().getBoolean("economy.upkeep-enabled");
+        eChargeUpkeepOnlyIfMemberFeeEnabled = getConfig().getBoolean("economy.charge-upkeep-only-if-member-fee-enabled");
         eMultiplyUpkeepBySize = getConfig().getBoolean("economy.multiply-upkeep-by-clan-size");
         eMemberFee = getConfig().getBoolean("economy.member-fee-enabled");
         purgeClan = getConfig().getInt("purge.inactive-clan-days");
@@ -404,6 +406,15 @@ public final class SettingsManager {
 
         return word.equalsIgnoreCase("clan") || word.equalsIgnoreCase(commandMore) || word.equalsIgnoreCase(commandDeny) || word.equalsIgnoreCase(commandAccept);
 
+    }
+    
+    /**
+     * Checks if the upkeep is to be charged only from clans with the member fee enabled
+     * 
+     * @return
+     */
+    public boolean isChargeUpkeepOnlyIfMemberFeeEnabled() {
+    	return eChargeUpkeepOnlyIfMemberFeeEnabled;
     }
     
     /**
