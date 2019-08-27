@@ -95,6 +95,8 @@ public final class SettingsManager {
     private int clanMinSizeToRival;
     private int clanMinLength;
     private int clanMaxLength;
+    private int clanMaxDescriptionLength;
+    private int clanMinDescriptionLength;
     private String pageClanNameColor;
     private int tagMinLength;
     private int tagMaxLength;
@@ -276,6 +278,8 @@ public final class SettingsManager {
         clanMinSizeToRival = getConfig().getInt("clan.min-size-to-set-rival");
         clanMinLength = getConfig().getInt("clan.min-length");
         clanMaxLength = getConfig().getInt("clan.max-length");
+        clanMaxDescriptionLength = getConfig().getInt("clan.max-description-length");
+        clanMinDescriptionLength = getConfig().getInt("clan.min-description-length");
         clanFFOnByDefault = getConfig().getBoolean("clan.ff-on-by-default");
         tagMinLength = getConfig().getInt("tag.min-length");
         tagMaxLength = getConfig().getInt("tag.max-length");
@@ -833,8 +837,32 @@ public final class SettingsManager {
     public int getClanMinSizeToRival() {
         return clanMinSizeToRival;
     }
+    
+    /**
+     * Returns the max length of the clan description
+     * 
+     * @return the max length
+     */
+    public int getClanMaxDescriptionLength() {
+    	if (clanMaxDescriptionLength > 255 || clanMaxDescriptionLength < 0) {
+    		clanMaxDescriptionLength = 255;
+    	}
+		return clanMaxDescriptionLength;
+	}
 
     /**
+     * Returns the min length of the clan description
+     * 
+     * @return the min length
+     */
+	public int getClanMinDescriptionLength() {
+		if (clanMinDescriptionLength < 0 || clanMinDescriptionLength > getClanMaxDescriptionLength()) {
+			clanMinDescriptionLength = 0;
+		}
+		return clanMinDescriptionLength;
+	}
+
+	/**
      * @return the clanMinLength
      */
     public int getClanMinLength() {

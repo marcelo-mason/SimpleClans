@@ -91,6 +91,8 @@ clan:
     homebase-can-be-set-only-once: true
     min-size-to-set-rival: 3
     max-length: 25
+    max-description-length: 120
+    min-description-length: 10
     max-members: 25
     confirmation-for-promote: false
     trust-members-by-default: false

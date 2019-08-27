@@ -66,6 +66,7 @@ public class ProfileCommand {
                 ChatBlock.sendBlank(player);
 
                 String name = plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketLeft() + plugin.getSettingsManager().getTagDefaultColor() + clan.getColorTag() + plugin.getSettingsManager().getClanChatBracketColor() + plugin.getSettingsManager().getClanChatTagBracketRight() + " " + plugin.getSettingsManager().getPageClanNameColor() + clan.getName();
+                String description = ChatColor.WHITE + (clan.getDescription() != null && !clan.getDescription().isEmpty() ? clan.getDescription() : plugin.getLang("no.description"));
                 String leaders = clan.getLeadersString(plugin.getSettingsManager().getPageLeaderColor(), subColor + ", ");
                 String onlineCount = ChatColor.WHITE + "" + Helper.stripOffLinePlayers(clan.getMembers()).size();
                 String membersOnline = onlineCount + subColor + "/" + ChatColor.WHITE + clan.getSize();
@@ -83,6 +84,7 @@ public class ProfileCommand {
                 String feeValue = ChatColor.WHITE + "" + clan.getMemberFee();
                 
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("name.0"), name));
+                ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("description.0"), description));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("status.0"), status));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("leaders.0"), leaders));
                 ChatBlock.sendMessage(player, "  " + subColor + MessageFormat.format(plugin.getLang("members.online.0"), membersOnline));

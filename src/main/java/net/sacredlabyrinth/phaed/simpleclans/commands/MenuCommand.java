@@ -135,6 +135,9 @@ public class MenuCommand {
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.modtag")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.modtag.tag.1.modify.the.clan.s.tag"), clanCommand, ChatColor.WHITE));
         }
+        if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.description")) {
+        	chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.description.description.1.modify.the.clan.s.description"), clanCommand, ChatColor.WHITE));
+        }
 
         String toggles = "";
 

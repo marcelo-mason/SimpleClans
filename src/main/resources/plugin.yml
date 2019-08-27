@@ -95,6 +95,8 @@ permissions:
     description: Can start a rivalry with another clan
   simpleclans.leader.modtag:
     description: Can modify his clan's tag
+  simpleclans.leader.description:
+    description: Can modify his clan's description
   simpleclans.leader.cape:
     description: Can set his clan's cape url
   simpleclans.member.cape-toggle:

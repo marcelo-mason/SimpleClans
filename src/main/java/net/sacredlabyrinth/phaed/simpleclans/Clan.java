@@ -29,6 +29,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     private String tag;
     private String colorTag;
     private String name;
+    private String description;
     private double balance;
     private double fee;
     private boolean friendlyFire;
@@ -157,8 +158,26 @@ public class Clan implements Serializable, Comparable<Clan> {
     public void setName(String name) {
         this.name = name;
     }
+    
+    /**
+     * Returns the clan's description
+     * 
+     * @return the description or null if it doesn't have one
+     */
+    public String getDescription() {
+		return description;
+	}
 
     /**
+     * (used internally)
+     * 
+     * @param description
+     */
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	/**
      * Sets the clan's fee
      * 
      * @param fee 

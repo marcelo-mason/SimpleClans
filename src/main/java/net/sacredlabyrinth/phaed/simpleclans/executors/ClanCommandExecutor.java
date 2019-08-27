@@ -55,6 +55,7 @@ public final class ClanCommandExecutor implements CommandExecutor {
     private final PlaceCommand placeCommand;
     private final ResetKDRCommand resetKDRCommand;
     private final PurgeCommand purgeCommand;
+    private final DescriptionCommand descriptionCommand;
 
     /**
      *
@@ -103,6 +104,7 @@ public final class ClanCommandExecutor implements CommandExecutor {
         resetKDRCommand = new ResetKDRCommand();
         feeCommand = new FeeCommand();
         purgeCommand = new PurgeCommand();
+        descriptionCommand = new DescriptionCommand();
     }
 
     @Override
@@ -208,7 +210,9 @@ public final class ClanCommandExecutor implements CommandExecutor {
                         feeCommand.execute(player, subargs);
                     } else if (subcommand.equalsIgnoreCase(plugin.getLang("purge.command")) || subcommand.equalsIgnoreCase("purge")){
                         purgeCommand.execute(player, subargs);
-                    } else {      
+                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("description.command")) || subcommand.equalsIgnoreCase("description")) {
+                    	descriptionCommand.execute(player, subargs);
+                    } else {   
                         ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
                     }
                 }

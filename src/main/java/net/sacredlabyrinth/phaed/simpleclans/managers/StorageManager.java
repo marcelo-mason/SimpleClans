@@ -85,21 +85,63 @@ public final class StorageManager {
                 if (!core.existsTable("sc_clans")) {
                     SimpleClans.log("Creating table: sc_clans");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20) NOT NULL auto_increment, `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, `balance` double(64,2), `fee_enabled` tinyint(1) default '0', `fee_value` double(64,2), PRIMARY KEY  (`id`), UNIQUE KEY `uq_simpleclans_1` (`tag`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ("
+                    		+ " `id` bigint(20) NOT NULL auto_increment,"
+                    		+ " `verified` tinyint(1) default '0',"
+                    		+ " `tag` varchar(25) NOT NULL,"
+                    		+ " `color_tag` varchar(25) NOT NULL,"
+                    		+ " `name` varchar(100) NOT NULL,"
+                    		+ " `description` varchar(255),"
+                    		+ " `friendly_fire` tinyint(1) default '0',"
+                    		+ " `founded` bigint NOT NULL,"
+                    		+ " `last_used` bigint NOT NULL,"
+                    		+ " `packed_allies` text NOT NULL,"
+                    		+ " `packed_rivals` text NOT NULL,"
+                    		+ " `packed_bb` mediumtext NOT NULL,"
+                    		+ " `cape_url` varchar(255) NOT NULL,"
+                    		+ " `flags` text NOT NULL,"
+                    		+ " `balance` double(64,2),"
+                    		+ " `fee_enabled` tinyint(1) default '0',"
+                    		+ " `fee_value` double(64,2),"
+                    		+ " PRIMARY KEY  (`id`),"
+                    		+ " UNIQUE KEY `uq_simpleclans_1` (`tag`));";
                     core.execute(query);
                 }
 
                 if (!core.existsTable("sc_players")) {
                     SimpleClans.log("Creating table: sc_players");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20) NOT NULL auto_increment, `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, PRIMARY KEY  (`id`), UNIQUE KEY `uq_sc_players_1` (`name`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ("
+                    		+ " `id` bigint(20) NOT NULL auto_increment,"
+                    		+ " `name` varchar(16) NOT NULL,"
+                    		+ " `leader` tinyint(1) default '0',"
+                    		+ " `tag` varchar(25) NOT NULL,"
+                    		+ " `friendly_fire` tinyint(1) default '0',"
+                    		+ " `neutral_kills` int(11) default NULL,"
+                    		+ " `rival_kills` int(11) default NULL,"
+                    		+ " `civilian_kills` int(11) default NULL,"
+                    		+ " `deaths` int(11) default NULL,"
+                    		+ " `last_seen` bigint NOT NULL,"
+                    		+ " `join_date` bigint NOT NULL,"
+                    		+ " `trusted` tinyint(1) default '0',"
+                    		+ " `flags` text NOT NULL,"
+                    		+ " `packed_past_clans` text,"
+                    		+ " PRIMARY KEY  (`id`),"
+                    		+ " UNIQUE KEY `uq_sc_players_1` (`name`));";
                     core.execute(query);
                 }
 
                 if (!core.existsTable("sc_kills")) {
                     SimpleClans.log("Creating table: sc_kills");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20) NOT NULL auto_increment, `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ("
+                    		+ " `kill_id` bigint(20) NOT NULL auto_increment,"
+                    		+ " `attacker` varchar(16) NOT NULL,"
+                    		+ " `attacker_tag` varchar(16) NOT NULL,"
+                    		+ " `victim` varchar(16) NOT NULL,"
+                    		+ " `victim_tag` varchar(16) NOT NULL,"
+                    		+ " `kill_type` varchar(1) NOT NULL,"
+                    		+ " PRIMARY KEY  (`kill_id`));";
                     core.execute(query);
                 }
             } else {
@@ -114,21 +156,63 @@ public final class StorageManager {
                 if (!core.existsTable("sc_clans")) {
                     SimpleClans.log("Creating table: sc_clans");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ( `id` bigint(20), `verified` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `color_tag` varchar(25) NOT NULL, `name` varchar(100) NOT NULL, `friendly_fire` tinyint(1) default '0', `founded` bigint NOT NULL, `last_used` bigint NOT NULL, `packed_allies` text NOT NULL, `packed_rivals` text NOT NULL, `packed_bb` mediumtext NOT NULL, `cape_url` varchar(255) NOT NULL, `flags` text NOT NULL, `balance` double(64,2) default 0.0, `fee_enabled` tinyint(1) default '0', `fee_value` double(64,2),  PRIMARY KEY  (`id`), UNIQUE (`tag`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_clans` ("
+                    		+ " `id` bigint(20),"
+                    		+ " `verified` tinyint(1) default '0',"
+                    		+ " `tag` varchar(25) NOT NULL,"
+                    		+ " `color_tag` varchar(25) NOT NULL,"
+                    		+ " `name` varchar(100) NOT NULL,"
+                    		+ " `description` varchar(255),"
+                    		+ " `friendly_fire` tinyint(1) default '0',"
+                    		+ " `founded` bigint NOT NULL,"
+                    		+ " `last_used` bigint NOT NULL,"
+                    		+ " `packed_allies` text NOT NULL,"
+                    		+ " `packed_rivals` text NOT NULL,"
+                    		+ " `packed_bb` mediumtext NOT NULL,"
+                    		+ " `cape_url` varchar(255) NOT NULL,"
+                    		+ " `flags` text NOT NULL,"
+                    		+ " `balance` double(64,2) default 0.0,"
+                    		+ " `fee_enabled` tinyint(1) default '0',"
+                    		+ " `fee_value` double(64,2),"
+                    		+ "  PRIMARY KEY  (`id`),"
+                    		+ " UNIQUE (`tag`));";
                     core.execute(query);
                 }
 
                 if (!core.existsTable("sc_players")) {
                     SimpleClans.log("Creating table: sc_players");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ( `id` bigint(20), `name` varchar(16) NOT NULL, `leader` tinyint(1) default '0', `tag` varchar(25) NOT NULL, `friendly_fire` tinyint(1) default '0', `neutral_kills` int(11) default NULL, `rival_kills` int(11) default NULL, `civilian_kills` int(11) default NULL, `deaths` int(11) default NULL, `last_seen` bigint NOT NULL, `join_date` bigint NOT NULL, `trusted` tinyint(1) default '0', `flags` text NOT NULL, `packed_past_clans` text, PRIMARY KEY  (`id`), UNIQUE (`name`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_players` ("
+                    		+ " `id` bigint(20),"
+                    		+ " `name` varchar(16) NOT NULL,"
+                    		+ " `leader` tinyint(1) default '0',"
+                    		+ " `tag` varchar(25) NOT NULL,"
+                    		+ " `friendly_fire` tinyint(1) default '0',"
+                    		+ " `neutral_kills` int(11) default NULL,"
+                    		+ " `rival_kills` int(11) default NULL,"
+                    		+ " `civilian_kills` int(11) default NULL,"
+                    		+ " `deaths` int(11) default NULL,"
+                    		+ " `last_seen` bigint NOT NULL,"
+                    		+ " `join_date` bigint NOT NULL,"
+                    		+ " `trusted` tinyint(1) default '0',"
+                    		+ " `flags` text NOT NULL,"
+                    		+ " `packed_past_clans` text,"
+                    		+ " PRIMARY KEY  (`id`),"
+                    		+ " UNIQUE (`name`));";
                     core.execute(query);
                 }
 
                 if (!core.existsTable("sc_kills")) {
                     SimpleClans.log("Creating table: sc_kills");
 
-                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ( `kill_id` bigint(20), `attacker` varchar(16) NOT NULL, `attacker_tag` varchar(16) NOT NULL, `victim` varchar(16) NOT NULL, `victim_tag` varchar(16) NOT NULL, `kill_type` varchar(1) NOT NULL, PRIMARY KEY  (`kill_id`));";
+                    String query = "CREATE TABLE IF NOT EXISTS `sc_kills` ("
+                    		+ " `kill_id` bigint(20),"
+                    		+ " `attacker` varchar(16) NOT NULL,"
+                    		+ " `attacker_tag` varchar(16) NOT NULL,"
+                    		+ " `victim` varchar(16) NOT NULL,"
+                    		+ " `victim_tag` varchar(16) NOT NULL,"
+                    		+ " `kill_type` varchar(1) NOT NULL,"
+                    		+ " PRIMARY KEY  (`kill_id`));";
                     core.execute(query);
                 }
             } else {
@@ -263,6 +347,7 @@ public final class StorageManager {
                         String tag = res.getString("tag");
                         String color_tag = Helper.parseColors(res.getString("color_tag"));
                         String name = res.getString("name");
+                        String description = res.getString("description");
                         String packed_allies = res.getString("packed_allies");
                         String packed_rivals = res.getString("packed_rivals");
                         String packed_bb = res.getString("packed_bb");
@@ -289,6 +374,7 @@ public final class StorageManager {
                         clan.setTag(tag);
                         clan.setColorTag(color_tag);
                         clan.setName(name);
+                        clan.setDescription(description);
                         clan.setPackedAllies(packed_allies);
                         clan.setPackedRivals(packed_rivals);
                         clan.setPackedBb(packed_bb);
@@ -337,6 +423,7 @@ public final class StorageManager {
                         String tag = res.getString("tag");
                         String color_tag = Helper.parseColors(res.getString("color_tag"));
                         String name = res.getString("name");
+                        String description = res.getString("description");
                         String packed_allies = res.getString("packed_allies");
                         String packed_rivals = res.getString("packed_rivals");
                         String packed_bb = res.getString("packed_bb");
@@ -363,6 +450,7 @@ public final class StorageManager {
                         clan.setTag(tag);
                         clan.setColorTag(color_tag);
                         clan.setName(name);
+                        clan.setDescription(description);
                         clan.setPackedAllies(packed_allies);
                         clan.setPackedRivals(packed_rivals);
                         clan.setPackedBb(packed_bb);
@@ -575,8 +663,8 @@ public final class StorageManager {
      * @param clan
      */
     public void insertClan(Clan clan) {
-        String query = "INSERT INTO `sc_clans` (`fee_enabled`, `fee_value`, `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`, `balance`) ";
-        String values = "VALUES ( " + (clan.isMemberFeeEnabled() ? 1 : 0) +","+ Helper.escapeQuotes(String.valueOf(clan.getMemberFee())) + "," + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "','" + Helper.escapeQuotes(clan.getFlags()) + "','" + Helper.escapeQuotes(String.valueOf(clan.getBalance())) + "');";
+        String query = "INSERT INTO `sc_clans` (`description`, `fee_enabled`, `fee_value`, `verified`, `tag`, `color_tag`, `name`, `friendly_fire`, `founded`, `last_used`, `packed_allies`, `packed_rivals`, `packed_bb`, `cape_url`, `flags`, `balance`) ";
+        String values = "VALUES ( '" + Helper.escapeQuotes(clan.getDescription()) + "'," + (clan.isMemberFeeEnabled() ? 1 : 0) +","+ Helper.escapeQuotes(String.valueOf(clan.getMemberFee())) + "," + (clan.isVerified() ? 1 : 0) + ",'" + Helper.escapeQuotes(clan.getTag()) + "','" + Helper.escapeQuotes(clan.getColorTag()) + "','" + Helper.escapeQuotes(clan.getName()) + "'," + (clan.isFriendlyFire() ? 1 : 0) + ",'" + clan.getFounded() + "','" + clan.getLastUsed() + "','" + Helper.escapeQuotes(clan.getPackedAllies()) + "','" + Helper.escapeQuotes(clan.getPackedRivals()) + "','" + Helper.escapeQuotes(clan.getPackedBb()) + "','" + Helper.escapeQuotes(clan.getCapeUrl()) + "','" + Helper.escapeQuotes(clan.getFlags()) + "','" + Helper.escapeQuotes(String.valueOf(clan.getBalance())) + "');";
         core.insert(query + values);
     }
 
@@ -626,9 +714,7 @@ public final class StorageManager {
      * @param clan
      */
     public void updateClan(Clan clan) {
-        clan.updateLastUsed();
-        String query = "UPDATE `sc_clans` SET fee_enabled = "+ (clan.isMemberFeeEnabled() ? 1 : 0) +", fee_value = '" + clan.getMemberFee() + "', verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getCapeUrl())) + "', balance = '" + clan.getBalance() + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
-        core.update(query);
+        updateClan(clan, true);
     }
     
     /**
@@ -641,8 +727,8 @@ public final class StorageManager {
     public void updateClan(Clan clan, boolean updateLastUsed) {
         if (updateLastUsed) {
             clan.updateLastUsed();
-            }
-        String query = "UPDATE `sc_clans` SET fee_enabled = "+ (clan.isMemberFeeEnabled() ? 1 : 0) +", fee_value = '" + clan.getMemberFee() + "', verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getCapeUrl())) + "', balance = '" + clan.getBalance() + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
+        }
+        String query = "UPDATE `sc_clans` SET description = '" + Helper.escapeQuotes(clan.getDescription())+ "', fee_enabled = "+ (clan.isMemberFeeEnabled() ? 1 : 0) +", fee_value = '" + clan.getMemberFee() + "', verified = " + (clan.isVerified() ? 1 : 0) + ", tag = '" + Helper.escapeQuotes(clan.getTag()) + "', color_tag = '" + Helper.escapeQuotes(clan.getColorTag()) + "', name = '" + Helper.escapeQuotes(clan.getName()) + "', friendly_fire = " + (clan.isFriendlyFire() ? 1 : 0) + ", founded = '" + clan.getFounded() + "', last_used = '" + clan.getLastUsed() + "', packed_allies = '" + Helper.escapeQuotes(clan.getPackedAllies()) + "', packed_rivals = '" + Helper.escapeQuotes(clan.getPackedRivals()) + "', packed_bb = '" + Helper.escapeQuotes(clan.getPackedBb()) + "', cape_url = '" + Helper.escapeQuotes(clan.getCapeUrl()) + "', cape_url = '" + Helper.escapeQuotes(String.valueOf(clan.getCapeUrl())) + "', balance = '" + clan.getBalance() + "', flags = '" + Helper.escapeQuotes(clan.getFlags()) + "' WHERE tag = '" + Helper.escapeQuotes(clan.getTag()) + "';";
         core.update(query);
     }
 
@@ -862,6 +948,14 @@ public final class StorageManager {
         if (!core.existsColumn("sc_clans", "fee_value")) {
             query = "ALTER TABLE sc_clans ADD COLUMN `fee_value` double(64,2);";
             core.execute(query);
+        }
+        
+        /**
+         * From 2.7.21 to 2.7.22
+         */
+        if (!core.existsColumn("sc_clans", "description")) {
+        	query = "ALTER TABLE sc_clans ADD COLUMN `description` varchar(255);";
+        	core.execute(query);
         }
 
         /**
