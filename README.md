@@ -4,7 +4,7 @@ SimpleClans
 Full featured clan system for PVP Minecraft Servers
 
 [![Build Status](https://travis-ci.org/marcelo-mason/SimpleClans.svg)](https://travis-ci.org/marcelo-mason/SimpleClans)
-[![Download](https://img.shields.io/badge/snapshot-download-blue.svg)](https://github.com/marcelo-mason/SimpleClans/releases/latest)
+[![Download](https://img.shields.io/badge/snapshot-download-blue.svg)](https://github.com/marcelo-mason/SimpleClans/releases)
 [![Issues](https://img.shields.io/github/issues/marcelo-mason/SimpleClans.svg)](https://github.com/marcelo-mason/SimpleClans/issues)
 [![ghit.me](https://ghit.me/badge.svg?repo=marcelo-mason/SimpleClans)](https://ghit.me/repo/marcelo-mason/SimpleClans)
 
