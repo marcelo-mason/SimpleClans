@@ -4,9 +4,12 @@ import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.*;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.World;
 import org.bukkit.entity.Player;
 import org.json.simple.JSONArray;
@@ -785,6 +788,30 @@ public class Clan implements Serializable, Comparable<Clan> {
         return false;
     }
 
+    /**
+     * Get all members that must pay the fee (that excludes leaders and players with the permission to bypass it)
+     * 
+     * @return the fee payers
+     */
+    public Set<ClanPlayer> getFeePayers() {
+    	Set<ClanPlayer> feePayers = new HashSet<>();
+    	
+    	getNonLeaders().forEach(cp -> {
+    		OfflinePlayer op;
+    		if (SimpleClans.getInstance().hasUUID()) {
+    			op = Bukkit.getOfflinePlayer(cp.getUniqueId());
+    		} else {
+    			op = Bukkit.getOfflinePlayer(cp.getName());
+    		}
+
+        	if (!SimpleClans.getInstance().getPermissionsManager().has(null, op, "simpleclans.member.bypass-fee")) {
+        		feePayers.add(cp);
+        	}
+    	});
+    	
+    	return feePayers;
+    }
+    
     /**
      * Get all members (leaders, and non-leaders) in the clan
      *

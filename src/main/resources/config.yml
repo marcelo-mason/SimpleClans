@@ -45,6 +45,17 @@ settings:
     new-clan-verification-required: true
     allow-regroup-command: true
     allow-reset-kdr: false
+    rejoin-cooldown: 60
+    rejoin-cooldown-enabled: false
+list:
+    size: size
+    kdr: kdr
+    name: name
+    founded: founded
+    active: active
+    asc: asc
+    desc: desc
+    default: kdr
 commands:
     more: more
     ally: ally

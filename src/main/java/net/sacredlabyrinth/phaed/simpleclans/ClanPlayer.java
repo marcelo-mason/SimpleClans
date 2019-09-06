@@ -10,6 +10,8 @@ import org.json.simple.JSONValue;
 import java.io.Serializable;
 import java.sql.Timestamp;
 import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 /**
@@ -32,6 +34,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     private long lastSeen;
     private long joinDate;
     private Set<String> pastClans = new HashSet<>();
+    private Map<String, Long> resignTimes = new HashMap<>();
     private VoteResult vote;
     private Channel channel;
 
@@ -627,6 +630,51 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 //        pc.addAll(pastClans);
 //        return pc;
         return pastClans;
+    }
+    
+    /**
+     * Returns a map containing the time the player resigned from certain clans
+     * 
+     * @return the resign times
+     */
+    public Map<String, Long> getResignTimes() {
+    	return resignTimes;
+    }
+    
+    /**
+     * Returns the time in millis when the player resigned from the clan
+     * 
+     * @param tag
+     * @return the time in millis
+     */
+    public Long getResignTime(String tag) {
+    	return resignTimes.get(tag);
+    }
+    
+    /**
+     * Sets the resign times (does not update to db)
+     * 
+     * @param resignTimes
+     */
+    public void setResignTimes(Map<String, Long> resignTimes) {
+    	if (resignTimes != null) {
+    		final int cooldown = SimpleClans.getInstance().getSettingsManager().getRejoinCooldown();
+    		resignTimes.forEach((k, v) -> {
+    			long timePassed = Instant.ofEpochMilli(v).until(Instant.now(), ChronoUnit.MINUTES);
+    			if (timePassed < cooldown) {
+    				this.resignTimes.put(k, v);
+    			}
+    		});
+    	}
+    }
+    
+    /**
+     * Adds the clan to the resign times map
+     * 
+     * @param tag
+     */
+    public void addResignTime(String tag) {
+    	if (tag != null) resignTimes.put(tag, System.currentTimeMillis());
     }
 
     /**

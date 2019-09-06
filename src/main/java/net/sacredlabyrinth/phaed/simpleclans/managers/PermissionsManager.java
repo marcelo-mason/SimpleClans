@@ -238,6 +238,22 @@ public final class PermissionsManager {
     /**
      * Check if a player has permissions
      *
+     * @param world the world
+     * @param player the player
+     * @param perm the permission
+     * @return whether he has the permission
+     */
+    public boolean has(String world, OfflinePlayer player, String perm) {
+    	if (player != null && permission != null) {
+    		return permission.playerHas(world, player, perm);
+    	}
+    	
+    	return false;
+    }    
+    
+    /**
+     * Check if a player has permissions
+     *
      * @param player the player
      * @param perm the permission
      * @return whether he has the permission

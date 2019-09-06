@@ -5,6 +5,9 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.lang.reflect.Method;
@@ -34,6 +37,31 @@ public class Helper {
         }
     }
     
+    /**
+     * Converts a resign times map to a JSON String
+     * 
+     * @param resignTimes
+     * @return a JSON String
+     */
+    public static String resignTimesToJson(Map<String, Long> resignTimes) {
+    	return JSONObject.toJSONString(resignTimes);
+    }
+    
+    /**
+     * Converts a JSON String to a resign times map
+     * 
+     * @param json JSON String
+     * @return a map
+     */
+    @SuppressWarnings("unchecked")
+	public static Map<String, Long> resignTimesFromJson(String json) {
+    	try {
+			return (Map<String, Long>) new JSONParser().parse(json);
+		} catch (ParseException e) {
+			e.printStackTrace();
+		}
+    	return null;
+    }
     
     /**
      * Returns the delay in seconds to the specified hour and minute.

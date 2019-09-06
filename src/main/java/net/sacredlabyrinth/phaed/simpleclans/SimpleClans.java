@@ -1,21 +1,32 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import net.sacredlabyrinth.phaed.simpleclans.executors.*;
-import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
-import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
-import net.sacredlabyrinth.phaed.simpleclans.managers.*;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
-
-import org.bukkit.plugin.java.JavaPlugin;
-
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+
+import org.bukkit.plugin.java.JavaPlugin;
+
+import net.sacredlabyrinth.phaed.simpleclans.executors.AcceptCommandExecutor;
+import net.sacredlabyrinth.phaed.simpleclans.executors.AllyCommandExecutor;
+import net.sacredlabyrinth.phaed.simpleclans.executors.ClanCommandExecutor;
+import net.sacredlabyrinth.phaed.simpleclans.executors.DenyCommandExecutor;
+import net.sacredlabyrinth.phaed.simpleclans.executors.GlobalCommandExecutor;
+import net.sacredlabyrinth.phaed.simpleclans.executors.MoreCommandExecutor;
+import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
+import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.LanguageManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.PermissionsManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.TeleportManager;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectFeeTask;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectUpkeepTask;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.UpkeepWarningTask;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  * @author Phaed

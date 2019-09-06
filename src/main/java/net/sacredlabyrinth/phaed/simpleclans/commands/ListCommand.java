@@ -4,6 +4,9 @@ import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -24,9 +27,9 @@ public class ListCommand {
      * Execute the command
      *
      * @param player
-     * @param arg
+     * @param args
      */
-    public void execute(Player player, String[] arg) {
+    public void execute(Player player, String[] args) {
         SimpleClans plugin = SimpleClans.getInstance();
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
@@ -36,13 +39,13 @@ public class ListCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             return;
         }
-        if (arg.length != 0) {
+        if (args.length > 2) {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.list"), plugin.getSettingsManager().getCommandClan()));
             return;
         }
-
         List<Clan> clans = plugin.getClanManager().getClans();
-        plugin.getClanManager().sortClansByKDR(clans);
+
+        sort(plugin, clans, args);
 
         if (clans.isEmpty()) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.clans.have.been.created"));
@@ -86,6 +89,48 @@ public class ListCommand {
 
         ChatBlock.sendBlank(player);
     }
+
+	private void sort(SimpleClans plugin, List<Clan> clans, String[] args) {
+		SettingsManager sm = plugin.getSettingsManager();
+		String type = sm.getListDefault();
+        String order = null;
+        if (args.length > 0) {
+        	type = args[0];
+        }
+        String asc = sm.getListAsc();
+        String desc = sm.getListDesc();
+        if (args.length == 2) {
+        	order = args[1];
+        	if (!order.equalsIgnoreCase(asc) && !order.equalsIgnoreCase(desc)) {
+        		order = null;
+        	}
+        }
+        ClanManager cm = plugin.getClanManager();
+        //in case the default type is invalid
+        cm.sortClansByKDR(clans);
+        
+		if (type.equalsIgnoreCase(sm.getListActive())) {
+        	cm.sortClansByActive(clans, asc.equalsIgnoreCase(order));
+        }
+        if (type.equalsIgnoreCase(sm.getListFounded())) {
+        	if (order == null) {
+        		order = asc;
+        	}
+        	cm.sortClansByFounded(clans, asc.equalsIgnoreCase(order));
+        }
+        if (type.equalsIgnoreCase(sm.getListKdr())) {
+        	cm.sortClansByKDR(clans, asc.equalsIgnoreCase(order));
+        }
+        if (type.equalsIgnoreCase(sm.getListName())) {
+        	if (order == null) {
+        		order = asc;
+        	}
+        	cm.sortClansByName(clans, asc.equalsIgnoreCase(order));
+        }
+        if (type.equalsIgnoreCase(sm.getListSize())) {
+        	cm.sortClansBySize(clans, asc.equalsIgnoreCase(order));
+        }
+	}
 }
 
 

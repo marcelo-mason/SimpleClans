@@ -815,6 +815,90 @@ public final class ClanManager {
 
         return out;
     }
+    
+    /**
+     * Sort clans by active
+     * 
+     * @param clans
+     * @param asc
+     */
+    public void sortClansByActive(List<Clan> clans, boolean asc) {
+    	clans.sort((c1, c2) -> {
+    	  	int o = 1;
+        	if (!asc) {
+        		o = -1;
+        	}
+        	
+    		return ((Long) c1.getLastUsed()).compareTo(c2.getLastUsed()) * o;
+    	});
+    }
+    
+    /**
+     * Sort clans by founded date
+     * 
+     * @param clans
+     * @param asc
+     */
+    public void sortClansByFounded(List<Clan> clans, boolean asc) {
+    	clans.sort((c1, c2) -> {
+    	  	int o = 1;
+        	if (!asc) {
+        		o = -1;
+        	}
+        	
+    		return ((Long) c1.getFounded()).compareTo(c2.getFounded()) * o;
+    	});
+    }
+    
+    /**
+     * Sort clans by kdr
+     * 
+     * @param clans
+     * @param asc
+     */
+    public void sortClansByKDR(List<Clan> clans, boolean asc) {
+    	clans.sort((c1, c2) -> {
+    	  	int o = 1;
+        	if (!asc) {
+        		o = -1;
+        	}
+        	
+    		return ((Float) c1.getTotalKDR()).compareTo(c2.getTotalKDR()) * o;
+    	});
+    }
+    
+    /**
+     * Sort clans by size
+     * 
+     * @param clans
+     * @param asc
+     */
+    public void sortClansBySize(List<Clan> clans, boolean asc) {
+    	clans.sort((c1, c2) -> {
+    	  	int o = 1;
+        	if (!asc) {
+        		o = -1;
+        	}
+        	
+    		return ((Integer) c1.getSize()).compareTo(c2.getSize()) * o;
+    	});
+    }
+    
+    /**
+     * Sort clans by name
+     * 
+     * @param clans
+     */
+    public void sortClansByName(List<Clan> clans, boolean asc) {
+    	clans.sort((c1, c2) -> {
+    	  	int o = 1;
+        	if (!asc) {
+        		o = -1;
+        	}
+        	
+    		return c1.getName().compareTo(c2.getName()) * o;
+    	});
+    }
 
     /**
      * Sort clans by KDR

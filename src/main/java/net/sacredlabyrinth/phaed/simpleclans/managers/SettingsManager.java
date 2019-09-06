@@ -34,6 +34,16 @@ public final class SettingsManager {
     private boolean allowResetKdr;
     private boolean showUnverifiedOnList;
     private boolean requireVerification;
+    private boolean rejoinCooldownEnabled;
+    private int rejoinCooldown;
+    private String listDefault;
+    private String listSize;
+    private String listKdr;
+    private String listName;
+    private String listFounded;
+    private String listActive;
+    private String listAsc;
+    private String listDesc;
     private List<Integer> itemsList;
     private List<String> blacklistedWorlds;
     private List<String> bannedPlayers;
@@ -214,6 +224,16 @@ public final class SettingsManager {
         unRivableClans = getConfig().getStringList("settings.unrivable-clans");
         showUnverifiedOnList = getConfig().getBoolean("settings.show-unverified-on-list");
         requireVerification = getConfig().getBoolean("settings.new-clan-verification-required");
+        rejoinCooldown = getConfig().getInt("settings.rejoin-cooldown");
+        rejoinCooldownEnabled = getConfig().getBoolean("settings.rejoin-cooldown-enabled");
+        listActive = getConfig().getString("list.active", "active");
+        listKdr = getConfig().getString("list.kdr", "kdr");
+        listDefault = getConfig().getString("list.default", listKdr);
+        listSize = getConfig().getString("list.size", "size");
+        listName = getConfig().getString("list.name", "name");
+        listFounded = getConfig().getString("list.founded", "founded");
+        listAsc = getConfig().getString("list.asc", "asc");
+        listDesc = getConfig().getString("list.desc", "desc");
         serverName = getConfig().getString("settings.server-name");
         chatTags = getConfig().getBoolean("settings.display-chat-tags");
         rivalLimitPercent = getConfig().getInt("settings.rival-limit-percent");
@@ -655,8 +675,48 @@ public final class SettingsManager {
     public boolean isRequireVerification() {
         return requireVerification;
     }
+    
+    public boolean isRejoinCooldown() {
+    	return rejoinCooldownEnabled;
+    }
+    
+    public int getRejoinCooldown() {
+    	return rejoinCooldown;
+    }
+    
+    public String getListDefault() {
+		return listDefault;
+	}
 
-    /**
+	public String getListSize() {
+		return listSize;
+	}
+
+	public String getListKdr() {
+		return listKdr;
+	}
+
+	public String getListName() {
+		return listName;
+	}
+
+	public String getListFounded() {
+		return listFounded;
+	}
+
+	public String getListActive() {
+		return listActive;
+	}
+
+	public String getListAsc() {
+		return listAsc;
+	}
+
+	public String getListDesc() {
+		return listDesc;
+	}
+
+	/**
      * @return the bannedPlayers
      */
     public List<String> getBannedPlayers() {

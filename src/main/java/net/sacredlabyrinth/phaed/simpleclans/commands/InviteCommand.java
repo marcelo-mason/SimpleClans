@@ -1,11 +1,17 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+import java.text.MessageFormat;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
+import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+import net.sacredlabyrinth.phaed.simpleclans.Clan;
+import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 /**
  * @author phaed
@@ -65,12 +71,26 @@ public class InviteCommand {
             return;
         }
 
-        ClanPlayer cpInv = plugin.getClanManager().getClanPlayer(invited);
+        ClanPlayer cpInv = plugin.getClanManager().getAnyClanPlayer(invited.getUniqueId());
 
         if (cpInv != null) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.already.member.of.another.clan"));
-            return;
+        	if (cpInv.getClan() != null) {
+        		ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.already.member.of.another.clan"));
+        		return;
+        	}
+        	if (plugin.getSettingsManager().isRejoinCooldown()) {
+	        	Long resign = cpInv.getResignTime(clan.getTag());
+	        	if (resign != null) {
+	        		long timePassed = Instant.ofEpochMilli(resign).until(Instant.now(), ChronoUnit.MINUTES);
+	        		int cooldown = plugin.getSettingsManager().getRejoinCooldown();
+	        		if (timePassed < cooldown) {
+	        			ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("the.player.must.wait.0.before.joining.your.clan.again"), cooldown - timePassed));
+	        			return;
+	        		}
+	        	}
+        	}
         }
+        
         if (!plugin.getClanManager().purchaseInvite(player)) {
             return;
         }
@@ -78,7 +98,7 @@ public class InviteCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.clan.members.reached.limit"));
             return;
         }
-
+        
         plugin.getRequestManager().addInviteRequest(cp, invited.getName(), clan);
         ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.asked.to.join"), Helper.capitalize(invited.getName()), clan.getName()));
     }

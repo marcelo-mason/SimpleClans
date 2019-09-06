@@ -1,13 +1,15 @@
 package net.sacredlabyrinth.phaed.simpleclans.tasks;
 
 import java.text.MessageFormat;
-import net.md_5.bungee.api.ChatColor;
+
+import org.bukkit.ChatColor;
+import org.bukkit.scheduler.BukkitRunnable;
+
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import org.bukkit.scheduler.BukkitRunnable;
 
 /**
  *
@@ -35,7 +37,8 @@ public class CollectFeeTask extends BukkitRunnable {
             final double memberFee = clan.getMemberFee();
             
             if (clan.isMemberFeeEnabled() && memberFee > 0) {
-                for (ClanPlayer cp : clan.getNonLeaders()) {
+                for (ClanPlayer cp : clan.getFeePayers()) {
+                	
                     final boolean success = plugin.getPermissionsManager().playerChargeMoney(cp.getName(), memberFee);
                     new BukkitRunnable() {
                         @Override
