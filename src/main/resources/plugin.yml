@@ -2,6 +2,7 @@ name: SimpleClans
 main: net.sacredlabyrinth.phaed.simpleclans.SimpleClans
 version: ${project.version}
 softdepend: [VanishNoPacket, Permissions, PermissionsBukkit, Vault, PermissionsEx, mChat, mChatSuite]
+api-version: '1.13'
 permissions:
   simpleclans.admin.permissions:
     description: Can grant clans permissions
@@ -53,6 +54,8 @@ permissions:
     description: Can view his own clan's profile
   simpleclans.member.roster:
     description: Can view his own clan's member list
+  simpleclans.member.bypass-fee:
+    description: Can bypass the member fee
   simpleclans.member.lookup:
     description: Can view his own player info
   simpleclans.member.vitals:
