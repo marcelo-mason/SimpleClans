@@ -55,11 +55,13 @@ public class Helper {
      */
     @SuppressWarnings("unchecked")
 	public static Map<String, Long> resignTimesFromJson(String json) {
-    	try {
-			return (Map<String, Long>) new JSONParser().parse(json);
-		} catch (ParseException e) {
-			e.printStackTrace();
-		}
+    	if (json != null) {
+	    	try {
+				return (Map<String, Long>) new JSONParser().parse(json);
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}	
+    	}
     	return null;
     }
     
