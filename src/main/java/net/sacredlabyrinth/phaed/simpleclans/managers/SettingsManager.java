@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+
 import org.bukkit.configuration.file.FileConfiguration;
 
 import java.io.File;
@@ -174,6 +175,10 @@ public final class SettingsManager {
     private boolean forceCommandPriority;
     private int maxAsksPerRequest;
     private int maxMembers;
+    private boolean maxKillsPerVictimEnabled;
+    private int maxKillsPerVictim;
+    private boolean delayBetweenKillsEnabled;
+    private int delayBetweenKills;
 
     /**
      *
@@ -360,7 +365,11 @@ public final class SettingsManager {
         useThreads = getConfig().getBoolean("performance.use-threads");
         useBungeeCord = getConfig().getBoolean("performance.use-bungeecord");
         maxMembers = getConfig().getInt("clan.max-members");
-
+        maxKillsPerVictim = getConfig().getInt("kdr-grinding-prevention.max-kills-per-victim");
+        maxKillsPerVictimEnabled = getConfig().getBoolean("kdr-grinding-prevention.enable-max-kills");
+        delayBetweenKills = getConfig().getInt("kdr-grinding-prevention.delay-between-kills");
+        delayBetweenKillsEnabled = getConfig().getBoolean("kdr-grinding-prevention.enable-kill-delay");
+        
         // migrate from old way of adding ports
         if (database.contains(":")) {
             String[] strings = database.split(":");
@@ -378,6 +387,42 @@ public final class SettingsManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    /**
+     * Returns the delay between kills
+     * 
+     * @return
+     */
+    public int getDelayBetweenKills() {
+    	return delayBetweenKills;
+    }
+    
+    /**
+     * Checks if the delay between kills is enabled
+     * 
+     * @return
+     */
+    public boolean isDelayBetweenKills() {
+    	return delayBetweenKillsEnabled;
+    }
+    
+    /**
+     * Returns the max number of kills per victim
+     * 
+     * @return
+     */
+    public int getMaxKillsPerVictim() {
+    	return maxKillsPerVictim;
+    }
+    
+    /**
+     * Checks if there is a max number of kills per victim
+     * 
+     * @return
+     */
+    public boolean isMaxKillsPerVictim() {
+    	return maxKillsPerVictimEnabled;
     }
 
     /**
@@ -565,7 +610,7 @@ public final class SettingsManager {
 
         return false;
     }
-
+    
     /**
      * Check whether a player is banned
      *
@@ -585,7 +630,7 @@ public final class SettingsManager {
 
         return false;
     }
-
+    
     /**
      * Add a player to the banned list
      *

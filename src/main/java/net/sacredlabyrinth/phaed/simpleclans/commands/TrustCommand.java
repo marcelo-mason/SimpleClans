@@ -5,10 +5,13 @@ import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.util.UUID;
 
 /**
  * @author phaed
@@ -49,13 +52,12 @@ public class TrustCommand {
             return;
         }
 
-        String trusted = arg[0];
-
+        UUID trusted = UUIDMigration.getForcedPlayerUUID(arg[0]);
         if (trusted == null) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
             return;
         }
-        if (trusted.equals(player.getName())) {
+        if (trusted.equals(player.getUniqueId())) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.trust.yourself"));
             return;
         }
@@ -80,7 +82,7 @@ public class TrustCommand {
             return;
         }
 
-        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.trusted.status.by"), Helper.capitalize(trusted), player.getName()));
+        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.trusted.status.by"), Helper.capitalize(arg[0]), player.getName()));
         tcp.setTrusted(true);
         plugin.getStorageManager().updateClanPlayer(tcp);
     }

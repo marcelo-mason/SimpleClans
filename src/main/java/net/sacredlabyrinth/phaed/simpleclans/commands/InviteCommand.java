@@ -66,7 +66,7 @@ public class InviteCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.invite.yourself"));
             return;
         }
-        if (plugin.getSettingsManager().isBanned(player.getName())) {
+        if (plugin.getSettingsManager().isBanned(player.getUniqueId())) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.banned.from.using.clan.commands"));
             return;
         }

@@ -36,38 +36,24 @@ public class BanCommand {
             return;
         }
 
-        String banned = arg[0];
-
-        if (SimpleClans.getInstance().hasUUID()) {
-            UUID PlayerUniqueId = UUIDMigration.getForcedPlayerUUID(banned);
-            if (plugin.getSettingsManager().isBanned(PlayerUniqueId)) {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.already.banned"));
-                return;
-            }
-
-            Player pl = SimpleClans.getInstance().getServer().getPlayer(PlayerUniqueId);
-
-            if (pl != null) {
-                ChatBlock.sendMessage(pl, ChatColor.AQUA + plugin.getLang("you.banned"));
-            }
-
-            plugin.getClanManager().ban(banned);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("player.added.to.banned.list"));
-        } else {
-            if (plugin.getSettingsManager().isBanned(banned)) {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.already.banned"));
-                return;
-            }
-
-            Player pl = SimpleClans.getInstance().getServer().getPlayerExact(banned);
-
-            if (pl != null) {
-                ChatBlock.sendMessage(pl, ChatColor.AQUA + plugin.getLang("you.banned"));
-            }
-
-            plugin.getClanManager().ban(banned);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("player.added.to.banned.list"));
+		UUID uuid = UUIDMigration.getForcedPlayerUUID(arg[0]);
+		if (uuid == null) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
+            return;
         }
+		
+		if (plugin.getSettingsManager().isBanned(uuid)) {
+			ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.already.banned"));
+			return;
+		}
 
+		Player pl = SimpleClans.getInstance().getServer().getPlayer(uuid);
+
+		if (pl != null) {
+			ChatBlock.sendMessage(pl, ChatColor.AQUA + plugin.getLang("you.banned"));
+		}
+
+		plugin.getClanManager().ban(uuid);
+		ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("player.added.to.banned.list"));
     }
 }

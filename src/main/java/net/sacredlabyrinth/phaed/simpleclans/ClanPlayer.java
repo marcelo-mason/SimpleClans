@@ -119,15 +119,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     }
 
     @Override
-    public int compareTo(ClanPlayer other)
-    {
-        if (SimpleClans.getInstance().hasUUID())
-        {
-            return this.getUniqueId().compareTo(other.getUniqueId());
-        } else
-        {
-            return this.getName().compareToIgnoreCase(other.getName());
-        }
+    public int compareTo(ClanPlayer other) {
+    	return this.getUniqueId().compareTo(other.getUniqueId());
     }
 
     @Override
@@ -332,6 +325,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     /**
      * Adds one rival kill to this player (does not update clanplayer to db)
      */
+    @Deprecated
     public void addRivalKill()
     {
         setRivalKills(getRivalKills() + 1);
@@ -360,6 +354,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     /**
      * Adds one civilian kill to this player (does not update clanplayer to db)
      */
+    @Deprecated
     public void addCivilianKill()
     {
         setCivilianKills(getCivilianKills() + 1);
@@ -388,9 +383,26 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     /**
      * Adds one civilian kill to this player (does not update clanplayer to db)
      */
+    @Deprecated
     public void addNeutralKill()
     {
         setNeutralKills(getNeutralKills() + 1);
+    }
+    
+    /**
+     * Adds one kill to this player (does not update to db)
+     */
+    public void addKill(Kill.Type type) {
+    	switch (type) {
+    		case CIVILIAN:
+    			civilianKills++;
+    			break;
+    		case NEUTRAL:
+    			neutralKills++;
+    			break;
+    		case RIVAL:
+    			rivalKills++;
+    	}
     }
 
     /**
@@ -756,7 +768,8 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      *
      * @return the flags
      */
-    public String getFlags()
+    @SuppressWarnings("unchecked")
+	public String getFlags()
     {
         JSONObject json = new JSONObject();
 

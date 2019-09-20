@@ -1,9 +1,13 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.text.MessageFormat;
+import java.util.UUID;
+
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -30,8 +34,9 @@ public class PurgeCommand {
         }
 
         if (args.length == 1) {
-            ClanPlayer cp = plugin.getClanManager().getClanPlayer(args[0]);
-            if (cp == null) {
+            UUID uuid = UUIDMigration.getForcedPlayerUUID(args[0]);
+            ClanPlayer cp = plugin.getClanManager().getClanPlayer(uuid);
+            if (uuid == null || cp == null) {
                 ChatBlock.sendMessage(sender, ChatColor.RED + plugin.getLang("no.player.matched"));
                 return;
             }

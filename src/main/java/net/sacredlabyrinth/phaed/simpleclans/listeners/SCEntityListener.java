@@ -2,7 +2,11 @@ package net.sacredlabyrinth.phaed.simpleclans.listeners;
 
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.Kill;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager.DataCallback;
+import net.sacredlabyrinth.phaed.simpleclans.Kill.Type;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.*;
 import org.bukkit.event.EventHandler;
@@ -15,6 +19,8 @@ import org.bukkit.event.entity.EntityTargetLivingEntityEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.util.Map;
 import java.util.logging.Level;
 
 /**
@@ -91,65 +97,88 @@ public class SCEntityListener implements Listener
             		}
             	}
             	            
-                ClanPlayer acp;
-                ClanPlayer vcp;
-                if (SimpleClans.getInstance().hasUUID())
-                {
-                    acp = plugin.getClanManager().getCreateClanPlayer(attacker.getUniqueId());
-                    vcp = plugin.getClanManager().getCreateClanPlayer(victim.getUniqueId());
-                } else
-                {
-                    acp = plugin.getClanManager().getCreateClanPlayer(attacker.getName());
-                    vcp = plugin.getClanManager().getCreateClanPlayer(victim.getName());
-                }
+                ClanPlayer attackerCp = plugin.getClanManager().getCreateClanPlayer(attacker.getUniqueId());
+                ClanPlayer victimCp = plugin.getClanManager().getCreateClanPlayer(victim.getUniqueId());
 
                 double reward = 0;
                 double multipier = plugin.getSettingsManager().getKDRMultipliesPerKill();
-                float kdr = acp.getKDR();
+                float kdr = attackerCp.getKDR();
 
-                if (vcp.getClan() == null || acp.getClan() == null || !vcp.getClan().isVerified() || !acp.getClan().isVerified())
+                if (victimCp.getClan() == null || attackerCp.getClan() == null || !victimCp.getClan().isVerified() || !attackerCp.getClan().isVerified())
                 {
-                    acp.addCivilianKill();
-                    //TODO: Is this slowing down the server?
-                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, "", "c");
-                } else if (acp.getClan().isRival(vcp.getTag()))
+                    addKill(Type.CIVILIAN, attackerCp, victimCp);
+                } else if (attackerCp.getClan().isRival(victimCp.getTag()))
                 {
-                    if (acp.getClan().isWarring(vcp.getClan()))
+                    if (attackerCp.getClan().isWarring(victimCp.getClan()))
                     {
                         reward = (double) kdr * multipier * 4;
                     } else
                     {
                         reward = (double) kdr * multipier * 2;
                     }
-                    acp.addRivalKill();
-                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "r");
-                } else if (acp.getClan().isAlly(vcp.getTag()))
+                    addKill(Type.RIVAL, attackerCp, victimCp);
+                } else if (attackerCp.getClan().isAlly(victimCp.getTag()))
                 {
                     reward = (double) kdr * multipier * -1;
                 } else
                 {
                     reward = (double) kdr * multipier;
-                    acp.addNeutralKill();
-                    plugin.getStorageManager().insertKill(attacker, acp.getTag(), victim, vcp.getTag(), "n");
+                    addKill(Type.NEUTRAL, attackerCp, victimCp);
                 }
 
                 if (reward != 0 && plugin.getSettingsManager().isMoneyPerKill())
                 {
-                    for (ClanPlayer cp : acp.getClan().getOnlineMembers())
+                    for (ClanPlayer cp : attackerCp.getClan().getOnlineMembers())
                     {
-                        double money = Math.round((reward / acp.getClan().getOnlineMembers().size()) * 100D) / 100D;
+                        double money = Math.round((reward / attackerCp.getClan().getOnlineMembers().size()) * 100D) / 100D;
                         cp.toPlayer().sendMessage(ChatColor.AQUA + MessageFormat.format(plugin.getLang("player.got.money"), money, victim.getName(), kdr));
-                        plugin.getPermissionsManager().playerGrantMoney(cp.getName(), money);
+                        plugin.getPermissionsManager().playerGrantMoney(cp.toPlayer(), money);
                     }
                 }
 
                 // record death for victim
-                vcp.addDeath();
-                plugin.getStorageManager().updateClanPlayerAsync(vcp);
+                victimCp.addDeath();
+                plugin.getStorageManager().updateClanPlayerAsync(victimCp);
             }
         }
     }
 
+    private void addKill(Kill.Type type, ClanPlayer attacker, ClanPlayer victim) {
+    	if (type == null || attacker == null || victim == null) {
+    		return;
+    	}
+    	final Kill kill = new Kill(attacker, victim, LocalDateTime.now());
+    	if (plugin.getSettingsManager().isDelayBetweenKills() && plugin.getClanManager().isKillBeforeDelay(kill)) {
+    		return;
+    	}
+    	
+    	if (plugin.getSettingsManager().isMaxKillsPerVictim()) {
+    		plugin.getStorageManager().getKillsPerPlayer(attacker.getName(), new DataCallback<Map<String,Integer>>() {
+				
+				@Override
+				public void onResultReady(Map<String, Integer> data) {
+		    		final int max = plugin.getSettingsManager().getMaxKillsPerVictim();
+		    		Integer kills = data.get(kill.getVictim().getName());
+		    		if (kills != null) {
+		    			if (kills.intValue() < max) {
+		    				saveKill(kill, type);
+		    			}
+		    		}
+				}
+			});
+    		return;
+    	}
+    	saveKill(kill, type);
+    }
+
+	private void saveKill(Kill kill, Kill.Type type) {
+		plugin.getClanManager().addKill(kill);
+    	ClanPlayer killer = kill.getKiller();
+    	ClanPlayer victim = kill.getVictim();
+		killer.addKill(type);
+		plugin.getStorageManager().insertKill(killer.toPlayer(), killer.getTag(), victim.toPlayer(), victim.getTag(), type.getShortname());
+	}
+    
     /**
      * @param event
      */

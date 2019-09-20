@@ -340,11 +340,7 @@ public final class RequestManager {
 
                 if (denies.isEmpty()) {
                     clan.addBb(plugin.getLang("leaders"), ChatColor.AQUA + MessageFormat.format(plugin.getLang("demoted.back.to.member"), Helper.capitalize(demoted)));
-                    if (SimpleClans.getInstance().hasUUID()) {
-                        clan.demote(demotedUniqueId);
-                    } else {
-                        clan.demote(demoted);
-                    }
+                    clan.demote(demotedUniqueId);
                 } else {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
                     clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("denied.demotion"), deniers, demoted));
@@ -359,11 +355,7 @@ public final class RequestManager {
                 }
                 if (denies.isEmpty()) {
                     clan.addBb(plugin.getLang("leaders"), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted)));
-                    if (SimpleClans.getInstance().hasUUID()) {
-                        clan.promote(promotedUniqueId);
-                    } else {
-                        clan.promote(promoted);
-                    }
+                    clan.promote(promotedUniqueId);
                 } else {
                     String deniers = Helper.capitalize(Helper.toMessage(Helper.toArray(denies), ", "));
                     clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("denied.the.promotion"), deniers, promoted));

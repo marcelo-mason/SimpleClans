@@ -657,11 +657,7 @@ public class Helper {
     }
 
     public static Player getPlayer(String playerName) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            return SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(playerName));
-        }
-
-        return SimpleClans.getInstance().getServer().getPlayer(playerName);
+    	return SimpleClans.getInstance().getServer().getPlayer(UUIDMigration.getForcedPlayerUUID(playerName));
     }
 
     /**

@@ -5,10 +5,13 @@ import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
+import java.util.UUID;
 
 /**
  * @author phaed
@@ -49,26 +52,25 @@ public class UntrustCommand {
             return;
         }
 
-        String trusted = arg[0];
-
-        if (trusted == null) {
+        UUID trustedId = UUIDMigration.getForcedPlayerUUID(arg[0]);
+        if (trustedId == null) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
             return;
         }
-        if (trusted.equals(player.getName())) {
+        if (trustedId.equals(player.getUniqueId())) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.untrust.yourself"));
             return;
         }
-        if (!clan.isMember(trusted)) {
+        if (!clan.isMember(trustedId)) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.not.a.member.of.your.clan"));
             return;
         }
-        if (clan.isLeader(trusted)) {
+        if (clan.isLeader(trustedId)) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("leaders.cannot.be.untrusted"));
             return;
         }
 
-        ClanPlayer tcp = plugin.getClanManager().getClanPlayer(trusted);
+        ClanPlayer tcp = plugin.getClanManager().getClanPlayer(trustedId);
 
         if (tcp == null) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
@@ -79,7 +81,7 @@ public class UntrustCommand {
             return;
         }
 
-        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.untrusted.status.by"), Helper.capitalize(trusted), player.getName()));
+        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.untrusted.status.by"), Helper.capitalize(arg[0]), player.getName()));
         tcp.setTrusted(false);
         plugin.getStorageManager().updateClanPlayer(tcp);
     }

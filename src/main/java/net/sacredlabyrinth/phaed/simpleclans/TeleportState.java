@@ -7,7 +7,6 @@ import java.util.UUID;
 
 public class TeleportState {
     private UUID playerUniqueId;
-    private String playerName;
     private Location playerLocation;
     private Location destination;
     private int counter;
@@ -17,7 +16,6 @@ public class TeleportState {
     public TeleportState(Player player, Location dest, String clanName) {
         this.destination = dest;
         this.playerLocation = player.getLocation();
-        this.playerName = player.getName();
         this.clanName = clanName;
         this.counter = SimpleClans.getInstance().getSettingsManager().getWaitSecs();
         this.playerUniqueId = player.getUniqueId();
@@ -50,11 +48,7 @@ public class TeleportState {
      * @return
      */
     public Player getPlayer() {
-        if (SimpleClans.getInstance().hasUUID()) {
-            return SimpleClans.getInstance().getServer().getPlayer(this.playerUniqueId);
-        } else {
-            return SimpleClans.getInstance().getServer().getPlayer(this.playerName);
-        }
+    	return SimpleClans.getInstance().getServer().getPlayer(this.playerUniqueId);
     }
 
     /**

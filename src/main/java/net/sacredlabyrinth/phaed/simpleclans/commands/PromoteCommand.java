@@ -1,7 +1,6 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
@@ -70,11 +69,7 @@ public class PromoteCommand {
         }
 
         clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted.getName())));
-        if (SimpleClans.getInstance().hasUUID()) {
-            clan.promote(promoted.getUniqueId());
-        } else {
-            clan.promote(promoted.getName());
-        }
+        clan.promote(promoted.getUniqueId());
     }
 }
 

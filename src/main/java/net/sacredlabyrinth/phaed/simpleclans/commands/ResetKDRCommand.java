@@ -1,10 +1,12 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import java.text.MessageFormat;
+import java.util.UUID;
+
 import net.sacredlabyrinth.phaed.simpleclans.*;
-import org.bukkit.Bukkit;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+
 import org.bukkit.ChatColor;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 
 /**
@@ -52,18 +54,18 @@ public class ResetKDRCommand {
                 }
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.have.reseted.kdr.of.all.players"));
             } else {                
-                OfflinePlayer toReset = Bukkit.getOfflinePlayer(arg[0]);
-                if (toReset == null) {
+            	UUID uuid = UUIDMigration.getForcedPlayerUUID(arg[0]);
+                if (uuid == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
                     return;
                 }
-                ClanPlayer trcp = plugin.getClanManager().getClanPlayer(toReset);
+                ClanPlayer trcp = plugin.getClanManager().getClanPlayer(uuid);
                 if (trcp == null) {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.data.found"));
                     return;
                 }
                 plugin.getClanManager().resetKdr(trcp);
-                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("you.have.reseted.0.kdr"), toReset.getName()));
+                ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("you.have.reseted.0.kdr"), trcp.getName()));
             }
         } else {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));

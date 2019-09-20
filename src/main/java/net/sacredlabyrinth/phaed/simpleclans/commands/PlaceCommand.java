@@ -59,12 +59,7 @@ public class PlaceCommand {
                 oldClan.disband();
             } else {
                 oldClan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("0.has.resigned"), Helper.capitalize(player.getName())));
-
-                if (SimpleClans.getInstance().hasUUID()) {
-                    oldClan.removePlayerFromClan(player.getUniqueId());
-                } else {
-                    oldClan.removePlayerFromClan(player.getName());
-                }
+                oldClan.removePlayerFromClan(player.getUniqueId());
             }
         }
 

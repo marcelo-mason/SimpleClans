@@ -297,11 +297,7 @@ public class Clan implements Serializable, Comparable<Clan> {
      * @return confirmation
      */
     public boolean isMember(Player player) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            return this.members.contains(player.getUniqueId().toString());
-        } else {
-            return this.members.contains(player.getName().toLowerCase());
-        }
+    	return this.members.contains(player.getUniqueId().toString());
     }
 
     /**
@@ -417,11 +413,7 @@ public class Clan implements Serializable, Comparable<Clan> {
      * @param msg
      */
     public void addBb(String msg) {
-        while (bb.size() > SimpleClans.getInstance().getSettingsManager().getBbSize()) {
-            bb.remove(0);
-        }
-
-        bb.add(System.currentTimeMillis() + "_" + msg);
+        addBbWithoutSaving(msg);
         SimpleClans.getInstance().getStorageManager().updateClan(this);
     }
     
@@ -465,18 +457,15 @@ public class Clan implements Serializable, Comparable<Clan> {
      * @param cp
      */
     public void importMember(ClanPlayer cp) {
-        String NameOrUUID;
-        if (SimpleClans.getInstance().hasUUID()) {
-            if (cp.getUniqueId() != null) {
-                NameOrUUID = cp.getUniqueId().toString();
-            } else {
-                return;
-            }
-        } else {
-            NameOrUUID = cp.getCleanName();
-        }
-        if (!this.members.contains(NameOrUUID)) {
-            this.members.add(NameOrUUID);
+        String uuid;
+		if (cp.getUniqueId() != null) {
+			uuid = cp.getUniqueId().toString();
+		} else {
+			return;
+		}
+     
+        if (!this.members.contains(uuid)) {
+            this.members.add(uuid);
         }
     }
 
@@ -719,12 +708,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         String out = "";
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -744,11 +728,7 @@ public class Clan implements Serializable, Comparable<Clan> {
      * @return the leaders
      */
     public boolean isLeader(Player player) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            return isLeader(player.getUniqueId());
-        } else {
-            return isLeader(player.getName());
-        }
+    	return isLeader(player.getUniqueId());
     }
 
     /**
@@ -797,14 +777,8 @@ public class Clan implements Serializable, Comparable<Clan> {
     	Set<ClanPlayer> feePayers = new HashSet<>();
     	
     	getNonLeaders().forEach(cp -> {
-    		OfflinePlayer op;
-    		if (SimpleClans.getInstance().hasUUID()) {
-    			op = Bukkit.getOfflinePlayer(cp.getUniqueId());
-    		} else {
-    			op = Bukkit.getOfflinePlayer(cp.getName());
-    		}
-
-        	if (!SimpleClans.getInstance().getPermissionsManager().has(null, op, "simpleclans.member.bypass-fee")) {
+    		OfflinePlayer op=  Bukkit.getOfflinePlayer(cp.getUniqueId());
+    		if (!SimpleClans.getInstance().getPermissionsManager().has(null, op, "simpleclans.member.bypass-fee")) {
         		feePayers.add(cp);
         	}
     	});
@@ -821,12 +795,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         List<ClanPlayer> out = new ArrayList<>();
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -845,12 +814,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         List<ClanPlayer> out = new ArrayList<>();
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -871,12 +835,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         List<ClanPlayer> out = new ArrayList<>();
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -898,12 +857,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         List<ClanPlayer> out = new ArrayList<>();
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -927,12 +881,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         List<ClanPlayer> out = new ArrayList<>();
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -978,12 +927,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         int totalDeaths = 0;
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -1012,12 +956,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         }
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -1041,12 +980,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         }
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -1070,12 +1004,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         }
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -1099,12 +1028,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         }
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -1128,12 +1052,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         }
 
         for (String member : members) {
-            ClanPlayer cp;
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
-            } else {
-                cp = SimpleClans.getInstance().getClanManager().getClanPlayer(member.toLowerCase());
-            }
+            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(UUID.fromString(member));
             if (cp == null) {
                 continue;
             }
@@ -1177,13 +1096,9 @@ public class Clan implements Serializable, Comparable<Clan> {
 
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
+        SimpleClans.getInstance().getPermissionsManager().addPlayerPermissions(cp);
 
-        Player player;
-        if (SimpleClans.getInstance().hasUUID()) {
-            player = SimpleClans.getInstance().getServer().getPlayer(cp.getUniqueId());
-        } else {
-            player = SimpleClans.getInstance().getServer().getPlayerExact(cp.getName());
-        }
+        Player player = SimpleClans.getInstance().getServer().getPlayer(cp.getUniqueId());
 
         if (player != null) {
             SimpleClans.getInstance().getClanManager().updateDisplayName(player);
@@ -1409,17 +1324,11 @@ public class Clan implements Serializable, Comparable<Clan> {
      * @return
      */
     public boolean isAnyOnline() {
-        for (String member : members) {
-            if (SimpleClans.getInstance().hasUUID()) {
-                if (Helper.isOnline(UUID.fromString(member))) {
-                    return true;
-                }
-            } else {
-                if (Helper.isOnline(member)) {
-                    return true;
-                }
-            }
-        }
+		for (String member : members) {
+			if (Helper.isOnline(UUID.fromString(member))) {
+				return true;
+			}
+		}
 
         return false;
     }
@@ -1459,17 +1368,11 @@ public class Clan implements Serializable, Comparable<Clan> {
     public boolean allLeadersOnline() {
         List<ClanPlayer> leaders = getLeaders();
 
-        for (ClanPlayer leader : leaders) {
-            if (SimpleClans.getInstance().hasUUID()) {
-                if (!Helper.isOnline(leader.getUniqueId())) {
-                    return false;
-                }
-            } else {
-                if (!Helper.isOnline(leader.getName())) {
-                    return false;
-                }
-            }
-        }
+		for (ClanPlayer leader : leaders) {
+			if (!Helper.isOnline(leader.getUniqueId())) {
+				return false;
+			}
+		}
 
         return true;
     }
@@ -1802,7 +1705,8 @@ public class Clan implements Serializable, Comparable<Clan> {
      *
      * @return the flags
      */
-    public String getFlags() {
+    @SuppressWarnings("unchecked")
+	public String getFlags() {
         JSONObject json = new JSONObject();
 
         // writing the list of flags to json
@@ -1872,8 +1776,8 @@ public class Clan implements Serializable, Comparable<Clan> {
     }
 
     public void validateWarring() {
-        for (Iterator iter = warringClans.keySet().iterator(); iter.hasNext(); ) {
-            String clanName = (String) iter.next();
+        for (Iterator<String> iter = warringClans.keySet().iterator(); iter.hasNext(); ) {
+            String clanName = iter.next();
 
             Clan clan = SimpleClans.getInstance().getClanManager().getClan(clanName);
 

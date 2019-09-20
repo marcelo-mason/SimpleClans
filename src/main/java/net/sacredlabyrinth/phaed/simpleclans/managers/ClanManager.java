@@ -10,6 +10,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 
 import java.text.MessageFormat;
+import java.time.LocalDateTime;
+import java.time.temporal.ChronoUnit;
 import java.util.*;
 import net.sacredlabyrinth.phaed.simpleclans.events.ChatEvent;
 import org.bukkit.Bukkit;
@@ -24,6 +26,7 @@ public final class ClanManager {
     private SimpleClans plugin;
     private HashMap<String, Clan> clans = new HashMap<>();
     private HashMap<String, ClanPlayer> clanPlayers = new HashMap<>();
+    private HashMap<ClanPlayer, List<Kill>> kills = new HashMap<>();
 
     /**
      *
@@ -38,8 +41,76 @@ public final class ClanManager {
     public void cleanData() {
         clans.clear();
         clanPlayers.clear();
+        kills.clear();
     }
 
+    /**
+     * Adds a kill to the memory
+     * 
+     * @param kill
+     */
+    public void addKill(Kill kill) {
+    	if (kill == null) {
+    		return;
+    	}
+
+    	List<Kill> list = kills.get(kill.getKiller());
+    	if (list == null) {
+    		list = new ArrayList<>();
+    		kills.put(kill.getKiller(), list);
+    	}
+    	
+    	Iterator<Kill> iterator = list.iterator();
+    	while (iterator.hasNext()) {
+    		Kill oldKill = iterator.next();
+    		if (oldKill.getVictim().equals(kill.getKiller())) {
+    			iterator.remove();
+    			continue;
+    		}
+    		
+    		//cleaning
+    		final int delay = plugin.getSettingsManager().getDelayBetweenKills();
+			long timePassed = oldKill.getTime().until(LocalDateTime.now(), ChronoUnit.MINUTES);
+			if (timePassed >= delay) {
+				iterator.remove();
+			}
+    	}
+    	
+    	list.add(kill);
+    }
+    
+    /**
+     * Checks if this kill respects the delay
+     * 
+     * @param kill
+     * @return
+     */
+	public boolean isKillBeforeDelay(Kill kill) {
+		if (kill == null) {
+			return false;
+		}
+		List<Kill> list = kills.get(kill.getKiller());
+		if (list == null) {
+			return false;
+		}
+
+		Iterator<Kill> iterator = list.iterator();
+		while (iterator.hasNext()) {
+
+			Kill oldKill = iterator.next();
+			if (oldKill.getVictim().equals(kill.getVictim())) {
+
+				final int delay = plugin.getSettingsManager().getDelayBetweenKills();
+				long timePassed = oldKill.getTime().until(kill.getTime(), ChronoUnit.MINUTES);
+				if (timePassed < delay) {
+					return true;
+				}
+			}
+		}
+
+		return false;
+	}
+    
     /**
      * Import a clan into the in-memory store
      *
@@ -55,13 +126,9 @@ public final class ClanManager {
      * @param cp
      */
     public void importClanPlayer(ClanPlayer cp) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            if (cp.getUniqueId() != null) {
-                this.clanPlayers.put(cp.getUniqueId().toString(), cp);
-            }
-        } else {
-            this.clanPlayers.put(cp.getCleanName(), cp);
-        }
+		if (cp.getUniqueId() != null) {
+			this.clanPlayers.put(cp.getUniqueId().toString(), cp);
+		}
     }
 
     /**
@@ -72,12 +139,7 @@ public final class ClanManager {
      * @param name
      */
     public void createClan(Player player, String colorTag, String name) {
-        ClanPlayer cp;
-        if (SimpleClans.getInstance().hasUUID()) {
-            cp = getCreateClanPlayer(player.getUniqueId());
-        } else {
-            cp = getCreateClanPlayer(player.getName());
-        }
+        ClanPlayer cp = getCreateClanPlayer(player.getUniqueId());
 
         boolean verified = !plugin.getSettingsManager().isRequireVerification() || plugin.getPermissionsManager().has(player, "simpleclans.mod.verify");
 
@@ -113,14 +175,10 @@ public final class ClanManager {
      */
     public void deleteClanPlayer(ClanPlayer cp) {
         Clan clan = cp.getClan();
-        if (clan != null) {
-            if (SimpleClans.getInstance().hasUUID()) {
-                clan.removePlayerFromClan(cp.getUniqueId());
-            } else {
-                clan.removePlayerFromClan(cp.getName());
-            }
-        }
-        clanPlayers.remove(cp.getCleanName());
+		if (clan != null) {
+			clan.removePlayerFromClan(cp.getUniqueId());
+		}
+        clanPlayers.remove(cp.getUniqueId().toString());
         plugin.getStorageManager().deleteClanPlayer(cp);
     }
 
@@ -221,11 +279,7 @@ public final class ClanManager {
      */
     public ClanPlayer getClanPlayerJoinEvent(Player player) {
         SimpleClans.getInstance().getStorageManager().importFromDatabaseOnePlayer(player);
-        if (SimpleClans.getInstance().hasUUID()) {
-            return getClanPlayer(player.getUniqueId());
-        } else {
-            return getClanPlayer(player.getName());
-        }
+        return getClanPlayer(player.getUniqueId());
     }
 
     /**
@@ -236,11 +290,7 @@ public final class ClanManager {
      * @return
      */
     public ClanPlayer getClanPlayer(OfflinePlayer player) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            return getClanPlayer(player.getUniqueId());
-        } else {
-            return getClanPlayer(player.getName());
-        }
+    	return getClanPlayer(player.getUniqueId());
     }
 
     /**
@@ -387,16 +437,12 @@ public final class ClanManager {
      * @return
      */
     public ClanPlayer getCreateClanPlayerUUID(String playerDisplayName) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            UUID playerUniqueId = UUIDMigration.getForcedPlayerUUID(playerDisplayName);
-            if (playerUniqueId != null) {
-                return getCreateClanPlayer(playerUniqueId);
-            } else {
-                return null;
-            }
-        } else {
-            return getCreateClanPlayer(playerDisplayName);
-        }
+		UUID playerUniqueId = UUIDMigration.getForcedPlayerUUID(playerDisplayName);
+		if (playerUniqueId != null) {
+			return getCreateClanPlayer(playerUniqueId);
+		} else {
+			return null;
+		}
     }
 
     /**
@@ -496,9 +542,38 @@ public final class ClanManager {
         }
     }
 
+    
+    /**
+     * Bans a player from clan commands
+     * 
+     * @param uuid the player's uuid
+     */
+    public void ban(UUID uuid) {
+        ClanPlayer cp = getClanPlayer(uuid);
+        Clan clan = cp.getClan();
+
+        if (clan != null) {
+            if (clan.getSize() == 1) {
+                clan.disband();
+            } else {
+                cp.setClan(null);
+                cp.addPastClan(clan.getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
+                cp.setLeader(false);
+                cp.setJoinDate(0);
+                clan.removeMember(uuid);
+
+                plugin.getStorageManager().updateClanPlayer(cp);
+                plugin.getStorageManager().updateClan(clan);
+            }
+        }
+
+        plugin.getSettingsManager().addBanned(uuid);
+    }
+    
     /**
      * @param playerName
      */
+    @Deprecated
     public void ban(String playerName) {
         ClanPlayer cp = getClanPlayer(playerName);
         Clan clan = cp.getClan();
@@ -1370,15 +1445,9 @@ public final class ClanManager {
                 if (ally.isMutedAlly()) {
                     continue;
                 }
-                if (SimpleClans.getInstance().hasUUID()) {
-                    if (player.getUniqueId().equals(ally.getUniqueId())) {
-                        continue;
-                    }
-                } else {
-                    if (player.getName().equalsIgnoreCase(ally.getName())) {
-                        continue;
-                    }
-                }
+				if (player.getUniqueId().equals(ally.getUniqueId())) {
+					continue;
+				}
                 receivers.add(ally);
             }
 
@@ -1414,12 +1483,7 @@ public final class ClanManager {
      * @return boolean
      */
     public boolean processGlobalChat(Player player, String msg) {
-        ClanPlayer cp;
-        if (SimpleClans.getInstance().hasUUID()) {
-            cp = plugin.getClanManager().getClanPlayer(player.getUniqueId());
-        } else {
-            cp = plugin.getClanManager().getClanPlayer(player.getName());
-        }
+        ClanPlayer cp = plugin.getClanManager().getClanPlayer(player.getUniqueId());
 
         if (cp == null) {
             return false;

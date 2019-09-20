@@ -20,7 +20,7 @@ public class DenyCommandExecutor implements CommandExecutor {
     public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
         Player player = (Player) commandSender;
 
-        if (plugin.getSettingsManager().isBanned(player.getName())) {
+        if (plugin.getSettingsManager().isBanned(player.getUniqueId())) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
             return false;
         }
@@ -50,11 +50,8 @@ public class DenyCommandExecutor implements CommandExecutor {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.deny"));
                 return false;
             }
-            if (SimpleClans.getInstance().hasUUID()) {
-                cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
-            } else {
-                cp = plugin.getClanManager().getCreateClanPlayer(player.getName());
-            }
+            cp = plugin.getClanManager().getCreateClanPlayer(player.getUniqueId());
+            
             plugin.getRequestManager().deny(cp);
         }
 

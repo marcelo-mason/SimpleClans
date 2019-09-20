@@ -1,12 +1,13 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
+import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager.DataCallback;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.text.MessageFormat;
-import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
@@ -54,37 +55,49 @@ public class KillsCommand {
         if (arg.length == 1) {
             polledPlayerName = arg[0];
         }
+        
+        final String name = polledPlayerName;
+        
+        plugin.getStorageManager().getKillsPerPlayer(polledPlayerName, new DataCallback<Map<String, Integer>>() {
+			@Override
+			public void onResultReady(Map<String, Integer> data) {
+				
+				new BukkitRunnable() {
+					@Override
+					public void run() {
 
-        ChatBlock chatBlock = new ChatBlock();
-        chatBlock.setFlexibility(true, false);
-        chatBlock.setAlignment("l", "c");
-        chatBlock.addRow("  " + headColor + plugin.getLang("victim"), plugin.getLang("killcount"));
+				        ChatBlock chatBlock = new ChatBlock();
+				        chatBlock.setFlexibility(true, false);
+				        chatBlock.setAlignment("l", "c");
+				        chatBlock.addRow("  " + headColor + plugin.getLang("victim"), plugin.getLang("killcount"));				        
 
-        Map<String, Integer> killsPerPlayerUnordered = plugin.getStorageManager().getKillsPerPlayer(polledPlayerName);
+				        if (data.isEmpty()) {
+				            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nokillsfound"));
+				            return;
+				        }
 
-        if (killsPerPlayerUnordered.isEmpty()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nokillsfound"));
-            return;
-        }
+				        Map<String, Integer> killsPerPlayer = Helper.sortByValue(data);
 
-        Map<String, Integer> killsPerPlayer = Helper.sortByValue(killsPerPlayerUnordered);
+				        for (Entry<String, Integer> playerKills : killsPerPlayer.entrySet()) {
+				            int count = playerKills.getValue();
+				            chatBlock.addRow("  " + playerKills.getKey(), ChatColor.AQUA + "" + count);
+				        }
 
-        for (Entry<String, Integer> playerKills : killsPerPlayer.entrySet()) {
-            int count = playerKills.getValue();
-            chatBlock.addRow("  " + playerKills.getKey(), ChatColor.AQUA + "" + count);
-        }
+				        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(name) + subColor + " " + plugin.getLang("kills") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+				        ChatBlock.sendBlank(player);
 
-        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(polledPlayerName) + subColor + " " + plugin.getLang("kills") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
-        ChatBlock.sendBlank(player);
+				        boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
 
-        boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());
+				        if (more) {
+				            plugin.getStorageManager().addChatBlock(player, chatBlock);
+				            ChatBlock.sendBlank(player);
+				            ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
+				        }
 
-        if (more) {
-            plugin.getStorageManager().addChatBlock(player, chatBlock);
-            ChatBlock.sendBlank(player);
-            ChatBlock.sendMessage(player, headColor + MessageFormat.format(plugin.getLang("view.next.page"), plugin.getSettingsManager().getCommandMore()));
-        }
-
-        ChatBlock.sendBlank(player);
+				        ChatBlock.sendBlank(player);						
+					}
+				}.runTask(plugin);
+			}
+		});
     }
 }

@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.tasks;
 
 import java.text.MessageFormat;
 
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -38,8 +39,9 @@ public class CollectFeeTask extends BukkitRunnable {
             
             if (clan.isMemberFeeEnabled() && memberFee > 0) {
                 for (ClanPlayer cp : clan.getFeePayers()) {
-                	
-                    final boolean success = plugin.getPermissionsManager().playerChargeMoney(cp.getName(), memberFee);
+                	                	
+					final boolean success = plugin.getPermissionsManager()
+							.playerChargeMoney(Bukkit.getOfflinePlayer(cp.getUniqueId()), memberFee);
                     new BukkitRunnable() {
                         @Override
                         public void run() {
@@ -49,11 +51,7 @@ public class CollectFeeTask extends BukkitRunnable {
                                 clan.setBalance(clan.getBalance() + memberFee);
                                 plugin.getStorageManager().updateClanAsync(clan);
                             } else {
-                                if (plugin.hasUUID()) {
-                                    clan.removePlayerFromClan(cp.getUniqueId());
-                                } else {
-                                    clan.removePlayerFromClan(cp.getName());
-                                }
+                            	clan.removePlayerFromClan(cp.getUniqueId());
                                 clan.addBb(ChatColor.AQUA + 
                                         MessageFormat.format(plugin.getLang("bb.fee.player.kicked"), cp.getName()));
                             }

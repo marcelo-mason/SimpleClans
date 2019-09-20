@@ -165,7 +165,19 @@ public final class PermissionsManager {
      * @param money
      * @return
      */    
+    @Deprecated
     public boolean playerChargeMoney(String player, double money) {
+        return economy.withdrawPlayer(player, money).transactionSuccess();
+    }
+    
+    /**
+     * Charge a player some money
+     *
+     * @param player
+     * @param money
+     * @return
+     */    
+    public boolean playerChargeMoney(OfflinePlayer player, double money) {
         return economy.withdrawPlayer(player, money).transactionSuccess();
     }
 
@@ -177,7 +189,7 @@ public final class PermissionsManager {
      * @return
      */
     public boolean playerChargeMoney(Player player, double money) {
-        return economy.withdrawPlayer(player, money).transactionSuccess();
+    	return playerChargeMoney((OfflinePlayer) player, money);
     }
 
     /**

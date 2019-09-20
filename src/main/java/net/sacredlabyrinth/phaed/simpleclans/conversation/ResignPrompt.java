@@ -34,11 +34,8 @@ public class ResignPrompt extends StringPrompt {
             if (!clan.isLeader(player) || clan.getLeaders().size() > 1) {
                 clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("0.has.resigned"), Helper.capitalize(player.getName())));
                 cp.addResignTime(clan.getTag());
-                if (SimpleClans.getInstance().hasUUID()) {
-                    clan.removePlayerFromClan(player.getUniqueId());
-                } else {
-                    clan.removePlayerFromClan(player.getName());
-                }
+                clan.removePlayerFromClan(player.getUniqueId());
+                
                 return new MessagePromptImpl(ChatColor.AQUA + plugin.getLang("resign.success"));
             } else if (clan.isLeader(player) && clan.getLeaders().size() == 1) {
                 plugin.getClanManager().serverAnnounce(ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.has.been.disbanded"), clan.getName()));

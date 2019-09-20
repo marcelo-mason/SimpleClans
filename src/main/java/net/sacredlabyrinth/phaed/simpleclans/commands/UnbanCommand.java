@@ -1,13 +1,15 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+import java.text.MessageFormat;
+import java.util.UUID;
+
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
-import java.text.MessageFormat;
+import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  * @author phaed
@@ -34,20 +36,23 @@ public class UnbanCommand {
             return;
         }
 
-        String banned = arg[0];
+        UUID uuid = UUIDMigration.getForcedPlayerUUID(arg[0]);
+        if (uuid == null) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
+            return;
+        }
 
-        if (!plugin.getSettingsManager().isBanned(banned)) {
+        if (!plugin.getSettingsManager().isBanned(uuid)) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("this.player.is.not.banned"));
             return;
         }
 
-        Player pl = Helper.getPlayer(banned);
-
+        Player pl = Bukkit.getPlayer(uuid);
         if (pl != null) {
             ChatBlock.sendMessage(pl, ChatColor.AQUA + plugin.getLang("you.have.been.unbanned.from.clan.commands"));
         }
 
-        plugin.getSettingsManager().removeBanned(banned);
+        plugin.getSettingsManager().removeBanned(uuid);
         ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("player.removed.from.the.banned.list"));
     }
 }

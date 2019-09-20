@@ -195,6 +195,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the hasUUID
      */
+    @Deprecated
     public boolean hasUUID() {
         return this.hasUUID;
     }

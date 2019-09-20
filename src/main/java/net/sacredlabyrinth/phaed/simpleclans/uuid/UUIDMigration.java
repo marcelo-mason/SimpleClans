@@ -27,11 +27,11 @@ public class UUIDMigration {
     }
 
     public static UUID getForcedPlayerUUID(String playerDisplayName) {
-        Player OnlinePlayer = SimpleClans.getInstance().getServer().getPlayerExact(playerDisplayName);
-        OfflinePlayer OfflinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
+        Player onlinePlayer = SimpleClans.getInstance().getServer().getPlayerExact(playerDisplayName);
+        OfflinePlayer offlinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
 
-        if (OnlinePlayer != null) {
-            return OnlinePlayer.getUniqueId();
+        if (onlinePlayer != null) {
+            return onlinePlayer.getUniqueId();
         } else {
             for (ClanPlayer cp : SimpleClans.getInstance().getClanManager().getAllClanPlayers()) {
                 if (cp.getName().equalsIgnoreCase(playerDisplayName)) {
@@ -41,8 +41,8 @@ public class UUIDMigration {
             try {
                 return UUIDFetcher.getUUIDOf(playerDisplayName);
             } catch (Exception ex) {
-                if (OfflinePlayer != null) {
-                    return OfflinePlayer.getUniqueId();
+                if (offlinePlayer != null) {
+                    return offlinePlayer.getUniqueId();
                 } else {
                     return null;
                 }
