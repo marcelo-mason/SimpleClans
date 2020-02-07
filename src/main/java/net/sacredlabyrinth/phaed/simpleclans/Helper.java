@@ -400,9 +400,9 @@ public class Helper {
      * @return
      */
     public static String stripColors(String msg) {
-        String out = msg.replaceAll("[&][0-9a-f]", "");
+        String out = msg.replaceAll("[&][0-9a-fk-or]", "");
         out = out.replaceAll(String.valueOf((char) 194), "");
-        return out.replaceAll("[\u00a7][0-9a-f]", "");
+        return out.replaceAll("[\u00a7][0-9a-fk-or]", "");
     }
 
     /*

@@ -690,7 +690,8 @@ public final class SettingsManager {
         if (!bannedPlayers.contains(playerUniqueId.toString())) {
             bannedPlayers.add(playerUniqueId.toString());
         }
-
+        
+        getConfig().set("settings.banned-players", bannedPlayers);
         save();
     }
 
@@ -703,7 +704,8 @@ public final class SettingsManager {
         if (bannedPlayers.contains(playerUniqueId.toString())) {
             bannedPlayers.remove(playerUniqueId.toString());
         }
-
+        
+        getConfig().set("settings.banned-players", bannedPlayers);
         save();
     }
 
