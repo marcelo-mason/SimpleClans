@@ -4,6 +4,7 @@ import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Kill;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.PermissionsManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager.DataCallback;
 import net.sacredlabyrinth.phaed.simpleclans.Kill.Type;
 
@@ -95,6 +96,11 @@ public class SCEntityListener implements Listener
             			return;
             			
             		}
+            	}
+            	String kdrExempt = "simpleclans.anyone.kdr-exempt";
+            	PermissionsManager pm = plugin.getPermissionsManager();
+            	if (pm.has(attacker, kdrExempt) || pm.has(victim, kdrExempt)) {
+            		return;
             	}
             	            
                 ClanPlayer attackerCp = plugin.getClanManager().getCreateClanPlayer(attacker.getUniqueId());
