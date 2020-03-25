@@ -1,16 +1,16 @@
 package net.sacredlabyrinth.phaed.simpleclans.managers;
 
-import net.sacredlabyrinth.phaed.simpleclans.Helper;
-import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
-
-import org.bukkit.configuration.file.FileConfiguration;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
 import java.util.UUID;
+
+import org.bukkit.configuration.file.FileConfiguration;
+
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  * @author phaed
@@ -146,6 +146,12 @@ public final class SettingsManager {
     private String clanChatBracketColor;
     private String clanChatPlayerBracketLeft;
     private String clanChatPlayerBracketRight;
+    private int tasksCollectUpkeepHour;
+    private int tasksCollectUpkeepMinute;
+    private int tasksCollectUpkeepWarningHour;
+    private int tasksCollectUpkeepWarningMinute;
+    private int tasksCollectFeeHour;
+    private int tasksCollectFeeMinute;
     private boolean clanFFOnByDefault;
     private double kwRival;
     private double kwNeutral;
@@ -344,6 +350,12 @@ public final class SettingsManager {
         clanChatTagBracketRight = getConfig().getString("clanchat.tag-bracket.right");
         clanChatPlayerBracketLeft = getConfig().getString("clanchat.player-bracket.left");
         clanChatPlayerBracketRight = getConfig().getString("clanchat.player-bracket.right");
+        tasksCollectFeeHour = getConfig().getInt("tasks.collect-fee.hour");
+        tasksCollectFeeMinute = getConfig().getInt("tasks.collect-fee.minute");
+        tasksCollectUpkeepHour = getConfig().getInt("tasks.collect-upkeep.hour");
+        tasksCollectUpkeepMinute = getConfig().getInt("tasks.collect-upkeep.minute");
+        tasksCollectUpkeepWarningHour = getConfig().getInt("tasks.collect-upkeep-warning.hour");
+        tasksCollectUpkeepWarningMinute = getConfig().getInt("tasks.collect-upkeep-warning.minute");
         kwRival = getConfig().getDouble("kill-weights.rival");
         kwNeutral = getConfig().getDouble("kill-weights.neutral");
         kwCivilian = getConfig().getDouble("kill-weights.civilian");
@@ -389,7 +401,55 @@ public final class SettingsManager {
         }
     }
     
-    /**
+    public int getTasksCollectUpkeepHour() {
+		return tasksCollectUpkeepHour;
+	}
+
+	public void setTasksCollectUpkeepHour(int tasksCollectUpkeepHour) {
+		this.tasksCollectUpkeepHour = tasksCollectUpkeepHour;
+	}
+
+	public int getTasksCollectUpkeepMinute() {
+		return tasksCollectUpkeepMinute;
+	}
+
+	public void setTasksCollectUpkeepMinute(int tasksCollectUpkeepMinute) {
+		this.tasksCollectUpkeepMinute = tasksCollectUpkeepMinute;
+	}
+
+	public int getTasksCollectUpkeepWarningHour() {
+		return tasksCollectUpkeepWarningHour;
+	}
+
+	public void setTasksCollectUpkeepWarningHour(int tasksCollectUpkeepWarningHour) {
+		this.tasksCollectUpkeepWarningHour = tasksCollectUpkeepWarningHour;
+	}
+
+	public int getTasksCollectUpkeepWarningMinute() {
+		return tasksCollectUpkeepWarningMinute;
+	}
+
+	public void setTasksCollectUpkeepWarningMinute(int tasksCollectUpkeepWarningMinute) {
+		this.tasksCollectUpkeepWarningMinute = tasksCollectUpkeepWarningMinute;
+	}
+
+	public int getTasksCollectFeeHour() {
+		return tasksCollectFeeHour;
+	}
+
+	public void setTasksCollectFeeHour(int tasksCollectFeeHour) {
+		this.tasksCollectFeeHour = tasksCollectFeeHour;
+	}
+
+	public int getTasksCollectFeeMinute() {
+		return tasksCollectFeeMinute;
+	}
+
+	public void setTasksCollectFeeMinute(int tasksCollectFeeMinute) {
+		this.tasksCollectFeeMinute = tasksCollectFeeMinute;
+	}
+
+	/**
      * Returns the delay between kills
      * 
      * @return

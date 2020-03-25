@@ -73,8 +73,10 @@ public class Helper {
      * @return the delay in seconds
      */
     public static long getDelayTo(int hour, int minute) {
+    	if (hour < 0 || hour > 23) hour = 1;
+    	if (minute < 0 || minute > 59) minute = 0;
         LocalDateTime now = LocalDateTime.now();
-        LocalDateTime d = LocalDateTime.of(now.toLocalDate(), LocalTime.of(1, 0));
+        LocalDateTime d = LocalDateTime.of(now.toLocalDate(), LocalTime.of(hour, minute));
         long delay;
         if (now.isAfter(d)) {
             delay = now.until(d.plusDays(1), ChronoUnit.SECONDS);
@@ -631,7 +633,7 @@ public class Helper {
         }
         return result;
     }
-
+    
     public static boolean isVanished(Player player) {
         if (player != null && player.hasMetadata("vanished") && !player.getMetadata("vanished").isEmpty()) {
             return player.getMetadata("vanished").get(0).asBoolean();
@@ -639,7 +641,8 @@ public class Helper {
         return false;
     }
 
-    public static Collection<Player> getOnlinePlayers() {
+    @SuppressWarnings("unchecked")
+	public static Collection<Player> getOnlinePlayers() {
         try {
             Method method = Bukkit.class.getDeclaredMethod("getOnlinePlayers");
             Object players = method.invoke(null);

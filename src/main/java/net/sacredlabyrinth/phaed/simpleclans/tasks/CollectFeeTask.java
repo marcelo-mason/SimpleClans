@@ -11,18 +11,28 @@ import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 
 /**
  *
  * @author roinujnosde
  */
 public class CollectFeeTask extends BukkitRunnable {
+	private final SimpleClans plugin;
     
+	public CollectFeeTask() {
+		plugin = SimpleClans.getInstance();
+	}
+	
     /**
      * Starts the repetitive task
      */
     public void start() {
-        long delay = Helper.getDelayTo(1, 0);
+    	SettingsManager sm = plugin.getSettingsManager();
+    	
+    	int hour = sm.getTasksCollectFeeHour();
+    	int minute = sm.getTasksCollectFeeMinute();
+        long delay = Helper.getDelayTo(hour, minute);
         
         this.runTaskTimerAsynchronously(SimpleClans.getInstance(), delay * 20, 86400 * 20);
     }
@@ -32,8 +42,6 @@ public class CollectFeeTask extends BukkitRunnable {
      */
     @Override
     public void run() {
-        final SimpleClans plugin = SimpleClans.getInstance();
-        
         for (Clan clan : plugin.getClanManager().getClans()) {
             final double memberFee = clan.getMemberFee();
             

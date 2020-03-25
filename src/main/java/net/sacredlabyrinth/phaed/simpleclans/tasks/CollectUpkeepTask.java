@@ -12,12 +12,21 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author roinujnosde
  */
 public class CollectUpkeepTask extends BukkitRunnable {
+	private final SimpleClans plugin;
+	private final SettingsManager settingsManager;
+	
+	public CollectUpkeepTask() {
+		plugin = SimpleClans.getInstance();
+		settingsManager = plugin.getSettingsManager();
+	}
 
     /**
      * Starts the repetitive task
      */
     public void start() {
-        long delay = Helper.getDelayTo(1, 30);
+    	int hour = settingsManager.getTasksCollectUpkeepHour();
+    	int minute = settingsManager.getTasksCollectUpkeepMinute();
+        long delay = Helper.getDelayTo(hour, minute);
 
         this.runTaskTimerAsynchronously(SimpleClans.getInstance(), delay * 20, 86400 * 20);
     }
@@ -27,9 +36,10 @@ public class CollectUpkeepTask extends BukkitRunnable {
      */
     @Override
     public void run() {
-        final SimpleClans plugin = SimpleClans.getInstance();
-        final SettingsManager settingsManager = plugin.getSettingsManager();
-        plugin.getClanManager().getClans().forEach((clan) -> {
+    	if (plugin == null) {
+    		throw new IllegalStateException("Use the start() method!");
+    	}        
+    	plugin.getClanManager().getClans().forEach((clan) -> {
         	if (settingsManager.isChargeUpkeepOnlyIfMemberFeeEnabled() && !clan.isMemberFeeEnabled()) {
         		return;
         	}

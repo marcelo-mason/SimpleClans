@@ -177,6 +177,7 @@ permissions:
       simpleclans.anyone.leaderboard: true
       simpleclans.anyone.alliances: true
       simpleclans.anyone.rivalries: true
+      simpleclans.anyone.kdr-exempt: true
   simpleclans.member.*:
     description: Permissions for those who can be clan members
     default: false

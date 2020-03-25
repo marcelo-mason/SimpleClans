@@ -11,15 +11,24 @@ import org.bukkit.scheduler.BukkitRunnable;
  * @author roinujnosde
  */
 public class UpkeepWarningTask extends BukkitRunnable {
+	private final SimpleClans plugin;
+	private final SettingsManager sm;
 
+	public UpkeepWarningTask() {
+		plugin = SimpleClans.getInstance();
+		sm = plugin.getSettingsManager();
+	}
+	
     /**
      * Starts the repetitive task
      *
      */
     public void start() {
-        long delay = Helper.getDelayTo(12, 0);
-
-        this.runTaskTimerAsynchronously(SimpleClans.getInstance(), delay * 20, 86400 * 20);
+    	int hour = sm.getTasksCollectUpkeepWarningHour();
+    	int minute = sm.getTasksCollectUpkeepWarningMinute();
+        long delay = Helper.getDelayTo(hour, minute);
+        
+		this.runTaskTimerAsynchronously(plugin, delay * 20, 86400 * 20);
     }
 
     /**
@@ -27,8 +36,9 @@ public class UpkeepWarningTask extends BukkitRunnable {
      */
     @Override
     public void run() {
-        final SimpleClans plugin = SimpleClans.getInstance();
-        final SettingsManager sm = plugin.getSettingsManager();
+    	if (plugin == null) {
+    		throw new IllegalStateException("Use the start() method!");
+    	}
         plugin.getClanManager().getClans().forEach((clan) -> {
         	if (sm.isChargeUpkeepOnlyIfMemberFeeEnabled() && !clan.isMemberFeeEnabled()) {
         		return;

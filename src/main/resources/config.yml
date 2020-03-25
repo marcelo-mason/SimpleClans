@@ -117,6 +117,16 @@ clan:
     ff-on-by-default: false
     min-length: 2
     min-size-to-set-ally: 3
+tasks:
+    collect-upkeep:
+        hour: 1
+        minute: 30
+    collect-upkeep-warning:
+        hour: 12
+        minute: 0
+    collect-fee:
+        hour: 1
+        minute: 0
 page:
     untrusted-color: '8'
     clan-name-color: b
