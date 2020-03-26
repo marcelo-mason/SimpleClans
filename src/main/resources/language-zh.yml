@@ -261,6 +261,7 @@ your.clan.tag.cannot.be.longer.than.characters: "你的帮派的标签不能超�
 your.clan.tag.must.be.longer.than.characters: "你的帮派的标签必须超过 {0} 字符"
 your.tag.cannot.contain.the.following.colors: "帮派的标签不能含有以下颜色: {0}"
 your.tag.cannot.contain.color.codes: "Your tag cannot contain color codes"
+you.cannot.set.colored.ranks: "You cannot set colored ranks"
 your.clan.name.cannot.be.longer.than.characters: "你的帮派的名称不能超过 {0} 字符"
 your.clan.name.must.be.longer.than.characters: "你的帮派的名称必须超过 {0} 字符"
 your.clan.tag.can.only.contain.letters.numbers.and.color.codes: "帮派的标签只能含有字母、数字和颜色代码"

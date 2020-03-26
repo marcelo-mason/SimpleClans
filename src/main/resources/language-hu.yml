@@ -262,6 +262,7 @@ your.clan.tag.must.be.longer.than.characters: "A klán tagjának hosszabbnak kel
 your.tag.cannot.contain.the.following.colors: "A címke nem tartalmazhatja a következő színeket: {0}"
 your.clan.name.cannot.be.longer.than.characters: "A klán neve legfeljebb {0} karakter lehet"
 your.tag.cannot.contain.color.codes: "A címke nem tartalmazhat színkódokat"
+you.cannot.set.colored.ranks: "You cannot set colored ranks"
 your.clan.name.must.be.longer.than.characters: "A klán neveinek {0} karakter hosszúnak kell lenniük"
 your.clan.tag.can.only.contain.letters.numbers.and.color.codes: "A klán tagja csak betűket, számokat és színkódokat tartalmazhat"
 your.clan.name.cannot.contain.color.codes: "A klán neve nem tartalmazhat színkódokat"

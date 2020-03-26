@@ -49,12 +49,16 @@ public class SetRankCommand {
             return;
         }
 
-        UUID uuid = UUIDMigration.getForcedPlayerUUID(arg[0]);
-        String rank = Helper.toMessage(Helper.removeFirst(arg));
-
+        UUID uuid = UUIDMigration.getForcedPlayerUUID(arg[0]);        
         if (uuid == null || (!clan.isMember(uuid) && !clan.isLeader(uuid))) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.player.matched"));
             return;
+        }
+        
+        String rank = Helper.toMessage(Helper.removeFirst(arg));
+        if (rank.contains("&") && !plugin.getPermissionsManager().has(player, "simpleclans.leader.coloredrank")) {
+            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.set.colored.ranks"));
+        	return;
         }
 
         ClanPlayer cpm = plugin.getClanManager().getClanPlayer(uuid);

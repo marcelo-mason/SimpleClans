@@ -261,6 +261,7 @@ your.clan.tag.cannot.be.longer.than.characters: "Your clan''s tag cannot be long
 your.clan.tag.must.be.longer.than.characters: "Your clan''s tag must be longer than {0} characters"
 your.tag.cannot.contain.the.following.colors: "Your tag cannot contain the following colors: {0}"
 your.tag.cannot.contain.color.codes: "Your tag cannot contain color codes"
+you.cannot.set.colored.ranks: "You cannot set colored ranks"
 your.clan.name.cannot.be.longer.than.characters: "Your clan''s name cannot be longer than {0} characters"
 your.clan.name.must.be.longer.than.characters: "Your clan''s name must be longer than {0} characters"
 your.clan.tag.can.only.contain.letters.numbers.and.color.codes: "Your clan''s tag can only contain letters, numbers, and color codes"

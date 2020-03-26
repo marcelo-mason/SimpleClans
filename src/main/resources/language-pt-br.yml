@@ -261,6 +261,7 @@ your.clan.tag.cannot.be.longer.than.characters: "A tag do seu clã não pode ser
 your.clan.tag.must.be.longer.than.characters: "A tag do seu clã deve ser maior que {0} caracteres"
 your.tag.cannot.contain.the.following.colors: "Sua tag não pode conter as seguintes cores: {0}"
 your.tag.cannot.contain.color.codes: "Sua tag não pode conter códigos de cor"
+you.cannot.set.colored.ranks: "Você não pode definir ranks coloridos"
 your.clan.name.cannot.be.longer.than.characters: "O nome do seu clã não pode ser maior que {0} caracteres"
 your.clan.name.must.be.longer.than.characters: "O nome do seu clã deve ser maior que {0} caracteres"
 your.clan.tag.can.only.contain.letters.numbers.and.color.codes: "A tag do seu clã pode conter apenas letras, números e códigos de cor"
