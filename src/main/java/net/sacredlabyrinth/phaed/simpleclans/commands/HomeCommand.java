@@ -207,7 +207,6 @@ public class HomeCommand {
                 
                 plugin.getTeleportManager().addPlayer(player, new Location(loc.getWorld(), x + .5, loc.getBlockY(), z + .5), clan.getName());
             }
-            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("hombase.set") + ChatColor.YELLOW + Helper.toLocationString(loc));
             return;
         }
 
