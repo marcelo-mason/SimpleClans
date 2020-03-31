@@ -165,9 +165,11 @@ public class HomeCommand {
 
             if (!cp.isLeader()) {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+                return;
             }
             if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.home-regroup")) {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
+                return;
             }
 
             HomeRegroupEvent homeRegroupEvent = new HomeRegroupEvent(clan, cp, clan.getOnlineMembers(), loc);
