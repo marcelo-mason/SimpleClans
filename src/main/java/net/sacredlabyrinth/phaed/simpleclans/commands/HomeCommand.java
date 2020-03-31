@@ -171,6 +171,11 @@ public class HomeCommand {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
                 return;
             }
+            
+            if (loc == null) {
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("hombase.not.set"));
+                return;
+            }
 
             HomeRegroupEvent homeRegroupEvent = new HomeRegroupEvent(clan, cp, clan.getOnlineMembers(), loc);
             SimpleClans.getInstance().getServer().getPluginManager().callEvent(homeRegroupEvent);
