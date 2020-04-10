@@ -107,7 +107,7 @@ public class RankCommand {
             return;
         }
         
-        String rank = args[1];
+        String rank = args[1].toLowerCase();
 		if (!clan.hasRank(rank)) {
 			ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("rank.0.does.not.exist"));
 			return;
@@ -153,7 +153,7 @@ public class RankCommand {
 			return;
 		}
 		
-		String rank = args[0];
+		String rank = args[0].toLowerCase();
 		if (clan.hasRank(rank)) {
 			ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("rank.already.exists"));
 			return;
@@ -195,7 +195,7 @@ public class RankCommand {
             		plugin.getSettingsManager().getCommandClan()));
 			return;
 		}
-		String rank = args[0];
+		String rank = args[0].toLowerCase();
 		if (!clan.hasRank(rank)) {
 			ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("rank.0.does.not.exist"));
 			return;
@@ -216,11 +216,12 @@ public class RankCommand {
             return;
 		}
 		
-		if (!clan.hasRank(args[0])) {
-			ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("rank.0.does.not.exist"), args[0]));
+		String rankName = args[0].toLowerCase();
+		if (!clan.hasRank(rankName)) {
+			ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("rank.0.does.not.exist"), rankName));
 			return;
 		}
-		Rank rank = clan.getRank(args[0]);
+		Rank rank = clan.getRank(rankName);
 		String dn = Helper.toMessage(Helper.removeFirst(args));
 		if (dn.contains("&") && !plugin.getPermissionsManager().has(player, "simpleclans.leader.coloredrank")) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("you.cannot.set.colored.ranks"));
@@ -244,7 +245,7 @@ public class RankCommand {
 			return;
 		}
 		if (args.length > 0) {
-			String rank = args[0];
+			String rank = args[0].toLowerCase();
 			if (!clan.hasRank(rank)) {
 				ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("rank.0.does.not.exist"), rank));
 				return;
