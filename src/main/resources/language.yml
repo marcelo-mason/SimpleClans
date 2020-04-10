@@ -464,6 +464,7 @@ your.clan.description.cannot.be.longer.than: "Your clan description cannot be lo
 description.changed: "You have successfully changed your clan's description"
 no.description: "No description"
 the.player.must.wait.0.before.joining.your.clan.again: "This player must wait {0} minute(s) before joining your clan again"
+disabled.command: "Disabled command"
 rank.displayname.updated: "The rank's display name was updated!"
 rank.0.permissions: "Rank {0}''s permissions:"
 available.rank.permissions: "Available permissions for ranks:"

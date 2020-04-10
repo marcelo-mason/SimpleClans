@@ -156,7 +156,7 @@ public class SCPlayerListener implements Listener {
         String message = event.getMessage();
         ClanPlayer cp = plugin.getClanManager().getClanPlayer(event.getPlayer());
 
-        if (cp != null) {
+        if (cp != null && !event.isCancelled()) {
             if (cp.getChannel().equals(ClanPlayer.Channel.CLAN)) {
                 event.setCancelled(true);
                 if (!plugin.getPermissionsManager().has(cp.toPlayer(), "simpleclans.member.chat")) {

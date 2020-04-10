@@ -95,10 +95,10 @@ public class MenuCommand {
         if (isVerified && plugin.getPermissionsManager().has(player, RankPermission.KILLS, PermissionLevel.TRUSTED, false)) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.killsplayer"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.fee-check")) {
+        if (plugin.getSettingsManager().isMemberFee() && isVerified && plugin.getPermissionsManager().has(player, "simpleclans.member.fee-check")) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.fee.check"), clanCommand, ChatColor.WHITE));
         }
-        if (isVerified && plugin.getPermissionsManager().has(player, RankPermission.FEE_SET, PermissionLevel.LEADER, false)) {
+        if (plugin.getSettingsManager().isMemberFee() && isVerified && plugin.getPermissionsManager().has(player, RankPermission.FEE_SET, PermissionLevel.LEADER, false)) {
             chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.fee.set"), clanCommand, ChatColor.WHITE));
         }
         if (isVerified && (plugin.getPermissionsManager().has(player, RankPermission.ALLY_ADD, PermissionLevel.LEADER, false) 
@@ -151,7 +151,7 @@ public class MenuCommand {
             toggles += "tag/";
         }
         
-        if (isVerified && plugin.getPermissionsManager().has(player, RankPermission.FEE_ENABLE, PermissionLevel.LEADER, false)) {
+        if (plugin.getSettingsManager().isMemberFee() && isVerified && plugin.getPermissionsManager().has(player, RankPermission.FEE_ENABLE, PermissionLevel.LEADER, false)) {
             toggles += "fee/";
         }
 
