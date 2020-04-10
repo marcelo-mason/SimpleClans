@@ -44,10 +44,6 @@ public class RivalCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("your.clan.cannot.create.rivals"));
             return;
         }
-        if (!clan.isLeader(player)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
-            return;
-        }
         if (arg.length != 2) {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.rival"), plugin.getSettingsManager().getCommandClan()));
             return;
@@ -81,6 +77,9 @@ public class RivalCommand {
         }
 
         if (action.equals(plugin.getLang("add"))) {
+            if (!plugin.getPermissionsManager().has(player, RankPermission.RIVAL_ADD, PermissionLevel.LEADER, true)) {
+            	return;
+            }
             if (!clan.reachedRivalLimit()) {
                 if (!clan.isRival(rival.getTag())) {
                     clan.addRival(rival);
@@ -96,6 +95,9 @@ public class RivalCommand {
         }
 
         if (action.equals(plugin.getLang("remove"))) {
+            if (!plugin.getPermissionsManager().has(player, RankPermission.RIVAL_REMOVE, PermissionLevel.LEADER, true)) {
+            	return;
+            }
             if (clan.isRival(rival.getTag())) {
                 plugin.getRequestManager().addRivalryBreakRequest(cp, rival, clan);
                 ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.asked.to.end.rivalry"), Helper.capitalize(rival.getName())));

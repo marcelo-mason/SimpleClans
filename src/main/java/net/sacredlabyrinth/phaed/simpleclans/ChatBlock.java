@@ -255,7 +255,6 @@ public class ChatBlock {
             // crop and print out
 
             String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString, LINE_LENGTH);
-
             if (color.length() > 0) {
                 msg = color + msg;
             }

@@ -3,17 +3,23 @@ package net.sacredlabyrinth.phaed.simpleclans.managers;
 import net.milkbowl.vault.chat.Chat;
 import net.milkbowl.vault.economy.Economy;
 import net.milkbowl.vault.permission.Permission;
+import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.PermissionLevel;
+import net.sacredlabyrinth.phaed.simpleclans.RankPermission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 import org.bukkit.entity.Player;
 import org.bukkit.permissions.PermissionAttachment;
 import org.bukkit.plugin.RegisteredServiceProvider;
 
+import java.text.MessageFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+
+import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
 /**
@@ -51,7 +57,7 @@ public final class PermissionsManager {
     }
 
     /**
-     * Whether exonomy plugin exists and is enabled
+     * Whether economy plugin exists and is enabled
      *
      * @return
      */
@@ -71,7 +77,7 @@ public final class PermissionsManager {
     }
 
     /**
-     * Saves the permissions for earch clan from the config
+     * Saves the permissions for each clan from the config
      */
     public void savePermissions() {
         for (Clan clan : plugin.getClanManager().getClans()) {
@@ -79,11 +85,12 @@ public final class PermissionsManager {
                 SimpleClans.getInstance().getSettingsManager().getConfig().set("permissions." + clan.getTag(), getPermissions(clan));
             }
         }
+        SimpleClans.getInstance().getSettingsManager().load();
         SimpleClans.getInstance().getSettingsManager().save();
     }
 
     /**
-     * Adds all pemrissions for a clan
+     * Adds all permissions for a clan
      *
      * @param clan
      */
@@ -280,6 +287,60 @@ public final class PermissionsManager {
         } else {
             return player.hasPermission(perm);
         }
+    }
+    
+    /**
+     * Checks if the player has the rank permission or the permission level, and the equivalent Bukkit permission
+     * 
+     * @param player the player
+     * @param permission the rank permission
+     * @param notify notify the player if they don't have permission
+     * @return
+     */
+    public boolean has(Player player, RankPermission permission, PermissionLevel level, boolean notify) {
+    	if (player == null || permission == null) {
+    		return false;
+    	}
+    	
+    	ClanPlayer clanPlayer = plugin.getClanManager().getClanPlayer(player);
+    	if (clanPlayer == null) {
+    		return false;
+    	}
+    	
+    	boolean hasBukkitPermission = has(player, permission.getBukkitPermission());
+    	if (!hasBukkitPermission) {
+    		return false;
+    	}
+    	
+    	boolean hasLevel = false;
+    	if (level != null) {
+    		switch (level) {
+    			case LEADER:
+    				hasLevel = clanPlayer.isLeader();
+    				break;
+    			case TRUSTED:
+    				hasLevel = clanPlayer.isTrusted();
+    				break;
+    		}
+    	}
+    	
+    	boolean hasRankPermission = false;
+    	String rankName = clanPlayer.getRank();
+    	Clan clan = clanPlayer.getClan();
+		if (clan.hasRank(rankName)) {
+			hasRankPermission = clan.getRank(rankName).getPermissions().contains(permission.toString());
+		} else {
+			if (rankName != null && !rankName.isEmpty()) {
+				clanPlayer.setRank(null);
+			}
+		}
+		
+		if (notify && !hasLevel && !hasRankPermission) {
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("you.must.be.0.or.have.the.permission.1.to.use.this"),
+            		level == PermissionLevel.LEADER ? plugin.getLang("leader") : plugin.getLang("trusted"), permission.toString()));
+		}
+    	
+    	return hasLevel || hasRankPermission;
     }
 
     /**

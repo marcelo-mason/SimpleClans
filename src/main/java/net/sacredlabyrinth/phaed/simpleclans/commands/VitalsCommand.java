@@ -7,7 +7,6 @@ import org.bukkit.entity.Player;
 import java.text.MessageFormat;
 import java.util.Collection;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author phaed
@@ -43,10 +42,11 @@ public class VitalsCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             return;
         }
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.vitals"));
-            return;
+        
+        if (!plugin.getPermissionsManager().has(player, RankPermission.VITALS, PermissionLevel.TRUSTED, true)) {
+        	return;
         }
+
         if (arg.length != 0) {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.vitals"), plugin.getSettingsManager().getCommandClan()));
             return;

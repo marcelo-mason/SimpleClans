@@ -46,9 +46,8 @@ public class MostKilledCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             return;
         }
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
-            return;
+        if (!plugin.getPermissionsManager().has(player, RankPermission.MOSTKILLED, PermissionLevel.TRUSTED, true)) {
+        	return;
         }
 
         plugin.getStorageManager().getMostKilled(new DataCallback<Map<String, Integer>>() {

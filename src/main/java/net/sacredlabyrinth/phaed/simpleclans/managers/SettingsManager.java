@@ -448,7 +448,7 @@ public final class SettingsManager {
 	public void setTasksCollectFeeMinute(int tasksCollectFeeMinute) {
 		this.tasksCollectFeeMinute = tasksCollectFeeMinute;
 	}
-
+	
 	/**
      * Returns the delay between kills
      * 

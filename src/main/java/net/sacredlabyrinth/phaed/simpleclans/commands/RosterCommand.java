@@ -80,7 +80,7 @@ public class RosterCommand {
                     String name = plugin.getSettingsManager().getPageLeaderColor() + cp.getName();
                     String lastSeen = p != null && p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString();
 
-                    chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()) + ChatColor.RESET, lastSeen);
+                    chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRankDisplayName()) + ChatColor.RESET, lastSeen);
 
                 }
 
@@ -90,7 +90,7 @@ public class RosterCommand {
                     String name = (cp.isTrusted() ? plugin.getSettingsManager().getPageTrustedColor() : plugin.getSettingsManager().getPageUnTrustedColor()) + cp.getName();
                     String lastSeen = p != null && p.isOnline() && !Helper.isVanished(p) ? ChatColor.GREEN + plugin.getLang("online") : ChatColor.WHITE + cp.getLastSeenDaysString();
 
-                    chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRank()) + ChatColor.RESET, lastSeen);
+                    chatBlock.addRow("  " + name, ChatColor.YELLOW + Helper.parseColors(cp.getRankDisplayName()) + ChatColor.RESET, lastSeen);
                 }
 
                 boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -18,6 +19,7 @@ import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
 import java.util.*;
 import java.util.Map.Entry;
+
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 
 /**
@@ -35,6 +37,71 @@ public class Helper {
         for (StackTraceElement el : Thread.currentThread().getStackTrace()) {
             SimpleClans.debug(el.toString());
         }
+    }
+    
+    /**
+     * Converts a JSON String to a list of Ranks
+     * 
+     * @param json
+     * @return a list of ranks or null if the JSON String is null/empty
+     */
+	public static List<Rank> ranksFromJson(String json) {
+    	if (json != null && !json.isEmpty()) {
+	    	try {
+				JSONObject jo = (JSONObject) new JSONParser().parse(json);
+				Object ranks = jo.get("ranks");
+				if (ranks != null) {
+					JSONArray array = (JSONArray) ranks;
+					List<Rank> rankList = new ArrayList<>();
+					for (Object o : array) {
+						JSONObject r = (JSONObject) o;
+						String name = (String) r.get("name");
+						String displayName = (String) r.get("displayName");
+						Set<String> permissions = new HashSet<>();
+						for (Object p : (JSONArray) r.get("permissions")) {
+							permissions.add((String) p);
+						}
+						Rank rank = new Rank(name, displayName, permissions);
+						rankList.add(rank);
+					}
+					
+					return rankList;
+					
+				}
+			} catch (ParseException e) {
+				e.printStackTrace();
+			}
+    	}
+    	return null;
+    }
+    
+    /**
+     * Converts a list of Ranks to a JSON String
+     * 
+     * @param ranks
+     * @return a JSON String
+     */
+    @SuppressWarnings("unchecked")
+	public static String ranksToJson(List<Rank> ranks) {
+    	if (ranks == null)
+    		ranks = new ArrayList<Rank>();
+    	
+    	JSONArray array = new JSONArray();
+    	for (Rank rank : ranks) {
+    		JSONObject o = new JSONObject();
+    		o.put("name", rank.getName());
+    		o.put("displayName", rank.getDisplayName());
+    		JSONArray permArray = new JSONArray();
+    		for (String p : rank.getPermissions()) {
+    			permArray.add(p);
+    		}
+    		o.put("permissions", permArray);
+    		array.add(o);
+    	}
+    	
+    	JSONObject object = new JSONObject();
+    	object.put("ranks", array);
+    	return object.toJSONString();
     }
     
     /**
@@ -318,6 +385,20 @@ public class Helper {
      */
     public static String[] toArray(List<String> list) {
         return list.toArray(new String[list.size()]);
+    }
+    
+    /**
+     * Converts the Permission values array to a String array
+     * 
+     * @return
+     */
+    public static String[] fromPermissionArray() {
+    	RankPermission[] permissions = RankPermission.values();
+    	String[] sa = new String[permissions.length];
+    	for (int i = 0; i < permissions.length; i++) {
+    		sa[i] = permissions[i].toString();
+    	}
+    	return sa;
     }
 
     /**
@@ -676,7 +757,7 @@ public class Helper {
 
         String leaderColor = sm.getAllyChatLeaderColor();
         String memberColor = sm.getAllyChatMemberColor();
-        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
+        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRankDisplayName());
         String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getAllyChatRank()).replace("%rank%", rank) : "";
 
         String message = replacePlaceholders(sm.getAllyChatFormat(), cp, leaderColor, memberColor, rankFormat, msg);
@@ -711,7 +792,7 @@ public class Helper {
 
         String leaderColor = sm.getClanChatLeaderColor();
         String memberColor = sm.getClanChatMemberColor();
-        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRank());
+        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRankDisplayName());
         String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getClanChatRank()).replace("%rank%", rank) : "";
 
         String message = replacePlaceholders(sm.getClanChatFormat(), cp, leaderColor, memberColor, rankFormat, msg);

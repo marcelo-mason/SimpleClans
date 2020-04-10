@@ -46,9 +46,8 @@ public class StatsCommand {
             return;
         }
 
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
-            return;
+        if (!plugin.getPermissionsManager().has(player, RankPermission.STATS, PermissionLevel.TRUSTED, true)) {
+        	return;
         }
 
         if (arg.length != 0) {

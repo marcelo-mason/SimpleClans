@@ -176,5 +176,5 @@ permissions:
   YourClanNameHere:
   - test.permission
 performance:
-  use-threads: false
+  use-threads: true
   use-bungeecord: false

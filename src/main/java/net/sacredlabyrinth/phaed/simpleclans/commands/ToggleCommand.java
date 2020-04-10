@@ -3,6 +3,8 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
+import net.sacredlabyrinth.phaed.simpleclans.PermissionLevel;
+import net.sacredlabyrinth.phaed.simpleclans.RankPermission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
@@ -115,23 +117,19 @@ public class ToggleCommand {
             }
         }
 
-        if (cmd.equalsIgnoreCase("fee") && plugin.getPermissionsManager().has(player, "simpleclans.leader.fee")) {
+        if (cmd.equalsIgnoreCase("fee") && plugin.getPermissionsManager().has(player, RankPermission.FEE_ENABLE, PermissionLevel.LEADER, true)) {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
             if (cp != null) {
                 Clan clan = cp.getClan();
                 if (clan.isVerified()) {
-                    if (clan.isLeader(player)) {
-                        if (clan.isMemberFeeEnabled()) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("feeoff"));
-                            clan.setMemberFeeEnabled(false);
-                        } else {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("feeon"));
-                            clan.setMemberFeeEnabled(true);
-                        }
-                        plugin.getStorageManager().updateClanAsync(clan);
-                    } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
-                    }
+                	if (clan.isMemberFeeEnabled()) {
+                		ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("feeoff"));
+                		clan.setMemberFeeEnabled(false);
+                	} else {
+                		ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("feeon"));
+                		clan.setMemberFeeEnabled(true);
+                	}
+                	plugin.getStorageManager().updateClanAsync(clan);
                 }
             }
         }

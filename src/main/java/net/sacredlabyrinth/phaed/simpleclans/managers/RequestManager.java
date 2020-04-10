@@ -334,7 +334,7 @@ public final class RequestManager {
                 String demoted = req.getTarget();
                 UUID demotedUniqueId = UUIDMigration.getForcedPlayerUUID(demoted);
 
-                if (SimpleClans.getInstance().hasUUID() && demotedUniqueId != null) {
+                if (demotedUniqueId == null) {
                     return;
                 }
 
@@ -350,7 +350,7 @@ public final class RequestManager {
                 String promoted = req.getTarget();
                 UUID promotedUniqueId = UUIDMigration.getForcedPlayerUUID(promoted);
 
-                if (SimpleClans.getInstance().hasUUID() && promotedUniqueId == null) {
+                if (promotedUniqueId == null) {
                     return;
                 }
                 if (denies.isEmpty()) {

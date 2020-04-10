@@ -159,7 +159,6 @@ public class SCPlayerListener implements Listener {
         if (cp != null) {
             if (cp.getChannel().equals(ClanPlayer.Channel.CLAN)) {
                 event.setCancelled(true);
-                //TODO: Document this permission
                 if (!plugin.getPermissionsManager().has(cp.toPlayer(), "simpleclans.member.chat")) {
                     ChatBlock.sendMessage(cp.toPlayer(), ChatColor.RED + plugin.getLang("insufficient.permissions"));
                     return;
@@ -181,8 +180,8 @@ public class SCPlayerListener implements Listener {
             boolean isClanChat = event.getMessage().contains("" + ChatColor.RED + ChatColor.WHITE + ChatColor.RED + ChatColor.BLACK);
             boolean isAllyChat = event.getMessage().contains("" + ChatColor.AQUA + ChatColor.WHITE + ChatColor.AQUA + ChatColor.BLACK);
 
-            for (Iterator iter = event.getRecipients().iterator(); iter.hasNext();) {
-                Player player = (Player) iter.next();
+            for (Iterator<Player> iter = event.getRecipients().iterator(); iter.hasNext();) {
+                Player player = iter.next();
 
                 ClanPlayer rcp = plugin.getClanManager().getClanPlayer(player);
 

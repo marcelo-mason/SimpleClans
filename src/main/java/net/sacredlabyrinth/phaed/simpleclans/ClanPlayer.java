@@ -977,6 +977,16 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
         return useChatShortcut;
     }
 
+    public String getRankDisplayName() {
+    	if (clan != null) {
+    		Rank r = clan.getRank(rank);
+    		if (r != null) {
+    			return r.getDisplayName();
+    		}
+    	}
+    	return "";
+    }
+    
     public String getRank()
     {
         return rank;
@@ -984,6 +994,9 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
 
     public void setRank(String rank)
     {
+    	if (rank == null) {
+    		rank = "";
+    	}
         this.rank = rank;
     }
 

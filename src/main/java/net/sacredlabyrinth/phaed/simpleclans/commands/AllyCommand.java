@@ -40,12 +40,7 @@ public class AllyCommand {
         if (!clan.isVerified()) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             return;
-        }
-
-        if (!clan.isLeader(player)) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
-            return;
-        }
+        }      
 
         if (arg.length != 2) {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.ally"), plugin.getSettingsManager().getCommandClan()));
@@ -70,6 +65,10 @@ public class AllyCommand {
         }
 
         if (action.equals(plugin.getLang("add"))) {
+            if (!plugin.getPermissionsManager().has(player, RankPermission.ALLY_ADD, PermissionLevel.LEADER, true)) {
+            	return;
+            }
+
             if (clan.isAlly(ally.getTag())) {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("your.clans.are.already.allies"));
                 return;
@@ -85,6 +84,10 @@ public class AllyCommand {
             plugin.getRequestManager().addAllyRequest(cp, ally, clan);
             ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.have.been.asked.for.an.alliance"), Helper.capitalize(ally.getName())));
         } else if (action.equals(plugin.getLang("remove"))) {
+            if (!plugin.getPermissionsManager().has(player, RankPermission.ALLY_REMOVE, PermissionLevel.LEADER, true)) {
+            	return;
+            }
+        	
             if (!clan.isAlly(ally.getTag())) {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("your.clans.are.not.allies"));
                 return;

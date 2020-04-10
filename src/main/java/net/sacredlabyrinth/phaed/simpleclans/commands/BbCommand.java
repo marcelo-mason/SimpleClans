@@ -45,12 +45,7 @@ public class BbCommand {
         }
 
         if (arg.length == 1 && arg[0].equalsIgnoreCase("clear")) {
-            if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.bb-clear")) {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
-                return;
-            }
-            if (!cp.isTrusted() || !cp.isLeader()) {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+            if (!plugin.getPermissionsManager().has(player, RankPermission.BB_CLEAR, PermissionLevel.LEADER, true)) {
                 return;
             }
             cp.getClan().clearBb();
@@ -58,13 +53,7 @@ public class BbCommand {
             return;
         }
 
-        if (!plugin.getPermissionsManager().has(player, "simpleclans.member.bb-add")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
-            return;
-        }
-
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+        if (!plugin.getPermissionsManager().has(player, RankPermission.BB_ADD, PermissionLevel.TRUSTED, true)) {
             return;
         }
 

@@ -28,7 +28,8 @@ public class UUIDMigration {
 
     public static UUID getForcedPlayerUUID(String playerDisplayName) {
         Player onlinePlayer = SimpleClans.getInstance().getServer().getPlayerExact(playerDisplayName);
-        OfflinePlayer offlinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
+        @SuppressWarnings("deprecation")
+		OfflinePlayer offlinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
 
         if (onlinePlayer != null) {
             return onlinePlayer.getUniqueId();

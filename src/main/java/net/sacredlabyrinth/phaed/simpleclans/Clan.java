@@ -51,6 +51,7 @@ public class Clan implements Serializable, Comparable<Clan> {
     private boolean allowWithdraw = false;
     private boolean allowDeposit = true;
     private boolean feeEnabled;
+    private List<Rank> ranks = new ArrayList<>();
 
     /**
      *
@@ -1158,6 +1159,7 @@ public class Clan implements Serializable, Comparable<Clan> {
         cp.setLeader(false);
         cp.setTrusted(false);
         cp.setJoinDate(0);
+        cp.setRank(null);
         removeMember(playerUniqueId);
 
         SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
@@ -1894,4 +1896,79 @@ public class Clan implements Serializable, Comparable<Clan> {
     public void setAllowDeposit(boolean allowDeposit) {
         this.allowDeposit = allowDeposit;
     }
+
+    /**
+     * Checks if the clan has the specified rank
+     * 
+     * @param name the rank
+     * @return
+     */
+	public boolean hasRank(String name) {
+		return getRank(name) != null;
+	}
+
+	/**
+	 * Creates a rank
+	 * 
+	 * @param name
+	 */
+	public void createRank(String name) {
+		ranks.add(new Rank(name));
+	}
+
+	/**
+	 * Returns the clan's ranks
+	 * 
+	 * @return the ranks
+	 */
+	public List<Rank> getRanks() {
+		return ranks;
+	}
+
+	/**
+	 * Sets the clan's ranks
+	 * 
+	 * @param ranks
+	 */
+	public void setRanks(List<Rank> ranks) {
+		if (ranks == null) {
+			ranks = new ArrayList<>();
+		}
+		this.ranks = ranks;
+	}
+
+	/**
+	 * Deletes a rank with the specified name
+	 * 
+	 * @param name
+	 */
+	public void deleteRank(String name) {
+		Rank r = getRank(name);
+		if (r != null) {
+			ranks.remove(r);
+			getMembers().forEach(cp -> {
+				if (cp.getRank().equals(r.getName())) {
+					cp.setRank("");
+					SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
+				}
+			});
+		}
+	}
+
+	/**
+	 * Gets a rank with the specified name or null if not found
+	 * 
+	 * @param name the rank name
+	 * @return a rank or null
+	 */
+	public Rank getRank(String name) {
+		if (name != null) {
+			for (Rank r : ranks) {
+				if (r.getName().equals(name)) {
+					return r;
+				}
+			}	
+		}
+		return null;
+	}
 }

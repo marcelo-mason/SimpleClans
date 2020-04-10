@@ -105,6 +105,8 @@ permissions:
     description: Can modify his clan's description
   simpleclans.leader.cape:
     description: Can set his clan's cape url
+  simpleclans.leader.bb-clear:
+    description: Can clear his clan's bb
   simpleclans.member.cape-toggle:
     description: Can toggle his cape on/off
   simpleclans.member.kills:
@@ -146,6 +148,26 @@ permissions:
     default: true
   simpleclans.leader.coloredtag:
     description: Can use color codes in tags
+  simpleclans.leader.rank.list:
+    description: Can list the ranks
+  simpleclans.leader.rank.create:
+    description: Can create a new rank
+  simpleclans.leader.rank.assign:
+    description: Can assign a rank to a user
+  simpleclans.leader.rank.unassign:
+    description: Can unassign a player from a rank
+  simpleclans.leader.rank.delete:
+    description: Can delete a rank
+  simpleclans.leader.rank.permissions.available:
+    description: Can list the available permissions
+  simpleclans.leader.rank.permissions.list:
+    description: Can list the permissions of a rank
+  simpleclans.leader.rank.permissions.add:
+    description: Can add permissions to a rank
+  simpleclans.leader.rank.permissions.remove:
+    description: Can remove permissions from a rank
+  simpleclans.leader.rank.setdisplayname:
+    description: Can set the rank displayname
   simpleclans.member.bank:
     description: Can use banks
   simpleclans.admin.*:
@@ -230,3 +252,14 @@ permissions:
       simpleclans.leader.setrank: true
       simpleclans.leader.coloredtag: true
       simpleclans.leader.coloredrank: true
+      simpleclans.leader.bb-clear: true
+      simpleclans.leader.rank.setdisplayname: true
+      simpleclans.leader.rank.list: true
+      simpleclans.leader.rank.create: true
+      simpleclans.leader.rank.assign: true
+      simpleclans.leader.rank.unassign: true
+      simpleclans.leader.rank.delete: true
+      simpleclans.leader.rank.permissions.available: true
+      simpleclans.leader.rank.permissions.add: true
+      simpleclans.leader.rank.permissions.remove: true
+      simpleclans.leader.rank.permissions.list: true

@@ -45,9 +45,8 @@ public class KillsCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             return;
         }
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.stats"));
-            return;
+        if (!plugin.getPermissionsManager().has(player, RankPermission.KILLS, PermissionLevel.TRUSTED, true)) {
+        	return;
         }
 
         String polledPlayerName = player.getName();

@@ -47,10 +47,10 @@ public class CoordsCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
             return;
         }
-        if (!cp.isTrusted()) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("only.trusted.players.can.access.clan.coords"));
-            return;
+        if (!plugin.getPermissionsManager().has(player, RankPermission.COORDS, PermissionLevel.TRUSTED, true)) {
+        	return;
         }
+
         if (arg.length != 0) {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.coords"), plugin.getSettingsManager().getCommandClan()));
             return;

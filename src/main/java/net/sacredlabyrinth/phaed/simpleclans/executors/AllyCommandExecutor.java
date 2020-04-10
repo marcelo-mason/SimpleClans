@@ -1,9 +1,9 @@
 package net.sacredlabyrinth.phaed.simpleclans.executors;
 
-import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.PermissionLevel;
+import net.sacredlabyrinth.phaed.simpleclans.RankPermission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -25,8 +25,7 @@ public class AllyCommandExecutor implements CommandExecutor {
             return false;
         }
 
-        if (!plugin.getPermissionsManager().has(player, "simpleclans.member.ally")) {
-            ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
+        if (!plugin.getPermissionsManager().has(player, RankPermission.ALLY_CHAT, PermissionLevel.TRUSTED, true)) {
             return true;
         }
 
