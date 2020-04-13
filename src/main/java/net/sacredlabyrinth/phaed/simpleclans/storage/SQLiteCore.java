@@ -8,6 +8,7 @@ import java.sql.SQLException;
 import java.util.logging.Logger;
 
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.threads.ThreadUpdateSQL;
 
 /**
  * @author cc_madelg
@@ -114,14 +115,19 @@ public class SQLiteCore implements DBCore {
      */
     @Override
     public void insert(String query) {
-        try {
-            getConnection().createStatement().executeQuery(query);
-        } catch (SQLException ex) {
-            if (!ex.toString().contains("not return ResultSet")) {
-                log.severe("Error at SQL INSERT Query: " + ex);
-                log.severe("Query: " + query);
-            }
-        }
+    	if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
+    		Thread thread = new Thread(new ThreadUpdateSQL(getConnection(), query, "INSERT"));
+    		thread.start();
+    	} else {
+    		try {
+    			getConnection().createStatement().executeQuery(query);
+    		} catch (SQLException ex) {
+    			if (!ex.toString().contains("not return ResultSet")) {
+    				log.severe("Error at SQL INSERT Query: " + ex);
+    				log.severe("Query: " + query);
+    			}
+    		}
+    	}
     }
 
     /**
@@ -131,13 +137,18 @@ public class SQLiteCore implements DBCore {
      */
     @Override
     public void update(String query) {
-        try {
-            getConnection().createStatement().executeQuery(query);
-        } catch (SQLException ex) {
-            if (!ex.toString().contains("not return ResultSet")) {
-                log.severe("Error at SQL UPDATE Query: " + ex);
-                log.severe("Query: " + query);
-            }
+    	if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
+    		Thread thread = new Thread(new ThreadUpdateSQL(getConnection(), query, "UPDATE"));
+    		thread.start();
+    	} else {
+    		try {
+    			getConnection().createStatement().executeQuery(query);
+    		} catch (SQLException ex) {
+    			if (!ex.toString().contains("not return ResultSet")) {
+    				log.severe("Error at SQL UPDATE Query: " + ex);
+    				log.severe("Query: " + query);
+    			}
+    		}
         }
     }
 
@@ -148,13 +159,18 @@ public class SQLiteCore implements DBCore {
      */
     @Override
     public void delete(String query) {
-        try {
-            getConnection().createStatement().executeQuery(query);
-        } catch (SQLException ex) {
-            if (!ex.toString().contains("not return ResultSet")) {
-                log.severe("Error at SQL DELETE Query: " + ex);
-                log.severe("Query: " + query);
-            }
+    	if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
+    		Thread thread = new Thread(new ThreadUpdateSQL(getConnection(), query, "DELETE"));
+    		thread.start();
+    	} else {
+    		try {
+    			getConnection().createStatement().executeQuery(query);
+    		} catch (SQLException ex) {
+    			if (!ex.toString().contains("not return ResultSet")) {
+    				log.severe("Error at SQL DELETE Query: " + ex);
+    				log.severe("Query: " + query);
+    			}
+    		}
         }
     }
 
