@@ -1557,7 +1557,7 @@ public final class SettingsManager {
         return tamableMobsSharing;
     }
 
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public boolean isOnlineMode() {
         return true;
     }

@@ -1004,7 +1004,7 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      * 
      * @return
      */
-    @Deprecated(forRemoval = true)
+    @Deprecated
     public String getRank()
     {
         return getRankDisplayName();
