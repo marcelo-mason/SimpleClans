@@ -214,15 +214,10 @@ public class ChatBlock {
                     		col = section;
                     	}
                     } else if (msgLength(section) < colsize) {
-                    	if (padRight) {
-                    		col = centerInLineOf(section, colsize);
-                    	} else {
-                    		col = section;
-                    	}
+                    	col = centerInLineOf(section, colsize);
                     }
                 }
 
-                System.out.println(col + "END");
                 measuredCols.add(col);
             }
 

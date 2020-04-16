@@ -1012,6 +1012,7 @@ public final class StorageManager {
          */
         if (!core.existsColumn("sc_clans", "ranks")) {
         	query = "ALTER TABLE sc_clans ADD COLUMN `ranks` text;";
+        	core.execute(query);
         }
 
         /**
