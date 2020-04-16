@@ -2,7 +2,6 @@ package net.sacredlabyrinth.phaed.simpleclans;
 
 import net.md_5.bungee.api.chat.HoverEvent;
 import net.md_5.bungee.api.chat.TextComponent;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 import net.sacredlabyrinth.phaed.simpleclans.events.*;
 
 import org.bukkit.Bukkit;
@@ -304,26 +303,6 @@ public class Clan implements Serializable, Comparable<Clan> {
     /**
      * Check if the player is a member of this clan
      *
-     * @param playerName
-     * @return confirmation
-     */
-    @Deprecated
-    public boolean isMember(String playerName) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            UUID PlayerUniqueId = UUIDMigration.getForcedPlayerUUID(playerName);
-            if (PlayerUniqueId != null) {
-                return this.members.contains(PlayerUniqueId.toString());
-            } else {
-                return false;
-            }
-        } else {
-            return this.members.contains(playerName.toLowerCase());
-        }
-    }
-
-    /**
-     * Check if the player is a member of this clan
-     *
      * @param playerUniqueId
      * @return confirmation
      */
@@ -467,23 +446,6 @@ public class Clan implements Serializable, Comparable<Clan> {
      
         if (!this.members.contains(uuid)) {
             this.members.add(uuid);
-        }
-    }
-
-    /**
-     * (used internally)
-     *
-     * @param playerName
-     */
-    @Deprecated
-    public void removeMember(String playerName) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            UUID PlayerUniqueId = UUIDMigration.getForcedPlayerUUID(playerName);
-            if (PlayerUniqueId != null) {
-                this.members.remove(PlayerUniqueId.toString());
-            }
-        } else {
-            this.members.remove(playerName.toLowerCase());
         }
     }
 
@@ -732,24 +694,6 @@ public class Clan implements Serializable, Comparable<Clan> {
     	return isLeader(player.getUniqueId());
     }
 
-    /**
-     * Check if a player is a leader of a clan
-     *
-     * @param playerName
-     * @return the leaders
-     */
-    @Deprecated
-    public boolean isLeader(String playerName) {
-        if (isMember(playerName)) {
-            ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName.toLowerCase());
-
-            if (cp != null && cp.isLeader()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
 
     /**
      * Check if a player is a leader of a clan
@@ -1110,39 +1054,6 @@ public class Clan implements Serializable, Comparable<Clan> {
     /**
      * Remove a player from a clan
      *
-     * @param playerName
-     */
-    @Deprecated
-    public void removePlayerFromClan(String playerName) {
-        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
-
-        // remove clan group-permission
-        SimpleClans.getInstance().getPermissionsManager().removeClanPermissions(cp);
-
-        // remove permissions
-        SimpleClans.getInstance().getPermissionsManager().removeClanPlayerPermissions(cp);
-
-        cp.setClan(null);
-        cp.addPastClan(getColorTag() + (cp.isLeader() ? ChatColor.DARK_RED + "*" : ""));
-        cp.setLeader(false);
-        cp.setTrusted(false);
-        cp.setJoinDate(0);
-        removeMember(playerName);
-
-        SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
-        SimpleClans.getInstance().getStorageManager().updateClan(this);
-
-        Player matched = cp.toPlayer();
-
-        if (matched != null) {
-            SimpleClans.getInstance().getClanManager().updateDisplayName(matched);
-        }
-        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerKickedClanEvent(this, cp));
-    }
-
-    /**
-     * Remove a player from a clan
-     *
      * @param playerUniqueId
      */
     public void removePlayerFromClan(UUID playerUniqueId) {
@@ -1173,27 +1084,6 @@ public class Clan implements Serializable, Comparable<Clan> {
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerKickedClanEvent(this, cp));
     }
 
-
-    /**
-     * Promote a member to a leader of a clan
-     *
-     * @param playerName
-     */
-    @Deprecated
-    public void promote(String playerName) {
-        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
-
-        cp.setLeader(true);
-        cp.setTrusted(true);
-
-        SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
-        SimpleClans.getInstance().getStorageManager().updateClan(this);
-
-        // add clan permission
-        SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
-        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerPromoteEvent(this, cp));
-    }
-
     /**
      * Promote a member to a leader of a clan
      *
@@ -1211,25 +1101,6 @@ public class Clan implements Serializable, Comparable<Clan> {
         // add clan permission
         SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
         SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerPromoteEvent(this, cp));
-    }
-
-    /**
-     * Demote a leader back to a member of a clan
-     *
-     * @param playerName
-     */
-    @Deprecated
-    public void demote(String playerName) {
-        ClanPlayer cp = SimpleClans.getInstance().getClanManager().getClanPlayer(playerName);
-
-        cp.setLeader(false);
-
-        SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
-        SimpleClans.getInstance().getStorageManager().updateClan(this);
-
-        // add clan permission
-        SimpleClans.getInstance().getPermissionsManager().addClanPermissions(cp);
-        SimpleClans.getInstance().getServer().getPluginManager().callEvent(new PlayerDemoteEvent(this, cp));
     }
 
     /**
@@ -1947,7 +1818,7 @@ public class Clan implements Serializable, Comparable<Clan> {
 		if (r != null) {
 			ranks.remove(r);
 			getMembers().forEach(cp -> {
-				if (cp.getRank().equals(r.getName())) {
+				if (cp.getRankId().equals(r.getName())) {
 					cp.setRank("");
 					SimpleClans.getInstance().getStorageManager().updateClanPlayer(cp);
 				}

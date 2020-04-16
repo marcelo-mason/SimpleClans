@@ -757,7 +757,7 @@ public class Helper {
 
         String leaderColor = sm.getAllyChatLeaderColor();
         String memberColor = sm.getAllyChatMemberColor();
-        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRankDisplayName());
+        String rank = cp.getRankId().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRankDisplayName());
         String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getAllyChatRank()).replace("%rank%", rank) : "";
 
         String message = replacePlaceholders(sm.getAllyChatFormat(), cp, leaderColor, memberColor, rankFormat, msg);
@@ -792,7 +792,7 @@ public class Helper {
 
         String leaderColor = sm.getClanChatLeaderColor();
         String memberColor = sm.getClanChatMemberColor();
-        String rank = cp.getRank().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRankDisplayName());
+        String rank = cp.getRankId().isEmpty() ? null : ChatColor.translateAlternateColorCodes('&', cp.getRankDisplayName());
         String rankFormat = rank != null ? ChatColor.translateAlternateColorCodes('&', sm.getClanChatRank()).replace("%rank%", rank) : "";
 
         String message = replacePlaceholders(sm.getClanChatFormat(), cp, leaderColor, memberColor, rankFormat, msg);

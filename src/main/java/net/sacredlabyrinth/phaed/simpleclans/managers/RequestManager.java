@@ -46,7 +46,7 @@ public final class RequestManager {
     public void addDemoteRequest(ClanPlayer requester, String demotedName, Clan clan) {
         String msg = MessageFormat.format(plugin.getLang("asking.for.the.demotion"), Helper.capitalize(requester.getName()), demotedName);
 
-        ClanPlayer demotedTp = plugin.getClanManager().getClanPlayer(demotedName.toLowerCase());
+        ClanPlayer demotedTp = plugin.getClanManager().getClanPlayer(UUIDMigration.getForcedPlayerUUID(demotedName));
 
         List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(clan.getLeaders());
         acceptors.remove(demotedTp);
@@ -403,9 +403,10 @@ public final class RequestManager {
      * Starts the task that asks for the votes of all requests
      */
     public void askerTask() {
-        plugin.getServer().getScheduler().scheduleAsyncRepeatingTask(plugin, new Runnable() {
-            @Override
-            public void run() {
+    	new BukkitRunnable() {
+			
+			@Override
+			public void run() {
                 for (Iterator<Map.Entry<String, Request>> iter = requests.entrySet().iterator(); iter.hasNext(); ) {
                     Request req = iter.next().getValue();
 
@@ -418,10 +419,9 @@ public final class RequestManager {
                     }
 
                     ask(req);
-                    req.incrementAskCount();
-                }
-            }
-        }, 0, plugin.getSettingsManager().getRequestFreqencySecs() * 20L);
+                    req.incrementAskCount();				
+			}
+		}}.runTaskTimerAsynchronously(plugin, 0, plugin.getSettingsManager().getRequestFreqencySecs() * 20L);
     }
 
     /**

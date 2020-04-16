@@ -210,7 +210,7 @@ public class RankCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
             return;
 		}
-		if (args.length != 2) {
+		if (args.length < 2) {
             ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.rank.setdisplayname"),
             		plugin.getSettingsManager().getCommandClan()));
             return;

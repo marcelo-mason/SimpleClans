@@ -1051,7 +1051,7 @@ public final class StorageManager {
      *
      * @param
      */
-    private void updatePlayersToUUID() {
+	private void updatePlayersToUUID() {
         SimpleClans.log("[SimpleClans] Starting Migration to UUID Players !");
         SimpleClans.log("[SimpleClans] ==================== ATTENTION DONT STOP BUKKIT ! ==================== ");
         SimpleClans.log("[SimpleClans] ==================== ATTENTION DONT STOP BUKKIT ! ==================== ");

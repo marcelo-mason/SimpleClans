@@ -325,7 +325,7 @@ public final class PermissionsManager {
     	}
     	
     	boolean hasRankPermission = false;
-    	String rankName = clanPlayer.getRank();
+    	String rankName = clanPlayer.getRankId();
     	Clan clan = clanPlayer.getClan();
 		if (clan.hasRank(rankName)) {
 			hasRankPermission = clan.getRank(rankName).getPermissions().contains(permission.toString());

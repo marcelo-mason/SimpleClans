@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans;
 
-import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;

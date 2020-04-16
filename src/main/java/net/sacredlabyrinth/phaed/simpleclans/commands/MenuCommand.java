@@ -39,6 +39,8 @@ public class MenuCommand {
         String clanCommand = plugin.getSettingsManager().getCommandClan();
 
         ChatBlock chatBlock = new ChatBlock();
+        chatBlock.setCropRight(false);
+        chatBlock.setPadRight(false);
 
         if (clan == null && plugin.getPermissionsManager().has(player, "simpleclans.leader.create")) {
             if (plugin.getSettingsManager().isePurchaseCreation()) {

@@ -10,7 +10,6 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
 import org.bukkit.ChatColor;
 import org.bukkit.conversations.ConversationContext;
 import org.bukkit.conversations.Prompt;
-import static org.bukkit.conversations.Prompt.END_OF_CONVERSATION;
 import org.bukkit.conversations.StringPrompt;
 import org.bukkit.entity.Player;
 

@@ -16,8 +16,6 @@ public class UUIDMigration {
 	private UUIDMigration() {}
 	
     public static boolean canReturnUUID() {
-        if(!SimpleClans.getInstance().getSettingsManager().isOnlineMode())
-            return false;
         try {
             Bukkit.class.getDeclaredMethod("getPlayer", UUID.class);
             return true;
@@ -32,22 +30,18 @@ public class UUIDMigration {
 		OfflinePlayer offlinePlayer = SimpleClans.getInstance().getServer().getOfflinePlayer(playerDisplayName);
 
         if (onlinePlayer != null) {
-            return onlinePlayer.getUniqueId();
+        	return onlinePlayer.getUniqueId();
         } else {
-            for (ClanPlayer cp : SimpleClans.getInstance().getClanManager().getAllClanPlayers()) {
-                if (cp.getName().equalsIgnoreCase(playerDisplayName)) {
-                    return cp.getUniqueId();
-                }
-            }
-            try {
-                return UUIDFetcher.getUUIDOf(playerDisplayName);
-            } catch (Exception ex) {
-                if (offlinePlayer != null) {
-                    return offlinePlayer.getUniqueId();
-                } else {
-                    return null;
-                }
-            }
+        	for (ClanPlayer cp : SimpleClans.getInstance().getClanManager().getAllClanPlayers()) {
+        		if (cp.getName().equalsIgnoreCase(playerDisplayName)) {
+        			return cp.getUniqueId();
+        		}
+        	}
+        	if (offlinePlayer != null) {
+        		return offlinePlayer.getUniqueId();
+        	} else {
+        		return null;
+        	}
         }
     }
 

@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import org.bstats.bukkit.Metrics;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.sacredlabyrinth.phaed.simpleclans.executors.AcceptCommandExecutor;
@@ -121,6 +122,23 @@ public class SimpleClans extends JavaPlugin {
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
         
         startTasks();
+        startMetrics();
+    }
+    
+    private void startMetrics() {
+    	Metrics metrics = new Metrics(this, 7131);
+    	SettingsManager sm = getSettingsManager();
+    	ClanManager cm = getClanManager();
+    	metrics.addCustomChart(new Metrics.SingleLineChart("clans", () -> cm.getClans().size()));
+    	metrics.addCustomChart(new Metrics.SingleLineChart("clan_players", () -> cm.getAllClanPlayers().size()));
+    	metrics.addCustomChart(new Metrics.SimplePie("database", () -> sm.isUseMysql() ? "MySQL" : "SQLite"));
+    	metrics.addCustomChart(new Metrics.SimplePie("upkeep", () -> sm.isClanUpkeep() ? "enabled" : "disabled"));
+    	metrics.addCustomChart(new Metrics.SimplePie("member_fee", () -> sm.isMemberFee() ? "enabled" : "disabled"));
+    	metrics.addCustomChart(new Metrics.SimplePie("rejoin_cooldown", () -> sm.isRejoinCooldown() ? "enabled" : "disabled"));
+    	metrics.addCustomChart(new Metrics.SimplePie("clan_verification", () -> sm.isRequireVerification() ? "enabled" : "disabled"));
+    	metrics.addCustomChart(new Metrics.SimplePie("money_per_kill", () -> sm.isMoneyPerKill() ? "enabled" : "disabled"));
+    	metrics.addCustomChart(new Metrics.SimplePie("threads", () -> sm.getUseThreads() ? "enabled" : "disabled"));
+    	metrics.addCustomChart(new Metrics.SimplePie("bungeecord", () -> sm.getUseBungeeCord() ? "enabled" : "disabled"));
     }
 
     private void startTasks() {

@@ -10,13 +10,11 @@ import org.bukkit.configuration.file.FileConfiguration;
 
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
 /**
  * @author phaed
  */
 public final class SettingsManager {
-    private boolean onlineMode;
     private boolean disableMessages;
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
@@ -215,7 +213,6 @@ public final class SettingsManager {
             getConfig().options().copyDefaults(true);
         }
 
-        onlineMode = getConfig().getBoolean("settings.online-mode");
         disableMessages = getConfig().getBoolean("settings.disable-messages");
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
@@ -669,60 +666,6 @@ public final class SettingsManager {
         }
 
         return false;
-    }
-    
-    /**
-     * Check whether a player is banned
-     *
-     * @param playerName the player's name
-     * @return whether player is banned
-     */
-    @Deprecated
-    public boolean isBanned(String playerName) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            playerName = UUIDMigration.getForcedPlayerUUID(playerName).toString();
-        }
-        for (String pl : getBannedPlayers()) {
-            if (pl.equalsIgnoreCase(playerName)) {
-                return true;
-            }
-        }
-
-        return false;
-    }
-    
-    /**
-     * Add a player to the banned list
-     *
-     * @param playerName the player's name
-     */
-    @Deprecated
-    public void addBanned(String playerName) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            playerName = UUIDMigration.getForcedPlayerUUID(playerName).toString();
-        }
-        if (!bannedPlayers.contains(playerName)) {
-            bannedPlayers.add(playerName);
-        }
-
-        save();
-    }
-
-    /**
-     * Remove a player from the banned list
-     *
-     * @param playerName the player's name
-     */
-    @Deprecated
-    public void removeBanned(String playerName) {
-        if (SimpleClans.getInstance().hasUUID()) {
-            playerName = UUIDMigration.getForcedPlayerUUID(playerName).toString();
-        }
-        if (bannedPlayers.contains(playerName)) {
-            bannedPlayers.remove(playerName);
-        }
-
-        save();
     }
 
     /**
@@ -1614,8 +1557,9 @@ public final class SettingsManager {
         return tamableMobsSharing;
     }
 
+    @Deprecated(forRemoval = true)
     public boolean isOnlineMode() {
-        return onlineMode;
+        return true;
     }
 
     public boolean isDisableMessages() {

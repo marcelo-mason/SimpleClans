@@ -543,6 +543,9 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
      */
     public String getLastSeenString()
     {
+    	if (toPlayer() != null) {
+    		return SimpleClans.getInstance().getLang("online");
+    	}
         return new java.text.SimpleDateFormat("MMM dd, ''yy h:mm a").format(new Date(this.lastSeen));
     }
 
@@ -987,11 +990,31 @@ public class ClanPlayer implements Serializable, Comparable<ClanPlayer>
     	return "";
     }
     
+    /**
+     * Gets the rank id
+     * 
+     * @return
+     */
+    public String getRankId() {
+    	return rank;
+    }
+    
+    /**
+     * Gets the rank displayname
+     * 
+     * @return
+     */
+    @Deprecated(forRemoval = true)
     public String getRank()
     {
-        return rank;
+        return getRankDisplayName();
     }
 
+    /**
+     * Sets the rank id
+     * 
+     * @param rank the rank id
+     */
     public void setRank(String rank)
     {
     	if (rank == null) {

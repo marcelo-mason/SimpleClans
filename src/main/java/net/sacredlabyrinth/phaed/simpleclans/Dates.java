@@ -67,10 +67,6 @@ public class Dates {
         return differenceInSeconds(new Date(date1.getTime()), new Date(date2.getTime()));
     }
 
-    private static double differenceInMilliseconds(Timestamp date1, Timestamp date2) {
-        return differenceInMilliseconds(new Date(date1.getTime()), new Date(date2.getTime()));
-    }
-
     /**
      * @param date1
      * @param date2

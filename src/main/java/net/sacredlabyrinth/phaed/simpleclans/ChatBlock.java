@@ -19,11 +19,23 @@ public class ChatBlock {
     private final ArrayList<String> columnAlignments = new ArrayList<>();
     private final LinkedList<String[]> rows = new LinkedList<>();
     private String color = "";
+    private boolean cropRight = true;
+    private boolean padRight = true;
+    
     /**
      *
      */
     public static final Logger LOG = Logger.getLogger("Minecraft");
 
+    
+    public void setCropRight(boolean cropRight) {
+    	this.cropRight = cropRight;
+    }
+    
+    public void setPadRight(boolean padRight) {
+    	this.padRight = padRight;
+    }
+    
     /**
      * @param columnAlignment
      */
@@ -182,18 +194,35 @@ public class ChatBlock {
                     }
                 } else if (align.equalsIgnoreCase("l")) {
                     if (msgLength(section) > colsize) {
-                        col = cropRightToFit(section, colsize);
+                    	if (cropRight) {
+                    		col = cropRightToFit(section, colsize);
+                        } else {
+                        	col = section;
+                        }
                     } else if (msgLength(section) < colsize) {
-                        col = paddRightToFit(section, colsize);
+                    	if (padRight) {
+                    		col = paddRightToFit(section, colsize);
+                    	} else {
+                    		col = section;
+                    	}
                     }
                 } else if (align.equalsIgnoreCase("c")) {
                     if (msgLength(section) > colsize) {
-                        col = cropRightToFit(section, colsize);
+                    	if (cropRight) {
+                    		col = cropRightToFit(section, colsize);
+                    	} else {
+                    		col = section;
+                    	}
                     } else if (msgLength(section) < colsize) {
-                        col = centerInLineOf(section, colsize);
+                    	if (padRight) {
+                    		col = centerInLineOf(section, colsize);
+                    	} else {
+                    		col = section;
+                    	}
                     }
                 }
 
+                System.out.println(col + "END");
                 measuredCols.add(col);
             }
 
@@ -253,8 +282,10 @@ public class ChatBlock {
             }
 
             // crop and print out
-
-            String msg = cropRightToFit((prefix_used ? empty_prefix : prefix + " ") + finalString, LINE_LENGTH);
+            String msg = (prefix_used ? empty_prefix : prefix + " ") + finalString;
+            if (cropRight) {
+            	msg = cropRightToFit(msg, LINE_LENGTH);
+            }
             if (color.length() > 0) {
                 msg = color + msg;
             }

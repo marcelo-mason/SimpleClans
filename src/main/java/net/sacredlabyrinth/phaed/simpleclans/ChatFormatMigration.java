@@ -7,10 +7,12 @@ import org.bukkit.configuration.file.FileConfiguration;
  *
  * @author RoinujNosde
  */
+@SuppressWarnings("deprecation")
 public class ChatFormatMigration {
 
     SimpleClans plugin = SimpleClans.getInstance();
 
+    
     public void migrateClanChat() {
         SettingsManager sm = plugin.getSettingsManager();
         FileConfiguration c = sm.getConfig();

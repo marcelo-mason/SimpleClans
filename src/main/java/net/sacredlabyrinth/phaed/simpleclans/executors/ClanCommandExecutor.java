@@ -128,6 +128,7 @@ public final class ClanCommandExecutor implements CommandExecutor {
                     menuCommand.execute(player);
                 } else {
                     String subcommand = args[0];
+                    // TODO if
                     String[] subargs = Helper.removeFirst(args);
 
                     if (subcommand.equalsIgnoreCase(plugin.getLang("create.command"))) {
