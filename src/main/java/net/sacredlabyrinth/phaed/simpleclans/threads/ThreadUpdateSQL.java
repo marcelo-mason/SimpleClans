@@ -10,15 +10,15 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
  */
 public class ThreadUpdateSQL extends Thread {
 
-    Connection Connection;
-    String Query;
-    String TypeSQL;
+    Connection connection;
+    String query;
+    String sqlType;
 
-    public ThreadUpdateSQL(Connection Connection, String Query, String TypeSQL)
+    public ThreadUpdateSQL(Connection connection, String query, String sqlType)
     {
-        this.Query = Query;
-        this.Connection = Connection;
-        this.TypeSQL = TypeSQL;
+        this.query = query;
+        this.connection = connection;
+        this.sqlType = sqlType;
     }
 
     @Override
@@ -26,14 +26,16 @@ public class ThreadUpdateSQL extends Thread {
     {
         try
         {
-            this.Connection.createStatement().executeUpdate(this.Query);
+        	if (!connection.isClosed()) {
+        		this.connection.createStatement().executeUpdate(this.query);
+        	}
         }
         catch (SQLException ex)
         {
             if (!ex.toString().contains("not return ResultSet"))
             {
-                SimpleClans.getLog().severe("[Thread] Error at SQL " + this.TypeSQL + " Query: " + ex);
-                SimpleClans.getLog().severe("[Thread] Query: " + this.Query);
+                SimpleClans.getLog().severe("[Thread] Error at SQL " + this.sqlType + " Query: " + ex);
+                SimpleClans.getLog().severe("[Thread] Query: " + this.query);
             }
         }
     }

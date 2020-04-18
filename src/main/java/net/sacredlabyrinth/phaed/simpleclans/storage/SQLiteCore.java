@@ -7,8 +7,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Logger;
 
+import org.bukkit.scheduler.BukkitRunnable;
+
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
-import net.sacredlabyrinth.phaed.simpleclans.threads.ThreadUpdateSQL;
 
 /**
  * @author cc_madelg
@@ -99,7 +100,6 @@ public class SQLiteCore implements DBCore {
     @Override
     public ResultSet select(String query) {
         try {
-
             return getConnection().createStatement().executeQuery(query);
         } catch (SQLException ex) {
             log.severe("Error at SQL Query: " + ex.getMessage());
@@ -116,8 +116,7 @@ public class SQLiteCore implements DBCore {
     @Override
     public void insert(String query) {
     	if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
-    		Thread thread = new Thread(new ThreadUpdateSQL(getConnection(), query, "INSERT"));
-    		thread.start();
+    		executeAsync(query, "INSERT");    		
     	} else {
     		try {
     			getConnection().createStatement().executeQuery(query);
@@ -138,8 +137,7 @@ public class SQLiteCore implements DBCore {
     @Override
     public void update(String query) {
     	if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
-    		Thread thread = new Thread(new ThreadUpdateSQL(getConnection(), query, "UPDATE"));
-    		thread.start();
+    		executeAsync(query, "UPDATE");    		
     	} else {
     		try {
     			getConnection().createStatement().executeQuery(query);
@@ -160,8 +158,7 @@ public class SQLiteCore implements DBCore {
     @Override
     public void delete(String query) {
     	if (SimpleClans.getInstance().getSettingsManager().getUseThreads()) {
-    		Thread thread = new Thread(new ThreadUpdateSQL(getConnection(), query, "DELETE"));
-    		thread.start();
+    		executeAsync(query, "DELETE");    		
     	} else {
     		try {
     			getConnection().createStatement().executeQuery(query);
@@ -223,5 +220,26 @@ public class SQLiteCore implements DBCore {
             log.severe("Failed to check if column " + column + " exists in table " + table + " : " + e.getMessage());
             return false;
         }
+    }
+    
+    private void executeAsync(String query, String sqlType) {
+    	new BukkitRunnable() {
+			@Override
+			public void run() {
+		        try {
+		        	if (connection != null && !connection.isClosed()) {
+		        		connection.createStatement().executeUpdate(query);
+		        	}
+		        }
+		        catch (SQLException ex) {
+		            if (!ex.toString().contains("not return ResultSet"))
+		            {
+		                SimpleClans.getLog().severe("[Thread] Error at SQL " + sqlType + " Query: " + ex);
+		                SimpleClans.getLog().severe("[Thread] Query: " + query);
+		            }
+		        }				
+			}
+		}.runTaskAsynchronously(SimpleClans.getInstance());
+
     }
 }
