@@ -1217,7 +1217,8 @@ public class Clan implements Serializable, Comparable<Clan> {
         online.remove(cp);
         
         double minimum = SimpleClans.getInstance().getSettingsManager().getPercentageOnlineToDemote();
-        double totalLeaders = getLeaders().size();
+        // all leaders minus the one being demoted
+        double totalLeaders = getLeaders().size() - 1;
         double onlineLeaders = online.size();
         
         
