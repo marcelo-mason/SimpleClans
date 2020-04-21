@@ -52,7 +52,7 @@ public final class RequestManager {
         acceptors.remove(demotedTp);
 
         Request req = new Request(plugin, ClanRequest.DEMOTE, acceptors, requester, demotedName, clan, msg);
-        requests.put(clan.getTag(), req);
+        requests.put(req.getTarget(), req);
         ask(req);
     }
 
@@ -70,7 +70,7 @@ public final class RequestManager {
         acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.PROMOTE, acceptors, requester, promotedName, clan, msg);
-        requests.put(clan.getTag(), req);
+        requests.put(req.getTarget(), req);
         ask(req);
     }
 
@@ -87,7 +87,7 @@ public final class RequestManager {
         acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.DISBAND, acceptors, requester, clan.getTag(), clan, msg);
-        requests.put(clan.getTag(), req);
+        requests.put(req.getTarget(), req);
         ask(req);
     }
 
@@ -119,7 +119,7 @@ public final class RequestManager {
         acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.START_WAR, acceptors, requester, warClan.getTag(), requestingClan, msg);
-        requests.put(warClan.getTag(), req);
+        requests.put(req.getTarget(), req);
         ask(req);
     }
 
@@ -137,7 +137,7 @@ public final class RequestManager {
         acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.END_WAR, acceptors, requester, warClan.getTag(), requestingClan, msg);
-        requests.put(warClan.getTag(), req);
+        requests.put(req.getTarget(), req);
         ask(req);
     }
 
@@ -155,7 +155,7 @@ public final class RequestManager {
         acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.CREATE_ALLY, acceptors, requester, allyClan.getTag(), requestingClan, msg);
-        requests.put(allyClan.getTag(), req);
+        requests.put(req.getTarget(), req);
         ask(req);
     }
 
@@ -173,7 +173,7 @@ public final class RequestManager {
         acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.BREAK_RIVALRY, acceptors, requester, rivalClan.getTag(), requestingClan, msg);
-        requests.put(rivalClan.getTag(), req);
+        requests.put(req.getTarget(), req);
         ask(req);
     }
 
