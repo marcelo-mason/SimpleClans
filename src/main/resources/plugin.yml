@@ -50,7 +50,7 @@ permissions:
     description: Can view alliances by clan
   simpleclans.anyone.rivalries:
     description: Can view rivalries by clan
-  simpleclans.anyone.kdr-exempt:
+  simpleclans.other.kdr-exempt:
     description: The player's KDR is not affected on killing/dying
     default: false
   simpleclans.member.profile:

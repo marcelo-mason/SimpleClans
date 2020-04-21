@@ -97,7 +97,7 @@ public class SCEntityListener implements Listener
             			
             		}
             	}
-            	String kdrExempt = "simpleclans.anyone.kdr-exempt";
+            	String kdrExempt = "simpleclans.other.kdr-exempt";
             	PermissionsManager pm = plugin.getPermissionsManager();
             	if (pm.has(attacker, kdrExempt) || pm.has(victim, kdrExempt)) {
             		return;
