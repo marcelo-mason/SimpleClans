@@ -63,9 +63,16 @@ public class PromoteCommand {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.not.a.member.of.your.clan"));
             return;
         }
-        if (clan.isLeader(promoted) && plugin.getSettingsManager().isConfirmationForPromote()) {
+        if (clan.isLeader(promoted)) {
             ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("the.player.is.already.a.leader"));
             return;
+        }
+        
+        if (plugin.getSettingsManager().isConfirmationForPromote() && clan.getLeaders().size() != 1) {
+        	plugin.getRequestManager().addPromoteRequest(cp, promoted.getName(), clan);
+			ChatBlock.sendMessage(player,
+					ChatColor.AQUA + plugin.getLang("promotion.vote.has.been.requested.from.all.leaders"));
+        	return;
         }
 
         clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted.getName())));
