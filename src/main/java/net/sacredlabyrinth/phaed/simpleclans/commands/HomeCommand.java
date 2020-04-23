@@ -152,7 +152,12 @@ public class HomeCommand {
             } else {
                 loc = cp.getClan().getHomeLocation();
             }
-          
+            
+            if(loc == null) {
+                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("hombase.not.set"));
+                return;
+            }
+            
             HomeRegroupEvent homeRegroupEvent = new HomeRegroupEvent(clan, cp, clan.getOnlineMembers(), loc);
             SimpleClans.getInstance().getServer().getPluginManager().callEvent(homeRegroupEvent);
 
