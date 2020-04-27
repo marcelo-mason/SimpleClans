@@ -3,6 +3,8 @@ package net.sacredlabyrinth.phaed.simpleclans.commands;
 import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.language.LanguageResource;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -31,9 +33,10 @@ public class ReloadCommand
         	ChatBlock.sendMessage(sender, ChatColor.RED + "Does not match a clan command");
         	return;
         }
+        
         plugin.reloadConfig();
+        LanguageResource.clearCache();
         plugin.getSettingsManager().load();
-        plugin.getLanguageManager().load();
         plugin.getStorageManager().importFromDatabase();
         SimpleClans.getInstance().getPermissionsManager().loadPermissions();
 

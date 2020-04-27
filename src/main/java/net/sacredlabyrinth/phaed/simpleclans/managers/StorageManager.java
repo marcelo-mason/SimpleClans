@@ -146,6 +146,7 @@ public final class StorageManager {
             core = new SQLiteCore(plugin.getDataFolder().getPath());
 
             if (core.checkConnection()) {
+
                 SimpleClans.log("[SimpleClans] " + plugin.getLang("sqlite.connection.successful"));
 
                 if (!core.existsTable("sc_clans")) {

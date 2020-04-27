@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.bukkit.configuration.file.FileConfiguration;
@@ -183,6 +184,8 @@ public final class SettingsManager {
     private int maxKillsPerVictim;
     private boolean delayBetweenKillsEnabled;
     private int delayBetweenKills;
+	private String language;
+	private boolean languagePerPlayer;
 
     /**
      *
@@ -368,6 +371,8 @@ public final class SettingsManager {
         moneyperkill = getConfig().getBoolean("economy.money-per-kill");
         KDRMultipliesPerKill = getConfig().getDouble("economy.money-per-kill-kdr-multipier");
         teleportBlocks = getConfig().getBoolean("settings.teleport-blocks");
+        language = getConfig().getString("settings.language", "");
+        languagePerPlayer = getConfig().getBoolean("settings.language-per-player", false);
         AutoGroupGroupName = getConfig().getBoolean("permissions.auto-group-groupname");
         tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         allowReGroupCommand = getConfig().getBoolean("settings.allow-regroup-command");
@@ -396,6 +401,20 @@ public final class SettingsManager {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+    
+    public Locale getLanguage() {
+    	String[] split = language.split("_");
+    	
+    	if (split.length == 2) {
+    		return new Locale(split[0], split[1]);
+    	}
+
+    	return new Locale(language);
+    }
+    
+    public boolean isLanguagePerPlayer() {
+    	return languagePerPlayer;
     }
     
     public int getTasksCollectUpkeepHour() {

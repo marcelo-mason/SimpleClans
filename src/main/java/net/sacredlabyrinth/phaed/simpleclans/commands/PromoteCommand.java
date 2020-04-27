@@ -68,7 +68,7 @@ public class PromoteCommand {
             return;
         }
         
-        if (plugin.getSettingsManager().isConfirmationForPromote() && clan.getLeaders().size() != 1) {
+        if (plugin.getSettingsManager().isConfirmationForPromote() && clan.getLeaders().size() > 1) {
         	plugin.getRequestManager().addPromoteRequest(cp, promoted.getName(), clan);
 			ChatBlock.sendMessage(player,
 					ChatColor.AQUA + plugin.getLang("promotion.vote.has.been.requested.from.all.leaders"));

@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.conversation;
 
 import java.text.MessageFormat;
 import java.util.Arrays;
+
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.Helper;
@@ -28,7 +29,7 @@ public class ResignPrompt extends StringPrompt {
         ClanManager cm = plugin.getClanManager();
         ClanPlayer cp = cm.getClanPlayer(player);
         Clan clan = cp.getClan();
-
+        		
         if (yes.equalsIgnoreCase(input)) {
             if (!clan.isLeader(player) || clan.getLeaders().size() > 1) {
                 clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("0.has.resigned"), Helper.capitalize(player.getName())));
@@ -37,14 +38,18 @@ public class ResignPrompt extends StringPrompt {
                 
                 return new MessagePromptImpl(ChatColor.AQUA + plugin.getLang("resign.success"));
             } else if (clan.isLeader(player) && clan.getLeaders().size() == 1) {
-                plugin.getClanManager().serverAnnounce(ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.has.been.disbanded"), clan.getName()));
                 clan.disband();
+                String clanDisbanded = ChatColor.AQUA + MessageFormat.format(plugin.getLang("clan.has.been.disbanded"), clan.getName());
+                //message for the server
+                plugin.getClanManager().serverAnnounce(clanDisbanded);
+                //message for the player
+                return new MessagePromptImpl(clanDisbanded);
             } else {
                 return new MessagePromptImpl(ChatColor.RED + plugin.getLang("last.leader.cannot.resign.you.must.appoint.another.leader.or.disband.the.clan"));
             }
+        } else {
+        	return new MessagePromptImpl(ChatColor.RED + plugin.getLang("resign.request.cancelled"));
         }
-
-        return END_OF_CONVERSATION;
     }
 
     @Override

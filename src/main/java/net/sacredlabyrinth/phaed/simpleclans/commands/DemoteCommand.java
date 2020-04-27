@@ -92,7 +92,7 @@ public class DemoteCommand {
 			ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("player.is.not.a.leader.of.your.clan"));
 			return;
 		}
-		if (clan.getLeaders().size() != 1 && plugin.getSettingsManager().isConfirmationForDemote()) {
+		if (clan.getLeaders().size() > 2 && plugin.getSettingsManager().isConfirmationForDemote()) {
 			plugin.getRequestManager().addDemoteRequest(cp, demotedName, clan);
 			ChatBlock.sendMessage(player,
 					ChatColor.AQUA + plugin.getLang("demotion.vote.has.been.requested.from.all.leaders"));

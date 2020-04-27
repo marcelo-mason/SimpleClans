@@ -9,13 +9,14 @@ import java.io.*;
 import java.util.HashMap;
 
 @SuppressWarnings("unchecked")
+@Deprecated
 public class LanguageManager {
     private File file;
     private HashMap<String, String> language;
     private String[] comments = new String[]{};
 
     public LanguageManager() {
-        load();
+        //load();
     }
 
     public void load() {

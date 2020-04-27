@@ -40,6 +40,23 @@ public class Helper {
     }
     
     /**
+     * Gets the Player locale
+     * 
+     * @param player the player
+     * @return the locale
+     */
+    public static Locale getLocale(Player player) {
+    	String lang = player.getLocale();
+    	String[] split = lang.split("_");
+    	
+    	if (split.length == 2) {
+    		return new Locale(split[0], split[1]);
+    	}
+    	
+    	return new Locale(lang);
+    }
+    
+    /**
      * Converts a JSON String to a list of Ranks
      * 
      * @param json

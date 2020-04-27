@@ -28,28 +28,32 @@ public class SQLiteCore implements DBCore {
         this.dbName = "SimpleClans";
         this.dbLocation = dbLocation;
         this.log = SimpleClans.getLog();
-
         initialize();
     }
 
     private void initialize() {
         if (file == null) {
+
             File dbFolder = new File(dbLocation);
 
             if (dbName.contains("/") || dbName.contains("\\") || dbName.endsWith(".db")) {
                 log.severe("The database name can not contain: /, \\, or .db");
                 return;
             }
+
             if (!dbFolder.exists()) {
                 dbFolder.mkdir();
             }
 
             file = new File(dbFolder.getAbsolutePath() + File.separator + dbName + ".db");
+
         }
 
         try {
             Class.forName("org.sqlite.JDBC");
+
             connection = DriverManager.getConnection("jdbc:sqlite:" + file.getAbsolutePath());
+
         } catch (SQLException ex) {
             log.severe("SQLite exception on initialize " + ex);
         } catch (ClassNotFoundException ex) {

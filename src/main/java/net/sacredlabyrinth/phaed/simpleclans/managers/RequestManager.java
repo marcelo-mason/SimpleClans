@@ -55,6 +55,7 @@ public final class RequestManager {
         acceptors.remove(demotedTp);
 
         Request req = new Request(plugin, ClanRequest.DEMOTE, acceptors, requester, demotedName, clan, msg);
+        req.vote(requester.getName(), VoteResult.ACCEPT);
         requests.put(req.getClan().getTag(), req);
         ask(req);
     }
@@ -73,10 +74,10 @@ public final class RequestManager {
         String msg = MessageFormat.format(plugin.getLang("asking.for.the.promotion"), Helper.capitalize(requester.getName()), promotedName);
 
         List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(clan.getLeaders());
-        acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.PROMOTE, acceptors, requester, promotedName, clan, msg);
         requests.put(req.getClan().getTag(), req);
+        req.vote(requester.getName(), VoteResult.ACCEPT);
         ask(req);
     }
 
@@ -93,10 +94,10 @@ public final class RequestManager {
         String msg = MessageFormat.format(plugin.getLang("asking.for.the.deletion"), Helper.capitalize(requester.getName()));
 
         List<ClanPlayer> acceptors = Helper.stripOffLinePlayers(clan.getLeaders());
-        acceptors.remove(requester);
 
         Request req = new Request(plugin, ClanRequest.DISBAND, acceptors, requester, clan.getTag(), clan, msg);
         requests.put(req.getTarget(), req);
+        req.vote(requester.getName(), VoteResult.ACCEPT);
         ask(req);
     }
 

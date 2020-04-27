@@ -49,6 +49,10 @@ public class MenuCommand {
                 chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.create.tag.name.1.create.a.new.clan"), clanCommand, ChatColor.WHITE));
             }
         }
+        if (clan != null && plugin.getPermissionsManager().has(player, "simpleclans.member.chat")) {
+        	String chatCommand = plugin.getSettingsManager().isTagBasedClanChat() ? clan.getTag() : plugin.getSettingsManager().getCommandClanChat();
+        	chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.message.1.send.a.message.to.clan.chat"), chatCommand, ChatColor.WHITE));
+        }
         if (isNonVerified && plugin.getSettingsManager().isRequireVerification() && plugin.getSettingsManager().isePurchaseVerification()) {
             chatBlock.addRow(ChatColor.DARK_RED + "  " + MessageFormat.format(plugin.getLang("0.verify.1.purchase.verification.of.your.clan"), clanCommand, ChatColor.WHITE));
         }

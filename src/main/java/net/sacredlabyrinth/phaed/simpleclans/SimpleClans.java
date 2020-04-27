@@ -3,10 +3,12 @@ package net.sacredlabyrinth.phaed.simpleclans;
 import java.text.MessageFormat;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import net.sacredlabyrinth.phaed.simpleclans.executors.AcceptCommandExecutor;
@@ -15,6 +17,8 @@ import net.sacredlabyrinth.phaed.simpleclans.executors.ClanCommandExecutor;
 import net.sacredlabyrinth.phaed.simpleclans.executors.DenyCommandExecutor;
 import net.sacredlabyrinth.phaed.simpleclans.executors.GlobalCommandExecutor;
 import net.sacredlabyrinth.phaed.simpleclans.executors.MoreCommandExecutor;
+import net.sacredlabyrinth.phaed.simpleclans.language.LanguageMigration;
+import net.sacredlabyrinth.phaed.simpleclans.language.LanguageResource;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -81,18 +85,18 @@ public class SimpleClans extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        
+        new LanguageMigration(this).migrate();        
         settingsManager = new SettingsManager();
         this.hasUUID = UUIDMigration.canReturnUUID();
+        
         languageManager = new LanguageManager();
-
         permissionsManager = new PermissionsManager();
         requestManager = new RequestManager();
         clanManager = new ClanManager();
         storageManager = new StorageManager();
         teleportManager = new TeleportManager();
         chatFormatMigration = new ChatFormatMigration();
-        
+
         chatFormatMigration.migrateAllyChat();
         chatFormatMigration.migrateClanChat();
 
@@ -120,6 +124,9 @@ public class SimpleClans extends JavaPlugin {
         getCommand(getSettingsManager().getCommandClan()).setTabCompleter(new PlayerNameTabCompleter());
         logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
         logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
+        if (!Locale.getDefault().getLanguage().equals("en")) {
+        	logger.info("[SimpleClans] Help us translate SimpleClans to your language! Access https://crowdin.com/project/simpleclans/");
+        }
         
         startTasks();
         startMetrics();
@@ -194,11 +201,22 @@ public class SimpleClans extends JavaPlugin {
     }
 
     /**
-     * @param msg the path within the language file
+     * @param key the path within the language file
      * @return the lang
      */
-    public String getLang(String msg) {
-        return languageManager.get(msg);
+    public String getLang(String key) {
+        return getLang(key, null);
+    }
+    
+    public String getLang(String key, Player player) {
+    	Locale locale;
+    	if (player == null) {
+    		locale = getSettingsManager().getLanguage();
+    	} else {
+    		locale = Helper.getLocale(player);
+    	}
+    	
+    	return new LanguageResource().getLang(key, locale);
     }
 
     public TeleportManager getTeleportManager() {
@@ -224,6 +242,7 @@ public class SimpleClans extends JavaPlugin {
         this.hasUUID = trueOrFalse;
     }
 
+    @Deprecated
     public LanguageManager getLanguageManager() {
         return languageManager;
     }

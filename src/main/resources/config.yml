@@ -38,6 +38,7 @@ settings:
     - vip
     - clan
     language: en
+    language-per-player: false
     disallowed-tag-colors:
     - '4'
     server-name: '&4SimpleClans'
