@@ -83,8 +83,8 @@ public class RivalCommand {
             if (!clan.reachedRivalLimit()) {
                 if (!clan.isRival(rival.getTag())) {
                     clan.addRival(rival);
-                    rival.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.initiated.a.rivalry"), Helper.capitalize(clan.getName()), rival.getName()), false);
-                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.initiated.a.rivalry"), Helper.capitalize(player.getName()), Helper.capitalize(rival.getName())));
+                    rival.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.initiated.a.rivalry"), clan.getName(), rival.getName()), false);
+                    clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.initiated.a.rivalry"), player.getName(), rival.getName()));
                 } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("your.clans.are.already.rivals"));
                 }
@@ -100,7 +100,7 @@ public class RivalCommand {
             }
             if (clan.isRival(rival.getTag())) {
                 plugin.getRequestManager().addRivalryBreakRequest(cp, rival, clan);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.asked.to.end.rivalry"), Helper.capitalize(rival.getName())));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.asked.to.end.rivalry"), rival.getName()));
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("your.clans.are.not.rivals"));
             }

@@ -102,6 +102,6 @@ public class InviteCommand {
         }
         
         plugin.getRequestManager().addInviteRequest(cp, invited.getName(), clan);
-        ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.asked.to.join"), Helper.capitalize(invited.getName()), clan.getName()));
+        ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.asked.to.join"), invited.getName(), clan.getName()));
     }
 }

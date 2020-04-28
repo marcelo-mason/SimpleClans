@@ -82,7 +82,7 @@ public class KillsCommand {
 				            chatBlock.addRow("  " + playerKills.getKey(), ChatColor.AQUA + "" + count);
 				        }
 
-				        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(name) + subColor + " " + plugin.getLang("kills") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+				        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + name + subColor + " " + plugin.getLang("kills") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
 				        ChatBlock.sendBlank(player);
 
 				        boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

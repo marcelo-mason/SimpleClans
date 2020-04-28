@@ -75,7 +75,7 @@ public class PromoteCommand {
         	return;
         }
 
-        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), Helper.capitalize(promoted.getName())));
+        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("promoted.to.leader"), promoted.getName()));
         clan.promote(promoted.getUniqueId());
     }
 }

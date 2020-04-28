@@ -67,7 +67,7 @@ public class WarCommand {
 
                 if (!onlineLeaders.isEmpty()) {
                     plugin.getRequestManager().addWarStartRequest(cp, war, clan);
-                    ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.have.been.asked.to.accept.the.war.request"), Helper.capitalize(war.getName())));
+                    ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.have.been.asked.to.accept.the.war.request"), war.getName()));
                 } else {
                     ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("at.least.one.leader.accept.the.alliance"));
                 }
@@ -83,7 +83,7 @@ public class WarCommand {
             }
             if (clan.isWarring(war.getTag())) {
                 plugin.getRequestManager().addWarEndRequest(cp, war, clan);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.asked.to.end.rivalry"), Helper.capitalize(war.getName())));
+                ChatBlock.sendMessage(player, ChatColor.AQUA + MessageFormat.format(plugin.getLang("leaders.asked.to.end.rivalry"), war.getName()));
             } else {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clans.not.at.war"));
             }

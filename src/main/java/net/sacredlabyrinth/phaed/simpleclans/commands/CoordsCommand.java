@@ -96,7 +96,7 @@ public class CoordsCommand {
         }
 
         ChatBlock.sendBlank(player);
-        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor + " " + plugin.getLang("coords") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + clan.getName() + subColor + " " + plugin.getLang("coords") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
         ChatBlock.sendBlank(player);
 
         boolean more = chatBlock.sendBlock(player, plugin.getSettingsManager().getPageSize());

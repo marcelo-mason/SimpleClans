@@ -53,7 +53,7 @@ public class VitalsCommand {
         }
         ChatBlock chatBlock = new ChatBlock();
         ChatBlock.sendBlank(player);
-        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor + " " + plugin.getLang("vitals") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+        ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + clan.getName() + subColor + " " + plugin.getLang("vitals") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
         ChatBlock.sendBlank(player);
         ChatBlock.sendMessage(player, headColor + plugin.getLang("weapons") + ": " + MessageFormat.format(plugin.getLang("0.s.sword.1.2.b.bow.3.4.a.arrow"), ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE, ChatColor.DARK_GRAY, ChatColor.WHITE));
         ChatBlock.sendMessage(player, headColor + plugin.getLang("materials") + ": " + ChatColor.AQUA + plugin.getLang("diamond") + ChatColor.DARK_GRAY + ", " + ChatColor.YELLOW + plugin.getLang("gold") + ChatColor.DARK_GRAY + ", " + ChatColor.GRAY + plugin.getLang("stone") + ChatColor.DARK_GRAY + ", " + ChatColor.WHITE + plugin.getLang("iron") + ChatColor.DARK_GRAY + ", " + ChatColor.GOLD + plugin.getLang("wood"));

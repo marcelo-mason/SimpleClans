@@ -43,8 +43,8 @@ public class DenyCommandExecutor implements CommandExecutor {
                 return false;
             }
 
-            clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("has.voted.to.deny"), Helper.capitalize(player.getName())));
-            plugin.getRequestManager().deny(cp);
+            clan.leaderAnnounce(ChatColor.RED + MessageFormat.format(plugin.getLang("has.voted.to.deny"), player.getName()));
+			plugin.getRequestManager().deny(cp);
         } else {
             if (!plugin.getRequestManager().hasRequest(player.getName().toLowerCase())) {
                 ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("nothing.to.deny"));

@@ -59,7 +59,7 @@ public class RosterCommand {
                 ChatBlock chatBlock = new ChatBlock();
 
                 ChatBlock.sendBlank(player);
-                ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + Helper.capitalize(clan.getName()) + subColor + " " + plugin.getLang("roster") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
+                ChatBlock.saySingle(player, plugin.getSettingsManager().getPageClanNameColor() + clan.getName() + subColor + " " + plugin.getLang("roster") + " " + headColor + Helper.generatePageSeparator(plugin.getSettingsManager().getPageSep()));
                 ChatBlock.sendBlank(player);
                 ChatBlock.sendMessage(player, headColor + plugin.getLang("legend") + " " + plugin.getSettingsManager().getPageLeaderColor() + plugin.getLang("leader") + headColor + ", " + plugin.getSettingsManager().getPageTrustedColor() + plugin.getLang("trusted") + headColor + ", " + plugin.getSettingsManager().getPageUnTrustedColor() + plugin.getLang("untrusted"));
                 ChatBlock.sendBlank(player);

@@ -82,7 +82,7 @@ public class TrustCommand {
             return;
         }
 
-        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.trusted.status.by"), Helper.capitalize(arg[0]), player.getName()));
+        clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("has.been.given.trusted.status.by"), arg[0], player.getName()));
         tcp.setTrusted(true);
         plugin.getStorageManager().updateClanPlayer(tcp);
     }

@@ -59,7 +59,7 @@ public class DemoteCommand {
 
             clan.demote(toDemote.getUniqueId());
                 
-            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("demoted.back.to.member"), Helper.capitalize(demotedName)));
+            clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("demoted.back.to.member"), demotedName));
             ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("player.successfully.demoted"));
             return;
         }
@@ -99,7 +99,7 @@ public class DemoteCommand {
 			return;
 		}
 		clan.addBb(player.getName(), ChatColor.AQUA
-				+ MessageFormat.format(plugin.getLang("demoted.back.to.member"), Helper.capitalize(demotedName)));
+				+ MessageFormat.format(plugin.getLang("demoted.back.to.member"), demotedName));
 		clan.demote(uuid);
     }
 }
