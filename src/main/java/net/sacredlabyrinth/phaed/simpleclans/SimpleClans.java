@@ -22,8 +22,8 @@ import net.sacredlabyrinth.phaed.simpleclans.language.LanguageResource;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCEntityListener;
 import net.sacredlabyrinth.phaed.simpleclans.listeners.SCPlayerListener;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
-import net.sacredlabyrinth.phaed.simpleclans.managers.LanguageManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.PermissionsManager;
+import net.sacredlabyrinth.phaed.simpleclans.managers.PlaceholdersManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.RequestManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager;
@@ -47,7 +47,6 @@ public class SimpleClans extends JavaPlugin {
     private SettingsManager settingsManager;
     private PermissionsManager permissionsManager;
     private TeleportManager teleportManager;
-    private LanguageManager languageManager;
     private ChatFormatMigration chatFormatMigration;
     private boolean hasUUID;
 
@@ -89,7 +88,6 @@ public class SimpleClans extends JavaPlugin {
         settingsManager = new SettingsManager();
         this.hasUUID = UUIDMigration.canReturnUUID();
         
-        languageManager = new LanguageManager();
         permissionsManager = new PermissionsManager();
         requestManager = new RequestManager();
         clanManager = new ClanManager();
@@ -130,6 +128,14 @@ public class SimpleClans extends JavaPlugin {
         
         startTasks();
         startMetrics();
+        hookIntoPAPI();
+    }
+    
+    private void hookIntoPAPI() {
+		if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			logger.info("[SimpleClans] PlaceholderAPI found. Registering hook...");
+			new PlaceholdersManager(this);
+		}
     }
     
     private void startMetrics() {
@@ -240,10 +246,5 @@ public class SimpleClans extends JavaPlugin {
      */
     public void setUUID(boolean trueOrFalse) {
         this.hasUUID = trueOrFalse;
-    }
-
-    @Deprecated
-    public LanguageManager getLanguageManager() {
-        return languageManager;
     }
 }

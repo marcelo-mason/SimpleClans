@@ -143,7 +143,8 @@ clanchat:
     format: "&b[%clan%&b] &4<%nick-color%%player%&4> %rank%: &b%message%"
     rank: "&f[%rank%&f]"
     leader-color: '4'
-    member-color: 'f'
+    trusted-color: 'f'
+    member-color: '7'
 request:
     message-color: b
     ask-frequency-secs: 60
@@ -159,7 +160,8 @@ allychat:
     format: "&b[Ally Chat] &4<%clan%&4> <%nick-color%%player%&4> %rank%: &b%message%"
     rank: "&f[%rank%&f]"
     leader-color: '4'
-    member-color: 'f'
+    trusted-color: 'f'
+    member-color: '7'
 purge:
     inactive-player-data-days: 30
     inactive-clan-days: 7
