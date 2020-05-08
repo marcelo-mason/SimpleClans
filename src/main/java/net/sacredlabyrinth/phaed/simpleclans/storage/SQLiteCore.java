@@ -27,7 +27,7 @@ public class SQLiteCore implements DBCore {
     public SQLiteCore(String dbLocation) {
         this.dbName = "SimpleClans";
         this.dbLocation = dbLocation;
-        this.log = SimpleClans.getLog();
+        this.log = SimpleClans.getInstance().getLogger();
         initialize();
     }
 
@@ -238,8 +238,8 @@ public class SQLiteCore implements DBCore {
 		        catch (SQLException ex) {
 		            if (!ex.toString().contains("not return ResultSet"))
 		            {
-		                SimpleClans.getLog().severe("[Thread] Error at SQL " + sqlType + " Query: " + ex);
-		                SimpleClans.getLog().severe("[Thread] Query: " + query);
+		                log.severe("[Thread] Error at SQL " + sqlType + " Query: " + ex);
+		                log.severe("[Thread] Query: " + query);
 		            }
 		        }				
 			}

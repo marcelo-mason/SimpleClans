@@ -73,7 +73,7 @@ public class LanguageMigration {
 		try (BufferedReader reader = new BufferedReader(new InputStreamReader(new FileInputStream(file), StandardCharsets.UTF_8))) {
 			lines = reader.lines().collect(Collectors.toList());
 		} catch (IOException e) {
-			SimpleClans.getLog().severe("Error converting language file " + file.getName());
+			plugin.getLogger().severe("Error converting language file " + file.getName());
 			e.printStackTrace();
 		}
 		
@@ -103,7 +103,7 @@ public class LanguageMigration {
 			
 			writer.flush();
 		} catch (IOException e) {
-			SimpleClans.getLog().severe("Error converting language file " + file.getName());
+			plugin.getLogger().severe("Error converting language file " + file.getName());
 			e.printStackTrace();
 		}
 		

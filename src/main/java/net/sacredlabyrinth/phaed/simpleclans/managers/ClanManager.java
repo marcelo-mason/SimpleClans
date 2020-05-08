@@ -156,7 +156,7 @@ public final class ClanManager {
     }
 
     /**
-     * Reset a player's kdr
+     * Reset a player's KDR
      *
      * @param cp
      */
@@ -165,7 +165,7 @@ public final class ClanManager {
         cp.setNeutralKills(0);
         cp.setRivalKills(0);
         cp.setDeaths(0);
-        plugin.getStorageManager().updateClanPlayerAsync(cp);
+        plugin.getStorageManager().updateClanPlayer(cp);
     }
 
     /**
@@ -449,13 +449,13 @@ public final class ClanManager {
 
         if (cp != null) {
             cp.updateLastSeen();
-            plugin.getStorageManager().updateClanPlayerAsync(cp);
+            plugin.getStorageManager().updateClanPlayer(cp);
 
             Clan clan = cp.getClan();
 
             if (clan != null) {
                 clan.updateLastUsed();
-                plugin.getStorageManager().updateClanAsync(clan);
+                plugin.getStorageManager().updateClan(clan);
             }
         }
     }
@@ -1356,7 +1356,7 @@ public final class ClanManager {
                     }
 
                     String message = Helper.formatAllyChat(cp, ce.getMessage(), ce.getPlaceholders());
-                    SimpleClans.log(message);
+                    plugin.getLogger().info(message);
 
                     Player self = cp.toPlayer();
                     ChatBlock.sendMessage(self, message);

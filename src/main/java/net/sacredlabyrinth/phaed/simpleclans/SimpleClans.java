@@ -30,6 +30,7 @@ import net.sacredlabyrinth.phaed.simpleclans.managers.StorageManager;
 import net.sacredlabyrinth.phaed.simpleclans.managers.TeleportManager;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectFeeTask;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectUpkeepTask;
+import net.sacredlabyrinth.phaed.simpleclans.tasks.SaveDataTask;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.UpkeepWarningTask;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
 
@@ -53,6 +54,7 @@ public class SimpleClans extends JavaPlugin {
     /**
      * @return the logger
      */
+    @Deprecated
     public static Logger getLog() {
         return logger;
     }
@@ -73,6 +75,7 @@ public class SimpleClans extends JavaPlugin {
         return instance;
     }
 
+    @Deprecated
     public static void log(String msg, Object... arg) {
         if (arg == null || arg.length == 0) {
             logger.log(Level.INFO, msg);
@@ -98,7 +101,7 @@ public class SimpleClans extends JavaPlugin {
         chatFormatMigration.migrateAllyChat();
         chatFormatMigration.migrateClanChat();
 
-        logger.info(MessageFormat.format(getLang("version.loaded"), getDescription().getName(), getDescription().getVersion()));
+        getLogger().info(MessageFormat.format(getLang("version.loaded"), getDescription().getName(), getDescription().getVersion()));
 
         getServer().getPluginManager().registerEvents(new SCEntityListener(), this);
         getServer().getPluginManager().registerEvents(new SCPlayerListener(), this);
@@ -120,20 +123,21 @@ public class SimpleClans extends JavaPlugin {
         getCommand(getSettingsManager().getCommandGlobal()).setExecutor(new GlobalCommandExecutor());
 
         getCommand(getSettingsManager().getCommandClan()).setTabCompleter(new PlayerNameTabCompleter());
-        logger.info("[SimpleClans] Modo Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
-        logger.info("[SimpleClans] Modo BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
+        getLogger().info("Multithreading: " + SimpleClans.getInstance().getSettingsManager().getUseThreads());
+        getLogger().info("BungeeCord: " + SimpleClans.getInstance().getSettingsManager().getUseBungeeCord());
         if (!Locale.getDefault().getLanguage().equals("en")) {
-        	logger.info("[SimpleClans] Help us translate SimpleClans to your language! Access https://crowdin.com/project/simpleclans/");
+        	getLogger().info("Help us translate SimpleClans to your language! Access https://crowdin.com/project/simpleclans/");
         }
         
         startTasks();
         startMetrics();
         hookIntoPAPI();
+        new UpdateChecker(this).check();
     }
     
     private void hookIntoPAPI() {
 		if (getServer().getPluginManager().getPlugin("PlaceholderAPI") != null) {
-			logger.info("[SimpleClans] PlaceholderAPI found. Registering hook...");
+			getLogger().info("PlaceholderAPI found. Registering hook...");
 			new PlaceholdersManager(this);
 		}
     }
@@ -142,19 +146,29 @@ public class SimpleClans extends JavaPlugin {
     	Metrics metrics = new Metrics(this, 7131);
     	SettingsManager sm = getSettingsManager();
     	ClanManager cm = getClanManager();
+    	String on = "enabled";
+    	String off = "disabled";
+    	
     	metrics.addCustomChart(new Metrics.SingleLineChart("clans", () -> cm.getClans().size()));
     	metrics.addCustomChart(new Metrics.SingleLineChart("clan_players", () -> cm.getAllClanPlayers().size()));
+    	metrics.addCustomChart(new Metrics.SimplePie("language", () -> sm.getLanguage().toString()));
+    	metrics.addCustomChart(new Metrics.SimplePie("machine_language", () -> Locale.getDefault().toString()));
     	metrics.addCustomChart(new Metrics.SimplePie("database", () -> sm.isUseMysql() ? "MySQL" : "SQLite"));
-    	metrics.addCustomChart(new Metrics.SimplePie("upkeep", () -> sm.isClanUpkeep() ? "enabled" : "disabled"));
-    	metrics.addCustomChart(new Metrics.SimplePie("member_fee", () -> sm.isMemberFee() ? "enabled" : "disabled"));
-    	metrics.addCustomChart(new Metrics.SimplePie("rejoin_cooldown", () -> sm.isRejoinCooldown() ? "enabled" : "disabled"));
-    	metrics.addCustomChart(new Metrics.SimplePie("clan_verification", () -> sm.isRequireVerification() ? "enabled" : "disabled"));
-    	metrics.addCustomChart(new Metrics.SimplePie("money_per_kill", () -> sm.isMoneyPerKill() ? "enabled" : "disabled"));
-    	metrics.addCustomChart(new Metrics.SimplePie("threads", () -> sm.getUseThreads() ? "enabled" : "disabled"));
-    	metrics.addCustomChart(new Metrics.SimplePie("bungeecord", () -> sm.getUseBungeeCord() ? "enabled" : "disabled"));
+    	metrics.addCustomChart(new Metrics.SimplePie("save_periodically", () -> sm.isSavePeriodically() ? on : off));
+    	metrics.addCustomChart(new Metrics.SimplePie("save_interval", () -> String.valueOf(sm.getSaveInterval())));
+    	metrics.addCustomChart(new Metrics.SimplePie("upkeep", () -> sm.isClanUpkeep() ? on : off));
+    	metrics.addCustomChart(new Metrics.SimplePie("member_fee", () -> sm.isMemberFee() ? on : off));
+    	metrics.addCustomChart(new Metrics.SimplePie("rejoin_cooldown", () -> sm.isRejoinCooldown() ? on : off));
+    	metrics.addCustomChart(new Metrics.SimplePie("clan_verification", () -> sm.isRequireVerification() ? on : off));
+    	metrics.addCustomChart(new Metrics.SimplePie("money_per_kill", () -> sm.isMoneyPerKill() ? on : off));
+    	metrics.addCustomChart(new Metrics.SimplePie("threads", () -> sm.getUseThreads() ? on : off));
+    	metrics.addCustomChart(new Metrics.SimplePie("bungeecord", () -> sm.getUseBungeeCord() ? on : off));
     }
 
     private void startTasks() {
+    	if (getSettingsManager().isSavePeriodically()) {
+    		new SaveDataTask().start();
+    	}
         if (getSettingsManager().isMemberFee()) {
             new CollectFeeTask().start();
         }
@@ -167,6 +181,9 @@ public class SimpleClans extends JavaPlugin {
     @Override
     public void onDisable() {
         getServer().getScheduler().cancelTasks(this);
+    	if (getSettingsManager().isSavePeriodically()) {
+    		getStorageManager().saveModified();
+    	}
         getStorageManager().closeConnection();
         getPermissionsManager().savePermissions();
     }

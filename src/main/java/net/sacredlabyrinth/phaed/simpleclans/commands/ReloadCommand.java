@@ -34,6 +34,7 @@ public class ReloadCommand
         	return;
         }
         
+        plugin.getStorageManager().saveModified();
         plugin.reloadConfig();
         LanguageResource.clearCache();
         plugin.getSettingsManager().load();

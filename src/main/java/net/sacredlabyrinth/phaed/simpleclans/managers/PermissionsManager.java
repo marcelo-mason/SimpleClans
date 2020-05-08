@@ -52,7 +52,7 @@ public final class PermissionsManager {
             setupEconomy();
             setupPermissions();
         } catch (ClassNotFoundException e) {
-            SimpleClans.log("[SimpleClans] Vault not found. No economy or extended Permissions support.");
+            SimpleClans.getInstance().getLogger().info("Vault not found. No economy or extended Permissions support.");
         }
     }
 

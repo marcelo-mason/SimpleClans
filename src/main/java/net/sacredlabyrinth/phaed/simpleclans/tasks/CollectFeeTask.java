@@ -57,7 +57,7 @@ public class CollectFeeTask extends BukkitRunnable {
                                 ChatBlock.sendMessage(cp.toPlayer(), ChatColor.AQUA + 
                                         MessageFormat.format(plugin.getLang("fee.collected"), memberFee));
                                 clan.setBalance(clan.getBalance() + memberFee);
-                                plugin.getStorageManager().updateClanAsync(clan);
+                                plugin.getStorageManager().updateClan(clan);
                             } else {
                             	clan.removePlayerFromClan(cp.getUniqueId());
                                 clan.addBb(ChatColor.AQUA + 

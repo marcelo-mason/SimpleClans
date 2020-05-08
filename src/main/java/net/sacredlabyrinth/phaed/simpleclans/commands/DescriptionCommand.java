@@ -64,6 +64,6 @@ public class DescriptionCommand {
 
         clan.setDescription(description);
         ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("description.changed"));
-        plugin.getStorageManager().updateClanAsync(clan);
+        plugin.getStorageManager().updateClan(clan);
 	}
 }

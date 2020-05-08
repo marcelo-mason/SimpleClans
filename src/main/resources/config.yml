@@ -178,5 +178,7 @@ permissions:
   YourClanNameHere:
   - test.permission
 performance:
+  save-periodically: true
+  save-interval: 10
   use-threads: true
   use-bungeecord: false

@@ -188,6 +188,8 @@ public final class SettingsManager {
     private int delayBetweenKills;
 	private String language;
 	private boolean languagePerPlayer;
+	private boolean savePeriodically;
+	private int saveInterval;
 
     /**
      *
@@ -380,6 +382,8 @@ public final class SettingsManager {
         AutoGroupGroupName = getConfig().getBoolean("permissions.auto-group-groupname");
         tamableMobsSharing = getConfig().getBoolean("settings.tameable-mobs-sharing");
         allowReGroupCommand = getConfig().getBoolean("settings.allow-regroup-command");
+        savePeriodically = getConfig().getBoolean("performance.save-periodically");
+        saveInterval = getConfig().getInt("performance.save-interval");
         useThreads = getConfig().getBoolean("performance.use-threads");
         useBungeeCord = getConfig().getBoolean("performance.use-bungeecord");
         maxMembers = getConfig().getInt("clan.max-members");
@@ -1645,4 +1649,21 @@ public final class SettingsManager {
     public int getMaxMembers() {
         return this.maxMembers;
     }
+
+	public boolean isSavePeriodically() {
+		return savePeriodically;
+	}
+
+	/**
+	 * Gets the interval to save the data
+	 * 
+	 * @return the interval in seconds
+	 */
+	public int getSaveInterval() {
+		if (saveInterval < 1) {
+			saveInterval = 5;
+		}
+		
+		return saveInterval * 60;
+	}
 }

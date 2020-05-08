@@ -76,7 +76,7 @@ public class FeeCommand {
                     clan.setMemberFee(newFee);
                     clan.addBb(player.getName(), ChatColor.AQUA + MessageFormat.format(plugin.getLang("bb.fee.set"), newFee));
                     ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("fee.set"));
-                    plugin.getStorageManager().updateClanAsync(clan);                    
+                    plugin.getStorageManager().updateClan(clan);                    
                 }
                 return;
             }

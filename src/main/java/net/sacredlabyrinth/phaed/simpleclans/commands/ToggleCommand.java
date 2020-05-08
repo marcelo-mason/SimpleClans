@@ -129,7 +129,7 @@ public class ToggleCommand {
                 		ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("feeon"));
                 		clan.setMemberFeeEnabled(true);
                 	}
-                	plugin.getStorageManager().updateClanAsync(clan);
+                	plugin.getStorageManager().updateClan(clan);
                 }
             }
         }

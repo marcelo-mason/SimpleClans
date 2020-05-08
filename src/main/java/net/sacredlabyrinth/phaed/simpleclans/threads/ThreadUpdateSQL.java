@@ -34,8 +34,8 @@ public class ThreadUpdateSQL extends Thread {
         {
             if (!ex.toString().contains("not return ResultSet"))
             {
-                SimpleClans.getLog().severe("[Thread] Error at SQL " + this.sqlType + " Query: " + ex);
-                SimpleClans.getLog().severe("[Thread] Query: " + this.query);
+                SimpleClans.getInstance().getLogger().severe("[Thread] Error at SQL " + this.sqlType + " Query: " + ex);
+                SimpleClans.getInstance().getLogger().severe("[Thread] Query: " + this.query);
             }
         }
     }
