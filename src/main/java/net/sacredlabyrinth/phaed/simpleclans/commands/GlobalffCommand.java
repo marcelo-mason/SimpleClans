@@ -24,7 +24,7 @@ public class GlobalffCommand {
         SimpleClans plugin = SimpleClans.getInstance();
 
         if (arg.length != 1) {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.ff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("usage.0.globalff.allow.auto"), plugin.getSettingsManager().getCommandClan()));
             return;
         }
 
