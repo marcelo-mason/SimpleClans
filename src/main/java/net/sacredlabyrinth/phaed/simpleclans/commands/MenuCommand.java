@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.commands;
 
 import net.sacredlabyrinth.phaed.simpleclans.*;
+
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -25,7 +26,7 @@ public class MenuCommand {
      */
     public void execute(Player player) {
         SimpleClans plugin = SimpleClans.getInstance();
-
+                
         String headColor = plugin.getSettingsManager().getPageHeadingsColor();
         String subColor = plugin.getSettingsManager().getPageSubTitleColor();
 
@@ -181,7 +182,7 @@ public class MenuCommand {
         	chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.rank.create.rank.1.create.rank"), clanCommand, ChatColor.WHITE));
         }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.rank.assign")) {
-        	chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.rank.assign.rank.player.1.assign.rank.to.player"), clanCommand, ChatColor.WHITE));
+        	chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.rank.assign.player.rank.1.assign.rank.to.player"), clanCommand, ChatColor.WHITE));
         }
         if (isVerified && isLeader && plugin.getPermissionsManager().has(player, "simpleclans.leader.rank.unassign")) {
         	chatBlock.addRow(ChatColor.AQUA + "  " + MessageFormat.format(plugin.getLang("0.rank.unassign.player.1.unassign.player.from.rank"), clanCommand, ChatColor.WHITE));
