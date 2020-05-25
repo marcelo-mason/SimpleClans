@@ -22,6 +22,8 @@ import java.util.Map;
 import org.bukkit.ChatColor;
 import org.bukkit.OfflinePlayer;
 
+import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
+
 /**
  * @author phaed
  */
@@ -30,14 +32,14 @@ public final class PermissionsManager {
     /**
      *
      */
-    private SimpleClans plugin;
+    private final SimpleClans plugin;
 
     private static Permission permission = null;
     private static Economy economy = null;
     private static Chat chat = null;
 
-    private HashMap<String, List<String>> permissions = new HashMap<>();
-    private HashMap<Player, PermissionAttachment> permAttaches = new HashMap<>();
+    private final HashMap<String, List<String>> permissions = new HashMap<>();
+    private final HashMap<Player, PermissionAttachment> permAttaches = new HashMap<>();
 
     /**
      *
@@ -297,6 +299,7 @@ public final class PermissionsManager {
      * @param notify notify the player if they don't have permission
      * @return
      */
+    @Deprecated
     public boolean has(Player player, RankPermission permission, PermissionLevel level, boolean notify) {
     	if (player == null || permission == null) {
     		return false;
@@ -336,8 +339,63 @@ public final class PermissionsManager {
 		}
 		
 		if (notify && !hasLevel && !hasRankPermission) {
-            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("you.must.be.0.or.have.the.permission.1.to.use.this"),
-            		level == PermissionLevel.LEADER ? plugin.getLang("leader") : plugin.getLang("trusted"), permission.toString()));
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(lang("you.must.be.0.or.have.the.permission.1.to.use.this"),
+            		level == PermissionLevel.LEADER ? lang("leader") : lang("trusted"), permission.toString()));
+		}
+    	
+    	return hasLevel || hasRankPermission;
+    }
+    
+    /**
+     * Checks if the player has the rank permission or the permission level, and the equivalent Bukkit permission
+     * 
+     * @param player the player
+     * @param permission the rank permission
+     * @param notify notify the player if they don't have permission
+     * @return
+     */
+    public boolean has(Player player, RankPermission permission, boolean notify) {
+    	if (player == null || permission == null) {
+    		return false;
+    	}
+    	
+    	ClanPlayer clanPlayer = plugin.getClanManager().getClanPlayer(player);
+    	if (clanPlayer == null) {
+    		return false;
+    	}
+    	
+    	boolean hasBukkitPermission = has(player, permission.getBukkitPermission());
+    	if (!hasBukkitPermission) {
+    	    if (notify) {
+                ChatBlock.sendMessage(player, lang(ChatColor.RED + "insufficient.permissions"));
+            }
+    		return false;
+    	}
+    	
+		boolean hasLevel = false;
+		switch (permission.getPermissionLevel()) {
+			case LEADER:
+				hasLevel = clanPlayer.isLeader();
+				break;
+			case TRUSTED:
+				hasLevel = clanPlayer.isTrusted();
+				break;
+		}
+    	
+    	boolean hasRankPermission = false;
+    	String rankName = clanPlayer.getRankId();
+    	Clan clan = clanPlayer.getClan();
+		if (clan.hasRank(rankName)) {
+			hasRankPermission = clan.getRank(rankName).getPermissions().contains(permission.toString());
+		} else {
+			if (rankName != null && !rankName.isEmpty()) {
+				clanPlayer.setRank(null);
+			}
+		}
+		
+		if (notify && !hasLevel && !hasRankPermission) {
+            ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(lang("you.must.be.0.or.have.the.permission.1.to.use.this"),
+            		permission.getPermissionLevel() == PermissionLevel.LEADER ? lang("leader") : lang("trusted"), permission.toString()));
 		}
     	
     	return hasLevel || hasRankPermission;

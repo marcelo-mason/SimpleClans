@@ -13,6 +13,7 @@ tag:
         leader-color: '4'
         char: ' .'
 settings:
+    enable-gui: true
     disable-messages: false
     tameable-mobs-sharing: false
     teleport-blocks: false

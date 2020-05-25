@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 import org.bstats.bukkit.Metrics;
+import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -32,15 +33,21 @@ import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectFeeTask;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.CollectUpkeepTask;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.SaveDataTask;
 import net.sacredlabyrinth.phaed.simpleclans.tasks.UpkeepWarningTask;
+import net.sacredlabyrinth.phaed.simpleclans.ui.InventoryController;
+import net.sacredlabyrinth.phaed.simpleclans.utils.ChatFormatMigration;
+import net.sacredlabyrinth.phaed.simpleclans.utils.UpdateChecker;
 import net.sacredlabyrinth.phaed.simpleclans.uuid.UUIDMigration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * @author Phaed
  */
 public class SimpleClans extends JavaPlugin {
 
-    private ArrayList<String> messages = new ArrayList<>();
+    private final ArrayList<String> messages = new ArrayList<>();
     private static SimpleClans instance;
+    private static LanguageResource languageResource;
     private static final Logger logger = Logger.getLogger("Minecraft");
     private ClanManager clanManager;
     private RequestManager requestManager;
@@ -48,7 +55,6 @@ public class SimpleClans extends JavaPlugin {
     private SettingsManager settingsManager;
     private PermissionsManager permissionsManager;
     private TeleportManager teleportManager;
-    private ChatFormatMigration chatFormatMigration;
     private boolean hasUUID;
 
     /**
@@ -87,8 +93,9 @@ public class SimpleClans extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        new LanguageMigration(this).migrate();        
+        new LanguageMigration(this).migrate();
         settingsManager = new SettingsManager();
+        languageResource = new LanguageResource();
         this.hasUUID = UUIDMigration.canReturnUUID();
         
         permissionsManager = new PermissionsManager();
@@ -96,15 +103,14 @@ public class SimpleClans extends JavaPlugin {
         clanManager = new ClanManager();
         storageManager = new StorageManager();
         teleportManager = new TeleportManager();
-        chatFormatMigration = new ChatFormatMigration();
 
+        ChatFormatMigration chatFormatMigration = new ChatFormatMigration();
         chatFormatMigration.migrateAllyChat();
         chatFormatMigration.migrateClanChat();
-
-        getLogger().info(MessageFormat.format(getLang("version.loaded"), getDescription().getName(), getDescription().getVersion()));
-
+        
         getServer().getPluginManager().registerEvents(new SCEntityListener(), this);
         getServer().getPluginManager().registerEvents(new SCPlayerListener(), this);
+        getServer().getPluginManager().registerEvents(new InventoryController(), this);
 
         permissionsManager.loadPermissions();
 
@@ -227,10 +233,12 @@ public class SimpleClans extends JavaPlugin {
      * @param key the path within the language file
      * @return the lang
      */
+    @Deprecated
     public String getLang(String key) {
         return getLang(key, null);
     }
-    
+
+    @Deprecated
     public String getLang(String key, Player player) {
     	Locale locale;
     	if (player == null) {
@@ -238,8 +246,26 @@ public class SimpleClans extends JavaPlugin {
     	} else {
     		locale = Helper.getLocale(player);
     	}
-    	
-    	return new LanguageResource().getLang(key, locale);
+    	return ChatColor.translateAlternateColorCodes('&', languageResource.getLang(key, locale));
+    }
+
+    @NotNull
+    public static String lang(@NotNull String key, @Nullable Player player, Object... arguments) {
+        Locale locale;
+        if (player != null && instance.getSettingsManager().isLanguagePerPlayer()) {
+            locale = Helper.getLocale(player);
+        } else {
+            locale = getInstance().getSettingsManager().getLanguage();
+        }
+
+        return MessageFormat.format(
+                ChatColor.translateAlternateColorCodes(
+                        '&', languageResource.getLang(key, locale)), arguments);
+    }
+
+    @NotNull
+    public static String lang(@NotNull String key, Object... arguments) {
+        return lang(key, null, arguments);
     }
 
     public TeleportManager getTeleportManager() {

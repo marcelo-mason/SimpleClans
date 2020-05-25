@@ -16,6 +16,7 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
  * @author phaed
  */
 public final class SettingsManager {
+	private boolean enableGUI;
     private boolean disableMessages;
     private String clanChatRankColor;
     private boolean tagBasedClanChat;
@@ -220,6 +221,7 @@ public final class SettingsManager {
             getConfig().options().copyDefaults(true);
         }
 
+        enableGUI = getConfig().getBoolean("settings.enable-gui");
         disableMessages = getConfig().getBoolean("settings.disable-messages");
         teleportOnSpawn = getConfig().getBoolean("settings.teleport-home-on-spawn");
         dropOnHome = getConfig().getBoolean("settings.drop-items-on-clan-home");
@@ -410,6 +412,14 @@ public final class SettingsManager {
             e.printStackTrace();
         }
     }
+    
+    public boolean isEnableGUI() {
+		return enableGUI;
+	}
+    
+    public void setEnableGUI(boolean enableGUI) {
+		this.enableGUI = enableGUI;
+	}
     
     public Locale getLanguage() {
     	String[] split = language.split("_");
@@ -731,9 +741,7 @@ public final class SettingsManager {
      * @param playerUniqueId the player's name
      */
     public void removeBanned(UUID playerUniqueId) {
-        if (bannedPlayers.contains(playerUniqueId.toString())) {
-            bannedPlayers.remove(playerUniqueId.toString());
-        }
+        bannedPlayers.remove(playerUniqueId.toString());
         
         getConfig().set("settings.banned-players", bannedPlayers);
         save();
@@ -1045,12 +1053,12 @@ public final class SettingsManager {
      * @return the tagSeparator
      */
     public String getTagSeparator() {
-        if (tagSeparator.equals(" .")) {
-            return ".";
-        }
-
         if (tagSeparator == null) {
             return "";
+        }
+
+        if (tagSeparator.equals(" .")) {
+            return ".";
         }
 
         return tagSeparator;

@@ -244,6 +244,9 @@ permissions:
       simpleclans.leader.promotable: true
       simpleclans.leader.demote: true
       simpleclans.leader.ff: true
+      simpleclans.leader.withdraw-toggle: true
+      simpleclans.leader.deposit-toggle: true
+      simpleclans.leader.fee: true
       simpleclans.leader.disband: true
       simpleclans.leader.settrust: true
       simpleclans.leader.war: true

@@ -1,5 +1,6 @@
-package net.sacredlabyrinth.phaed.simpleclans;
+package net.sacredlabyrinth.phaed.simpleclans.utils;
 
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.SettingsManager;
 import org.bukkit.configuration.file.FileConfiguration;
 

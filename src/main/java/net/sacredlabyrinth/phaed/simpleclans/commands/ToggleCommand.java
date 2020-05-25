@@ -9,6 +9,8 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
+
 /**
  * @author phaed
  */
@@ -41,24 +43,28 @@ public class ToggleCommand {
 
                     if (clan.isVerified()) {
                         if (cp.isCapeEnabled()) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("capeoff"));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + lang("capeoff"));
                             cp.setCapeEnabled(false);
                         } else {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("capeon"));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + lang("capeon"));
                             cp.setCapeEnabled(true);
                         }
                     } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("clan.is.not.verified"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + lang("clan.is.not.verified"));
                     }
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("not.a.member.of.any.clan"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + lang("not.a.member.of.any.clan"));
                 }
             } else {
-                ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("insufficient.permissions"));
+                ChatBlock.sendMessage(player, ChatColor.RED + lang("insufficient.permissions"));
             }
         }
 
-        if (cmd.equalsIgnoreCase("bb") && plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle")) {
+        if (cmd.equalsIgnoreCase("bb")) {
+            if (!plugin.getPermissionsManager().has(player, "simpleclans.member.bb-toggle")) {
+                lang(ChatColor.RED + "insufficient.permissions");
+                return;
+            }
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
             if (cp != null) {
@@ -66,10 +72,10 @@ public class ToggleCommand {
 
                 if (clan.isVerified()) {
                     if (cp.isBbEnabled()) {
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("bboff"));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + lang("bboff"));
                         cp.setBbEnabled(false);
                     } else {
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("bbon"));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + lang("bbon"));
                         cp.setBbEnabled(true);
                     }
                     plugin.getStorageManager().updateClanPlayer(cp);
@@ -77,7 +83,11 @@ public class ToggleCommand {
             }
         }
 
-        if (cmd.equalsIgnoreCase("tag") && plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle")) {
+        if (cmd.equalsIgnoreCase("tag")) {
+            if (!plugin.getPermissionsManager().has(player, "simpleclans.member.tag-toggle")) {
+                lang(ChatColor.RED + "insufficient.permissions");
+                return;
+            }
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
             if (cp != null) {
@@ -85,10 +95,10 @@ public class ToggleCommand {
 
                 if (clan.isVerified()) {
                     if (cp.isTagEnabled()) {
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("tagoff"));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + lang("tagoff"));
                         cp.setTagEnabled(false);
                     } else {
-                        ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("tagon"));
+                        ChatBlock.sendMessage(player, ChatColor.AQUA + lang("tagon"));
                         cp.setTagEnabled(true);
                     }
                     plugin.getStorageManager().updateClanPlayer(cp);
@@ -96,7 +106,11 @@ public class ToggleCommand {
             }
         }
 
-        if (cmd.equalsIgnoreCase("deposit") && plugin.getPermissionsManager().has(player, "simpleclans.leader.deposit-toggle")) {
+        if (cmd.equalsIgnoreCase("deposit")) {
+            if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.deposit-toggle")) {
+                lang(ChatColor.RED + "insufficient.permissions");
+                return;
+            }
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
 
             if (cp != null) {
@@ -104,29 +118,29 @@ public class ToggleCommand {
                 if (clan.isLeader(player)) {
                     if (clan.isVerified()) {
                         if (clan.isAllowDeposit()) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("depositoff"));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + lang("depositoff"));
                             clan.setAllowDeposit(false);
                         } else {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("depositon"));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + lang("depositon"));
                             clan.setAllowDeposit(true);
                         }
                     }
                 } else {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + lang("no.leader.permissions"));
                 }
             }
         }
 
-        if (cmd.equalsIgnoreCase("fee") && plugin.getPermissionsManager().has(player, RankPermission.FEE_ENABLE, PermissionLevel.LEADER, true)) {
+        if (cmd.equalsIgnoreCase("fee") && plugin.getPermissionsManager().has(player, RankPermission.FEE_ENABLE,true)) {
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
             if (cp != null) {
                 Clan clan = cp.getClan();
                 if (clan.isVerified()) {
                 	if (clan.isMemberFeeEnabled()) {
-                		ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("feeoff"));
+                		ChatBlock.sendMessage(player, ChatColor.AQUA + lang("feeoff"));
                 		clan.setMemberFeeEnabled(false);
                 	} else {
-                		ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("feeon"));
+                		ChatBlock.sendMessage(player, ChatColor.AQUA + lang("feeon"));
                 		clan.setMemberFeeEnabled(true);
                 	}
                 	plugin.getStorageManager().updateClan(clan);
@@ -134,21 +148,25 @@ public class ToggleCommand {
             }
         }
 
-        if (cmd.equalsIgnoreCase("withdraw") && plugin.getPermissionsManager().has(player, "simpleclans.leader.withdraw-toggle")) {
+        if (cmd.equalsIgnoreCase("withdraw")) {
+            if (!plugin.getPermissionsManager().has(player, "simpleclans.leader.withdraw-toggle")) {
+                lang(ChatColor.RED + "insufficient.permissions");
+                return;
+            }
             ClanPlayer cp = plugin.getClanManager().getClanPlayer(player);
             if (cp != null) {
                 Clan clan = cp.getClan();
                 if (clan.isVerified()) {
                     if (clan.isLeader(player)) {
                         if (clan.isAllowWithdraw()) {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("withdrawoff"));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + lang("withdrawoff"));
                             clan.setAllowWithdraw(false);
                         } else {
-                            ChatBlock.sendMessage(player, ChatColor.AQUA + plugin.getLang("withdrawon"));
+                            ChatBlock.sendMessage(player, ChatColor.AQUA + lang("withdrawon"));
                             clan.setAllowWithdraw(true);
                         }
                     } else {
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("no.leader.permissions"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + lang("no.leader.permissions"));
                     }
                 }
             }

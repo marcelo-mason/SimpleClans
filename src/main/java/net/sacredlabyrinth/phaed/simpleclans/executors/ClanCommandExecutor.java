@@ -1,17 +1,65 @@
 package net.sacredlabyrinth.phaed.simpleclans.executors;
 
-import net.sacredlabyrinth.phaed.simpleclans.*;
-import net.sacredlabyrinth.phaed.simpleclans.commands.*;
-
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.command.*;
-import org.bukkit.entity.Player;
-import org.bukkit.scheduler.BukkitRunnable;
-
 import java.text.MessageFormat;
-import java.util.ArrayList;
-import java.util.Collection;
+
+import org.bukkit.ChatColor;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+
+import net.sacredlabyrinth.phaed.simpleclans.ChatBlock;
+import net.sacredlabyrinth.phaed.simpleclans.Helper;
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import net.sacredlabyrinth.phaed.simpleclans.commands.AlliancesCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.AllyCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.BanCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.BankCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.BbCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ClanffCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.CoordsCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.CreateCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.DemoteCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.DescriptionCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.DisbandCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.FeeCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.FfCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.GlobalffCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.HomeCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.InviteCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.KickCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.KillsCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.LeaderboardCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ListCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.LookupCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.MenuCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ModtagCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.MostKilledCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.PlaceCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ProfileCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.PromoteCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.PurgeCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.RankCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ReloadCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ResetKDRCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ResignCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.RivalCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.RivalriesCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.RosterCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.SetRankCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.StatsCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.ToggleCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.TrustCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.UnbanCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.UntrustCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.VerifyCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.VitalsCommand;
+import net.sacredlabyrinth.phaed.simpleclans.commands.WarCommand;
+import net.sacredlabyrinth.phaed.simpleclans.ui.InventoryDrawer;
+import net.sacredlabyrinth.phaed.simpleclans.ui.frames.MainFrame;
+import org.jetbrains.annotations.NotNull;
+
+import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
 
 /**
  * @author phaed
@@ -115,7 +163,7 @@ public final class ClanCommandExecutor implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(CommandSender sender, Command command, String s, String[] args) {
+    public boolean onCommand(@NotNull CommandSender sender, Command command, String s, String[] args) {
         try {
             if (sender instanceof Player) {
                 Player player = (Player) sender;
@@ -125,104 +173,117 @@ public final class ClanCommandExecutor implements CommandExecutor {
                 }
 
                 if (plugin.getSettingsManager().isBanned(player.getUniqueId())) {
-                    ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("banned"));
+                    ChatBlock.sendMessage(player, ChatColor.RED + lang("banned"));
                     return false;
                 }
 
                 if (args.length == 0) {
-                    menuCommand.execute(player);
+                	if (plugin.getSettingsManager().isEnableGUI()) {
+                		try {
+                			InventoryDrawer.open(new MainFrame(player));
+                		} catch (NoSuchFieldError e) {
+                		    menuCommand.execute(player);
+                		    plugin.getServer().getConsoleSender().sendMessage(lang("gui.not.supported"));
+                			plugin.getSettingsManager().setEnableGUI(false);
+                			plugin.getSettingsManager().save();
+                		}
+                	} else {
+                        menuCommand.execute(player);
+                	}
                 } else {
                     String subcommand = args[0];
                     String[] subargs = Helper.removeFirst(args);
-
-                    if (subcommand.equalsIgnoreCase(plugin.getLang("create.command")) || subcommand.equalsIgnoreCase("create")) {
+                    
+                    if (subcommand.equalsIgnoreCase(lang("create.command")) || subcommand.equalsIgnoreCase("create")) {
                         createCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("list.command")) || subcommand.equalsIgnoreCase("list")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("list.command")) || subcommand.equalsIgnoreCase("list")) {
                         listCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("bank.command")) || subcommand.equalsIgnoreCase("bank")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("bank.command")) || subcommand.equalsIgnoreCase("bank")) {
                         bankCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("profile.command")) || subcommand.equalsIgnoreCase("profile")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("profile.command")) || subcommand.equalsIgnoreCase("profile")) {
                         profileCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("roster.command")) || subcommand.equalsIgnoreCase("roster")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("roster.command")) || subcommand.equalsIgnoreCase("roster")) {
                         rosterCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("lookup.command")) || subcommand.equalsIgnoreCase("lookup")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("lookup.command")) || subcommand.equalsIgnoreCase("lookup")) {
                         lookupCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("home.command")) || subcommand.equalsIgnoreCase("home")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("home.command")) || subcommand.equalsIgnoreCase("home")) {
                         homeCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("leaderboard.command")) || subcommand.equalsIgnoreCase("leaderboard")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("leaderboard.command")) || subcommand.equalsIgnoreCase("leaderboard")) {
                         leaderboardCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("alliances.command")) || subcommand.equalsIgnoreCase("alliances")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("alliances.command")) || subcommand.equalsIgnoreCase("alliances")) {
                         alliancesCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("rivalries.command")) || subcommand.equalsIgnoreCase("rivalries")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("rivalries.command")) || subcommand.equalsIgnoreCase("rivalries")) {
                         rivalriesCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("vitals.command")) || subcommand.equalsIgnoreCase("vitals")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("vitals.command")) || subcommand.equalsIgnoreCase("vitals")) {
                         vitalsCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("coords.command")) || subcommand.equalsIgnoreCase("coords")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("coords.command")) || subcommand.equalsIgnoreCase("coords")) {
                         coordsCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("stats.command")) || subcommand.equalsIgnoreCase("stats")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("stats.command")) || subcommand.equalsIgnoreCase("stats")) {
                         statsCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("ally.command")) || subcommand.equalsIgnoreCase("ally")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("ally.command")) || subcommand.equalsIgnoreCase("ally")) {
                         allyCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("rival.command")) || subcommand.equalsIgnoreCase("rival")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("rival.command")) || subcommand.equalsIgnoreCase("rival")) {
                         rivalCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("bb.command")) || subcommand.equalsIgnoreCase("bb")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("bb.command")) || subcommand.equalsIgnoreCase("bb")) {
                         bbCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("modtag.command")) || subcommand.equalsIgnoreCase("modtag")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("modtag.command")) || subcommand.equalsIgnoreCase("modtag")) {
                         modtagCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("toggle.command")) || subcommand.equalsIgnoreCase("toggle")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("toggle.command")) || subcommand.equalsIgnoreCase("toggle")) {
                         toggleCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("invite.command")) || subcommand.equalsIgnoreCase("invite")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("invite.command")) || subcommand.equalsIgnoreCase("invite")) {
                         inviteCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("kick.command")) || subcommand.equalsIgnoreCase("kick")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("kick.command")) || subcommand.equalsIgnoreCase("kick")) {
                         kickCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("trust.command")) || subcommand.equalsIgnoreCase("trust")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("trust.command")) || subcommand.equalsIgnoreCase("trust")) {
                         trustCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("untrust.command")) || subcommand.equalsIgnoreCase("unstrust")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("untrust.command")) || subcommand.equalsIgnoreCase("unstrust")) {
                         untrustCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("promote.command")) || subcommand.equalsIgnoreCase("promote")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("promote.command")) || subcommand.equalsIgnoreCase("promote")) {
                         promoteCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("demote.command")) || subcommand.equalsIgnoreCase("demote")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("demote.command")) || subcommand.equalsIgnoreCase("demote")) {
                         demoteCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("clanff.command")) || subcommand.equalsIgnoreCase("canff")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("clanff.command")) || subcommand.equalsIgnoreCase("canff")) {
                         clanffCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("ff.command")) || subcommand.equalsIgnoreCase("ff")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("ff.command")) || subcommand.equalsIgnoreCase("ff")) {
                         ffCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("resign.command")) || subcommand.equalsIgnoreCase("resign")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("resign.command")) || subcommand.equalsIgnoreCase("resign")) {
                         resignCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("disband.command")) || subcommand.equalsIgnoreCase("disband")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("disband.command")) || subcommand.equalsIgnoreCase("disband")) {
                         disbandCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("verify.command")) || subcommand.equalsIgnoreCase("verify")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("verify.command")) || subcommand.equalsIgnoreCase("verify")) {
                         verifyCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("ban.command")) || subcommand.equalsIgnoreCase("ban")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("ban.command")) || subcommand.equalsIgnoreCase("ban")) {
                         banCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("unban.command")) || subcommand.equalsIgnoreCase("unban")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("unban.command")) || subcommand.equalsIgnoreCase("unban")) {
                         unbanCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("reload.command")) || subcommand.equalsIgnoreCase("reload")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("reload.command")) || subcommand.equalsIgnoreCase("reload")) {
                         reloadCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("globalff.command")) || subcommand.equalsIgnoreCase("globalff")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("globalff.command")) || subcommand.equalsIgnoreCase("globalff")) {
                         globalffCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("war.command")) || subcommand.equalsIgnoreCase("war")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("war.command")) || subcommand.equalsIgnoreCase("war")) {
                         warCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("kills.command")) || subcommand.equalsIgnoreCase("kills")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("kills.command")) || subcommand.equalsIgnoreCase("kills")) {
                         killsCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("mostkilled.command")) || subcommand.equalsIgnoreCase("mostkilled")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("mostkilled.command")) || subcommand.equalsIgnoreCase("mostkilled")) {
                         mostKilledCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("setrank.command")) || subcommand.equalsIgnoreCase("setrank")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("setrank.command")) || subcommand.equalsIgnoreCase("setrank")) {
                         setRankCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("place.command")) || subcommand.equalsIgnoreCase("place")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("place.command")) || subcommand.equalsIgnoreCase("place")) {
                         placeCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("resetkdr.command")) || subcommand.equalsIgnoreCase("resetkdr")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("resetkdr.command")) || subcommand.equalsIgnoreCase("resetkdr")) {
                         resetKDRCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("fee.command")) || subcommand.equalsIgnoreCase("fee")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("fee.command")) || subcommand.equalsIgnoreCase("fee")) {
                         feeCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("purge.command")) || subcommand.equalsIgnoreCase("purge")){
+                    } else if (subcommand.equalsIgnoreCase(lang("purge.command")) || subcommand.equalsIgnoreCase("purge")){
                         purgeCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("description.command")) || subcommand.equalsIgnoreCase("description")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("description.command")) || subcommand.equalsIgnoreCase("description")) {
                     	descriptionCommand.execute(player, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("rank.command")) || subcommand.equalsIgnoreCase("rank")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("rank.command")) || subcommand.equalsIgnoreCase("rank")) {
                     	rankCommand.execute(player, subargs);
+                    } else if (subcommand.equalsIgnoreCase(lang("help.command")) || subcommand.equalsIgnoreCase("help")) {
+                    	menuCommand.execute(player);
                     } else {   
-                        ChatBlock.sendMessage(player, ChatColor.RED + plugin.getLang("does.not.match"));
+                        ChatBlock.sendMessage(player, ChatColor.RED + lang("does.not.match"));
                     }
                 }
             } else {
@@ -232,23 +293,23 @@ public final class ClanCommandExecutor implements CommandExecutor {
                     String subcommand = args[0];
                     String[] subargs = Helper.removeFirst(args);
 
-                    if (subcommand.equalsIgnoreCase(plugin.getLang("verify.command")) || subcommand.equalsIgnoreCase("verify")) {
+                    if (subcommand.equalsIgnoreCase(lang("verify.command")) || subcommand.equalsIgnoreCase("verify")) {
                         verifyCommand.execute(sender, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("reload.command")) || subcommand.equalsIgnoreCase("reload")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("reload.command")) || subcommand.equalsIgnoreCase("reload")) {
                         reloadCommand.execute(sender, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("place.command")) || subcommand.equalsIgnoreCase("place")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("place.command")) || subcommand.equalsIgnoreCase("place")) {
                         placeCommand.execute(sender, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("globalff.command")) || subcommand.equalsIgnoreCase("globalff")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("globalff.command")) || subcommand.equalsIgnoreCase("globalff")) {
                         globalffCommand.execute(sender, subargs);
-                    } else if (subcommand.equalsIgnoreCase(plugin.getLang("purge.command")) || subcommand.equalsIgnoreCase("purge")) {
+                    } else if (subcommand.equalsIgnoreCase(lang("purge.command")) || subcommand.equalsIgnoreCase("purge")) {
                         purgeCommand.execute(sender, subargs);
                     } else {
-                        ChatBlock.sendMessage(sender, ChatColor.RED + plugin.getLang("does.not.match"));
+                        ChatBlock.sendMessage(sender, ChatColor.RED + lang("does.not.match"));
                     }
                 }
             }
         } catch (Exception ex) {
-            SimpleClans.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.RED + MessageFormat.format(plugin.getLang("simpleclans.command.failure"), ex.getMessage()));
+            SimpleClans.getInstance().getServer().getConsoleSender().sendMessage(ChatColor.RED + MessageFormat.format(lang("simpleclans.command.failure"), ex.getMessage()));
             for (StackTraceElement el : ex.getStackTrace()) {
                 System.out.print(el.toString());
             }

@@ -1,4 +1,4 @@
-package net.sacredlabyrinth.phaed.simpleclans;
+package net.sacredlabyrinth.phaed.simpleclans.utils;
 
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -12,6 +12,8 @@ import org.bukkit.scheduler.BukkitRunnable;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonParseException;
 import com.google.gson.JsonParser;
+
+import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 
 /**
  * 

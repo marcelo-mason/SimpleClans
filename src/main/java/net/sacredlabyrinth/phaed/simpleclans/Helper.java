@@ -14,6 +14,7 @@ import java.io.IOException;
 import java.lang.reflect.Method;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.temporal.ChronoUnit;
@@ -37,6 +38,11 @@ public class Helper {
         for (StackTraceElement el : Thread.currentThread().getStackTrace()) {
             SimpleClans.debug(el.toString());
         }
+    }
+    
+    public static String formatKDR(float kdr) {
+    	DecimalFormat formatter = new DecimalFormat("#.#");
+    	return formatter.format(kdr);
     }
     
     /**
@@ -557,7 +563,7 @@ public class Helper {
 
         String out = msg;
         String first = msg.substring(0, sep.length());
-        String last = msg.substring(msg.length() - sep.length(), msg.length());
+        String last = msg.substring(msg.length() - sep.length());
 
         if (first.equals(sep)) {
             out = msg.substring(sep.length());
