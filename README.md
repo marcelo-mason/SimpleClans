@@ -7,3 +7,5 @@ Full featured clan system for PVP Minecraft Servers
 [![Download](https://img.shields.io/badge/snapshot-download-blue.svg)](https://github.com/marcelo-mason/SimpleClans/packages)
 [![Issues](https://img.shields.io/github/issues/marcelo-mason/SimpleClans.svg)](https://github.com/marcelo-mason/SimpleClans/issues)
 [![Crowdin](https://badges.crowdin.net/simpleclans/localized.svg)](https://crowdin.com/project/simpleclans)
+
+Spigot resource page: https://www.spigotmc.org/resources/simpleclans.71242/
