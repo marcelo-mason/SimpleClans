@@ -1,6 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.ui;
 
 import net.sacredlabyrinth.phaed.simpleclans.RankPermission;
+import net.sacredlabyrinth.phaed.simpleclans.commands.MenuCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.InventoryType;
@@ -29,12 +30,22 @@ public class InventoryDrawer {
 
             @Override
             public void run() {
-                Inventory inventory = Bukkit.createInventory(frame.getViewer(), frame.getSize(), frame.getTitle());
+                try {
+                    Inventory inventory = Bukkit.createInventory(frame.getViewer(), frame.getSize(), frame.getTitle());
 
-                setComponents(inventory, frame);
+                    setComponents(inventory, frame);
 
-                frame.getViewer().openInventory(inventory);
-                InventoryController.register(frame);
+                    frame.getViewer().openInventory(inventory);
+                    InventoryController.register(frame);
+                } catch (NoSuchFieldError ex) {
+                    SimpleClans plugin = SimpleClans.getInstance();
+                    Player player = frame.getViewer();
+                    MenuCommand menuCommand = new MenuCommand();
+                    menuCommand.execute(player);
+                    plugin.getServer().getConsoleSender().sendMessage(lang("gui.not.supported"));
+                    plugin.getSettingsManager().setEnableGUI(false);
+                    plugin.getSettingsManager().save();
+                }
             }
         }.runTask(SimpleClans.getInstance());
     }

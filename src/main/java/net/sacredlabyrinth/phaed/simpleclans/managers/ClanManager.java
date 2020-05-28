@@ -18,15 +18,17 @@ import org.bukkit.Bukkit;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.scheduler.BukkitRunnable;
 
+import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
+
 /**
  * @author phaed
  */
 public final class ClanManager {
 
-    private SimpleClans plugin;
-    private HashMap<String, Clan> clans = new HashMap<>();
-    private HashMap<String, ClanPlayer> clanPlayers = new HashMap<>();
-    private HashMap<ClanPlayer, List<Kill>> kills = new HashMap<>();
+    private final SimpleClans plugin;
+    private final HashMap<String, Clan> clans = new HashMap<>();
+    private final HashMap<String, ClanPlayer> clanPlayers = new HashMap<>();
+    private final HashMap<ClanPlayer, List<Kill>> kills = new HashMap<>();
 
     /**
      *
@@ -1207,26 +1209,26 @@ public final class ClanManager {
         if (command.equals(plugin.getLang("on"))) {
             cp.setClanChat(true);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have enabled clan chat");
+            ChatBlock.sendMessage(player, lang("enabled.clan.chat", player));
         } else if (command.equals(plugin.getLang("off"))) {
             cp.setClanChat(false);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have disabled clan chat");
+            ChatBlock.sendMessage(player, lang("disabled.clan.chat", player));
         } else if (command.equals(plugin.getLang("join"))) {
             cp.setChannel(ClanPlayer.Channel.CLAN);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have joined clan chat");
+            ChatBlock.sendMessage(player, lang("joined.clan.chat", player));
         } else if (command.equals(plugin.getLang("leave"))) {
             cp.setChannel(ClanPlayer.Channel.NONE);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left clan chat");
+            ChatBlock.sendMessage(player, lang("left.clan.chat", player));
         } else if (command.equals(plugin.getLang("mute"))) {
             if (cp.isMuted()) {
                 cp.setMuted(true);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted clan chat");
+                ChatBlock.sendMessage(player, lang("muted.clan.chat", player));
             } else {
                 cp.setMuted(false);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted clan chat");
+                ChatBlock.sendMessage(player, lang("unmuted.clan.chat", player));
             }
         } else {
             final List<ClanPlayer> receivers = new LinkedList<>();
@@ -1310,26 +1312,26 @@ public final class ClanManager {
         if (command.equals(plugin.getLang("on"))) {
             cp.setAllyChat(true);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have enabled ally chat");
+            ChatBlock.sendMessage(player, lang("enabled.ally.chat", player));
         } else if (command.equals(plugin.getLang("off"))) {
             cp.setAllyChat(false);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have disabled ally chat");
+            ChatBlock.sendMessage(player, lang("disabled.ally.chat", player));
         } else if (command.equals(plugin.getLang("join"))) {
             cp.setChannel(ClanPlayer.Channel.ALLY);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have joined ally chat");
+            ChatBlock.sendMessage(player, lang("joined.ally.chat", player));
         } else if (command.equals(plugin.getLang("leave"))) {
             cp.setChannel(ClanPlayer.Channel.NONE);
             plugin.getStorageManager().updateClanPlayer(cp);
-            ChatBlock.sendMessage(player, ChatColor.AQUA + "You have left ally chat");
+            ChatBlock.sendMessage(player, lang("left.ally.chat", player));
         } else if (command.equals(plugin.getLang("mute"))) {
             if (!cp.isMutedAlly()) {
                 cp.setMutedAlly(true);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have muted ally chat");
+                ChatBlock.sendMessage(player, lang("muted.ally.chat", player));
             } else {
                 cp.setMutedAlly(false);
-                ChatBlock.sendMessage(player, ChatColor.AQUA + "You have unmuted ally chat");
+                ChatBlock.sendMessage(player, lang("unmuted.ally.chat", player));
             }
         } else {
             final List<ClanPlayer> receivers = new LinkedList<>();
