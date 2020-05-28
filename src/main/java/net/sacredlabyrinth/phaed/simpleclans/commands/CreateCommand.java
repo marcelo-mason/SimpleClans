@@ -10,6 +10,8 @@ import org.bukkit.entity.Player;
 
 import java.text.MessageFormat;
 
+import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
+
 /**
  * @author phaed
  */
@@ -43,12 +45,17 @@ public class CreateCommand {
 
         boolean bypass = plugin.getPermissionsManager().has(player, "simpleclans.mod.bypass");
 
+        if (tag.length() > 25) {
+            ChatBlock.sendMessage(player, lang("your.clan.color.tag.cannot.be.longer.than.characters", player, 25));
+            return;
+        }
+
         if (!bypass) {
             if (cleanTag.length() > plugin.getSettingsManager().getTagMaxLength()) {
                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("your.clan.tag.cannot.be.longer.than.characters"), plugin.getSettingsManager().getTagMaxLength()));
                 return;
             }
-            if (cleanTag.length() <= plugin.getSettingsManager().getTagMinLength()) {
+            if (cleanTag.length() < plugin.getSettingsManager().getTagMinLength()) {
                 ChatBlock.sendMessage(player, ChatColor.RED + MessageFormat.format(plugin.getLang("your.clan.tag.must.be.longer.than.characters"), plugin.getSettingsManager().getTagMinLength()));
                 return;
             }
