@@ -34,7 +34,7 @@ public class PermissionsFrame extends SCFrame {
 
 		add(Components.getBackComponent(getParent(), 2));
 
-		SCComponent add = new SCComponentImpl(lang("gui.permissions.add.title"), null, Material.WHITE_WOOL,
+		SCComponent add = new SCComponentImpl(lang("gui.permissions.add.title"), null, Material.WOOL,
 				4);
 		add.setListener(ClickType.LEFT, () -> InventoryDrawer.open(new AddPermissionFrame(this, getViewer(), rank)));
 		add.setPermission(ClickType.LEFT, "simpleclans.leader.rank.permissions.add");

@@ -3,6 +3,7 @@ package net.sacredlabyrinth.phaed.simpleclans.ui.frames;
 import java.util.Collections;
 import java.util.List;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
@@ -30,6 +31,7 @@ public class RosterFrame extends SCFrame {
 		this.subject = subject;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void createComponents() {
 		List<ClanPlayer> allMembers = subject.getLeaders();
@@ -45,7 +47,7 @@ public class RosterFrame extends SCFrame {
 		add(Components.getBackComponent(getParent(), 2));
 
 		SCComponent invite = new SCComponentImpl(lang("gui.roster.invite.title"),
-				Collections.singletonList(lang("gui.roster.invite.lore")), Material.LIME_WOOL, 4);
+				Collections.singletonList(lang("gui.roster.invite.lore")), Material.WOOL, DyeColor.LIME.getWoolData(), 4);
 		invite.setListener(ClickType.LEFT, () -> InventoryDrawer.open(new InviteFrame(this, getViewer())));
 		invite.setPermission(ClickType.LEFT, RankPermission.INVITE);
 		add(invite);

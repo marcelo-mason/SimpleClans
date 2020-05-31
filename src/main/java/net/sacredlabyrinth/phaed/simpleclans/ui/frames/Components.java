@@ -3,12 +3,15 @@ package net.sacredlabyrinth.phaed.simpleclans.ui.frames;
 import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
@@ -62,11 +65,11 @@ public class Components {
                                 lang("gui.playerdetails.player.lore.past.clans.separator"))),
                         lang("gui.playerdetails.player.lore.inactive", cp.getInactiveDays(),
                                 pl.getSettingsManager().getPurgePlayers())),
-                Material.PLAYER_HEAD, slot);
+                Material.SKULL_ITEM, (byte) 3, slot);
         SkullMeta itemMeta = (SkullMeta) c.getItemMeta();
         OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(cp.getUniqueId());
         if (itemMeta != null) {
-            itemMeta.setOwningPlayer(offlinePlayer);
+            itemMeta.setOwner(offlinePlayer.getName());
             c.setItemMeta(itemMeta);
         }
         if (viewer.getUniqueId().equals(cp.getUniqueId())) {
@@ -110,7 +113,10 @@ public class Components {
             lore = null;
         }
 
-        SCComponent c = new SCComponentImpl(name, lore, Material.GREEN_BANNER, slot);
+        SCComponent c = new SCComponentImpl(name, lore, Material.BANNER, slot);
+        BannerMeta itemMeta = ((BannerMeta) c.getItemMeta());
+        Objects.requireNonNull(itemMeta).setBaseColor(DyeColor.GREEN);
+        c.setItemMeta(itemMeta);
         if (openDetails && clan != null) {
             c.setListener(ClickType.LEFT, () -> InventoryDrawer.open(new ClanDetailsFrame(frame, viewer, clan)));
         }
@@ -131,8 +137,9 @@ public class Components {
         return back;
     }
 
+    @SuppressWarnings("deprecation")
     public static SCComponent getPanelComponent(int slot) {
-        return new SCComponentImpl(" ", null, Material.GRAY_STAINED_GLASS_PANE, slot);
+        return new SCComponentImpl(" ", null, Material.STAINED_GLASS_PANE, DyeColor.GRAY.getDyeData(), slot);
     }
 
     public static SCComponent getPreviousPageComponent(int slot, Runnable listener) {

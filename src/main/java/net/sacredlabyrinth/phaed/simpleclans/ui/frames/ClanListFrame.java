@@ -2,7 +2,9 @@ package net.sacredlabyrinth.phaed.simpleclans.ui.frames;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 
@@ -14,6 +16,7 @@ import net.sacredlabyrinth.phaed.simpleclans.ui.SCComponent;
 import net.sacredlabyrinth.phaed.simpleclans.ui.SCComponentImpl;
 import net.sacredlabyrinth.phaed.simpleclans.ui.SCFrame;
 import net.sacredlabyrinth.phaed.simpleclans.utils.Paginator;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.jetbrains.annotations.NotNull;
 
 import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
@@ -49,7 +52,10 @@ public class ClanListFrame extends SCFrame {
 					Arrays.asList(lang("gui.clanlist.clan.lore.position", i + 1),
 							lang("gui.clanlist.clan.lore.kdr", Helper.formatKDR(clan.getTotalKDR())),
 							lang("gui.clanlist.clan.lore.members", clan.getMembers().size())),
-					Material.BLACK_BANNER, slot);
+					Material.BANNER, slot);
+			BannerMeta bannerMeta = (BannerMeta) Objects.requireNonNull(c.getItemMeta());
+			bannerMeta.setBaseColor(DyeColor.BLACK);
+			c.setItemMeta(bannerMeta);
 			c.setLorePermission("simpleclans.anyone.list");
 			add(c);
 			slot++;

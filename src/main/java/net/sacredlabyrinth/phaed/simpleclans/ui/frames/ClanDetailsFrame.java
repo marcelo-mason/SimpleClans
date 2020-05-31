@@ -4,9 +4,11 @@ import net.sacredlabyrinth.phaed.simpleclans.*;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer.Channel;
 import net.sacredlabyrinth.phaed.simpleclans.ui.*;
 import org.bukkit.Bukkit;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -14,6 +16,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
 
@@ -71,7 +74,7 @@ public class ClanDetailsFrame extends SCFrame {
 						lang("gui.clandetails.chat.ally.status.lore", allyStatus),
 						lang("gui.clandetails.chat.clan.toggle.lore"),
 						lang("gui.clandetails.chat.ally.toggle.lore")),
-				Material.KNOWLEDGE_BOOK, 43);
+				Material.BOOK, 43);
 		chat.setListener(ClickType.LEFT, () -> {
 			if (clan) {
 				cp.setChannel(Channel.NONE);
@@ -132,7 +135,7 @@ public class ClanDetailsFrame extends SCFrame {
 
 	private void addVerify() {
 		boolean verified = clan.isVerified();
-		Material material = verified ? Material.REDSTONE_TORCH : Material.LEVER;
+		Material material = verified ? Material.REDSTONE_TORCH_ON : Material.REDSTONE_TORCH_OFF;
 		String title = verified ? lang("gui.clandetails.verified.title")
 				: lang("gui.clandetails.not.verified.title");
 		List<String> lore = verified ? null : Collections.singletonList(lang("gui.clandetails.not.verified.lore"));
@@ -173,7 +176,7 @@ public class ClanDetailsFrame extends SCFrame {
 						lang("gui.clandetails.ff.clan.lore", clanFf),
 						lang("gui.clandetails.ff.personal.toggle.lore"),
 						lang("gui.clandetails.ff.clan.toggle.lore")),
-				Material.GOLDEN_SWORD, 32);
+				Material.GOLD_SWORD, 32);
 
 		ff.setListener(ClickType.LEFT, this::togglePersonalFf);
 		ff.setPermission(ClickType.LEFT, "simpleclans.member.ff");
@@ -221,7 +224,7 @@ public class ClanDetailsFrame extends SCFrame {
 				Arrays.asList(lang("gui.clandetails.home.lore.teleport"),
 						lang("gui.clandetails.home.lore.set"),
 						lang("gui.clandetails.home.lore.clear")),
-				Material.MAGENTA_BED, 28);
+				Material.BED, 28);
 		home.setVerifiedOnly(ClickType.LEFT);
 		home.setListener(ClickType.LEFT, () -> InventoryController.runSubcommand(getViewer(), "home", false));
 		home.setPermission(ClickType.LEFT, RankPermission.HOME_TP);
@@ -236,12 +239,12 @@ public class ClanDetailsFrame extends SCFrame {
 
 	private void addRoster() {
 		SCComponent roster = new SCComponentImpl(lang("gui.clandetails.roster.title"),
-				Collections.singletonList(lang("gui.clandetails.roster.lore")), Material.PLAYER_HEAD, 19);
+				Collections.singletonList(lang("gui.clandetails.roster.lore")), Material.SKULL_ITEM, (byte) 3, 19);
 		if (roster.getItemMeta() != null) {
 			SkullMeta itemMeta = (SkullMeta) roster.getItemMeta();
 			List<ClanPlayer> members = clan.getMembers();
-			itemMeta.setOwningPlayer(Bukkit.getOfflinePlayer(
-					members.get((int) (Math.random() * members.size())).getUniqueId()));
+			itemMeta.setOwner(Bukkit.getOfflinePlayer(
+					members.get((int) (Math.random() * members.size())).getUniqueId()).getName());
 			roster.setItemMeta(itemMeta);
 		}
 		roster.setVerifiedOnly(ClickType.LEFT);
@@ -261,7 +264,10 @@ public class ClanDetailsFrame extends SCFrame {
 
 	private void addAllies() {
 		SCComponent allies = new SCComponentImpl(lang("gui.clandetails.allies.title"),
-				Collections.singletonList(lang("gui.clandetails.allies.lore")), Material.CYAN_BANNER, 23);
+				Collections.singletonList(lang("gui.clandetails.allies.lore")), Material.BANNER, 23);
+		BannerMeta bannerMeta = (BannerMeta) Objects.requireNonNull(allies.getItemMeta());
+		bannerMeta.setBaseColor(DyeColor.CYAN);
+		allies.setItemMeta(bannerMeta);
 		allies.setListener(ClickType.LEFT, () -> InventoryDrawer.open(new AlliesFrame(getViewer(), this, clan)));
 		allies.setPermission(ClickType.LEFT, "simpleclans.anyone.alliances");
 		add(allies);
@@ -269,7 +275,10 @@ public class ClanDetailsFrame extends SCFrame {
 
 	private void addRivals() {
 		SCComponent rivals = new SCComponentImpl(lang("gui.clandetails.rivals.title"),
-				Collections.singletonList(lang("gui.clandetails.rivals.lore")), Material.RED_BANNER, 25);
+				Collections.singletonList(lang("gui.clandetails.rivals.lore")), Material.BANNER, 25);
+		BannerMeta bannerMeta = (BannerMeta) Objects.requireNonNull(rivals.getItemMeta());
+		bannerMeta.setBaseColor(DyeColor.RED);
+		rivals.setItemMeta(bannerMeta);
 		rivals.setListener(ClickType.LEFT, () -> InventoryDrawer.open(new RivalsFrame(getViewer(), this, clan)));
 		rivals.setPermission(ClickType.LEFT, "simpleclans.anyone.rivalries");
 		add(rivals);

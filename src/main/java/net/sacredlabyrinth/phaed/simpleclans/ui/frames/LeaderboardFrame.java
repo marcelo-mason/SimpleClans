@@ -57,11 +57,11 @@ public class LeaderboardFrame extends SCFrame {
 											cp.getClan().getColorTag(), cp.getClan().getName()),
 							lang("gui.playerdetails.player.lore.kdr", Helper.formatKDR(cp.getKDR())),
 							lang("gui.playerdetails.player.lore.last.seen", cp.getLastSeenString())),
-					Material.PLAYER_HEAD, slot);
+					Material.SKULL_ITEM, (byte) 3, slot);
 			SkullMeta itemMeta = (SkullMeta) c.getItemMeta();
 			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(cp.getUniqueId());
 			if (itemMeta != null) {
-				itemMeta.setOwningPlayer(offlinePlayer);
+				itemMeta.setOwner(offlinePlayer.getName());
 				c.setItemMeta(itemMeta);
 			}
 			c.setListener(ClickType.LEFT,

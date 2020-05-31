@@ -5,13 +5,16 @@ import net.sacredlabyrinth.phaed.simpleclans.RankPermission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.ui.*;
 import net.sacredlabyrinth.phaed.simpleclans.utils.Paginator;
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
+import org.bukkit.inventory.meta.BannerMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
@@ -46,8 +49,12 @@ public class AddAllyFrame extends SCFrame {
 
 			Clan notRival = notAllies.get(i);
 			SCComponent c = new SCComponentImpl(
-					lang("gui.clanlist.clan.title", notRival.getColorTag(), notRival.getName()),
-					Collections.singletonList(lang("gui.add.ally.clan.lore")), Material.CYAN_BANNER, slot);
+					lang("gui.clanlist.clan.title",getViewer(), notRival.getColorTag(), notRival.getName()),
+					Collections.singletonList(lang("gui.add.ally.clan.lore")), Material.BANNER, slot);
+			BannerMeta itemMeta = (BannerMeta) c.getItemMeta();
+			Objects.requireNonNull(itemMeta).setBaseColor(DyeColor.CYAN);
+			c.setItemMeta(itemMeta);
+			c.setItemMeta(itemMeta);
 
 			c.setListener(ClickType.LEFT, () -> InventoryController.runSubcommand(getViewer(),
 					String.format("ally %s %s", lang("add"), notRival.getTag()), false));

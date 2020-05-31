@@ -52,14 +52,18 @@ public class Helper {
      * @return the locale
      */
     public static Locale getLocale(Player player) {
-    	String lang = player.getLocale();
-    	String[] split = lang.split("_");
-    	
-    	if (split.length == 2) {
-    		return new Locale(split[0], split[1]);
-    	}
-    	
-    	return new Locale(lang);
+        // TODO Implementar
+//      String lang = player.getLocale();
+
+        return SimpleClans.getInstance().getSettingsManager().getLanguage();
+
+//    	String[] split = lang.split("_");
+//
+//    	if (split.length == 2) {
+//    		return new Locale(split[0], split[1]);
+//    	}
+//
+//    	return new Locale(lang);
     }
     
     /**

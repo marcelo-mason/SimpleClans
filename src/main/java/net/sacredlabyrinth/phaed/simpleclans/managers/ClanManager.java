@@ -525,7 +525,7 @@ public final class ClanManager {
                 out += ChatColor.WHITE + plugin.getLang("armor.h");
             } else if (h.getType().equals(Material.DIAMOND_HELMET)) {
                 out += ChatColor.AQUA + plugin.getLang("armor.h");
-            } else if (h.getType().equals(Material.GOLDEN_HELMET)) {
+            } else if (h.getType().equals(Material.GOLD_HELMET)) {
                 out += ChatColor.YELLOW + plugin.getLang("armor.h");
             } else if (h.getType().equals(Material.IRON_HELMET)) {
                 out += ChatColor.GRAY + plugin.getLang("armor.h");
@@ -544,7 +544,7 @@ public final class ClanManager {
                 out += ChatColor.WHITE + plugin.getLang("armor.c");
             } else if (c.getType().equals(Material.DIAMOND_CHESTPLATE)) {
                 out += ChatColor.AQUA + plugin.getLang("armor.c");
-            } else if (c.getType().equals(Material.GOLDEN_CHESTPLATE)) {
+            } else if (c.getType().equals(Material.GOLD_CHESTPLATE)) {
                 out += ChatColor.YELLOW + plugin.getLang("armor.c");
             } else if (c.getType().equals(Material.IRON_CHESTPLATE)) {
                 out += ChatColor.GRAY + plugin.getLang("armor.c");
@@ -563,7 +563,7 @@ public final class ClanManager {
                 out += ChatColor.WHITE + plugin.getLang("armor.l");
             } else if (l.getType().equals(Material.DIAMOND_LEGGINGS)) {
                 out += plugin.getLang("armor.l");
-            } else if (l.getType().equals(Material.GOLDEN_LEGGINGS)) {
+            } else if (l.getType().equals(Material.GOLD_LEGGINGS)) {
                 out += plugin.getLang("armor.l");
             } else if (l.getType().equals(Material.IRON_LEGGINGS)) {
                 out += plugin.getLang("armor.l");
@@ -582,7 +582,7 @@ public final class ClanManager {
                 out += ChatColor.WHITE + plugin.getLang("armor.B");
             } else if (b.getType().equals(Material.DIAMOND_BOOTS)) {
                 out += ChatColor.AQUA + plugin.getLang("armor.B");
-            } else if (b.getType().equals(Material.GOLDEN_BOOTS)) {
+            } else if (b.getType().equals(Material.GOLD_BOOTS)) {
                 out += ChatColor.YELLOW + plugin.getLang("armor.B");
             } else if (b.getType().equals(Material.IRON_BOOTS)) {
                 out += ChatColor.WHITE + plugin.getLang("armor.B");
@@ -620,7 +620,7 @@ public final class ClanManager {
             out += ChatColor.AQUA + plugin.getLang("weapon.S") + headColor + countString;
         }
 
-        count = getItemCount(inv.all(Material.GOLDEN_SWORD));
+        count = getItemCount(inv.all(Material.GOLD_SWORD));
 
         if (count > 0) {
             String countString = count > 1 ? count + "" : "";
@@ -641,7 +641,7 @@ public final class ClanManager {
             out += ChatColor.GRAY + plugin.getLang("weapon.S") + headColor + countString;
         }
 
-        count = getItemCount(inv.all(Material.WOODEN_SWORD));
+        count = getItemCount(inv.all(Material.WOOD_SWORD));
 
         if (count > 0) {
             String countString = count > 1 ? count + "" : "";
@@ -656,8 +656,6 @@ public final class ClanManager {
         }
 
         count = getItemCount(inv.all(Material.ARROW));
-        count += getItemCount(inv.all(Material.SPECTRAL_ARROW));
-        count += getItemCount(inv.all(Material.TIPPED_ARROW));
 
         if (count > 0) {
             out += ChatColor.WHITE + plugin.getLang("weapon.A") + headColor + count;
@@ -698,36 +696,29 @@ public final class ClanManager {
 
         double count = getFoodPoints(inv, Material.APPLE, 4, 2.4);
         count += getFoodPoints(inv, Material.BAKED_POTATO, 5, 6);
-        count += getFoodPoints(inv, Material.BEETROOT, 1, 1.2);
-        count += getFoodPoints(inv, Material.BEETROOT_SOUP, 6, 7.2);
         count += getFoodPoints(inv, Material.BREAD, 5, 6);
         count += getFoodPoints(inv, Material.CAKE, 14, 2.8);
         count += getFoodPoints(inv, Material.CARROT, 3, 3.6);
-        count += getFoodPoints(inv, Material.CHORUS_FRUIT, 4, 2.4);
         count += getFoodPoints(inv, Material.COOKED_CHICKEN, 6, 7.2);
         count += getFoodPoints(inv, Material.COOKED_MUTTON, 6, 9.6);
-        count += getFoodPoints(inv, Material.COOKED_PORKCHOP, 8, 12.8);
+        count += getFoodPoints(inv, Material.GRILLED_PORK, 8, 12.8);
         count += getFoodPoints(inv, Material.COOKED_RABBIT, 5, 6);
-        count += getFoodPoints(inv, Material.COOKED_SALMON, 1, 6, 9.6);
         count += getFoodPoints(inv, Material.COOKIE, 2, .4);
         count += getFoodPoints(inv, Material.GOLDEN_APPLE, 4, 9.6);
         count += getFoodPoints(inv, Material.GOLDEN_CARROT, 6, 14.4);
         count += getFoodPoints(inv, Material.MELON, 2, 1.2);
-        count += getFoodPoints(inv, Material.MUSHROOM_STEW, 6, 7.2);
+        count += getFoodPoints(inv, Material.MUSHROOM_SOUP, 6, 7.2);
         count += getFoodPoints(inv, Material.POISONOUS_POTATO, 2, 1.2);
         count += getFoodPoints(inv, Material.POTATO, 1, 0.6);
-        count += getFoodPoints(inv, Material.PUFFERFISH, 3, 1, 0.2);
         count += getFoodPoints(inv, Material.PUMPKIN_PIE, 8, 4.8);
         count += getFoodPoints(inv, Material.RABBIT_STEW, 10, 12);
-        count += getFoodPoints(inv, Material.BEEF, 3, 1.8);
-        count += getFoodPoints(inv, Material.CHICKEN, 2, 1.2);
+        count += getFoodPoints(inv, Material.RAW_BEEF, 3, 1.8);
+        count += getFoodPoints(inv, Material.RAW_CHICKEN, 2, 1.2);
+        count += getFoodPoints(inv, Material.COOKED_FISH, 5, 6);
+        count += getFoodPoints(inv, Material.RAW_FISH, 2, 0.4);
         count += getFoodPoints(inv, Material.MUTTON, 2, 1.2);
-        count += getFoodPoints(inv, Material.PORKCHOP, 3, 1.8);
+        count += getFoodPoints(inv, Material.PORK, 3, 1.8);
         count += getFoodPoints(inv, Material.RABBIT, 3, 1.8);
-        count += getFoodPoints(inv, Material.SALMON, 1, .4);
-        count += getFoodPoints(inv, Material.COD, 2, .4);
-        count += getFoodPoints(inv, Material.COOKED_COD, 5, 6);
-        count += getFoodPoints(inv, Material.TROPICAL_FISH, 1, .2);
         count += getFoodPoints(inv, Material.ROTTEN_FLESH, 4, .8);
         count += getFoodPoints(inv, Material.SPIDER_EYE, 2, 3.2);
         count += getFoodPoints(inv, Material.COOKED_BEEF, 8, 12.8);

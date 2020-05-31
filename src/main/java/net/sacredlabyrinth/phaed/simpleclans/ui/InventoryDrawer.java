@@ -31,7 +31,7 @@ public class InventoryDrawer {
             @Override
             public void run() {
                 try {
-                    Inventory inventory = Bukkit.createInventory(frame.getViewer(), frame.getSize(), frame.getTitle());
+                    Inventory inventory = Bukkit.createInventory(frame.getViewer(), frame.getSize(), getSafeTitle(frame));
 
                     setComponents(inventory, frame);
 
@@ -50,6 +50,15 @@ public class InventoryDrawer {
         }.runTask(SimpleClans.getInstance());
     }
 
+    @NotNull
+    private static String getSafeTitle(@NotNull SCFrame frame) {
+        String title = frame.getTitle();
+        if (title.length() > 32) {
+            title = title.substring(0, 32);
+        }
+        return title;
+    }
+
     public static void update(@NotNull SCFrame frame) {
 
         new BukkitRunnable() {
@@ -62,7 +71,7 @@ public class InventoryDrawer {
                     return;
                 }
                 //if the title or size changed, the inventory needs to be recreated
-                if (!view.getTitle().equals(frame.getTitle()) || inventory.getSize() != frame.getSize()) {
+                if (!view.getTitle().equals(getSafeTitle(frame)) || inventory.getSize() != frame.getSize()) {
                     open(frame);
                     return;
                 }

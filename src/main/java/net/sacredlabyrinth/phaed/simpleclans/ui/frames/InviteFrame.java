@@ -1,6 +1,5 @@
 package net.sacredlabyrinth.phaed.simpleclans.ui.frames;
 
-import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.RankPermission;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.ClanManager;
@@ -51,11 +50,11 @@ public class InviteFrame extends SCFrame {
 			Player player = players.get(i);
 			SCComponent c = new SCComponentImpl(
 					lang("gui.invite.player.title", player.getName()),
-					Collections.singletonList(lang("gui.invite.player.lore")), Material.PLAYER_HEAD, slot);
+					Collections.singletonList(lang("gui.invite.player.lore")), Material.SKULL_ITEM, (byte) 3, slot);
 			SkullMeta itemMeta = (SkullMeta) c.getItemMeta();
 			OfflinePlayer offlinePlayer = Bukkit.getOfflinePlayer(player.getUniqueId());
 			if (itemMeta != null) {
-				itemMeta.setOwningPlayer(offlinePlayer);
+				itemMeta.setOwner(offlinePlayer.getName());
 				c.setItemMeta(itemMeta);
 			}
 			c.setListener(ClickType.LEFT, () -> InventoryController.runSubcommand(getViewer(), "invite " + player.getName(), false));

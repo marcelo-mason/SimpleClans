@@ -2,6 +2,7 @@ package net.sacredlabyrinth.phaed.simpleclans.ui.frames;
 
 import java.util.Arrays;
 
+import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -31,6 +32,7 @@ public class PlayerDetailsFrame extends SCFrame {
 		clan = plugin.getClanManager().getAnyClanPlayer(viewer.getUniqueId()).getClan();
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void createComponents() {
 		String subjectName = subject.getName();
@@ -47,7 +49,7 @@ public class PlayerDetailsFrame extends SCFrame {
 			return;
 		}
 		
-		SCComponent kick = new SCComponentImpl(lang("gui.playerdetails.kick.title"), null, Material.RED_WOOL,
+		SCComponent kick = new SCComponentImpl(lang("gui.playerdetails.kick.title"), null, Material.WOOL, DyeColor.RED.getWoolData(),
 				28);
 		kick.setListener(ClickType.LEFT, () -> InventoryController.runSubcommand(getViewer(), "kick " + subjectName, true));
 		kick.setPermission(ClickType.LEFT, RankPermission.KICK);
@@ -56,7 +58,7 @@ public class PlayerDetailsFrame extends SCFrame {
 		SCComponent promoteDemote = new SCComponentImpl(lang("gui.playerdetails.promote.demote.title"),
 				Arrays.asList(lang("gui.playerdetails.promote.lore.left.click"),
 						lang("gui.playerdetails.demote.lore.right.click")),
-				Material.GUNPOWDER, 30);
+				Material.BLAZE_POWDER, 30);
 		promoteDemote.setListener(ClickType.LEFT,
 				() -> InventoryController.runSubcommand(getViewer(), "promote " + subjectName, !plugin.getSettingsManager().isConfirmationForPromote()));
 		promoteDemote.setPermission(ClickType.LEFT, "simpleclans.leader.promote");
@@ -80,7 +82,7 @@ public class PlayerDetailsFrame extends SCFrame {
 		SCComponent trustUntrust = new SCComponentImpl(lang("gui.playerdetails.trust.untrust.title"),
 				Arrays.asList(lang("gui.playerdetails.trust.lore.left.click"),
 						lang("gui.playerdetails.untrust.lore.right.click")),
-				Material.CYAN_DYE, 34);
+				Material.INK_SACK, DyeColor.CYAN.getDyeData(), 34);
 		trustUntrust.setListener(ClickType.LEFT,
 				() -> InventoryController.runSubcommand(getViewer(), "trust " + subjectName, true));
 		trustUntrust.setPermission(ClickType.LEFT, "simpleclans.leader.settrust");
