@@ -10,6 +10,10 @@ import me.clip.placeholderapi.PlaceholderHook;
 import net.sacredlabyrinth.phaed.simpleclans.Clan;
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 import static me.clip.placeholderapi.PlaceholderAPIPlugin.booleanFalse;
 import static me.clip.placeholderapi.PlaceholderAPIPlugin.booleanTrue;
@@ -23,6 +27,8 @@ import static me.clip.placeholderapi.PlaceholderAPIPlugin.booleanTrue;
  */
 
 public final class PlaceholdersManager {
+
+	private static final String TOP_CLANS_IDENTIFIER = "topclans_";
 	
 	/**
 	 * The {@link SimpleClans} {@link Plugin} instance
@@ -30,7 +36,7 @@ public final class PlaceholdersManager {
 	 * @since 2.10.1
 	 */
 	
-	private SimpleClans plugin;
+	private final SimpleClans plugin;
 	
 	/**
 	 * The {@link PlaceholdersManager} constructor
@@ -59,9 +65,11 @@ public final class PlaceholdersManager {
 			
 			@Override
 			public String onRequest(OfflinePlayer player, String identifier) {
-				if (player == null) return "";
-				
-				return getPlaceholderValue(SimpleClans.getInstance().getClanManager().getAnyClanPlayer(player.getUniqueId()), identifier);
+				ClanPlayer clanPlayer = null;
+				if (player != null) {
+					clanPlayer = plugin.getClanManager().getAnyClanPlayer(player.getUniqueId());
+				}
+				return getPlaceholderValue(clanPlayer, identifier);
 			}
 		});
 	}
@@ -76,8 +84,12 @@ public final class PlaceholdersManager {
 	 * 
 	 * @since 2.10.1
 	 */
-	
-	public String getPlaceholderValue(ClanPlayer player, String identifier) {
+	@NotNull
+	public String getPlaceholderValue(@Nullable ClanPlayer player, String identifier) {
+		if (identifier.startsWith(TOP_CLANS_IDENTIFIER)) {
+			return getTopClansPlaceholderValue(identifier);
+		}
+
 		if (player == null) return "";
 		
 		Clan clan = player.getClan();
@@ -265,6 +277,42 @@ public final class PlaceholdersManager {
 			}
 			default:
 				break;
+		}
+		return "";
+	}
+
+	/**
+	 *
+	 * @param identifier String that determine what value to return
+	 * @return value for the requested identifier and params
+	 */
+	private String getTopClansPlaceholderValue(String identifier) {
+		//getting the position
+		int position;
+		try {
+			position = Integer.parseInt(identifier.substring(TOP_CLANS_IDENTIFIER.length(),
+					identifier.indexOf('_', TOP_CLANS_IDENTIFIER.length())));
+		} catch (NumberFormatException ex) {
+			return "";
+		}
+		List<Clan> clans = plugin.getClanManager().getClans();
+		//validating position
+		if (position < 1 || position > clans.size()) {
+			return "";
+		}
+
+		plugin.getClanManager().sortClansByKDR(clans);
+
+		Clan clan = clans.get(position - 1);
+		if (identifier.endsWith("_color_tag")) {
+			return clan.getColorTag();
+		}
+		if (identifier.endsWith("_kdr")) {
+			return String.valueOf(clan.getTotalKDR());
+		}
+		if (identifier.endsWith("_total_kills")) {
+			int totalKills = clan.getTotalCivilian() + clan.getTotalNeutral() + clan.getTotalRival();
+			return String.valueOf(totalKills);
 		}
 		return "";
 	}
