@@ -78,26 +78,40 @@ public class Paginator {
 	 * @author RoinujNosde
 	 */
 	public boolean nextPage() {
-		if ((sizePerPage * (currentPage + 1)) > totalElements) {
+		if (!hasNextPage()) {
 			return false;
 		}
 		currentPage++;
 		return true;
 	}
-	
+
+	/**
+	 * @return if there is a next page
+	 */
+	public boolean hasNextPage() {
+		return !((sizePerPage * (currentPage + 1)) > totalElements);
+	}
+
 	/**
 	 * Decreases the page number if current > 0
 	 *
 	 * @author RoinujNosde
 	 */
 	public boolean previousPage() {
-		if (currentPage > 0) {
+		if (hasPreviousPage()) {
 			currentPage--;
 			return true;
 		}
 		return false;
 	}
-	
+
+	/**
+	 * @return if there is a previous page
+	 */
+	public boolean hasPreviousPage() {
+		return currentPage > 0;
+	}
+
 	/**
 	 * 
 	 * @param index the index

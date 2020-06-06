@@ -4,6 +4,7 @@ import java.text.DecimalFormat;
 import java.util.Arrays;
 import java.util.List;
 
+import net.sacredlabyrinth.phaed.simpleclans.utils.Paginator;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -135,14 +136,20 @@ public class Components {
         return new SCComponentImpl(" ", null, Material.GRAY_STAINED_GLASS_PANE, slot);
     }
 
-    public static SCComponent getPreviousPageComponent(int slot, Runnable listener) {
+    public static SCComponent getPreviousPageComponent(int slot, @Nullable Runnable listener, @NotNull Paginator paginator) {
+	    if (!paginator.hasPreviousPage()) {
+	        return getPanelComponent(slot);
+        }
         SCComponent c = new SCComponentImpl(lang("gui.previous.page.title"), null,
                 Material.STONE_BUTTON, slot);
         c.setListener(ClickType.LEFT, listener);
         return c;
     }
 
-    public static SCComponent getNextPageComponent(int slot, Runnable listener) {
+    public static SCComponent getNextPageComponent(int slot, @Nullable Runnable listener, @NotNull Paginator paginator) {
+	    if (!paginator.hasNextPage()) {
+	        return getPanelComponent(slot);
+        }
         SCComponent c = new SCComponentImpl(lang("gui.next.page.title"), null,
                 Material.STONE_BUTTON, slot);
         c.setListener(ClickType.LEFT, listener);

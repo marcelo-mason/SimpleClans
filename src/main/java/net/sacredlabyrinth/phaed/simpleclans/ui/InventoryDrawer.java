@@ -4,82 +4,81 @@ import net.sacredlabyrinth.phaed.simpleclans.RankPermission;
 import net.sacredlabyrinth.phaed.simpleclans.commands.MenuCommand;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.InventoryView;
 import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.scheduler.BukkitRunnable;
 
 import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
+import java.util.*;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.logging.Level;
 
 import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
 
 public class InventoryDrawer {
+    private static final SimpleClans plugin = SimpleClans.getInstance();
+    private static final ConcurrentHashMap<UUID, SCFrame> OPENING = new ConcurrentHashMap<>();
 
     private InventoryDrawer() {
     }
 
     public static void open(@Nullable SCFrame frame) {
-        if (frame == null) return;
+        if (frame == null) {
+            return;
+        }
+        UUID uuid = frame.getViewer().getUniqueId();
+        if (frame.equals(OPENING.get(uuid))) {
+            return;
+        }
 
-        new BukkitRunnable() {
+        OPENING.put(uuid, frame);
+        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
 
-            @Override
-            public void run() {
-                try {
-                    Inventory inventory = Bukkit.createInventory(frame.getViewer(), frame.getSize(), frame.getTitle());
+            Inventory inventory = prepareInventory(frame);
 
-                    setComponents(inventory, frame);
-
-                    frame.getViewer().openInventory(inventory);
-                    InventoryController.register(frame);
-                } catch (NoSuchFieldError ex) {
-                    SimpleClans plugin = SimpleClans.getInstance();
-                    Player player = frame.getViewer();
-                    MenuCommand menuCommand = new MenuCommand();
-                    menuCommand.execute(player);
-                    plugin.getServer().getConsoleSender().sendMessage(lang("gui.not.supported"));
-                    plugin.getSettingsManager().setEnableGUI(false);
-                    plugin.getSettingsManager().save();
-                }
+            if (!frame.equals(OPENING.get(uuid))) {
+                return;
             }
-        }.runTask(SimpleClans.getInstance());
+            Bukkit.getScheduler().runTask(plugin, () -> {
+                frame.getViewer().openInventory(inventory);
+                InventoryController.register(frame);
+                OPENING.remove(uuid);
+            });
+        });
     }
 
+    @NotNull
+    private static Inventory prepareInventory(@NotNull SCFrame frame) {
+        Inventory inventory = Bukkit.createInventory(frame.getViewer(), frame.getSize(), frame.getTitle());
+        long start = System.currentTimeMillis();
+        setComponents(inventory, frame);
+
+        if (plugin.getSettingsManager().isDebugging()) {
+            plugin.getLogger().log(Level.INFO,
+                    String.format("It took %s millisecond(s) to load the frame %s for %s",
+                            System.currentTimeMillis() - start, frame.getTitle(), frame.getViewer().getName()));
+        }
+        return inventory;
+    }
+
+    @Deprecated
     public static void update(@NotNull SCFrame frame) {
-
-        new BukkitRunnable() {
-
-            @Override
-            public void run() {
-                InventoryView view = frame.getViewer().getOpenInventory();
-                Inventory inventory = view.getTopInventory();
-                if (inventory.getType() == InventoryType.CRAFTING) {
-                    return;
-                }
-                //if the title or size changed, the inventory needs to be recreated
-                if (!view.getTitle().equals(frame.getTitle()) || inventory.getSize() != frame.getSize()) {
-                    open(frame);
-                    return;
-                }
-                inventory.clear();
-
-                setComponents(inventory, frame);
-
-            }
-        }.runTask(SimpleClans.getInstance());
+        open(frame);
     }
 
     private static void setComponents(@NotNull Inventory inventory, @NotNull SCFrame frame) {
         frame.clear();
-        frame.createComponents();
+        try {
+            frame.createComponents();
+        } catch (NoSuchFieldError ex) {
+            runHelpCommand(frame.getViewer());
+            return;
+        }
 
-        SimpleClans plugin = SimpleClans.getInstance();
-        if (frame.getComponents().isEmpty()) {
+        Set<SCComponent> components = frame.getComponents();
+        if (components.isEmpty()) {
             plugin.getLogger().warning(String.format("Frame %s has no components", frame.getTitle()));
             return;
         }
@@ -87,27 +86,37 @@ public class InventoryDrawer {
             if (c.getSlot() >= frame.getSize()) {
                 continue;
             }
-            ItemMeta itemMeta = c.getItemMeta();
-            if (itemMeta != null) {
-                List<String> lore = itemMeta.getLore();
-                if (lore != null) {
-                    Object permission = c.getLorePermission();
-                    if (permission != null) {
-                        if (!hasPermission(frame.getViewer(), permission)) {
-                            lore.clear();
-                            lore.add(lang("gui.lore.no.permission"));
-                            itemMeta.setLore(lore);
-                            c.setItemMeta(itemMeta);
-                        }
-                    }
-                }
-            }
+            checkLorePermission(frame, c);
             inventory.setItem(c.getSlot(), c.getItem());
         }
     }
 
-	private static boolean hasPermission(@NotNull Player viewer, @NotNull Object permission) {
-    	SimpleClans plugin = SimpleClans.getInstance();
+    private static void runHelpCommand(@NotNull Player player) {
+        MenuCommand menuCommand = new MenuCommand();
+        menuCommand.execute(player);
+        Bukkit.getScheduler().runTask(plugin, () -> plugin.getServer().getConsoleSender().sendMessage(lang("gui.not.supported")));
+        plugin.getSettingsManager().setEnableGUI(false);
+    }
+
+    private static void checkLorePermission(@NotNull SCFrame frame, @NotNull SCComponent component) {
+        ItemMeta itemMeta = component.getItemMeta();
+        if (itemMeta != null) {
+            List<String> lore = itemMeta.getLore();
+            if (lore != null) {
+                Object permission = component.getLorePermission();
+                if (permission != null) {
+                    if (!hasPermission(frame.getViewer(), permission)) {
+                        lore.clear();
+                        lore.add(lang("gui.lore.no.permission"));
+                        itemMeta.setLore(lore);
+                        component.setItemMeta(itemMeta);
+                    }
+                }
+            }
+        }
+    }
+
+    private static boolean hasPermission(@NotNull Player viewer, @NotNull Object permission) {
     	if (permission instanceof String) {
     		return plugin.getPermissionsManager().has(viewer, (String) permission);
 		}

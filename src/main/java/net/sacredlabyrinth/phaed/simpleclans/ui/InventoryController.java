@@ -1,9 +1,8 @@
 package net.sacredlabyrinth.phaed.simpleclans.ui;
 
-import java.util.HashMap;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -11,6 +10,8 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.inventory.InventoryCloseEvent;
 import org.bukkit.event.inventory.InventoryType;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import net.sacredlabyrinth.phaed.simpleclans.ClanPlayer;
@@ -19,6 +20,8 @@ import net.sacredlabyrinth.phaed.simpleclans.SimpleClans;
 import net.sacredlabyrinth.phaed.simpleclans.managers.PermissionsManager;
 import net.sacredlabyrinth.phaed.simpleclans.ui.frames.WarningFrame;
 import org.jetbrains.annotations.NotNull;
+
+import static net.sacredlabyrinth.phaed.simpleclans.SimpleClans.lang;
 
 /**
  * 
@@ -79,7 +82,16 @@ public class InventoryController implements Listener {
 			}
 		}
 
-		listener.run();
+		Bukkit.getScheduler().runTask(SimpleClans.getInstance(), () -> {
+			ItemStack currentItem = event.getCurrentItem();
+			if (currentItem == null) return;
+
+			ItemMeta itemMeta = currentItem.getItemMeta();
+			Objects.requireNonNull(itemMeta).setLore(Collections.singletonList(lang("gui.loading")));
+			currentItem.setItemMeta(itemMeta);
+
+			listener.run();
+		});
 	}
 
 

@@ -419,7 +419,9 @@ public final class SettingsManager {
     
     public void setEnableGUI(boolean enableGUI) {
 		this.enableGUI = enableGUI;
-	}
+        getConfig().set("settings.enable-gui", enableGUI);
+        save();
+    }
     
     public Locale getLanguage() {
     	String[] split = language.split("_");
