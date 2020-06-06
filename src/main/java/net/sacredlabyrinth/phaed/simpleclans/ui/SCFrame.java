@@ -1,7 +1,7 @@
 package net.sacredlabyrinth.phaed.simpleclans.ui;
 
-import java.util.HashSet;
 import java.util.Set;
+import java.util.concurrent.ConcurrentHashMap;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -16,7 +16,7 @@ public abstract class SCFrame {
 
 	private final SCFrame parent;
 	private final Player viewer;
-	private final Set<SCComponent> components = new HashSet<>();
+	private final Set<SCComponent> components = ConcurrentHashMap.newKeySet();
 	
 	public SCFrame(@Nullable SCFrame parent, @NotNull Player viewer) {
 		this.parent = parent;
@@ -61,6 +61,22 @@ public abstract class SCFrame {
 	@NotNull
 	public Set<SCComponent> getComponents() {
 		return components;
+	}
+
+	@Override
+	public boolean equals(Object other) {
+		if (other instanceof SCFrame) {
+			SCFrame otherFrame = (SCFrame) other;
+			return getSize() == otherFrame.getSize() && getTitle().equals(otherFrame.getTitle())
+					&& getComponents().equals(otherFrame.getComponents());
+		}
+
+		return false;
+	}
+
+	@Override
+	public int hashCode() {
+		return getTitle().hashCode() + Integer.hashCode(getSize()) + getComponents().hashCode();
 	}
 
 }

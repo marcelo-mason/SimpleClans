@@ -40,8 +40,8 @@ public class PermissionsFrame extends SCFrame {
 		add.setPermission(ClickType.LEFT, "simpleclans.leader.rank.permissions.add");
 		add(add);
 
-		add(Components.getPreviousPageComponent(6, this::previousPage));
-		add(Components.getNextPageComponent(7, this::nextPage));
+		add(Components.getPreviousPageComponent(6, this::previousPage, paginator));
+		add(Components.getNextPageComponent(7, this::nextPage, paginator));
 
 		int slot = 9;
 		for (int i = paginator.getMinIndex(); paginator.isValidIndex(i); i++) {
