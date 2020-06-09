@@ -9,3 +9,5 @@ Full featured clan system for PVP Minecraft Servers
 [![Crowdin](https://badges.crowdin.net/simpleclans/localized.svg)](https://crowdin.com/project/simpleclans)
 
 Spigot resource page: https://www.spigotmc.org/resources/simpleclans.71242/
+
+Discord support server: https://discord.gg/CkNwgdE
