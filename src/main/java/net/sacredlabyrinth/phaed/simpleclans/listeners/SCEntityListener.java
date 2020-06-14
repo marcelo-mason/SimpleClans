@@ -279,7 +279,7 @@ public class SCEntityListener implements Listener
                 }
             }
 
-            if (sub.getEntity() instanceof Player && sub.getDamager() instanceof Arrow)
+            if (sub.getEntity() instanceof Player && sub.getDamager() instanceof Projectile)
             {
                 Arrow arrow = (Arrow) sub.getDamager();
 
