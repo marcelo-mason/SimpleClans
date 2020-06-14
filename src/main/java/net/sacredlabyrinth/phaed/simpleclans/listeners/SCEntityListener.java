@@ -73,18 +73,18 @@ public class SCEntityListener implements Listener
                 if (entityEvent.getDamager() instanceof Player)
                 {
                     attacker = (Player) entityEvent.getDamager();
-                } else if (entityEvent.getDamager() instanceof Arrow)
+                } else if (entityEvent.getDamager() instanceof Projectile)
                 {
-                    Arrow arrow = (Arrow) entityEvent.getDamager();
+                    Projectile projectile = (Projectile) entityEvent.getDamager();
 
-                    if (arrow.getShooter() instanceof Player)
+                    if (projectile.getShooter() instanceof Player)
                     {
-                        attacker = (Player) arrow.getShooter();
+                        attacker = (Player) projectile.getShooter();
                     }
                 }
             }
 
-            if (attacker != null && victim != null)
+            if (attacker != null)
             {
             	if (SimpleClans.getInstance().getSettingsManager().isDenySameIPKills()) 
             	{
@@ -166,7 +166,7 @@ public class SCEntityListener implements Listener
 		    		final int max = plugin.getSettingsManager().getMaxKillsPerVictim();
 		    		Integer kills = data.get(kill.getVictim().getName());
 		    		if (kills != null) {
-		    			if (kills.intValue() < max) {
+		    			if (kills < max) {
 		    				saveKill(kill, type);
 		    			}
 		    		}
@@ -281,11 +281,11 @@ public class SCEntityListener implements Listener
 
             if (sub.getEntity() instanceof Player && sub.getDamager() instanceof Projectile)
             {
-                Arrow arrow = (Arrow) sub.getDamager();
+                Projectile projectile = (Projectile) sub.getDamager();
 
-                if (arrow.getShooter() instanceof Player)
+                if (projectile.getShooter() instanceof Player)
                 {
-                    attacker = (Player) arrow.getShooter();
+                    attacker = (Player) projectile.getShooter();
                     victim = (Player) sub.getEntity();
                 }
             }
