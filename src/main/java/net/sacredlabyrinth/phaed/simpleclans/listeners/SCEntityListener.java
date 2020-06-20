@@ -182,7 +182,7 @@ public class SCEntityListener implements Listener
     	ClanPlayer killer = kill.getKiller();
     	ClanPlayer victim = kill.getVictim();
 		killer.addKill(type);
-		plugin.getStorageManager().insertKill(killer.toPlayer(), killer.getTag(), victim.toPlayer(), victim.getTag(), type.getShortname());
+		plugin.getStorageManager().insertKill(killer, victim, type.getShortname());
 	}
     
     /**
