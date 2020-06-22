@@ -194,7 +194,7 @@ public class ClanDetailsFrame extends SCFrame {
 		ff.setListener(ClickType.LEFT, this::togglePersonalFf);
 		ff.setPermission(ClickType.LEFT, "simpleclans.member.ff");
 		ff.setListener(ClickType.RIGHT, this::toggleClanFf);
-		ff.setPermission(ClickType.RIGHT, "simpleclans.leader.ff");
+		ff.setPermission(ClickType.RIGHT, RankPermission.FRIENDLYFIRE);
 		add(ff);
 	}
 
